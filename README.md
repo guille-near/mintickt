@@ -1,2 +1,2 @@
 # mintick_front
-Fron end for minitck
+Front end for minitck
