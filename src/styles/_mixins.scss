@@ -1,0 +1,121 @@
+@use "sass:list";
+@use "sass:map";
+
+                    // media query //
+$breakpoints: (
+  x-small: 400px,
+  small: 880px,
+  medium: 1200px,
+  large: 1440px,
+  x-large: 1800px,
+);
+@mixin mq($dir1, $key1, $dir2: fixed, $key2: fixed) {
+  $size1: map.get($breakpoints, $key1);
+  $size2: map.get($breakpoints, $key2);
+  // if doble parameters
+  @if ($dir1) and ($key1) and ($dir2) and ($key2) {
+    // if number + number
+    @if type-of($key1) == number and type-of($key2) == number {
+      // if mobile
+      @if $key1 <= 880 and $dir1 == max {
+        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) and (max-height: 1180px) {@content;}
+      }/* if desktop */ @else {
+        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) {@content;}
+      }
+    }
+    // if variable + variable
+    @else if type-of($key1) != number and type-of($key2) != number {
+      // if mobile
+      @if $key1 == small or $key1 == x-small and $dir1 == max or $key2 == small or $key2 == x-small and $dir2 == max {
+        @media (#{$dir1}-width: $size1) and (#{$dir2}-width: $size2) and (max-height: 1180px) {@content;}
+      }/* if desktop */ @else {
+        @media (#{$dir1}-width: $size1) and (#{$dir2}-width: $size2) {@content;}
+      }
+    }
+    // if variable + number
+    @else if type-of($key1) != number and type-of($key2) == number {
+      // if mobile
+      @if $key1 == small or $key1 == x-small and $dir1 == max and $key2 <= 880 and $dir2 == max {
+        @media (#{$dir1}-width: $size1) and (#{$dir2}-width: $key2) and (max-height: 1180px) {@content;}
+      }/* if desktop */ @else {
+        @media (#{$dir1}-width: $size1) and (#{$dir2}-width: $key2) {@content;}
+      }
+    }
+    // if number + variable
+    @else if type-of($key1) == number and type-of($key2) != number {
+      // if mobile
+      @if $key1 <= 880 and $dir1 == max and $key2 == small or $key2 == x-small and $dir2 == max {
+        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) and (max-height: 1180px) {@content;}
+      }/* if desktop */ @else {
+        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) {@content;}
+      }
+    }
+  }
+  
+  // if single parameter
+  @if ($dir1) and ($key1) {
+    // if numeric
+    @if type-of($key1) == number {
+      // if mobile
+      @if $key1 <= 880 and $dir1 == max {
+        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) and (max-height: 1180px) {@content;}
+      } @else {
+        @media (#{$dir1}-width: $key1) and (max-height: 1180px) {@content;}
+      }
+    }
+    // if variable
+    @else {
+      // if mobile
+      @if $key1 == small or $key1 == x-small and $dir1 == max {
+        @media (#{$dir1}-width: $size1) and (max-height: 1180px) {@content;}
+      } /* if desktop */ @else {
+        @media (#{$dir1}-width: $size1) {@content;}
+      }
+    }
+  }
+}
+/* example
+@include mq(min,small,max,1300px) {
+  display: none !important;
+}
+*/
+
+                    // iteration childs
+@mixin child($from, $to) {
+  @for $i from $from through $to {
+    &:nth-child(#{$i}) {
+      @content;
+    }
+  }
+}
+/* example
+@include child(1, 4) {
+  background-color: red;
+}
+*/
+
+                    // unique animations
+@mixin animation(
+  $duration,
+  $iteration: fixed,
+  $direction: fixed,
+  $delay: fixed,
+  $state: fixed
+) {
+  $name: #{unique-id()};
+  @keyframes #{$name} {
+    @content;
+  }
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-iteration-count: $iteration;
+  animation-direction: $direction;
+  animation-delay: $delay;
+  animation-play-state: $state;
+}
+/* example
+@include animation(.5s, infinite, alternate, 0ms, running) {
+  from { background-color: yellow }
+  to { background-color: red }
+}
+*/

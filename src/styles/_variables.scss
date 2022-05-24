@@ -1,0 +1,52 @@
+@import '~vuetify/src/styles/styles.sass';
+
+// Sidebar //
+$drawer-items-padding:                     32px !default;
+$navigation-drawer-mini-variant-width:     96px!important;
+
+// Layout //
+$body-bg: #20232C !default;
+$content-padding:                           24px;
+$margin-layout: 8em 15em;
+
+// Colors //
+$primary:           #536DFE;
+$secondary:         #FF5C93;
+$error:             #ff4081;
+$warning:           #FFC260;
+$success:           #3CD4A0;
+$info:              #9013FE;
+$text-color:        #6e6e6e;
+$text-grey:         #b9b9b9;
+$title-grey:        #4a4a4a;
+$clr:               #AD0FD5;
+$clr-btn:           #AD0FD5;
+$clr-text-btn:      #FFFFFF;
+$clr-hover:         #FF2C75;
+
+$card-title-color:  $text-color;
+
+// Typography //
+$h1-font-size:                3rem !default;      // 28px
+$h2-font-size:                2rem !default;       // 24px
+$h3-font-size:                1.64rem !default;     // 22px
+$h4-font-size:                1.5rem !default;     // 20px
+$h5-font-size:                1.285rem !default;         // 16px
+$h6-font-size:                1.142rem !default;     // 14px
+$h7-font-size:                1.0rem !default;
+$h8-font-size:                0.8rem !default;
+
+// Card //
+$card-shadow: 0 3px 11px 0 #111011, 0 3px 3px -2px #B2B2B21A, 0 1px 8px 0 #9A9A9A1A;
+$sombra-card: 0px 4px 50px rgba(0, 0, 0, 0.05);
+
+// Buttons //
+$button-shadow: 0px 3px 11px 0px #E8EAFC, 0 3px 3px -2px #B2B2B21A, 0 1px 8px 0 #9A9A9A1A;
+$sombra-btn: -2px 3px 3px 0px $clr-btn+ab;
+$sombra-filter: drop-shadow(0px 4px 1px rgba(0, 0, 0, 0.3));
+
+// hover //
+$ease: cubic-bezier(0.23, 1, 0.32, 1);
+$ease-return: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+$skew-right: skewX(12deg) translateX(1px);
+$skew-left: skewX(-12deg) translateX(-1px);
