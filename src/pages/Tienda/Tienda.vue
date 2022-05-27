@@ -24,21 +24,21 @@
           <h3 class="h7-em">About</h3>
 
           <div v-if="Datos.about.event" class="divcol h8-em">
-            <p><strong>Event Information:</strong></p>
-            <p class="margintop">{{Datos.about.event.text}}</p>
+            <p class="p"><strong>Event Information:</strong></p>
+            <p>{{Datos.about.event.text}}</p>
             <p v-if="Datos.about.event.text2" class="margintop">{{Datos.about.event.text2}}</p>
             <p v-if="Datos.about.event.text3" class="margintop">{{Datos.about.event.item.text3}}</p>
           </div>
 
           <div v-if="Datos.about.venue" class="divcol h8-em">
-            <p><strong>Venue Information:</strong></p>
-            <p class="margintop">{{Datos.about.venue.text}}</p>
+            <p class="p"><strong>Venue Information:</strong></p>
+            <p>{{Datos.about.venue.text}}</p>
             <p v-if="Datos.about.venue.text2" class="margintop">{{Datos.about.venue.text2}}</p>
             <p v-if="Datos.about.venue.text3" class="margintop">{{Datos.about.venue.text3}}</p>
           </div>
 
           <div v-if="Datos.about.movie" class="divcol h8-em">
-            <p><strong>Movie Information:</strong></p>
+            <p class="p"><strong>Movie Information:</strong></p>
             <p class="margintop">
               <strong v-if="Datos.about.movie.boldText">{{Datos.about.movie.boldText}} </strong>
               {{Datos.about.movie.text}}
@@ -60,8 +60,8 @@
           </div>
 
           <div class="divcol h8-em">
-            <p><strong>Cancelation &amp; Weather Policy::</strong></p>
-            <p class="margintop">
+            <p class="p"><strong>Cancelation &amp; Weather Policy::</strong></p>
+            <p>
               If you need to change your ticket, a full refund is available 
               up to 48 hours before the start of the event. A 50% refund is 
               available for cancellations made 48 - 24 hours before the event 
