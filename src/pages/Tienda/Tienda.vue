@@ -1,10 +1,10 @@
 <template>
   <section id="tienda" class="center align divcol">
     <aside>
-    <!-- new -->
+      <!-- new -->
       <img class="eliminarmobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
       <img class="vermobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
-    <!-- new -->
+      <!-- new -->
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
         <h2>{{tittle}}</h2>
@@ -12,7 +12,7 @@
       </div>
     </aside>
 
-    <aside v-for="(item, index) in Datos" :key="index" class="jspace divcolmobile gapmobile acentermobile limiter">
+    <aside class="jspace divcolmobile gapmobile acentermobile limiter">
       <div v-if="!isIntersecting" class="floatButton vermobile">
         <div class="fill-w">
           <v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
@@ -20,17 +20,59 @@
       </div>
 
       <div class="contleft divcol fill-wmobile">
-        <aside class="divcol">
+        <aside v-if="Datos.about" class="aboutSection divcol">
           <h3 class="h7-em">About</h3>
-          <div class="conttitles">
-            <p v-for="(i, index) in item.titles" :key="index" class="h8-em tittles">
-              <strong> {{ i.titles }}</strong> {{ i.Text }}
+
+          <div v-if="Datos.about.event" class="divcol h8-em">
+            <p><strong>Event Information:</strong></p>
+            <p class="margintop">{{Datos.about.event.text}}</p>
+            <p v-if="Datos.about.event.text2" class="margintop">{{Datos.about.event.text2}}</p>
+            <p v-if="Datos.about.event.text3" class="margintop">{{Datos.about.event.item.text3}}</p>
+          </div>
+
+          <div v-if="Datos.about.venue" class="divcol h8-em">
+            <p><strong>Venue Information:</strong></p>
+            <p class="margintop">{{Datos.about.venue.text}}</p>
+            <p v-if="Datos.about.venue.text2" class="margintop">{{Datos.about.venue.text2}}</p>
+            <p v-if="Datos.about.venue.text3" class="margintop">{{Datos.about.venue.text3}}</p>
+          </div>
+
+          <div v-if="Datos.about.movie" class="divcol h8-em">
+            <p><strong>Movie Information:</strong></p>
+            <p class="margintop">
+              <strong v-if="Datos.about.movie.boldText">{{Datos.about.movie.boldText}} </strong>
+              {{Datos.about.movie.text}}
+            </p>
+            <p v-if="Datos.about.movie.text2" class="margintop">
+              <strong v-if="Datos.about.movie.boldText2">{{Datos.about.movie.boldText2}} </strong>
+              {{Datos.about.movie.text2}}
+            </p>
+            <p v-if="Datos.about.movie.text3" class="margintop">
+              <strong v-if="Datos.about.movie.boldText3">{{Datos.about.movie.boldText3}} </strong>
+              {{Datos.about.movie.text3}}
             </p>
           </div>
 
-          <p v-for="(i, index) in item.info" :key="index" class="h8-em">
-            {{ i.paragraph }}
-          </p>
+          <div v-if="Datos.about.info" class="conttitles">
+            <p v-for="(item,i) in Datos.about.info" :key="i" class="h8-em tittles">
+              <strong>{{ item.title }} </strong>{{ item.text }}
+            </p>
+          </div>
+
+          <div class="divcol h8-em">
+            <p><strong>Cancelation &amp; Weather Policy::</strong></p>
+            <p class="margintop">
+              If you need to change your ticket, a full refund is available 
+              up to 48 hours before the start of the event. A 50% refund is 
+              available for cancellations made 48 - 24 hours before the event 
+              starts. We are sorry but any cancellations made less than 
+              24 hours in advance are non-refundable.
+            </p>
+            <p class="margintop">
+              In case of rain, the event will continue. If there's heavy 
+              rain, we will continue with the film in the indoor area.
+            </p>
+          </div>
         </aside>
 
         <aside class="contLocation divcol">
@@ -41,16 +83,17 @@
             allowfullscreen>
           </iframe>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
-            <img :src="item.location.icon" :alt="item.location.icon" />
-            Av. Infante Dom Henrique, 1900-319 Lisboa, Portugal
+            <img src="@/assets/logo/Marker.png" alt="marker icon" />
+            {{Datos.location}}
           </p>
         </aside>
 
         <aside class="divcol">
           <h3 class="h7-em">Details</h3>
           <aside class="contDetails">
-            <p v-for="(i, index) in item.details" :key="index" class="h8-em tittles">
-              <strong>{{ i.titlesDetails }}</strong><br>{{ i.TextDetails }}
+            <p v-for="(item, i) in Datos.details" :key="i" class="h8-em tittles">
+              <strong>{{ item.titlesDetails }}</strong>
+              <br>{{ item.textDetails }}
             </p>
           </aside>
         </aside>
@@ -175,61 +218,56 @@ export default {
       ultimoprecio: null,
       Datos: {
         about: {
-          titles: [
-            {
-              titles: "Director:",
-              Text: " Bong Joon Ho",
-            },
-            {
-              titles: "Actors:",
-              Text: " Kang-ho Song, Sun-kyun Lee, Yeo-jeong Cho ",
-            },
-            {
-              titles: "Country:",
-              Text: " Korea | Year: 2019",
-            },
-            {
-              titles: "Audio:",
-              Text: " Korean | Subtitles: English | PG: M/14",
-            },
-            {
-              titles: "Lenght:",
-              Text: " 2h 16m ",
-            },
-          ],
+          event: {
+            text: "The movie starts at 21:00. The bar opens for drinks and music from 19:00. Pizzas and popcorn are available from 20:00. We always recommend bringing a warm jacket and/or blanket.",
+          },
+          venue: {
+            text: "Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.",
+            text2: "Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
+          },
+          movie: {
+            boldtext: "Plot:",
+            text: "Armed with a clear vision Richard Williams is determined to write his two daughters, Venus and Serena, into history. Training on tennis courts in Compton, California, Richard shapes the girls' unyielding commitment and keen intuition. Together, the Williams family defies seemingly insurmountable odds and the prevailing expectations laid before them.",
+            text2: "Unfortunately, the accident by Will Smith with presentator Chris Rock overshadowed the latest Academy Awards, where Smith won the Oscar for Best Actor in a Leading Role for his outstanding performance as father Richard of the world-famous Williams sisters.",
+          },
           info: [
             {
-            paragraph: 
-              "The struggling Kim family sees an opportunity when the son starts working for the wealthy Park family. Soon, all of them find a way to work within the same household and start living a parasitic life.",
+              title: "Director:",
+              text: "Reinaldo Marcus Green",
             },
             {
-            paragraph:
-              "Parasite’ gained a lot of international recognition and won some of the biggest awards in the film industry, including Best Picture at the Academy Awards, the Palme d’Or at the Cannes Film Festival, and the BAFTA Award for Best Film Not in the English Language.",
-            }
+              title: "Actors:",
+              text: "Will Smith, Aunjanue Ellis, Jon Bernthal",
+            },
+            {
+              title: "Country:",
+              text: "USA | Year: 2021 | Length: 2h 24m",
+            },
+            {
+              title: "Audio:",
+              text: "English | Subtitles: Portuguese | PG: M/12",
+            },
           ],
-          location: {
-            icon: require("@/assets/logo/Marker.png"),
-            Text: " Arroz Estúdios – Av. Infante Dom Henrique Lisboa, Xabregas ",
-          },
-          details: [
-            {
-              titlesDetails: "Storage Gateaway",
-              TextDetails: "https://arweave.net",
-            },
-            {
-              titlesDetails: "Transactions ID",
-              TextDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc",
-            },
-            {
-              titlesDetails: "Contract",
-              TextDetails: "mintickt.mintbase1.near",
-            },
-            {
-              titlesDetails: "Thing ID",
-              TextDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near",
-            },
-          ]
         },
+        location: "Av. Infante Dom Henrique, 1900-319 Lisboa, Portugal",
+        details: [
+          {
+            titlesDetails: "Storage Gateaway",
+            textDetails: "https://arweave.net",
+          },
+          {
+            titlesDetails: "Transactions ID",
+            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc",
+          },
+          {
+            titlesDetails: "Contract",
+            textDetails: "mintickt.mintbase1.near",
+          },
+          {
+            titlesDetails: "Thing ID",
+            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near",
+          },
+        ]
       },
       metadata: null,
       tokens_totales: null,
