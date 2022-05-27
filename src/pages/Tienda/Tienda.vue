@@ -79,7 +79,7 @@
           <h3 class="h7-em">Location</h3>
           <iframe
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=Av. Infante Dom Henrique, 1900-319 Lisboa, Portugal"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=Arroz Estúdios"
             allowfullscreen>
           </iframe>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
