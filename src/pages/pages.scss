@@ -39,7 +39,8 @@
   // padding-bottom: 70px;
   @include mq(max, small) {
     &>aside:nth-child(1) {
-      h2 {font-size: clamp(4em, 5vw, 5.1685em) !important; line-height: 83px !important; margin-bottom: 0;}
+      h2 {font-size: clamp(2.3em, 5vw, 5.1685em) !important;
+        margin-bottom: 0 !important;max-width: 100% !important;}
       span {font-size: 1.21611875em !important}
       .v-chip__content {font-size: 1em !important}
     }
@@ -99,10 +100,10 @@
       margin-block: 16px;
       letter-spacing: -0.03em;
       font-weight: 800;
-      font-size: clamp(7em, 8.5vw, 8.5em);
-      line-height: .7 !important;
+      font-size: clamp(2em, 8vw, 8em);
+      line-height: 1 !important;
       width: max-content;
-      max-width: max(calc(75% - 4vw), 4.7em) !important;
+      max-width: max(calc(75% - 4vw), 4.7em);
       word-break: break-all !important;
     }
 
