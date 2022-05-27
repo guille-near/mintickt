@@ -58,9 +58,9 @@ $breakpoints: (
     @if type-of($key1) == number {
       // if mobile
       @if $key1 <= 880 and $dir1 == max {
-        @media (#{$dir1}-width: $key1) and (#{$dir2}-width: $key2) and (max-height: 1180px) {@content;}
-      } @else {
         @media (#{$dir1}-width: $key1) and (max-height: 1180px) {@content;}
+      } @else {
+        @media (#{$dir1}-width: $key1) {@content;}
       }
     }
     // if variable
@@ -80,6 +80,8 @@ $breakpoints: (
 }
 */
 
+
+
                     // iteration childs
 @mixin child($from, $to) {
   @for $i from $from through $to {
@@ -94,28 +96,126 @@ $breakpoints: (
 }
 */
 
+
+
                     // unique animations
-@mixin animation(
-  $duration,
-  $iteration: fixed,
-  $direction: fixed,
-  $delay: fixed,
-  $state: fixed
-) {
+@mixin animation($values) {
   $name: #{unique-id()};
+  animation: $name $values;
   @keyframes #{$name} {
     @content;
   }
-  animation-name: $name;
-  animation-duration: $duration;
-  animation-iteration-count: $iteration;
-  animation-direction: $direction;
-  animation-delay: $delay;
-  animation-play-state: $state;
 }
 /* example
-@include animation(.5s, infinite, alternate, 0ms, running) {
+@include animation(.5s $ease-reutrn infinite alternate 0ms running) {
   from { background-color: yellow }
   to { background-color: red }
 }
 */
+
+
+
+                    // color scheme
+@mixin color($bg, $text:fixed) {
+  // if both parameters
+  @if ($bg) and ($text) {
+    @if type-of($bg) == color {
+      background-color: $bg !important;
+    } @else if list.length($bg) > 1 {
+      background-image: linear-gradient(to top left, $bg) !important;
+    } @else {
+      background-image: $bg !important;
+    }
+    color: $text !important; :is(span, i) {@include colorText($text);}
+  }
+  // if single parameter
+  @if ($bg) {
+    @if type-of($bg) == color {
+      background-color: $bg !important;
+    } @else if list.length($bg) > 1 {
+      background-image: linear-gradient(to top left, $bg) !important;
+    } @else {
+      background-image: $bg !important;
+    }
+  }
+};
+/* example
+  @include color((red 10%, purple 50%), $clr-text-btn);
+*/
+
+
+
+                    // text color
+@mixin colorText($color) {
+  @if type-of($color) == color {
+    color: $color !important; :is(span, i) {color: $color !important}
+  } @else if list.length($color) > 1 {
+    background-image: linear-gradient(to top left, $color) !important;
+    background-clip: text !important;
+    color: transparent !important;
+    :is(span, i) {
+      background-image: linear-gradient(to top left, $color) !important;
+      background-clip: text !important;
+      color: transparent !important;
+    }
+  } @else {
+    background-image: $color !important;
+    background-clip: text !important;
+    color: transparent !important;
+    :is(span, i) {
+      background-image: $color !important;
+      background-clip: text !important;
+      color: transparent !important;
+    }
+  }
+}
+/* example
+  @include colorText((red, green));
+*/
+
+
+
+                    // absolute position
+@mixin absolute($value1, $value2:fixed, $value3:fixed, $value4:fixed) {
+  position: absolute;
+  margin: auto;
+  left: $value1;
+  top: $value2;
+  right: $value3;
+  bottom: $value4;
+}
+/* example
+  @include center(auto, 0, 0, 0);
+*/
+@mixin absoluteCenter() {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+
+
+                    // text stroke
+@mixin stroke($value) {
+  @include nav(text-stroke, $value)
+}
+/* example
+  @include stroke(1px #191919);
+*/
+
+                    // prefix navigator properties
+@mixin nav($property, $value) {
+  #{$property}: $value;
+  -webkit-#{$property}: $value;
+  -ms-#{$property}: $value;
+  -moz-#{$property}: $value;
+}
+/* example
+  @include nav(transform, rotate(45deg));
+*/
+
+                    /* other adjusts */
+
