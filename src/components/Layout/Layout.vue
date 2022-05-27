@@ -1,6 +1,6 @@
 <template>
   <v-app class="layout">
-    <Header ref="header" id="navbar" />
+    <Header style="z-index: 10" ref="header" id="navbar" />
     <v-main class="content">
       <router-view></router-view>
     <Footer />

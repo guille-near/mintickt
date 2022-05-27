@@ -9,7 +9,7 @@
     height="140px"
     absolute
   >
-    <v-row>
+    <v-row class="limiter align">
       <v-col class="space" style="padding-inline: clamp(1em, 4vw, 4em)">
         <a class="center" href="/">
           <img class="logoHeader" src="@/assets/logo/logom.png" alt="logo">
