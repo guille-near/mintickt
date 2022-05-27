@@ -2,11 +2,11 @@
   <section id="tienda" class="center align divcol">
     <aside>
     <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/Parasite-landscape_background.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/Parasite-mobile-background.png" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
     <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">MAY 24</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
         <h2>{{tittle}}</h2>
         <span>Black Cat Cinema</span>
       </div>
@@ -138,7 +138,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-  things_by_pk(id: "ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near") {
+  things_by_pk(id: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -218,7 +218,7 @@ export default {
             },
             {
               titlesDetails: "Transactions ID",
-              TextDetails: "ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U",
+              TextDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc",
             },
             {
               titlesDetails: "Contract",
@@ -226,7 +226,7 @@ export default {
             },
             {
               titlesDetails: "Thing ID",
-              TextDetails: "ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near",
+              TextDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near",
             },
           ]
         },
@@ -280,7 +280,7 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        this.duneticket ="https://arweave.net/QeQTxc_R4_FnLfRjBjfFl1EVPOzO7ufZamlojVmLnbU"
+        this.duneticket ="https://arweave.net/KXDzhoCAHf2nyOluc8gkCQepFWyNnDy-0WNhFNgL61Q"
         this.tittle =  this.things_by_pk.metadata.title
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
@@ -349,26 +349,26 @@ export default {
     },
 
 
-  async  makeOffer() {
-  let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
-  const { data: walletData } = await new Wallet().init({
-    networkName: Network.mainnet,
-    chain: Chain.near,
-    apiKey: API_KEY,
-  })
-  const { wallet } = walletData
-       let tokenid = ""
-       this.things_by_pk.tokens.forEach(element => {
-          if (element.list.offer === null){
-              tokenid = element.id
-          }
-      });
-     wallet.makeOffer( 
-      tokenid.toString(),
-      "1500000000000000000000000",
-       ).then(() => {
-   })
-},
+//   async  makeOffer() {
+//   let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+//   const { data: walletData } = await new Wallet().init({
+//     networkName: Network.mainnet,
+//     chain: Chain.near,
+//     apiKey: API_KEY,
+//   })
+//   const { wallet } = walletData
+//        let tokenid = ""
+//        this.things_by_pk.tokens.forEach(element => {
+//           if (element.list.offer === null){
+//               tokenid = element.id
+//           }
+//       });
+//      wallet.makeOffer( 
+//       tokenid.toString(),
+//       "1500000000000000000000000",
+//        ).then(() => {
+//    })
+// },
     onIntersect (entries) {
       this.isIntersecting = entries[0].isIntersecting    },
 async  batchMakeOffer() {
