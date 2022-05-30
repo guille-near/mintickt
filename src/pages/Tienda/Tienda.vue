@@ -350,6 +350,7 @@ export default {
     yoctoNEARNEAR2: function(yoctoNEAR) {
       const amountInNEAR = utils.format.formatNearAmount(yoctoNEAR);
       this.price = amountInNEAR
+      console.log(this.price)
       return amountInNEAR.toString();
     },
     formatPrice (price) {
@@ -361,7 +362,7 @@ export default {
       this.tokens_buy = []
       if (item == 'more' && this.cantidad < this.tokens_disponibles) { 
         this.cantidad++ 
-        this.price = 1.5 * this.cantidad
+        this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
         this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
         this.things_by_pk.tokens.forEach(element => {
           if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
@@ -374,7 +375,7 @@ export default {
       }
       if (item == 'less' && this.cantidad > 1) { 
           this.cantidad-- 
-          this.price = 1.5 * this.cantidad
+          this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
           if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
