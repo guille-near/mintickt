@@ -83,7 +83,7 @@
             allowfullscreen>
           </iframe>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
-            <img src="@/assets/logo/Marker.png" alt="marker icon" />
+            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
             {{Datos.location}}
           </p>
         </aside>
@@ -126,7 +126,7 @@
 
         <aside class="space">
           <div class="divrow acenter">
-            <img src="@/assets/logo/logonear.png" alt="Logo near" />
+            <img src="@/assets/logo/logonear.svg" alt="Logo near" />
             <span class="h8-em number">{{price}}</span>
           </div>
           <span class="tend">~ {{ultimoprecio}} $USD</span>
