@@ -6,7 +6,7 @@
       <img class="vermobile" src="@/assets/img/juno_coverart_1800x686_06ac7160.jpeg" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 7</v-chip>
         <h2>{{tittle}}</h2>
         <span>Black Cat Cinema</span>
       </div>
@@ -375,7 +375,7 @@ export default {
       }
       if (item == 'less' && this.cantidad > 1) { 
           this.cantidad-- 
-          this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
+          this.price =  this.price  * this.cantidad
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
           if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
