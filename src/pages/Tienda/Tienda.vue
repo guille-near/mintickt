@@ -2,11 +2,11 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/juno_coverart_1800x686_06ac7160.jpeg" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/juno_coverart_1800x686_06ac7160.jpeg" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 7</v-chip>
         <h2>{{tittle}}</h2>
         <span>Black Cat Cinema</span>
       </div>
@@ -83,7 +83,7 @@
             allowfullscreen>
           </iframe>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
-            <img src="@/assets/logo/Marker.png" alt="marker icon" />
+            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
             {{Datos.location}}
           </p>
         </aside>
@@ -126,7 +126,7 @@
 
         <aside class="space">
           <div class="divrow acenter">
-            <img src="@/assets/logo/logonear.png" alt="Logo near" />
+            <img src="@/assets/logo/logonear.svg" alt="Logo near" />
             <span class="h8-em number">{{price}}</span>
           </div>
           <span class="tend">~ {{ultimoprecio}} $USD</span>
@@ -181,7 +181,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-  things_by_pk(id: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near") {
+  things_by_pk(id: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -227,21 +227,21 @@ export default {
           },
           movie: {
             boldtext: "Plot:",
-            text: "Armed with a clear vision Richard Williams is determined to write his two daughters, Venus and Serena, into history. Training on tennis courts in Compton, California, Richard shapes the girls' unyielding commitment and keen intuition. Together, the Williams family defies seemingly insurmountable odds and the prevailing expectations laid before them.",
-            text2: "Unfortunately, the accident by Will Smith with presentator Chris Rock overshadowed the latest Academy Awards, where Smith won the Oscar for Best Actor in a Leading Role for his outstanding performance as father Richard of the world-famous Williams sisters.",
+            text: "‘Juno’ stars Ellen Page as the title character, a whip-smart teen confronting an unplanned pregnancy by her classmate Bleeker (Michael Cera). With the help of her hot best friend Leah (Olivia Thirlby), Juno finds her unborn child a 'perfect' set of parents: an affluent suburban couple, Mark and Vanessa (Jason Bateman and Jennifer Garner), longing to adopt. Luckily, Juno has the total support of her parents as she faces some tough decisions, flirts with adulthood and ultimately figures out where she belongs.",
+            text2: "This 2007 comedy-drama has been widely considered as one of the most beloved movies of the 21st century and it won the Oscar for Best Screenplay and earned three other Oscar nominations, including Best Picture and Best Actress for 20-year old Page. ",
           },
           info: [
             {
               title: "Director:",
-              text: "Reinaldo Marcus Green",
+              text: "Jason Reitman",
             },
             {
               title: "Actors:",
-              text: "Will Smith, Aunjanue Ellis, Jon Bernthal",
+              text: "Elliot Page, Michael Cera, Jennifer Garner",
             },
             {
               title: "Country:",
-              text: "USA | Year: 2021 | Length: 2h 24m",
+              text: "USA | Year: 2007 | Length: 1h 36m",
             },
             {
               title: "Audio:",
@@ -257,7 +257,7 @@ export default {
           },
           {
             titlesDetails: "Transactions ID",
-            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc",
+            textDetails: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo",
           },
           {
             titlesDetails: "Contract",
@@ -265,7 +265,7 @@ export default {
           },
           {
             titlesDetails: "Thing ID",
-            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near",
+            textDetails: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo:mintickt.mintbase1.near",
           },
         ]
       },
@@ -318,7 +318,7 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        this.duneticket ="https://arweave.net/KXDzhoCAHf2nyOluc8gkCQepFWyNnDy-0WNhFNgL61Q"
+        this.duneticket ="https://arweave.net/LtKJYD5aoy5D2DX8H-va1soi_iHpRxgEDapZWMDs1TQ"
         this.tittle =  this.things_by_pk.metadata.title
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
@@ -375,7 +375,7 @@ export default {
       }
       if (item == 'less' && this.cantidad > 1) { 
           this.cantidad-- 
-          this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
+          this.price =  this.price  * this.cantidad
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
           if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){

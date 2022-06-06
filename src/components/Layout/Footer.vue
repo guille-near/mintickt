@@ -1,14 +1,14 @@
 <template>
   <v-footer color="#0A0A0A" absolute>
     <v-row class="astart jcenter fill-h">
-      <div class="footer-div"><img src="@/assets/landing/logo_mintick.png" loading="lazy" alt="Mintickt" class="footer-logo">
+      <div class="footer-div"><img src="@/assets/landing/logo_mintick.svg" loading="lazy" alt="Mintickt" class="footer-logo">
         <span class="text-block"> is cooking up a recipe at </span>
-        <a href="https://near.org" target="_blank" class="w-inline-block"><img src="@/assets/landing/near_logo_wht.png" loading="lazy" width="347" alt="" class="footer-logo"></a>
+        <a href="https://near.org" target="_blank" class="w-inline-block"><img src="@/assets/landing/near_logo_wht.svg" loading="lazy" width="347" alt="" class="footer-logo"></a>
         <span class="text-block marginright">,</span>
       </div>
       <div class="footer-div mintbase">
         <span class="text-block"> with a lot of</span>
-        <a href="https://mintbase.io" target="_blank" class="w-inline-block"><img src="@/assets/landing/Mintbase_logo.png" loading="lazy" width="347" alt="" class="footer-logo"></a>
+        <a href="https://mintbase.io" target="_blank" class="w-inline-block"><img src="@/assets/landing/Mintbase_logo.svg" loading="lazy" width="347" alt="" class="footer-logo"></a>
       </div>
       <div class="footer-div astro">
         <span class="text-block">a touch of </span>
@@ -17,7 +17,7 @@
       </div>
       <div class="footer-div astro">
         <span class="text-block">all the flavor of</span>
-        <a href="https://astrodao.com" target="_blank" class="w-inline-block"><img src="@/assets/landing/astro.png" loading="lazy" width="101" alt="" class="footer-logo"></a>
+        <a href="https://astrodao.com" target="_blank" class="w-inline-block"><img src="@/assets/landing/astro.svg" loading="lazy" width="101" alt="" class="footer-logo"></a>
       </div>
     </v-row>
   </v-footer>

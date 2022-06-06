@@ -12,7 +12,7 @@
     <v-row class="limiter align">
       <v-col class="space" style="padding-inline: clamp(1em, 4vw, 4em)">
         <a class="center" href="/">
-          <img class="logoHeader" src="@/assets/logo/logom.png" alt="logo">
+          <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
         </a>
       <v-btn
         @click="connect"
@@ -21,7 +21,7 @@
         rounded
         class="h9-em"
       >
-        <img src="@/assets/logo/near.png" alt="near">
+        <img src="@/assets/logo/near.svg" alt="near">
         <span>{{user}}</span>
       </v-btn>
       </v-col>

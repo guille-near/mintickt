@@ -12,7 +12,7 @@
         </h2>
 
         <section class="center divwrap">
-          <img class="ticket" src="@/assets/img/ticket.png" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
 
           <aside class="divcol">
             <h3>Basic Information</h3>
@@ -67,7 +67,7 @@
         </h2>
 
         <section class="center divwrap">
-          <img class="ticket" src="@/assets/img/ticket.png" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
 
           <aside class="divcol">
             <h3>Main event image</h3>
