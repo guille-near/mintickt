@@ -324,7 +324,7 @@ export default {
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list.offer === null){
+          if (element.ownerId === "mintickt.near"){
               this.cantidad_disponible = this.cantidad_disponible +1
           }
         });
