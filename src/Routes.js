@@ -47,7 +47,7 @@ export default new Router({
         component: () => import('@/pages/Tienda/TiendaNew'),
       },
       {
-        path: '/claim',
+        path: '/Y2xhaW1uZnQ',
         name: 'claim',
         component: () => import('@/pages/Tienda/Claim'),
       },
