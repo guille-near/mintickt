@@ -13,5 +13,5 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
-  publicPath: '/events/ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo:mintickt.mintbase1.near'
+  publicPath: '/events/_PnIG4wSbOt95cdArvYIeHqzlP3fQoTLN1XDxY1SNkQ:mintickt.mintbase1.near'
 }
