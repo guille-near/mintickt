@@ -31,7 +31,7 @@
             <v-slide-item v-for="(item,i) in Datos.lineUp.dataLineUp" :key="i">
               <v-card color="transparent" style="display:flex">
                 <img :src="item.img" alt="Dj image">
-                <h4>{{item.name}}</h4>
+                <h4 class="p">{{item.name}}</h4>
               </v-card>
             </v-slide-item>
           </v-slide-group>
