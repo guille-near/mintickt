@@ -6,7 +6,7 @@
         <article id="claim" class="divcol acenter" >
           <img :src="duneticket" alt="Ticket" />
           <div style="gap:1em" class="divcol fill-w">
-            <v-btn @click="batchMakeOffer()" class="paywallet h8-em">Claim your NFT ticket</v-btn>
+            <v-btn href="https://sonar.satori.art/zncNqENFJAwe4SGYU32rh" class="paywallet h8-em">Claim your NFT ticket</v-btn>
           </div>
         </article>
       </section>
