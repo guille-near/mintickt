@@ -169,7 +169,7 @@
         //   }
         // }
         .v-responsive__content {
-          padding: 1em;
+          padding: 1em clamp(0em, 1vw, 1em);
           gap: 1em;
           display: grid;
           place-items: center;
