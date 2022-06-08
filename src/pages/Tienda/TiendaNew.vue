@@ -374,6 +374,22 @@ export default {
     };
   },
   mounted(){
+     setTimeout(() => {
+      this.traerdatos().then( (res) => {
+          var cantidad_tokens = 0
+           this.things_by_pk.tokens.forEach(element => {
+             if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+              if (element.list.offer === null){
+                cantidad_tokens++
+                this.tokens_buy.push(element.id)
+              }
+          }
+        });
+      }) 
+      this.NearUsd()
+      // this.loginNear()
+      this.NEARyoctoNEAR()
+    }, 2000);
     window.innerWidth>=880?this.showCarousel=true:this.showCarousel=false
     window.addEventListener('resize', ()=>{window.innerWidth>=880?this.showCarousel=true:this.showCarousel=false});
 
@@ -389,22 +405,6 @@ export default {
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
     }
-    
-    setTimeout(() => {
-      this.traerdatos().then( (res) => {
-          var cantidad_tokens = 0
-           this.things_by_pk.tokens.forEach(element => {
-            if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < 1 ){
-              cantidad_tokens++
-              this.tokens_buy.push(element.id)
-            }
-        });
-      }) 
-      this.NearUsd()
-      // this.loginNear()
-      this.NEARyoctoNEAR()
-    }, 1000);
-    
   },
   methods: {
     NEARyoctoNEAR: function() {
@@ -419,8 +419,10 @@ export default {
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list.offer === null){
-              this.cantidad_disponible = this.cantidad_disponible +1
+           if (element.list !== null){
+              if (element.list.offer === null){
+                this.cantidad_disponible = this.cantidad_disponible +1
+              }
           }
         });
         this.tokens_disponibles =  this.cantidad_disponible
@@ -460,9 +462,11 @@ export default {
         this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
         this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            cantidad_tokens++
-            this.tokens_buy.push(element.id)
+          if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+            if (element.list.offer === null){
+              cantidad_tokens++
+              this.tokens_buy.push(element.id)
+            }
           }
           console.log(this.tokens_buy)
       });
@@ -473,9 +477,11 @@ export default {
           this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
-          if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            cantidad_tokens++
-            this.tokens_buy.push(element.id)
+         if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+            if (element.list.offer === null){
+              cantidad_tokens++
+              this.tokens_buy.push(element.id)
+            }
           }
           console.log(this.tokens_buy)
       });
