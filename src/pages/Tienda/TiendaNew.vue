@@ -326,21 +326,8 @@ export default {
       hash: "",
     };
   },
-  mounted(){
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes")
-    this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
-    if (urlParams.get("transactionHashes") !== null) {
-      console.log('aqui' + urlParams.get("transactionHashes"))
-      this.dialog = true
-      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
-    }
-    if (urlParams.get("errorCode") !== null) {
-      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
-    }
-    
-    setTimeout(() => {
+  created(){
+        setTimeout(() => {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0
            this.things_by_pk.tokens.forEach(element => {
@@ -353,8 +340,19 @@ export default {
       this.NearUsd()
       // this.loginNear()
       this.NEARyoctoNEAR()
-    }, 1000);
-    
+    }, 2000);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.get("transactionHashes")
+    this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
+    if (urlParams.get("transactionHashes") !== null) {
+      console.log('aqui' + urlParams.get("transactionHashes"))
+      this.dialog = true
+      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
+    }
+    if (urlParams.get("errorCode") !== null) {
+      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
+    }
   },
   methods: {
 
