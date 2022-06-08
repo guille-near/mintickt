@@ -29,7 +29,7 @@
             class="wrapper_lineUp"
           >
             <v-slide-item v-for="(item,i) in Datos.lineUp.dataLineUp" :key="i">
-              <v-card color="transparent" style="display:flex">
+              <v-card color="transparent" style="display:flex" :href="item.link" target="_blank">
                 <img :src="item.img" alt="Dj image">
                 <h4 class="p">{{item.name}}</h4>
               </v-card>
@@ -244,18 +244,22 @@ export default {
             {
               img: require("@/assets/djs/robb-banks.png"),
               name: "Robb Banks",
+              link: "https://open.spotify.com/artist/7KduBCxhfAMiQlhMOHL3IZ?si=7_QfGR3sTdak8HbqvyCmTg",
             },
             {
               img: require("@/assets/djs/babyG.png"),
               name: "BabyG",
+              link: "https://open.spotify.com/artist/4TSbN13XStA2YH0UGvIn8x?si=rMNhGsZxTyKxX42Kk6D3WA",
             },
             {
               img: require("@/assets/djs/k-charles.png"),
               name: "K.Charles",
+              link: "https://open.spotify.com/artist/4sOdMRnJPvEQJCHC4uhzns?si=A_ukVBtwSF--XL92ebWM-g",
             },
             {
               img: require("@/assets/djs/lxui-savage.png"),
               name: "Lxui Savage",
+              link: "https://open.spotify.com/artist/2XJx9jQQl50YGJXUmUthsa?si=Idc2bt-3RDq5-W5d_P579w",
             },
           ],
         },
