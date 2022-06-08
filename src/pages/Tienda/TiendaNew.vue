@@ -23,7 +23,7 @@
         <aside v-if="Datos.lineUp" class="divcol">
           <h3 class="h7-em">Line up</h3>
 
-          <v-slide-group
+          <!-- <v-slide-group
             center-active
             :show-arrows="false"
             class="wrapper_lineUp"
@@ -34,7 +34,52 @@
                 <h4 class="p">{{item.name}}</h4>
               </v-card>
             </v-slide-item>
-          </v-slide-group>
+          </v-slide-group> -->
+          
+          <v-carousel
+            v-model="Datos.lineUp.carousel"
+            hide-delimiters
+            :show-arrows="showCarousel==true?false:true"
+            class="wrapper_lineUp"
+          >
+            <template v-if="showCarousel==true">
+              <template v-for="(item, index) in Datos.lineUp.dataLineUp">
+                <v-carousel-item
+                  v-if="(index + 1) % 4 === 1 || 4 === 1"
+                  :key="index"
+                > 
+                  <template v-for="(n,i) in 4">
+                    <template v-if="(+index + i) < Datos.lineUp.dataLineUp.length">
+                      <v-card color="transparent" style="display:flex" :key="i"
+                        :href="Datos.lineUp.dataLineUp[+index + i].link" target="_blank">
+                        <img :src="Datos.lineUp.dataLineUp[+index + i].img" alt="Dj image">
+                        <h4 class="p">{{Datos.lineUp.dataLineUp[+index + i].name}}</h4>
+                      </v-card>
+                    </template>
+                  </template>
+                </v-carousel-item>
+              </template>
+            </template>
+            
+            <template v-else>
+              <template v-for="(item, index) in Datos.lineUp.dataLineUp">
+                <v-carousel-item
+                  v-if="(index + 1) % 1 === 1 || 1 === 1"
+                  :key="index"
+                > 
+                  <template v-for="(n,i) in 1">
+                    <template v-if="(+index + i) < Datos.lineUp.dataLineUp.length">
+                      <v-card color="transparent" style="display:flex" :key="i"
+                        :href="Datos.lineUp.dataLineUp[+index + i].link" target="_blank">
+                        <img :src="Datos.lineUp.dataLineUp[+index + i].img" alt="Dj image">
+                        <h4 class="p">{{Datos.lineUp.dataLineUp[+index + i].name}}</h4>
+                      </v-card>
+                    </template>
+                  </template>
+                </v-carousel-item>
+              </template>
+            </template>
+          </v-carousel>
 
           <p><strong style="color:#FF37BB">Dj Sets </strong>{{Datos.lineUp.djSet}}</p>
         </aside>
@@ -237,9 +282,11 @@ export default {
       location: '',
       dialog: false,
       ultimoprecio: null,
+      showCarousel: null,
       Datos: {
         lineUp: {
           djSet: "by Alex Jordan, Lunary, Os NinetyFive, HeartBreakSeason, AntPuke, WinterWrong, Low Earth, Orbit, Alien,The Princess Khai and Marte.",
+          carousel: 0,
           dataLineUp: [
             {
               img: require("@/assets/djs/robb-banks.png"),
@@ -326,21 +373,10 @@ export default {
       hash: "",
     };
   },
-  created(){
-        setTimeout(() => {
-      this.traerdatos().then( (res) => {
-          var cantidad_tokens = 0
-           this.things_by_pk.tokens.forEach(element => {
-            if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < 1 ){
-              cantidad_tokens++
-              this.tokens_buy.push(element.id)
-            }
-        });
-      }) 
-      this.NearUsd()
-      // this.loginNear()
-      this.NEARyoctoNEAR()
-    }, 2000);
+  mounted(){
+    window.innerWidth>=880?this.showCarousel=true:this.showCarousel=false
+    window.addEventListener('resize', ()=>{window.innerWidth>=880?this.showCarousel=true:this.showCarousel=false});
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes")
@@ -353,26 +389,38 @@ export default {
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
     }
+    
+    setTimeout(() => {
+      this.traerdatos().then( (res) => {
+          var cantidad_tokens = 0
+           this.things_by_pk.tokens.forEach(element => {
+            if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < 1 ){
+              cantidad_tokens++
+              this.tokens_buy.push(element.id)
+            }
+        });
+      }) 
+      this.NearUsd()
+      // this.loginNear()
+      this.NEARyoctoNEAR()
+    }, 1000);
+    
   },
   methods: {
-
     NEARyoctoNEAR: function() {
       const { utils } = nearAPI;
       const amountInYocto = utils.format.parseNearAmount(1);
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        console.log(this.things_by_pk)    
         this.duneticket ="https://arweave.net/balSBsdJ9lrHN-YSzJhHYY6VpJetr6Ne6_jU9rJk_C4"
         this.tittle = "Upside Down World"
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list !== null){
-              if (element.list.offer === null){
-                this.cantidad_disponible = this.cantidad_disponible +1
-              }
+          if (element.list.offer === null){
+              this.cantidad_disponible = this.cantidad_disponible +1
           }
         });
         this.tokens_disponibles =  this.cantidad_disponible
@@ -412,11 +460,9 @@ export default {
         this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
         this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            if (element.list.offer === null){
-              cantidad_tokens++
-              this.tokens_buy.push(element.id)
-            }
+          if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+            cantidad_tokens++
+            this.tokens_buy.push(element.id)
           }
           console.log(this.tokens_buy)
       });
@@ -427,11 +473,9 @@ export default {
           this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
-          if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            if (element.list.offer === null){
-              cantidad_tokens++
-              this.tokens_buy.push(element.id)
-            }
+          if (element.list.offer === null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+            cantidad_tokens++
+            this.tokens_buy.push(element.id)
           }
           console.log(this.tokens_buy)
       });

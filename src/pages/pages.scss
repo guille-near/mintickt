@@ -39,10 +39,14 @@
   // padding-bottom: 70px;
   @include mq(max, small) {
     &>aside:nth-child(1) {
-      h2 {font-size: clamp(2.3em, 5vw, 5.1685em) !important;
-        margin-bottom: 0 !important;max-width: 100% !important;}
+      h2 {font-size: clamp(1.8em, 5vw, 5.1685em) !important;
+        margin-bottom: 0 !important;max-width: 100% !important;
+      }
       span {font-size: 1.21611875em !important}
       .v-chip__content {font-size: 1em !important}
+    }
+    @include mq(max, 340px) {
+      font-size: 12px !important;
     }
   }
   &>aside:nth-child(1) {
@@ -112,7 +116,7 @@
       line-height: 1 !important;
       width: max-content;
       max-width: max(calc(75% - 4vw), 4.7em);
-      word-break: break-all !important;
+      word-break: initial !important;
     }
 
     span {
@@ -151,22 +155,31 @@
         letter-spacing: 0.04em;
         color: #FF37BB;
       }
+      :is(.v-image, .v-window) {height: max-content !important}
       .wrapper_lineUp {
         margin-bottom: 16px;
-        .v-slide-group__wrapper {
-          .v-slide-group__content {
-            gap: 1em;
-            padding: .5em;
-            @include mq(min, 880px) {
-              display: grid;
-              grid-template-columns: repeat(2, 1fr);
-            }
-          }
+        // .v-slide-group__wrapper {
+        //   .v-slide-group__content {
+        //     gap: 1em;
+        //     padding: .5em;
+        //     @include mq(min, 880px) {
+        //       display: grid;
+        //       grid-template-columns: repeat(2, 1fr);
+        //     }
+        //   }
+        // }
+        .v-responsive__content {
+          padding: 1em;
+          gap: 1em;
+          display: grid;
+          place-items: center;
+          @include mq(min, small) {grid-template-columns: repeat(2, 1fr)}
         }
         .v-card {
           border-radius: 8px;
           width: min(100%, 27.0625em);
-          @include mq(max, small) {width: 27.0625em !important};
+          // @include mq(max, 879px) {min-width: 27.0625em;max-width: 27.0625em;}
+          @include mq(min, small) {width: min(100%, 27.0625em) !important};
           // height: 18.4375em;
           aspect-ratio: 13.2/9;
           overflow: hidden;
