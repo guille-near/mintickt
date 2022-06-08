@@ -2,8 +2,8 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/Kingrichard.png" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/bg_tienda.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/bg_tienda-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
@@ -24,8 +24,8 @@
           <h3 class="h7-em">Line up</h3>
 
           <v-slide-group
-            v-model="carousel"
             center-active
+            :show-arrows="false"
             class="wrapper_lineUp"
           >
             <v-slide-item v-for="(item,i) in Datos.lineUp.dataLineUp" :key="i">
