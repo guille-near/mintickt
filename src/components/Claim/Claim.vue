@@ -1,15 +1,24 @@
 <template>
-  <section id="tienda" class="center align divcol" style="margin-block: 10em 14em !important">
-    <article id="claim" class="divcol acenter" >
-      <img :src="duneticket" alt="Ticket" />
-      <div style="gap:1em" class="divcol fill-w">
-        <v-btn @click="batchMakeOffer()" class="paywallet h8-em">Claim your NFT ticket</v-btn>
-      </div>
-    </article>
-  </section>
+  <v-app class="layout">
+    <Header style="z-index: 10" ref="header" id="navbar" />
+    <v-main class="content">
+      <section id="tienda" class="center align divcol" style="margin-block: 10em 14em !important">
+        <article id="claim" class="divcol acenter" >
+          <img :src="duneticket" alt="Ticket" />
+          <div style="gap:1em" class="divcol fill-w">
+            <v-btn @click="batchMakeOffer()" class="paywallet h8-em">Claim your NFT ticket</v-btn>
+          </div>
+        </article>
+      </section>
+    <Footer />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
+import Header from "./HeaderClaim";
+import Footer from "@/components/Layout/Footer";
+import "@/components/Layout/layout.scss";
 const axios = require('axios');
 import gql from 'graphql-tag'
 import { Wallet, Chain, Network } from 'mintbase'
@@ -18,6 +27,7 @@ import { CONFIG } from "@/services/api"
 const { connect, keyStores, WalletConnection, utils ,} = nearAPI
 export default {
   name: "claim",
+  components: { Header, Footer },
   apollo: {
     things_by_pk: {
        query: gql`{
@@ -200,4 +210,4 @@ async  batchMakeOffer() {
 };
 </script>
 
-<style src="../pages.scss" lang="scss" />
+<style src="@/pages/pages.scss" lang="scss" />
