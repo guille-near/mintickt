@@ -4,6 +4,17 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+  scrollBehavior: (to, from, savedPosition) => {
+    let scrollTo = 0
+
+    if (to.hash) {
+      scrollTo = to.hash
+    } else if (savedPosition) {
+      scrollTo = savedPosition.y
+    }
+
+    return goTo(scrollTo)
+  },
   routes: [
     {
       path: '/login',
