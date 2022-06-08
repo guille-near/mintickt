@@ -226,7 +226,7 @@ export default {
             text2: "Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
           },
           movie: {
-            boldText: "Plot:",
+            boldtext: "Plot:",
             text: "‘Juno’ stars Ellen Page as the title character, a whip-smart teen confronting an unplanned pregnancy by her classmate Bleeker (Michael Cera). With the help of her hot best friend Leah (Olivia Thirlby), Juno finds her unborn child a 'perfect' set of parents: an affluent suburban couple, Mark and Vanessa (Jason Bateman and Jennifer Garner), longing to adopt. Luckily, Juno has the total support of her parents as she faces some tough decisions, flirts with adulthood and ultimately figures out where she belongs.",
             text2: "This 2007 comedy-drama has been widely considered as one of the most beloved movies of the 21st century and it won the Oscar for Best Screenplay and earned three other Oscar nominations, including Best Picture and Best Actress for 20-year old Page. ",
           },
@@ -324,7 +324,7 @@ export default {
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
         this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near"){
+          if (element.list.offer === null){
               this.cantidad_disponible = this.cantidad_disponible +1
           }
         });

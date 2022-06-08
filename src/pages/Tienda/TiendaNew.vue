@@ -6,7 +6,7 @@
       <img class="vermobile" src="@/assets/img/bg_tienda-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 10</v-chip>
         <h2>{{tittle}}</h2>
         <span>Esquina de Abuela</span>
       </div>
@@ -98,7 +98,7 @@
           <h3 class="h7-em">Location</h3>
           <iframe
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=Arroz Estúdios"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=2705 NW 22nd Ave, Miami, FL 33142, USA"
             allowfullscreen>
           </iframe>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
@@ -291,7 +291,7 @@ export default {
         //     },
         //   ],
         // },
-        location: "Av. Infante Dom Henrique, 1900-319 Lisboa, Portugal",
+        location: "2705 NW 22nd Ave, Miami, FL 33142, USA",
         details: [
           {
             titlesDetails: "Storage Gateaway",
@@ -299,7 +299,7 @@ export default {
           },
           {
             titlesDetails: "Transactions ID",
-            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc",
+            textDetails: "_PnIG4wSbOt95cdArvYIeHqzlP3fQoTLN1XDxY1SNkQ",
           },
           {
             titlesDetails: "Contract",
@@ -307,7 +307,7 @@ export default {
           },
           {
             titlesDetails: "Thing ID",
-            textDetails: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near",
+            textDetails: "_PnIG4wSbOt95cdArvYIeHqzlP3fQoTLN1XDxY1SNkQ:mintickt.mintbase1.near",
           },
         ]
       },
@@ -360,6 +360,7 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
+        this.duneticket ="https://arweave.net/balSBsdJ9lrHN-YSzJhHYY6VpJetr6Ne6_jU9rJk_C4"
         this.tittle = "Upside Down World"
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
