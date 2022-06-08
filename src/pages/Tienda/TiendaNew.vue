@@ -119,11 +119,44 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img src="@/assets/img/claim-nft.svg" alt="Ticket" />
+        <img :src="duneticket" alt="Ticket" />
+        <div class="contenedor_aside divcol fill-w">
+        <aside class="divrow">
+          <span class="h8-em space" style="width: 100%; gap: .5em">
+            <strong class="number">{{tokens_disponibles}}</strong> of <strong class="number">{{tokens_totales}}</strong> available
+          </span>
+        </aside>
+        <aside class="relative">
+          <v-text-field  disabled  type="number" hide-spin-buttons :hide-details="true" solo v-model="cantidad">
+          </v-text-field>
+            <div class="contenedor_botones">
+              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
+                  <v-icon color="black">
+                    mdi-minus
+                  </v-icon>
+                </v-btn>
+                <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+                  <v-icon color="black">
+                    mdi-plus
+                  </v-icon>
+                </v-btn>
+            </div>
+        </aside>
+
+        <aside class="space">
+          <div class="divrow acenter">
+            <img src="@/assets/logo/logonear.svg" alt="Logo near" />
+            <span class="h8-em number">{{price}}</span>
+          </div>
+          <span class="tend">~ {{ultimoprecio}} $USD</span>
+        </aside>
+        </div>
         <div style="gap:1em" class="divcol fill-w">
-          <v-btn class="paywallet h8-em">Claim your NFT ticket</v-btn>
+          <v-btn @click="batchMakeOffer()" class="paywallet h8-em"> Pay with NEAR </v-btn>
+          <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
         </div>
       </article>
+
        <v-dialog
       v-model="dialog"
       width="500"
