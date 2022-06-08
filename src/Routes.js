@@ -37,12 +37,12 @@ export default new Router({
       //  component: () => import('@/pages/Landing/Landing'),
       //},
       {
-        path: '/',
+        path: '/tienda',
         name: 'Tienda',
         component: () => import('@/pages/Tienda/Tienda'),
       },
       {
-        path: '/tienda',
+        path: '/',
         name: 'Tienda',
         component: () => import('@/pages/Tienda/TiendaNew'),
       },
