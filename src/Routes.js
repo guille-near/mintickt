@@ -47,7 +47,7 @@ export default new Router({
         component: () => import('@/pages/Tienda/TiendaNew'),
       },
       {
-        path: '/claim',
+        path: '/Buywithstripeclaimyourticket',
         name: 'claim',
         component: () => import('@/pages/Tienda/Claim'),
       },
