@@ -177,7 +177,7 @@
         }
         .v-card {
           border-radius: 8px;
-          width: min(100%, 27.0625em);
+          width: min(100%, 37.0625em);
           // @include mq(max, 879px) {min-width: 27.0625em;max-width: 27.0625em;}
           @include mq(min, small) {width: min(100%, 27.0625em) !important};
           // height: 18.4375em;
@@ -189,12 +189,12 @@
           box-shadow: 0 0 3px 1.4px rgb(225, 225, 225, 0.3) !important;
           img {
             @include absoluteCenter;
-            object-fit: cover;
+            width: 100%;
           }
           h4 {
             font-family: 'Proxima Nova', sans-serif !important;
             font-weight: 800;
-            font-size: clamp(2.2em, 2.5vw, 2.5625em);
+            font-size: clamp(1.8em, 2.5vw, 2.5625em);
             letter-spacing: -0.03em;
             color: #FFFFFF !important;
             z-index: 2;
