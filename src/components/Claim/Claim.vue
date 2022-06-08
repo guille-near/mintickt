@@ -2,7 +2,7 @@
   <v-app class="layout">
     <Header style="z-index: 10" ref="header" id="navbar" />
     <v-main class="content">
-      <section id="tienda" class="center align divcol" style="margin-block: 10em 14em !important">
+      <section id="tienda" class="center align divcol" style="margin-block: 6em 4em !important">
         <article id="claim" class="divcol acenter" >
           <img :src="duneticket" alt="Ticket" />
           <div style="gap:1em" class="divcol fill-w">
@@ -10,14 +10,12 @@
           </div>
         </article>
       </section>
-    <Footer />
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Header from "./HeaderClaim";
-import Footer from "@/components/Layout/Footer";
 import "@/components/Layout/layout.scss";
 const axios = require('axios');
 import gql from 'graphql-tag'
@@ -27,7 +25,7 @@ import { CONFIG } from "@/services/api"
 const { connect, keyStores, WalletConnection, utils ,} = nearAPI
 export default {
   name: "claim",
-  components: { Header, Footer },
+  components: { Header },
   apollo: {
     things_by_pk: {
        query: gql`{

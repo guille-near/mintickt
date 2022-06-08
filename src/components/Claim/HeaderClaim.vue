@@ -6,7 +6,7 @@
     <v-app-bar
     id="headerApp"
     color="transparent"
-    height="140px"
+    height="100px"
     absolute
   >
     <v-row class="limiter align">

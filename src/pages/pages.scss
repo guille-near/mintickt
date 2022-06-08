@@ -44,9 +44,7 @@
       }
       span {font-size: 1.21611875em !important}
       .v-chip__content {font-size: 1em !important}
-    }
-    @include mq(max, 340px) {
-      font-size: 12px !important;
+      @include mq(max, 340px) {font-size: 12px !important}
     }
   }
   &>aside:nth-child(1) {
@@ -169,6 +167,7 @@
         //   }
         // }
         .v-responsive__content {
+          @include mq(max, 340px) {font-size: 12px !important}
           padding: 1em clamp(0em, 1vw, 1em);
           gap: 1em;
           display: grid;
@@ -268,11 +267,14 @@
   article {
     --padding: clamp(2em, calc(23% - 1em), 6em);
     position: static;
-    width: min(90%, 22em);
     color: white !important;
     gap: 2em;
+    &#claim {
+      width: min(90%, 17em);
+    }
     &#buy {
       @include mq(min, small) {
+        width: min(90%, 22em);
         position: absolute;
         right: clamp(2em, 4vw, 4em);
         top: -21.875em;
