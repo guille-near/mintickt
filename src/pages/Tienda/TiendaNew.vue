@@ -8,7 +8,7 @@
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">MAY 30</v-chip>
         <h2>{{tittle}}</h2>
-        <span>Black Cat Cinema</span>
+        <span>Esquina de Abuela</span>
       </div>
     </aside>
 
@@ -168,7 +168,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-  things_by_pk(id: "vIjQFtDJQDg7EjtCiUSlq-2DuM968am82IoDptKufPc:mintickt.mintbase1.near") {
+  things_by_pk(id: "_PnIG4wSbOt95cdArvYIeHqzlP3fQoTLN1XDxY1SNkQ:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -327,8 +327,7 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        this.duneticket ="https://arweave.net/KXDzhoCAHf2nyOluc8gkCQepFWyNnDy-0WNhFNgL61Q"
-        this.tittle =  this.things_by_pk.metadata.title
+        this.tittle = "Upside Down World"
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
