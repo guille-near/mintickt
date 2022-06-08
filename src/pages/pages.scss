@@ -124,7 +124,7 @@
     padding: clamp(1em, 4vw, 4em);
     position: relative;
     .contleft {
-      width: 60%;
+      width: 65%;
       gap: 2em;
       .conttitles {
         .tittles {margin-bottom: 0.2em}
@@ -142,6 +142,43 @@
         line-height: 115.5%;
         letter-spacing: 0.04em;
         color: #FF37BB;
+      }
+      .wrapper_lineUp {
+        margin-bottom: 16px;
+        .v-slide-group__wrapper {
+          .v-slide-group__content {
+            gap: 1em;
+            padding: .5em;
+            @include mq(min, 880px) {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+            }
+          }
+        }
+        .v-card {
+          border-radius: 8px;
+          width: min(100%, 27.0625em);
+          @include mq(max, small) {width: 27.0625em !important};
+          // height: 18.4375em;
+          aspect-ratio: 13.2/9;
+          overflow: hidden;
+          position: relative;
+          align-items: flex-end;
+          padding: .5em;
+          box-shadow: 0 0 3px 1.4px rgb(225, 225, 225, 0.3) !important;
+          img {
+            @include absoluteCenter;
+            object-fit: cover;
+          }
+          h4 {
+            font-family: 'Proxima Nova', sans-serif !important;
+            font-weight: 800;
+            font-size: clamp(2.2em, 2.5vw, 2.5625em);
+            letter-spacing: -0.03em;
+            color: #FFFFFF !important;
+            z-index: 2;
+          }
+        }
       }
       .contLocation {
         iframe {
@@ -211,7 +248,7 @@
     --padding: clamp(2em, calc(23% - 1em), 6em);
     position: absolute;
     right: clamp(2em, 4vw, 4em);
-    top: -26%;
+    top: -21.875em;
     color: white !important;
     gap: 2em;
     width: calc(clamp(2em, 6vw, 6em) * 2 + 150px);

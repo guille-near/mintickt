@@ -31,6 +31,11 @@ export default new Router({
         component: () => import('@/pages/Tienda/Tienda'),
       },
       {
+        path: '/tienda',
+        name: 'Tienda',
+        component: () => import('@/pages/Tienda/TiendaNew'),
+      },
+      {
         path: '/create-tickets',
         name: 'CreateTickets',
         component: () => import('@/pages/CreateTickets/CreateTickets'),
