@@ -2,8 +2,8 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/juno_coverart_1800x686_06ac7160.jpeg" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/juno_coverart_1800x686_06ac7160.jpeg" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/bg_flee.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/bg_flee-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">JUN 7</v-chip>
@@ -21,36 +21,21 @@
 
       <div class="contleft divcol fill-wmobile">
         <aside v-if="Datos.about" class="aboutSection divcol">
-          <h3 class="h7-em">About</h3>
+          <h3 class="h7-em p">About</h3>
 
           <div v-if="Datos.about.event" class="divcol h8-em">
             <p class="p"><strong>Event Information:</strong></p>
-            <p>{{Datos.about.event.text}}</p>
-            <p v-if="Datos.about.event.text2" class="margintop">{{Datos.about.event.text2}}</p>
-            <p v-if="Datos.about.event.text3" class="margintop">{{Datos.about.event.item.text3}}</p>
+            <p v-html="Datos.about.event.text" />
           </div>
 
           <div v-if="Datos.about.venue" class="divcol h8-em">
             <p class="p"><strong>Venue Information:</strong></p>
-            <p>{{Datos.about.venue.text}}</p>
-            <p v-if="Datos.about.venue.text2" class="margintop">{{Datos.about.venue.text2}}</p>
-            <p v-if="Datos.about.venue.text3" class="margintop">{{Datos.about.venue.text3}}</p>
+            <p v-html="Datos.about.venue.text" />
           </div>
 
           <div v-if="Datos.about.movie" class="divcol h8-em">
-            <p class="p"><strong>Movie Information:</strong></p>
-            <p class="margintop">
-              <strong v-if="Datos.about.movie.boldText">{{Datos.about.movie.boldText}} </strong>
-              {{Datos.about.movie.text}}
-            </p>
-            <p v-if="Datos.about.movie.text2" class="margintop">
-              <strong v-if="Datos.about.movie.boldText2">{{Datos.about.movie.boldText2}} </strong>
-              {{Datos.about.movie.text2}}
-            </p>
-            <p v-if="Datos.about.movie.text3" class="margintop">
-              <strong v-if="Datos.about.movie.boldText3">{{Datos.about.movie.boldText3}} </strong>
-              {{Datos.about.movie.text3}}
-            </p>
+            <p style="margin-block: 0em 1em !important"><strong>Movie Information:</strong></p>
+            <p v-html="Datos.about.movie.text" />
           </div>
 
           <div v-if="Datos.about.info" class="conttitles">
@@ -59,19 +44,9 @@
             </p>
           </div>
 
-          <div class="divcol h8-em">
-            <p class="p"><strong>Cancelation &amp; Weather Policy::</strong></p>
-            <p>
-              If you need to change your ticket, a full refund is available 
-              up to 48 hours before the start of the event. A 50% refund is 
-              available for cancellations made 48 - 24 hours before the event 
-              starts. We are sorry but any cancellations made less than 
-              24 hours in advance are non-refundable.
-            </p>
-            <p class="margintop">
-              In case of rain, the event will continue. If there's heavy 
-              rain, we will continue with the film in the indoor area.
-            </p>
+          <div v-if="Datos.about.cancelation" class="divcol h8-em">
+            <p class="p"><strong>Cancelation &amp; Weather Policy:</strong></p>
+            <p v-html="Datos.about.cancelation" />
           </div>
         </aside>
 
@@ -100,7 +75,7 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img :src="duneticket" alt="Ticket" />
+        <img src="@/assets/img/ticket_flee.svg" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
           <span class="h8-em space" style="width: 100%; gap: .5em">
@@ -222,34 +197,32 @@ export default {
             text: "The movie starts at 21:00. The bar opens for drinks and music from 19:00. Pizzas and popcorn are available from 20:00. We always recommend bringing a warm jacket and/or blanket.",
           },
           venue: {
-            text: "Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.",
-            text2: "Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
+            text: "<p>Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.</p>Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
           },
           movie: {
-            boldtext: "Plot:",
-            text: "‘Juno’ stars Ellen Page as the title character, a whip-smart teen confronting an unplanned pregnancy by her classmate Bleeker (Michael Cera). With the help of her hot best friend Leah (Olivia Thirlby), Juno finds her unborn child a 'perfect' set of parents: an affluent suburban couple, Mark and Vanessa (Jason Bateman and Jennifer Garner), longing to adopt. Luckily, Juno has the total support of her parents as she faces some tough decisions, flirts with adulthood and ultimately figures out where she belongs.",
-            text2: "This 2007 comedy-drama has been widely considered as one of the most beloved movies of the 21st century and it won the Oscar for Best Screenplay and earned three other Oscar nominations, including Best Picture and Best Actress for 20-year old Page. ",
+            text: "<p><strong>Plot: </strong>To honour the strength and courage of refugees worldwide and to stimulate public awareness and support for refugees, Black Cat Cinema hosts this special event on World Refugee Day with a screening of ‘Flee’. This 2021 animated Danish documentary follows the story of a man under the alias Amin Nawabi, who shares his hidden past of fleeing his country Afghanistan to Denmark for the first time.</p>The film received a nomination at the Academy Awards for Best International Feature Film, along with nominations in the Best Documentary and Best Animated Feature categories, becoming the first film in history to be nominated in all three major categories simultaneously. Besides this, ‘Flee’ won multiple international awards, including Grand Jury Prize in the World Cinema at Sundance Film Festival, and has been considered as one of the best movies of 2021.",
           },
           info: [
             {
               title: "Director:",
-              text: "Jason Reitman",
+              text: "Jonas Poher Rasmussen",
             },
             {
               title: "Actors:",
-              text: "Elliot Page, Michael Cera, Jennifer Garner",
+              text: "Daniel Karimyar, Fardin Mijdzadeh, Milad Eskandari",
             },
             {
               title: "Country:",
-              text: "USA | Year: 2007 | Length: 1h 36m",
+              text: "Denmark | Year: 2021 | Length: 1h 29m",
             },
             {
               title: "Audio:",
-              text: "English | Subtitles: Portuguese | PG: M/12",
+              text: "Danish | Subtitles: English | PG: M/12",
             },
           ],
+          cancelation: "<p>If you need to change your ticket, a full refund is available up to 48 hours before the start of the event. A 50% refund is available for cancellations made 48 - 24 hours before the event starts. We are sorry but any cancellations made less than 24 hours in advance are non-refundable.</p>In case of rain, the event will continue. If there's heavy rain, we will continue with the film in the indoor area.",
         },
-        location: "Av. Infante Dom Henrique, 1900-319 Lisboa, Portugal",
+        location: "Arroz Estúdios – Av. Infante Dom Henrique Lisboa, Xabregas",
         details: [
           {
             titlesDetails: "Storage Gateaway",
@@ -257,15 +230,15 @@ export default {
           },
           {
             titlesDetails: "Transactions ID",
-            textDetails: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo",
+            textDetails: "rrKzQCBY7PcHP56goSqlmh_C0ggZkb9jy3WOzOS1jG8",
           },
           {
             titlesDetails: "Contract",
-            textDetails: "mintickt.mintbase1.near",
+            textDetails: "blackcatcinema.mintspace2.testnet",
           },
           {
             titlesDetails: "Thing ID",
-            textDetails: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo:mintickt.mintbase1.near",
+            textDetails: "rrKzQCBY7PcHP56goSqlmh_C0ggZkb9jy3WOzOS1jG...",
           },
         ]
       },

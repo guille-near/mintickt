@@ -84,37 +84,23 @@
           <p><strong style="color:#FF37BB">Dj Sets </strong>{{Datos.lineUp.djSet}}</p>
         </aside>
 
+        
         <aside v-if="Datos.about" class="aboutSection divcol">
-          <h3 class="h7-em">About</h3>
+          <h3 class="h7-em p">About</h3>
 
           <div v-if="Datos.about.event" class="divcol h8-em">
             <p class="p"><strong>Event Information:</strong></p>
-            <p>{{Datos.about.event.text}}</p>
-            <p v-if="Datos.about.event.text2" class="margintop">{{Datos.about.event.text2}}</p>
-            <p v-if="Datos.about.event.text3" class="margintop">{{Datos.about.event.item.text3}}</p>
+            <p v-html="Datos.about.event.text" />
           </div>
 
           <div v-if="Datos.about.venue" class="divcol h8-em">
             <p class="p"><strong>Venue Information:</strong></p>
-            <p>{{Datos.about.venue.text}}</p>
-            <p v-if="Datos.about.venue.text2" class="margintop">{{Datos.about.venue.text2}}</p>
-            <p v-if="Datos.about.venue.text3" class="margintop">{{Datos.about.venue.text3}}</p>
+            <p v-html="Datos.about.venue.text" />
           </div>
 
           <div v-if="Datos.about.movie" class="divcol h8-em">
-            <p class="p"><strong>Movie Information:</strong></p>
-            <p class="margintop">
-              <strong v-if="Datos.about.movie.boldText">{{Datos.about.movie.boldText}} </strong>
-              {{Datos.about.movie.text}}
-            </p>
-            <p v-if="Datos.about.movie.text2" class="margintop">
-              <strong v-if="Datos.about.movie.boldText2">{{Datos.about.movie.boldText2}} </strong>
-              {{Datos.about.movie.text2}}
-            </p>
-            <p v-if="Datos.about.movie.text3" class="margintop">
-              <strong v-if="Datos.about.movie.boldText3">{{Datos.about.movie.boldText3}} </strong>
-              {{Datos.about.movie.text3}}
-            </p>
+            <p style="margin-block: 0em 1em !important"><strong>Movie Information:</strong></p>
+            <p v-html="Datos.about.movie.text" />
           </div>
 
           <div v-if="Datos.about.info" class="conttitles">
@@ -123,20 +109,10 @@
             </p>
           </div>
 
-          <!-- <div class="divcol h8-em">
-            <p class="p"><strong>Cancelation &amp; Weather Policy::</strong></p>
-            <p>
-              If you need to change your ticket, a full refund is available 
-              up to 48 hours before the start of the event. A 50% refund is 
-              available for cancellations made 48 - 24 hours before the event 
-              starts. We are sorry but any cancellations made less than 
-              24 hours in advance are non-refundable.
-            </p>
-            <p class="margintop">
-              In case of rain, the event will continue. If there's heavy 
-              rain, we will continue with the film in the indoor area.
-            </p>
-          </div> -->
+          <div v-if="Datos.about.cancelation" class="divcol h8-em">
+            <p class="p"><strong>Cancelation &amp; Weather Policy:</strong></p>
+            <p v-html="Datos.about.cancelation" />
+          </div>
         </aside>
 
         <aside class="contLocation divcol">
@@ -310,38 +286,36 @@ export default {
             },
           ],
         },
-        // about: {
-        //   event: {
-        //     text: "The movie starts at 21:00. The bar opens for drinks and music from 19:00. Pizzas and popcorn are available from 20:00. We always recommend bringing a warm jacket and/or blanket.",
-        //   },
-        //   venue: {
-        //     text: "Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.",
-        //     text2: "Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
-        //   },
-        //   movie: {
-        //     boldtext: "Plot:",
-        //     text: "Armed with a clear vision Richard Williams is determined to write his two daughters, Venus and Serena, into history. Training on tennis courts in Compton, California, Richard shapes the girls' unyielding commitment and keen intuition. Together, the Williams family defies seemingly insurmountable odds and the prevailing expectations laid before them.",
-        //     text2: "Unfortunately, the accident by Will Smith with presentator Chris Rock overshadowed the latest Academy Awards, where Smith won the Oscar for Best Actor in a Leading Role for his outstanding performance as father Richard of the world-famous Williams sisters.",
-        //   },
-        //   info: [
-        //     {
-        //       title: "Director:",
-        //       text: "Reinaldo Marcus Green",
-        //     },
-        //     {
-        //       title: "Actors:",
-        //       text: "Will Smith, Aunjanue Ellis, Jon Bernthal",
-        //     },
-        //     {
-        //       title: "Country:",
-        //       text: "USA | Year: 2021 | Length: 2h 24m",
-        //     },
-        //     {
-        //       title: "Audio:",
-        //       text: "English | Subtitles: Portuguese | PG: M/12",
-        //     },
-        //   ],
-        // },
+        about: {
+          event: {
+            text: "The movie starts at 21:00. The bar opens for drinks and music from 19:00. Pizzas and popcorn are available from 20:00. We always recommend bringing a warm jacket and/or blanket.",
+          },
+          venue: {
+            text: "<p>Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.</p>Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
+          },
+          movie: {
+            text: "<p><strong>Plot: </strong>Armed with a clear vision Richard Williams is determined to write his two daughters, Venus and Serena, into history. Training on tennis courts in Compton, California, Richard shapes the girls' unyielding commitment and keen intuition. Together, the Williams family defies seemingly insurmountable odds and the prevailing expectations laid before them.</p>Unfortunately, the accident by Will Smith with presentator Chris Rock overshadowed the latest Academy Awards, where Smith won the Oscar for Best Actor in a Leading Role for his outstanding performance as father Richard of the world-famous Williams sisters.",
+          },
+          info: [
+            {
+              title: "Director:",
+              text: "Reinaldo Marcus Green",
+            },
+            {
+              title: "Actors:",
+              text: "Will Smith, Aunjanue Ellis, Jon Bernthal",
+            },
+            {
+              title: "Country:",
+              text: "USA | Year: 2021 | Length: 2h 24m",
+            },
+            {
+              title: "Audio:",
+              text: "English | Subtitles: Portuguese | PG: M/12",
+            },
+          ],
+          cancelation: "<p>If you need to change your ticket, a full refund is available up to 48 hours before the start of the event. A 50% refund is available for cancellations made 48 - 24 hours before the event starts. We are sorry but any cancellations made less than 24 hours in advance are non-refundable.</p>In case of rain, the event will continue. If there's heavy rain, we will continue with the film in the indoor area.",
+        },
         location: "2705 NW 22nd Ave, Miami, FL 33142, USA",
         details: [
           {
