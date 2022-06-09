@@ -378,11 +378,9 @@ export default {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0
            this.things_by_pk.tokens.forEach(element => {
-             if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-              if (element.list.offer === null){
+             if (element.list !== null &&  element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
                 cantidad_tokens++
                 this.tokens_buy.push(element.id)
-              }
           }
         });
       }) 
@@ -419,10 +417,8 @@ export default {
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
         this.things_by_pk.tokens.forEach(element => {
-           if (element.list !== null){
-              if (element.list.offer === null){
+           if (element.list !== null &&  element.ownerId === "mintickt.near"){
                 this.cantidad_disponible = this.cantidad_disponible +1
-              }
           }
         });
         this.tokens_disponibles =  this.cantidad_disponible
@@ -462,11 +458,11 @@ export default {
         this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
         this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
         this.things_by_pk.tokens.forEach(element => {
-          if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            if (element.list.offer === null){
+          if (element.list !== null &&  element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+
               cantidad_tokens++
               this.tokens_buy.push(element.id)
-            }
+
           }
           console.log(this.tokens_buy)
       });
@@ -477,11 +473,8 @@ export default {
           this.price =  parseFloat(this.price  * this.cantidad).toFixed(1)
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
-         if (element.list !== null && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            if (element.list.offer === null){
+         if (element.list !== null &&  element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
               cantidad_tokens++
-              this.tokens_buy.push(element.id)
-            }
           }
           console.log(this.tokens_buy)
       });
