@@ -23,19 +23,6 @@
         <aside v-if="Datos.lineUp" class="divcol">
           <h3 class="h7-em">Line up</h3>
 
-          <!-- <v-slide-group
-            center-active
-            :show-arrows="false"
-            class="wrapper_lineUp"
-          >
-            <v-slide-item v-for="(item,i) in Datos.lineUp.dataLineUp" :key="i">
-              <v-card color="transparent" style="display:flex" :href="item.link" target="_blank">
-                <img :src="item.img" alt="Dj image">
-                <h4 class="p">{{item.name}}</h4>
-              </v-card>
-            </v-slide-item>
-          </v-slide-group> -->
-          
           <v-carousel
             v-model="Datos.lineUp.carousel"
             hide-delimiters
@@ -81,10 +68,9 @@
             </template>
           </v-carousel>
 
-          <p><strong style="color:#FF37BB">Dj Sets </strong>{{Datos.lineUp.djSet}}</p>
+          <p class="p"><strong style="color:#FF37BB">Dj Sets </strong>{{Datos.lineUp.djSet}}</p>
         </aside>
 
-        
         <aside v-if="Datos.about" class="aboutSection divcol">
           <h3 class="h7-em p">About</h3>
 
