@@ -156,7 +156,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-  things_by_pk(id: "ubjk1DnkwTzclvue4GhkUkAzW65KbT_fVEf2YkBoBgo:mintickt.mintbase1.near") {
+  things_by_pk(id: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -230,15 +230,15 @@ export default {
           },
           {
             titlesDetails: "Transactions ID",
-            textDetails: "rrKzQCBY7PcHP56goSqlmh_C0ggZkb9jy3WOzOS1jG8",
+            textDetails: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE",
           },
           {
             titlesDetails: "Contract",
-            textDetails: "blackcatcinema.mintspace2.testnet",
+            textDetails: "mintickt.mintbase1.near",
           },
           {
             titlesDetails: "Thing ID",
-            textDetails: "rrKzQCBY7PcHP56goSqlmh_C0ggZkb9jy3WOzOS1jG...",
+            textDetails: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE:mintickt.mintbase1.near",
           },
         ]
       },
@@ -254,20 +254,7 @@ export default {
     };
   },
   mounted(){
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes")
-    this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
-    if (urlParams.get("transactionHashes") !== null) {
-      console.log('aqui' + urlParams.get("transactionHashes"))
-      this.dialog = true
-      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
-    }
-    if (urlParams.get("errorCode") !== null) {
-      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
-    }
-    
-    setTimeout(() => {
+        setTimeout(() => {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0
            this.things_by_pk.tokens.forEach(element => {
@@ -280,8 +267,19 @@ export default {
       this.NearUsd()
       // this.loginNear()
       this.NEARyoctoNEAR()
-    }, 1000);
-    
+    }, 2000);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.get("transactionHashes")
+    this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
+    if (urlParams.get("transactionHashes") !== null) {
+      console.log('aqui' + urlParams.get("transactionHashes"))
+      this.dialog = true
+      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
+    }
+    if (urlParams.get("errorCode") !== null) {
+      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
+    }
   },
   methods: {
 

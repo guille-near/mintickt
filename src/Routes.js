@@ -37,15 +37,15 @@ export default new Router({
       //  component: () => import('@/pages/Landing/Landing'),
       //},
       {
-        path: '/tienda',
+        path: '/',
         name: 'Tienda',
         component: () => import('@/pages/Tienda/Tienda'),
       },
-      {
-        path: '/',
-        name: 'Tienda',
-        component: () => import('@/pages/Tienda/TiendaNew'),
-      },
+      // {
+      //   path: '/tienda',
+      //   name: 'Tienda',
+      //   component: () => import('@/pages/Tienda/TiendaNew'),
+      // },
       {
         path: '/create-tickets',
         name: 'CreateTickets',
@@ -53,11 +53,11 @@ export default new Router({
       },
     ],
   },
-  {
-    path: '/Y2xhaW1uZnQ',
-    name: 'claim',
-    component: () => import('@/components/Claim/Claim'),
-  },
+  // {
+  //   path: '/Y2xhaW1uZnQ',
+  //   name: 'claim',
+  //   component: () => import('@/components/Claim/Claim'),
+  // },
   // {
   //   path: '/',
   //   name: 'Layout2',
