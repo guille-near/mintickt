@@ -2,11 +2,11 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/120bpm_desktop.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/120bpm_mobile.png" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/bg_flee.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/bg_flee-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 21</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 20</v-chip>
         <h2>{{tittle}}</h2>
         <span>Black Cat Cinema</span>
       </div>
@@ -75,7 +75,7 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img src="@/assets/img/120bpm_ticket.png" alt="Ticket" />
+         <img src="@/assets/img/ticket_flee.svg" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
           <span class="h8-em space" style="width: 100%; gap: .5em">
@@ -156,7 +156,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-  things_by_pk(id: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near") {
+  things_by_pk(id: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -200,37 +200,37 @@ export default {
             text: "<p>Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.</p>Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
           },
           movie: {
-            text: "<p><strong>Plot: </strong>As the AIDS epidemic tears through their community during the early 90’s, the members of ACT UP Paris are fighting for survival. While they battle against governmental apathy, pharmaceutical greed and public ignorance, they also go out partying, debate politics and, occasionally, fall in love. One day, as outspoken radical Sean (Nahuel Pérez Biscayart) strikes up a conversation with shy newcomer Nathan (Arnaud Valois), they have no idea that their lives are about to change forever.",
+            text: "<p><strong>Plot: </strong>To honour the strength and courage of refugees worldwide and to stimulate public awareness and support for refugees, Black Cat Cinema hosts this special event on World Refugee Day with a screening of ‘Flee’. This 2021 animated Danish documentary follows the story of a man under the alias Amin Nawabi, who shares his hidden past of fleeing his country Afghanistan to Denmark for the first time.</p>The film received a nomination at the Academy Awards for Best International Feature Film, along with nominations in the Best Documentary and Best Animated Feature categories, becoming the first film in history to be nominated in all three major categories simultaneously. Besides this, ‘Flee’ won multiple international awards, including Grand Jury Prize in the World Cinema at Sundance Film Festival, and has been considered as one of the best movies of 2021.",
           },
           info: [
             {
               title: "Director:",
-              text: "Robin Campillo",
+              text: "Jonas Poher Rasmussen",
             },
             {
               title: "Actors:",
-              text: "Nahuel Pérez Biscayart, Arnaud Valois, Adèle Haenel",
+              text: "Daniel Karimyar, Fardin Mijdzadeh, Milad Eskandari",
             },
             {
               title: "Country:",
-              text: "France | Year: 2017 | Length: 2h 23m",
+              text: "Denmark | Year: 2021 | Length: 1h 29m",
             },
             {
               title: "Audio:",
-              text: "French | Subtitles: English | PG: M/16",
+              text: "Danish | Subtitles: English | PG: M/12",
             },
           ],
           cancelation: "<p>If you need to change your ticket, a full refund is available up to 48 hours before the start of the event. A 50% refund is available for cancellations made 48 - 24 hours before the event starts. We are sorry but any cancellations made less than 24 hours in advance are non-refundable.</p>In case of rain, the event will continue. If there's heavy rain, we will continue with the film in the indoor area.",
         },
         location: "Arroz Estúdios – Av. Infante Dom Henrique Lisboa, Xabregas",
-        details: [
+       details: [
           {
             titlesDetails: "Storage Gateaway",
             textDetails: "https://arweave.net",
           },
           {
             titlesDetails: "Transactions ID",
-            textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY",
+            textDetails: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE",
           },
           {
             titlesDetails: "Contract",
@@ -238,7 +238,7 @@ export default {
           },
           {
             titlesDetails: "Thing ID",
-            textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near",
+            textDetails: "1g69uL5UfbdIZVIajiu3Tpo44ypZY2H88pN5VHpcriE:mintickt.mintbase1.near",
           },
         ]
       },
@@ -290,7 +290,7 @@ export default {
     },
    async traerdatos(){
         this.duneticket ="https://arweave.net/LtKJYD5aoy5D2DX8H-va1soi_iHpRxgEDapZWMDs1TQ"
-        this.tittle = "120 BPM"
+         this.tittle =  this.things_by_pk.metadata.title
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
