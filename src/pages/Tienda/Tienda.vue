@@ -6,7 +6,7 @@
       <img class="vermobile" src="@/assets/img/bg_flee-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 20</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 19</v-chip>
         <h2>{{tittle}}</h2>
         <span>Black Cat Cinema</span>
       </div>
