@@ -2,7 +2,7 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-      <img class="eliminarmobile" src="@/assets/img/120bpm_desktop.png" alt="Background Image">
+      <img class="eliminarmobile" src="@/assets/img/bg_flee.png" alt="Background Image">
       <img class="vermobile" src="@/assets/img/bg_flee-mobile.png" alt="Background Image">
       <!-- new -->
       <div class="fill-w limiter align">
