@@ -177,6 +177,10 @@ export default {
         }
       }
       ownerId
+      lists {
+        price
+        removedAt
+      }
     }
   }
 }
@@ -289,8 +293,9 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
+        console.log(this.things_by_pk)
         this.duneticket ="https://arweave.net/LtKJYD5aoy5D2DX8H-va1soi_iHpRxgEDapZWMDs1TQ"
-         this.tittle =  this.things_by_pk.metadata.title
+        this.tittle =  this.things_by_pk.metadata.title
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
@@ -300,7 +305,11 @@ export default {
           }
         });
         this.tokens_disponibles =  this.cantidad_disponible
-        this.yoctoNEARNEAR(this.things_by_pk.tokens[0].list.price)
+        this.things_by_pk.tokens[0].lists.forEach(element => {
+          if (element.removedAt === null){
+             this.yoctoNEARNEAR(element.price)
+          }
+        });
     },
     NearUsd(){
       var BINANCE_NEAR = "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT"
