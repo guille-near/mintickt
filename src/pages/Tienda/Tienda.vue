@@ -209,19 +209,19 @@ export default {
           info: [
             {
               title: "Director:",
-              text: "Jonas Poher Rasmussen",
+              text: "Robin Campillo",
             },
             {
               title: "Actors:",
-              text: "Daniel Karimyar, Fardin Mijdzadeh, Milad Eskandari",
+              text: "Nahuel Pérez Biscayart, Arnaud Valois, Adèle Haenel ",
             },
             {
               title: "Country:",
-              text: "Denmark | Year: 2021 | Length: 1h 29m",
+              text: "France | Year: 2017 | Length: 2h 23m",
             },
             {
               title: "Audio:",
-              text: "Danish | Subtitles: English | PG: M/12",
+              text: "French | Subtitles: English | PG: M/16",
             },
           ],
           cancelation: "<p>If you need to change your ticket, a full refund is available up to 48 hours before the start of the event. A 50% refund is available for cancellations made 48 - 24 hours before the event starts. We are sorry but any cancellations made less than 24 hours in advance are non-refundable.</p>In case of rain, the event will continue. If there's heavy rain, we will continue with the film in the indoor area.",
