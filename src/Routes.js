@@ -46,11 +46,11 @@ export default new Router({
       //   name: 'Tienda',
       //   component: () => import('@/pages/Tienda/TiendaNew'),
       // },
-      {
-        path: '/create-tickets',
-        name: 'CreateTickets',
-        component: () => import('@/pages/CreateTickets/CreateTickets'),
-      },
+      // {
+      //   path: '/create-tickets',
+      //   name: 'CreateTickets',
+      //   component: () => import('@/pages/CreateTickets/CreateTickets'),
+      // },
     ],
   },
   // {
