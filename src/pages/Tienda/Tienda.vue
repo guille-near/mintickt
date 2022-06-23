@@ -2,36 +2,36 @@
   <section id="tienda" class="center align divcol">
     <aside>
       <!-- new -->
-       <img class="eliminarmobile" src="@/assets/img/120bpm_desktop.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/120bpm_mobile.png" alt="Background Image">
+       <img class="eliminarmobile" src="@/assets/img/NYCbackground.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/NYCbackground.png" alt="Background Image">
       <!-- new -->
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 21</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 23</v-chip>
         <h2>{{tittle}}</h2>
-        <span>Black Cat Cinema</span>
+        <span>Palomas BK</span>
       </div>
     </aside>
 
     <aside class="jspace divcolmobile gapmobile acentermobile limiter">
       <div v-if="!isIntersecting" class="floatButton vermobile">
         <div class="fill-w">
-          <v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
+          <v-btn class="h8-em fill-w" href="#buy">Get your ticket</v-btn>
         </div>
       </div>
 
       <div class="contleft divcol fill-wmobile">
         <aside v-if="Datos.about" class="aboutSection divcol">
-          <h3 class="h7-em p">About</h3>
+          <!-- <h3 class="h7-em p">About</h3> -->
 
-          <div v-if="Datos.about.event" class="divcol h8-em">
-            <p class="p"><strong>Event Information:</strong></p>
-            <p v-html="Datos.about.event.text" />
+          <div v-if="Datos.about.event" class="divcol">
+            <h3 class="p h7-em">About this event:</h3>
+            <p class=" h8-em" v-html="Datos.about.event.text" />
           </div>
 
           <div v-if="Datos.about.venue" class="divcol h8-em">
-            <p class="p"><strong>Venue Information:</strong></p>
-            <p v-html="Datos.about.venue.text" />
+            <h3 class="p h7-em">About Near NYC:</h3>
+            <p class=" h8-em" v-html="Datos.about.venue.text" />
           </div>
 
           <div v-if="Datos.about.movie" class="divcol h8-em">
@@ -53,19 +53,19 @@
 
         <aside class="contLocation divcol">
           <h3 class="h7-em">Location</h3>
-          <iframe
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=Arroz Estúdios"
-            allowfullscreen>
-          </iframe>
-          <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em">
+          <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em; margin-bottom: 1em;">
             <img src="@/assets/logo/Marker.svg" alt="marker icon" />
             {{Datos.location}}
           </p>
+          <iframe
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=palomabk"
+            allowfullscreen>
+          </iframe>
         </aside>
 
         <aside class="divcol">
-          <h3 class="h7-em">Details</h3>
+          <!-- <h3 class="h7-em">Details</h3> -->
           <aside class="contDetails">
             <p v-for="(item, i) in Datos.details" :key="i" class="h8-em tittles">
               <strong>{{ item.titlesDetails }}</strong>
@@ -76,7 +76,7 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img src="@/assets/img/120bpm_ticket.png" alt="Ticket" />
+        <img src="@/assets/img/nyc landing.png" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
           <span class="h8-em space" style="width: 100%; gap: .5em">
@@ -109,7 +109,7 @@
         </aside>
         </div>
         <div style="gap:1em" class="divcol fill-w">
-          <v-btn @click="batchMakeOffer()" class="paywallet h8-em"> Pay with NEAR </v-btn>
+          <v-btn @click="batchMakeOffer()" class="paywallet h8-em"> Get your ticket </v-btn>
           <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
         </div>
       </article>
@@ -157,7 +157,7 @@ export default {
   apollo: {
     things_by_pk: {
        query: gql`{
-   things_by_pk(id: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near") {
+   things_by_pk(id: "JHAaTXCxCoomlZ2WktgmVHBx2hAPEZfSiDxd1kMxNXc:mintickt.mintbase1.near") {
     id
     metadata {
       category
@@ -199,53 +199,53 @@ export default {
       Datos: {
         about: {
           event: {
-            text: "The movie starts at 21:00. The bar opens for drinks and music from 19:00. Pizzas and popcorn are available from 20:00. We always recommend bringing a warm jacket and/or blanket.",
+            text: "Come join a social that also aims to educate NFT NYC goers on the ecosystem and projects on NEAR as well as community building. Open to all, with an emphasis on founders, developers, and creators striving to address problems within their communities. First we will start with a 30 minute panel, followed by a beginner's salsa lesson by the Cuban Salsa School of Fuakata. Event will emphasize participation of minority populations like latinx communities, and will pay homage to one of the greatest forms of artistic expression, dance.",
           },
           venue: {
-            text: "<p>Arroz Estúdios is a members-only, non-profit Cultural Association based in the Beato area of East Lisbon. If you're not already a member of the club, a 1-year membership is just €3 (cash only) at the door.</p>Food, drinks, and popcorn are available before, during, and after the film. The bar has a wide range of beer, wine, cocktails, and soft drinks. The kitchen serves delicious, authentically-made wood fire pizza. Please note, it's cash only for pizza and popcorn!",
+            text: "<p>NEAR NYC is the official NEAR Protocol community of NYC. NEAR is a collective, a foundation, and a development platform built on a new layer-one blockchain. Through simple, secure, and scalable technology, NEAR empowers millions to invent and explore new experiences. Business, creativity, and community are being reimagined for a more sustainable and inclusive future.Learn more at https://near.org/ and check out the NYC community at https://linktr.ee/nearnyc",
           },
-          movie: {
-            text: "<p><strong>Plot: </strong>As the AIDS epidemic tears through their community during the early 90’s, the members of ACT UP Paris are fighting for survival. While they battle against governmental apathy, pharmaceutical greed and public ignorance, they also go out partying, debate politics and, occasionally, fall in love. One day, as outspoken radical Sean (Nahuel Pérez Biscayart) strikes up a conversation with shy newcomer Nathan (Arnaud Valois), they have no idea that their lives are about to change forever.",
-          },
-           info: [
-            {
-              title: "Director:",
-              text: "Robin Campillo",
-            },
-            {
-              title: "Actors:",
-              text: "Nahuel Pérez Biscayart, Arnaud Valois, Adèle Haenel ",
-            },
-            {
-              title: "Country:",
-              text: "France | Year: 2017 | Length: 2h 23m",
-            },
-            {
-              title: "Audio:",
-              text: "French | Subtitles: English | PG: M/16",
-            },
-          ],
-          cancelation: "<p>If you need to change your ticket, a full refund is available up to 48 hours before the start of the event. A 50% refund is available for cancellations made 48 - 24 hours before the event starts. We are sorry but any cancellations made less than 24 hours in advance are non-refundable.</p>In case of rain, the event will continue. If there's heavy rain, we will continue with the film in the indoor area.",
+          // movie: {
+          //   text: "<p><strong>Plot: </strong>As the AIDS epidemic tears through their community during the early 90’s, the members of ACT UP Paris are fighting for survival. While they battle against governmental apathy, pharmaceutical greed and public ignorance, they also go out partying, debate politics and, occasionally, fall in love. One day, as outspoken radical Sean (Nahuel Pérez Biscayart) strikes up a conversation with shy newcomer Nathan (Arnaud Valois), they have no idea that their lives are about to change forever.",
+          // },
+          //  info: [
+          //   {
+          //     title: "Director:",
+          //     text: "Robin Campillo",
+          //   },
+          //   {
+          //     title: "Actors:",
+          //     text: "Nahuel Pérez Biscayart, Arnaud Valois, Adèle Haenel ",
+          //   },
+          //   {
+          //     title: "Country:",
+          //     text: "France | Year: 2017 | Length: 2h 23m",
+          //   },
+          //   {
+          //     title: "Audio:",
+          //     text: "French | Subtitles: English | PG: M/16",
+          //   },
+          // ],
+          cancelation: "",
         },
-        location: "Arroz Estúdios – Av. Infante Dom Henrique Lisboa, Xabregas",
-       details: [
-          {
-            titlesDetails: "Storage Gateaway",
-            textDetails: "https://arweave.net",
-          },
-          {
-            titlesDetails: "Transactions ID",
-            textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY",
-          },
-          {
-            titlesDetails: "Contract",
-            textDetails: "mintickt.mintbase1.near",
-          },
-          {
-            titlesDetails: "Thing ID",
-            textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near",
-          },
-        ]
+        location: "Palomas Bk - 1 Knickerbocker Avenue, Brooklyn, NY 11237",
+      //  details: [
+      //     {
+      //       titlesDetails: "Storage Gateaway",
+      //       textDetails: "https://arweave.net",
+      //     },
+      //     {
+      //       titlesDetails: "Transactions ID",
+      //       textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY",
+      //     },
+      //     {
+      //       titlesDetails: "Contract",
+      //       textDetails: "mintickt.mintbase1.near",
+      //     },
+      //     {
+      //       titlesDetails: "Thing ID",
+      //       textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near",
+      //     },
+      //   ]
       },
       metadata: null,
       tokens_totales: null,
@@ -272,7 +272,7 @@ export default {
       this.NearUsd()
       // this.loginNear()
       this.NEARyoctoNEAR()
-    }, 2000);
+    }, 3000);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes")
@@ -294,7 +294,7 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        this.tittle =  "120 BPM"
+        this.tittle =  "NEAR NYC Salsa Social"
         this.tokens_totales =  this.things_by_pk.tokens.length
         // this.location = this.things_by_pk.metadata.extra.location.value
         this.cantidad_disponible = 0
