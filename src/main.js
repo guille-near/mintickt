@@ -10,6 +10,10 @@ import axios from "axios";
 import VueAnimateOnScroll from 'vue-animate-onscroll';
 import VueApexCharts from 'vue-apexcharts'
 import VueApollo from 'vue-apollo'
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+
+Vue.use(PerfectScrollbar)
 
 // google maps
 import * as VueGoogleMaps from 'vue2-google-maps';

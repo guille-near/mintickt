@@ -648,3 +648,103 @@
     }
   }
 }
+
+
+#events {
+  padding-block: 160px 12em;
+  padding-inline: 2em;
+  background-color: rgba(0,0,0,.2);
+  h2 {
+    font-family: 'Proxima Nova', sans-serif !important;
+    font-weight: 500;
+    font-size: 1.5625em;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  #tableEvents {
+    background-color: transparent !important;
+    table {border-spacing: 0 1em}
+    *:not(button span, span, i, h3) {color: #FFFFFF}
+    .eventName {
+      @media (min-width: 880px) {color: #000000 !important}
+      font-weight: 700 !important;
+      font-size: clamp(1em, 1.5vw, 1.5em);
+    }
+    th {
+      & :is(span, i) {
+        font-family: 'Proxima Nova', sans-serif !important;
+        font-weight: 600;
+        font-size: 0.875em;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        font-variant: small-caps;
+        color: #CC00B7;
+        -webkit-text-stroke: .04em #CC00B7;
+      }
+      &:first-child {display: flex;align-items: center}
+    }
+    .v-data-table__mobile-row__header {
+      font-family: 'Proxima Nova', sans-serif !important;
+      font-weight: 600;
+      font-size: 0.875em;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant: small-caps;
+      color: #CC00B7;
+      -webkit-text-stroke: .04em #CC00B7;
+    }
+    tbody tr {
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+      border: 2px solid #FFFFFF;
+      border-radius: 9px;
+      isolation: isolate;
+      position: relative;
+      @media (max-width: 1184px) and (min-width: 880px) {font-size: 12px}
+      @media (max-width: 880px) {
+        background: no-repeat center url(../assets/img/bg-ticket_events.png);
+        background-size: contain;
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-color: rgba(0, 0, 0, .4);
+          z-index: -1;
+        }
+      }
+      .bgTicket {
+        position: absolute;
+        left: -25px;
+        top: 0;
+        height: 100%;
+        z-index: -1;
+        @media (max-width: 1184px) {left: -30px;
+          @media (max-width: 1140px) {left: -65px;
+            @media (max-width: 880px) {display: none}
+          }
+        }
+      }
+      @media (min-width: 880px) {height: 91px}
+      td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
+      td:nth-of-type(7n) {border-radius: 0 .6vmax .6vmax 0}
+      td:first-child {border-radius: .6vmax 0 0 .6vmax; position: relative}
+      &:not(:last-child) {margin-bottom: 1em}
+      & .v-data-table__mobile-row:last-child {display: flex;justify-content: center}
+    }
+    .v-btn {
+      min-width: max-content;
+      height: max-content;
+      padding: 9px clamp(.5em, 1.2vw, 1.25em);
+      margin-inline: auto;
+      background: #FFFFFF;
+      border-radius: 6px;
+      * {color: #000000 !important}
+      span {
+        font-family: 'Proxima Nova', sans-serif !important;
+        font-size: clamp(.7em, .8vw, .875em);
+        font-weight: 700;
+      }
+    }
+    .v-btn + .v-btn {padding: 6px}
+  }
+}
+

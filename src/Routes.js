@@ -22,42 +22,59 @@ export default new Router({
       component: () => import('@/components/Login/Login'),
     },
     {
-    path: '/',
-    name: 'Layout',
-    component: () => import('@/components/Layout/Layout'),
-    children: [
-      // {
-      //   path: '/',
-      //   name: 'Home',
-      //   component: () => import('@/pages/Home/Home'),
-      // },
-      // {
-      //  path: '/',
-      //  name: 'Landing',
-      //  component: () => import('@/pages/Landing/Landing'),
-      // },
-      {
-        path: '/',
-        name: 'Tienda',
-        component: () => import('@/pages/Tienda/Tienda'),
-      },
-      // {
-      //   path: '/tienda',
-      //   name: 'Tienda',
-      //   component: () => import('@/pages/Tienda/TiendaNew'),
-      // },
-      // {
-      //   path: '/create-tickets',
-      //   name: 'CreateTickets',
-      //   component: () => import('@/pages/CreateTickets/CreateTickets'),
-      // },
-    ],
-  },
+      path: '/',
+      name: 'Layout',
+      component: () => import('@/components/Layout/Layout'),
+      children: [
+        // {
+        //   path: '/',
+        //   name: 'Home',
+        //   component: () => import('@/pages/Home/Home'),
+        // },
+        // {
+        //  path: '/',
+        //  name: 'Landing',
+        //  component: () => import('@/pages/Landing/Landing'),
+        // },
+        {
+          path: '/',
+          name: 'Tienda',
+          component: () => import('@/pages/Tienda/Tienda'),
+        },
+        // {
+        //   path: '/tienda',
+        //   name: 'Tienda',
+        //   component: () => import('@/pages/Tienda/TiendaNew'),
+        // },
+        // {
+        //   path: '/create-tickets',
+        //   name: 'CreateTickets',
+        //   component: () => import('@/pages/CreateTickets/CreateTickets'),
+        // },
+      ],
+    },
   // {
   //   path: '/Y2xhaW1uZnQ',
   //   name: 'claim',
   //   component: () => import('@/components/Claim/Claim'),
   // },
+    {
+      path: '/events',
+      name: 'Layout2',
+      component: () => import('@/components/Layout2/Layout2'),
+      children: [
+        {
+          path: '/',
+          name: 'Events',
+          component: () => import('@/pages/Events/Events'),
+        },
+        {
+          path: '/nearcon',
+          name: 'EventsNearcon',
+          component: () => import('@/pages/Events/Events'),
+        },
+      ]
+    },
   // {
   //   path: '/',
   //   name: 'Layout2',

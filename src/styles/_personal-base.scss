@@ -196,6 +196,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+.divwrap_inv {
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
 .divnowrap {
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -481,6 +485,10 @@
   .divwrapmobile {
     display: flex !important;
     flex-wrap: wrap !important;
+  }
+  .divwrap_invmobile {
+    display: flex !important;
+    flex-wrap: wrap-reverse !important;
   }
   .divnowrapmobile {
     display: flex !important;
