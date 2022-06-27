@@ -652,7 +652,7 @@
 
 #events {
   padding-block: 160px 12em;
-  padding-inline: 2em;
+  padding-inline: 2.5em;
   background-color: rgba(0,0,0,.2);
   h2 {
     font-family: 'Proxima Nova', sans-serif !important;
@@ -699,7 +699,7 @@
       border-radius: 9px;
       isolation: isolate;
       position: relative;
-      @media (max-width: 1184px) and (min-width: 880px) {font-size: 12px}
+      @media (max-width: 1194px) and (min-width: 880px) {font-size: 12px}
       @media (max-width: 880px) {
         background: no-repeat center url(../assets/img/bg-ticket_events.png);
         background-size: contain;
@@ -718,7 +718,7 @@
         height: 100%;
         z-index: -1;
         @media (max-width: 1184px) {left: -30px;
-          @media (max-width: 1140px) {left: -65px;
+          @media (max-width: 1162px) {left: -65px;
             @media (max-width: 880px) {display: none}
           }
         }
