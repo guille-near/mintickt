@@ -273,6 +273,8 @@
     position: static;
     color: white !important;
     gap: 2em;
+    @include mq(max, small) {width: 80%}
+    @include mq(max, x-small) {width: 90%}
     &#claim {
       width: min(90%, 17em);
     }

@@ -5,17 +5,19 @@
       color="transparent"
       height="140px"
       absolute
-      :class="{events:route=='Events'||route=='EventsNearcon'}"
+      :class="{events:$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'}"
     >
-      <v-row class="align" :class="{limiter: route!=='Events'}">
-        <v-col class="space" :style="route=='Events'||route=='EventsNearcon'?
+      <v-row class="align" :class="{limiter: $router.currentRoute.name!=='Events'}">
+        <v-col class="space" :style="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'?
           'padding:0':'padding-inline: clamp(1em, 4vw, 4em)'">
           <a class="center" href="/">
             <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
           </a>
           
-          <aside class="acenter" style="gap:.2em" :style="route=='Events'||route=='EventsNearcon'?'':'display:contents'">
-            <v-btn class="createEventBtn h9-em" :style="route=='Events'||route=='EventsNearcon'?'':'display:none'">
+          <aside class="acenter" style="gap:.2em" :style="$router.currentRoute.name=='Events'||
+            $router.currentRoute.name=='EventsNearcon'?'':'display:contents'">
+            <v-btn class="createEventBtn h9-em" :style="$router.currentRoute.name=='Events'||
+              $router.currentRoute.name=='EventsNearcon'?'':'display:none'">
               <span>create an event</span>
             </v-btn>
             <v-btn text color="white" rounded class="h9-em" @click="connect">
@@ -69,9 +71,6 @@ export default {
   },
   mounted(){
     this.revisar()
-  },
-  computed: {
-    route() {return this.$router.currentRoute.name}
   },
   methods: {
   
