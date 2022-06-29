@@ -10,6 +10,7 @@
       hide-default-footer
       calculate-widths
       mobile-breakpoint="880px"
+      class="eliminarmobile"
     >
       <template v-slot:[`item.name`]="{ item }">
         <img class="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="ticket image">
@@ -18,7 +19,19 @@
       <template v-slot:[`item.actions`]>
         <div class="divwrap_inv" style="gap:1em">
           <v-btn>Go to live data</v-btn>
-          <v-btn><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
+
+          <v-menu :close-on-content-click="false" offset-y open-on-hover>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn v-on="on" v-bind="attrs"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
+            </template>
+
+            <v-card class="contMoreOptions divcol" style="display:flex" color="#A5A5A5">
+              <v-btn v-for="(item, i) in dataMore" :key="i" color="transparent" :class="{active:item.active}"
+                @click="dataMore.forEach(e=>{e.active=false});item.active=true">
+                {{item.name}} more
+              </v-btn>
+            </v-card>
+          </v-menu>
         </div>
       </template>
     </v-data-table>
@@ -71,6 +84,10 @@ export default {
   data() {
     return {
       table: '',
+      dataMore: [
+        {name: 'Mint', active: false},
+        {name: 'List', active: false}
+      ],
       headers: [
         { text: 'EVENT NAME', align: 'start', value: 'name' },
         { text: 'DATE', align: 'start', value: 'date' },
@@ -137,7 +154,6 @@ export default {
     }
   },
   methods: {
-
     NEARyoctoNEAR: function() {
       const { utils } = nearAPI;
       const amountInYocto = utils.format.parseNearAmount(1);

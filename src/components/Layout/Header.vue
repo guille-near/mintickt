@@ -1,33 +1,31 @@
 <template>
   <section>
-    <!-- mobile -->
-
-    <!-- desktop -->
     <v-app-bar
-    id="headerApp"
-    color="transparent"
-    height="140px"
-    absolute
-  >
-    <v-row class="limiter align">
-      <v-col class="space" style="padding-inline: clamp(1em, 4vw, 4em)">
-        <a class="center" href="/">
-          <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
-        </a>
-      <v-btn
-        @click="connect"
-        text
-        color="white"
-        rounded
-        class="h9-em"
-      >
-        <img src="@/assets/logo/near.svg" alt="near">
-        <span>{{user}}</span>
-      </v-btn>
-      </v-col>
-    </v-row>
-  </v-app-bar>
-
+      id="headerApp"
+      color="transparent"
+      height="140px"
+      absolute
+      :class="{events:route=='Events'||route=='EventsNearcon'}"
+    >
+      <v-row class="align" :class="{limiter: route!=='Events'}">
+        <v-col class="space" :style="route=='Events'||route=='EventsNearcon'?
+          'padding:0':'padding-inline: clamp(1em, 4vw, 4em)'">
+          <a class="center" href="/">
+            <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
+          </a>
+          
+          <aside class="acenter" style="gap:.2em" :style="route=='Events'||route=='EventsNearcon'?'':'display:contents'">
+            <v-btn class="createEventBtn h9-em" :style="route=='Events'||route=='EventsNearcon'?'':'display:none'">
+              <span>create an event</span>
+            </v-btn>
+            <v-btn text color="white" rounded class="h9-em" @click="connect">
+              <img src="@/assets/logo/near.svg" alt="near">
+              <span>{{user}}</span>
+            </v-btn>
+          </aside>
+        </v-col>
+      </v-row>
+    </v-app-bar>
   </section>
 </template>
 
@@ -71,6 +69,9 @@ export default {
   },
   mounted(){
     this.revisar()
+  },
+  computed: {
+    route() {return this.$router.currentRoute.name}
   },
   methods: {
   

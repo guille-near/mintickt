@@ -1,6 +1,6 @@
 <template>
   <perfect-scrollbar style="height:100vh; z-index:99" ref="scroll">
-    <router-view style="isolation:isolate" />
+    <router-view style="isolation:isolate;z-index: -1" />
   </perfect-scrollbar>
 </template>
 

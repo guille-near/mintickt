@@ -5,18 +5,6 @@
 // $containerH: 100px;
 
 // layout
-.v-main__wrap {
-  // padding: 4rem $content-padding 70px $content-padding;
-
-  padding-inline: 0;
-  // padding-top: clamp(3rem, 22vh , 8rem);
-  background-color: transparent;
-}
-// @media (max-height: 800px) {
-//   .v-main__wrap {
-//     padding-top: clamp(3rem, 13vh , 9rem);
-//   }
-// }
 .fondo {
   position: absolute;
   width: 100%;
@@ -24,12 +12,22 @@
   inset: 0 0 0 0;
   z-index: 0;
 }
-#navbar {
-  transition: 0.3s ease-in-out;
-}
+#navbar {transition: 0.3s ease-in-out}
 .layout{
   position: relative;
   height: 100vh !important;
+  .v-main__wrap {
+    padding-inline: 0;
+    // padding-top: clamp(3rem, 22vh , 8rem);
+    background-color: transparent;
+    // @media (max-height: 800px) {
+    // padding-top: clamp(3rem, 13vh , 9rem);
+    // }
+  }
+  .v-main.events {
+    padding-left: calc(clamp(8em, 10vw, 10.0625em) + (clamp(1em, 4vw, 4em) * 2)) !important;
+    background: linear-gradient(180.22deg, rgba(246, 85, 235, 0.09) 0.19%, rgba(30, 30, 30, 0) 39.99%, rgba(102, 205, 118, 0.12) 99.82%) !important;
+  }
 
   .filtro1{
     position: absolute;
@@ -82,6 +80,9 @@
 }
 #headerApp {
   transition: 0.4s ease-in-out;
+  &.events {
+    & .v-toolbar__content {padding-inline: clamp(1em, 4vw, 4em)}
+  }
   .logoHeader{
     width: clamp(8em, 10vw, 10.0625em);
     // height: clamp(2.5em, 3vw,3.125em);
@@ -103,6 +104,12 @@
       letter-spacing: -0.03em;
     }
   }
+  .createEventBtn {
+    padding: 12px 20px;
+    background: linear-gradient(0deg, #000000 -42.31%, rgba(0, 0, 0, 0) 50%), #CC00B7 !important;
+    border-radius: 10px;
+    span {color:#FFFFFF !important}
+  }
 }
 
 
@@ -111,6 +118,7 @@
 
 // footer
 .v-footer {
+  bottom: 0;
   .row {padding-block: 48px 73px; max-width: 1200px; margin-inline: auto !important;}
   span {font-size: var(--step-em--4); color: #A0A0A0;}
   .footer-div {

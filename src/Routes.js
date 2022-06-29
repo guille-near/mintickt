@@ -41,6 +41,16 @@ export default new Router({
           name: 'Tienda',
           component: () => import('@/pages/Tienda/Tienda'),
         },
+        {
+          path: '/events',
+          name: 'Events',
+          component: () => import('@/pages/Events/Events'),
+        },
+        {
+          path: '/events-nearcon',
+          name: 'EventsNearcon',
+          component: () => import('@/pages/Events/Events'),
+        },
         // {
         //   path: '/tienda',
         //   name: 'Tienda',
@@ -58,23 +68,6 @@ export default new Router({
   //   name: 'claim',
   //   component: () => import('@/components/Claim/Claim'),
   // },
-    {
-      path: '/events',
-      name: 'Layout2',
-      component: () => import('@/components/Layout2/Layout2'),
-      children: [
-        {
-          path: '/',
-          name: 'Events',
-          component: () => import('@/pages/Events/Events'),
-        },
-        {
-          path: '/nearcon',
-          name: 'EventsNearcon',
-          component: () => import('@/pages/Events/Events'),
-        },
-      ]
-    },
   // {
   //   path: '/',
   //   name: 'Layout2',

@@ -1,10 +1,11 @@
 <template>
-  <v-app class="layout">
+  <v-app class="layout relative">
     <Header style="z-index: 10" ref="header" id="navbar" />
-    <v-main class="content">
+    <v-main class="content" :class="{events: $router.currentRoute.name=='Events'||
+      $router.currentRoute.name=='EventsNearcon'}">
       <router-view></router-view>
-    <Footer />
     </v-main>
+    <Footer />
   </v-app>
 </template>
 

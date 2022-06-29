@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="#0A0A0A" absolute>
+  <v-footer color="#0A0A0A">
     <v-row class="astart jcenter fill-h">
       <div class="footer-div"><img src="@/assets/landing/logo_mintick.svg" loading="lazy" alt="Mintickt" class="footer-logo">
         <span class="text-block"> is cooking up a recipe at </span>
