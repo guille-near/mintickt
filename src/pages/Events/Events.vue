@@ -9,7 +9,7 @@
       :items="items"
       hide-default-footer
       calculate-widths
-      mobile-breakpoint="880px"
+      :mobile-breakpoint="880"
       class="eliminarmobile"
     >
       <template v-slot:[`item.name`]="{ item }">
@@ -126,6 +126,7 @@ export default {
     };
   },
   mounted(){
+    this.$emit('renderHeader');
         setTimeout(() => {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0

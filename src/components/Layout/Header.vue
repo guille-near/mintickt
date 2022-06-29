@@ -5,19 +5,17 @@
       color="transparent"
       height="140px"
       absolute
-      :class="{events:$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'}"
+      :class="{events:route=='Events'||route=='EventsNearcon'}"
     >
-      <v-row class="align" :class="{limiter: $router.currentRoute.name!=='Events'}">
-        <v-col class="space" :style="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'?
+      <v-row class="align" :class="{limiter: route!=='Events'}">
+        <v-col class="space" :style="route=='Events'||route=='EventsNearcon'?
           'padding:0':'padding-inline: clamp(1em, 4vw, 4em)'">
           <a class="center" href="/">
             <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
           </a>
           
-          <aside class="acenter" style="gap:.2em"
-            :style="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'?'':'display:contents'">
-            <v-btn v-show="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'"
-              class="createEventBtn h9-em">
+          <aside class="acenter" style="gap:.2em" :style="route=='Events'||route=='EventsNearcon'?'':'display:contents'">
+            <v-btn class="createEventBtn h9-em" v-if="route=='Events'||route=='EventsNearcon'">
               <span>create an event</span>
             </v-btn>
             <v-btn text color="white" rounded class="h9-em" @click="connect">
@@ -33,44 +31,47 @@
 
 <script>
 import { Wallet, Chain, Network } from 'mintbase'
-let ubicacionPrincipal = window.pageYOffset;
-let resizeTimeout;
-function resizeThrottler(actualResizeHandler) {
-  // ignore resize events as long as an actualResizeHandler execution is in the queue
-  if (!resizeTimeout) {
-    resizeTimeout = setTimeout(() => {
-      resizeTimeout = null;
-      actualResizeHandler();
+// let ubicacionPrincipal = window.pageYOffset;
+// let resizeTimeout;
+// function resizeThrottler(actualResizeHandler) {
+//   // ignore resize events as long as an actualResizeHandler execution is in the queue
+//   if (!resizeTimeout) {
+//     resizeTimeout = setTimeout(() => {
+//       resizeTimeout = null;
+//       actualResizeHandler();
 
-      // The actualResizeHandler will execute at a rate of 15fps
-    }, 80);
-  }
-}
+//       // The actualResizeHandler will execute at a rate of 15fps
+//     }, 80);
+//   }
+// }
 export default {
   name: "Header",
   i18n: require("./i18n"),
-  created() {
-    this.element = document.getElementById("theme");
-    const theme = localStorage.getItem("theme");
-    if (theme) {
-      this.CambiarTheme(theme);
-    }
-    if (theme == "light") {
-      this.themeButton = true;
-    }
-    if (theme == "dark") {
-      this.themeButton = false;
-    }
-  },
+  // created() {
+  //   this.element = document.getElementById("theme");
+  //   const theme = localStorage.getItem("theme");
+  //   if (theme) {
+  //     this.CambiarTheme(theme);
+  //   }
+  //   if (theme == "light") {
+  //     this.themeButton = true;
+  //   }
+  //   if (theme == "dark") {
+  //     this.themeButton = false;
+  //   }
+  // },
   data() {
     return {
-      themeButton: true,
+      // themeButton: true,
       nearid: false,
       user: 'Login with NEAR',
     };
   },
   mounted(){
     this.revisar()
+  },
+  computed: {
+    route() {return this.$router.currentRoute.name}
   },
   methods: {
   
@@ -126,29 +127,26 @@ export default {
    }
 
  },
-    CambiarTheme(theme) {
-      this.$store.dispatch("CambiarTheme", { theme, element: this.element });
-      this.themeButton = !this.themeButton;
-    },
-    CambiarTheme2(theme) {
-      this.$refs.menu.OverlayMethod(theme);
-    },
-    OcultarNavbar() {
-      let Desplazamiento_Actual = window.pageYOffset;
-      if (ubicacionPrincipal >= Desplazamiento_Actual) {
-        document.getElementById("headerApp").style.top = "0";
-      } else {
-        document.getElementById("headerApp").style.top = "-100px";
-      }
-      ubicacionPrincipal = Desplazamiento_Actual;
-    },
-    scrollListener() {
-      resizeThrottler(this.OcultarNavbar);
-    }
+    // CambiarTheme(theme) {
+    //   this.$store.dispatch("CambiarTheme", { theme, element: this.element });
+    //   this.themeButton = !this.themeButton;
+    // },
+    // OcultarNavbar() {
+    //   let Desplazamiento_Actual = window.pageYOffset;
+    //   if (ubicacionPrincipal >= Desplazamiento_Actual) {
+    //     document.getElementById("headerApp").style.top = "0";
+    //   } else {
+    //     document.getElementById("headerApp").style.top = "-100px";
+    //   }
+    //   ubicacionPrincipal = Desplazamiento_Actual;
+    // },
+    // scrollListener() {
+    //   resizeThrottler(this.OcultarNavbar);
+    // }
   },
-  beforeDestroy() {
-    document.removeEventListener('scroll', this.scrollListener);
-  }
+  // beforeDestroy() {
+  //   document.removeEventListener('scroll', this.scrollListener);
+  // }
 };
 </script>
 

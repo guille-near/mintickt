@@ -334,6 +334,7 @@ export default {
     };
   },
   mounted(){
+    this.$emit('renderHeader');
      setTimeout(() => {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0
