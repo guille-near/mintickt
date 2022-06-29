@@ -14,10 +14,10 @@
             <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
           </a>
           
-          <aside class="acenter" style="gap:.2em" :style="$router.currentRoute.name=='Events'||
-            $router.currentRoute.name=='EventsNearcon'?'':'display:contents'">
-            <v-btn class="createEventBtn h9-em" :style="$router.currentRoute.name=='Events'||
-              $router.currentRoute.name=='EventsNearcon'?'':'display:none'">
+          <aside class="acenter" style="gap:.2em"
+            :style="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'?'':'display:contents'">
+            <v-btn v-show="$router.currentRoute.name=='Events'||$router.currentRoute.name=='EventsNearcon'"
+              class="createEventBtn h9-em">
               <span>create an event</span>
             </v-btn>
             <v-btn text color="white" rounded class="h9-em" @click="connect">
