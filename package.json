@@ -12,6 +12,7 @@
     "@mdi/font": "^6.5.95",
     "@mdi/js": "^6.5.95",
     "@metamask/detect-provider": "^1.2.0",
+    "@ramper/near": "^0.0.14",
     "apexcharts": "^3.33.2",
     "apollo-boost": "^0.4.9",
     "axios": "^0.26.0",

@@ -1394,6 +1394,54 @@
   "resolved" "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   "version" "1.1.0"
 
+"@ramper/constants@0.0.5":
+  "integrity" "sha512-m+hJcFwWwCzt4txAh28u0AqhAbA1xAdENy0Y5miMVKq5Wx64uhqFex+ZaTw8zyBs+P+IYoDbssooVibNl0XvnQ=="
+  "resolved" "https://registry.npmjs.org/@ramper/constants/-/constants-0.0.5.tgz"
+  "version" "0.0.5"
+  dependencies:
+    "@ramper/utils" "0.0.1"
+
+"@ramper/core@0.0.14":
+  "integrity" "sha512-ij7xdaUEotzVfusV/WgFmFwC/ZXXQNFL5sUkKUIfJzbMAk5JMRa4rFFNV9hpPFzLhRZRwGREjURcGSAmVyd8tg=="
+  "resolved" "https://registry.npmjs.org/@ramper/core/-/core-0.0.14.tgz"
+  "version" "0.0.14"
+  dependencies:
+    "@ramper/utils" "0.0.2"
+    "jwt-simple" "0.5.6"
+    "postmate" "1.5.2"
+
+"@ramper/near@^0.0.14":
+  "integrity" "sha512-gMqkI88dtmr/QbRsPLSogjLQzWpWwbmAltJjGEx8j9a9qOlAgLe0XZl6xZFMoUPD7+VesjWfatdw/95QqHnzZQ=="
+  "resolved" "https://registry.npmjs.org/@ramper/near/-/near-0.0.14.tgz"
+  "version" "0.0.14"
+  dependencies:
+    "@ramper/constants" "0.0.5"
+    "@ramper/core" "0.0.14"
+    "@ramper/sdk-loader" "0.0.1"
+    "@ramper/utils" "0.0.2"
+
+"@ramper/sdk-loader@0.0.1":
+  "integrity" "sha512-nmjsh23Gy0jh9xNmoqzYEz2UoPRFzDh1yqYr1/32pK20TPH6xDxEyYiDynLD+/Vpff2ThjDGEyUI67RnvVsiRQ=="
+  "resolved" "https://registry.npmjs.org/@ramper/sdk-loader/-/sdk-loader-0.0.1.tgz"
+  "version" "0.0.1"
+
+"@ramper/utils@0.0.1":
+  "integrity" "sha512-tEyLfBfL5fBwz1Y8v+gK2gW+Mtk0nceBfDpHvEfG8ho3KlBNX/R7k4cuqZBLaZZnSmd1nd7MAq1xvH6CjKpqNQ=="
+  "resolved" "https://registry.npmjs.org/@ramper/utils/-/utils-0.0.1.tgz"
+  "version" "0.0.1"
+  dependencies:
+    "await-to-js" "^3.0.0"
+
+"@ramper/utils@0.0.2":
+  "integrity" "sha512-EZTAFInMXO9UoBWTrgKV8LXQHiwgDe5big+b1at7q1I3xxxdsCOs/9KhvG7uKlmyiDiz2PLTJsnU4qZ3KTWtVQ=="
+  "resolved" "https://registry.npmjs.org/@ramper/utils/-/utils-0.0.2.tgz"
+  "version" "0.0.2"
+  dependencies:
+    "@types/ua-parser-js" "^0.7.36"
+    "await-to-js" "3.0.0"
+    "slugify" "^1.6.5"
+    "ua-parser-js" "^1.0.2"
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   "integrity" "sha512-h2ooWqP8XuFqTXT+NyAFbrArzfQA7R6HTezADrvD9Re8fxMLTPPniLdqVTdDaO0eIoLaAwKT+d6w+5GeTk7Vbg=="
   "resolved" "https://registry.npmjs.org/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.1.tgz"
@@ -1538,6 +1586,11 @@
   "integrity" "sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ=="
   "resolved" "https://registry.npmjs.org/@types/tapable/-/tapable-1.0.8.tgz"
   "version" "1.0.8"
+
+"@types/ua-parser-js@^0.7.36":
+  "integrity" "sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ=="
+  "resolved" "https://registry.npmjs.org/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz"
+  "version" "0.7.36"
 
 "@types/uglify-js@*":
   "integrity" "sha512-/xFrPIo+4zOeNGtVMbf9rUm0N+i4pDf1ynExomqtokIJmVzR3962lJ1UE+MmexMkA0cmN9oTzg5Xcbwge0Ij2Q=="
@@ -2402,6 +2455,11 @@
     "picocolors" "^0.2.1"
     "postcss" "^7.0.32"
     "postcss-value-parser" "^4.1.0"
+
+"await-to-js@^3.0.0", "await-to-js@3.0.0":
+  "integrity" "sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g=="
+  "resolved" "https://registry.npmjs.org/await-to-js/-/await-to-js-3.0.0.tgz"
+  "version" "3.0.0"
 
 "aws-sign2@~0.7.0":
   "integrity" "sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg="
@@ -5852,6 +5910,11 @@
     "json-schema" "0.4.0"
     "verror" "1.10.0"
 
+"jwt-simple@0.5.6":
+  "integrity" "sha512-40aUybvhH9t2h71ncA1/1SbtTNCVZHgsTsTgqPUxGWDmUDrXyDf2wMNQKEbdBjbf4AI+fQhbECNTV6lWxQKUzg=="
+  "resolved" "https://registry.npmjs.org/jwt-simple/-/jwt-simple-0.5.6.tgz"
+  "version" "0.5.6"
+
 "killable@^1.0.1":
   "integrity" "sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg=="
   "resolved" "https://registry.npmjs.org/killable/-/killable-1.0.1.tgz"
@@ -7417,6 +7480,11 @@
     "picocolors" "^0.2.1"
     "source-map" "^0.6.1"
 
+"postmate@1.5.2":
+  "integrity" "sha512-EHLlEmrUA/hALls49oBrtE7BzDXXjB9EiO4MZpsoO3R/jRuBmD+2WKQuYAbeuVEpTzrPpUTT79z2cz4qaFgPRg=="
+  "resolved" "https://registry.npmjs.org/postmate/-/postmate-1.5.2.tgz"
+  "version" "1.5.2"
+
 "prelude-ls@^1.2.1":
   "integrity" "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
@@ -8253,6 +8321,11 @@
     "astral-regex" "^2.0.0"
     "is-fullwidth-code-point" "^3.0.0"
 
+"slugify@^1.6.5":
+  "integrity" "sha512-8mo9bslnBO3tr5PEVFzMPIWwWnipGS0xVbYf65zxDqfNwmzYn1LpiKNrR6DlClusuvo+hDHd1zKpmfAe83NQSQ=="
+  "resolved" "https://registry.npmjs.org/slugify/-/slugify-1.6.5.tgz"
+  "version" "1.6.5"
+
 "snapdragon-node@^2.0.1":
   "integrity" "sha512-O27l4xaMYt/RSQ5TR3vpWCAB5Kb/czIcqUFOM/C4fYcLnbZUc1PkjTAMjof2pBWaSTwOUd6qUHcFGVGj7aIwnw=="
   "resolved" "https://registry.npmjs.org/snapdragon-node/-/snapdragon-node-2.1.1.tgz"
@@ -8982,6 +9055,11 @@
   "integrity" "sha512-+J5D5ir763y+Am/QY6hXNRlwljIeRMZMGs0cT6qqZVVzzT3X3nFPXVyPOFRMOR4kupB0T8JnCdpWdp6Q/iXn3w=="
   "resolved" "https://registry.npmjs.org/u3/-/u3-0.1.1.tgz"
   "version" "0.1.1"
+
+"ua-parser-js@^1.0.2":
+  "integrity" "sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg=="
+  "resolved" "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-1.0.2.tgz"
+  "version" "1.0.2"
 
 "uglify-js@3.4.x":
   "integrity" "sha512-Y2VsbPVs0FIshJztycsO2SfPk7/KAF/T72qzv9u5EpQ4kB2hQoHlhNQTsNyy6ul7lQtqJN/AoWeS23OzEiEFxw=="
