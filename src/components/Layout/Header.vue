@@ -17,7 +17,8 @@
           "
         >
           <a class="center" href="/">
-            <img class="logoHeader" src="@/assets/logo/logom.svg" alt="logo" />
+            <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/logo-mobile.svg" alt="logo">
+            <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
           </a>
 
           <aside
@@ -35,13 +36,14 @@
             >
               <span>create an event</span>
             </v-btn>
-            <v-btn text color="white" rounded class="h9-em" @click="connect">
-              <img src="@/assets/logo/near.svg" alt="near" />
-              <span>{{ user }}</span>
+
+            <v-btn v-if="responsiveActions"
+              color="white" class="btnNearMobile h7-em" @click="connect">
+              <img src="@/assets/logo/near-black.svg" alt="near logo">
             </v-btn>
-            <v-btn text color="white" rounded class="h9-em" @click="signIn()">
-              <img src="@/assets/logo/near.svg" alt="near" />
-              <span>boton de prueba</span>
+            <v-btn v-else text color="white" rounded class="h9-em" @click="connect">
+              <img src="@/assets/logo/near.svg" alt="near">
+              <span>{{user}}</span>
             </v-btn>
           </aside>
         </v-col>
@@ -93,11 +95,14 @@ export default {
     return {
       // themeButton: true,
       nearid: false,
-      user: "Login with NEAR",
+      user: 'Login with NEAR',
+      responsiveActions: false,
     };
   },
-  mounted() {
-    this.revisar();
+  mounted(){
+    this.revisar()
+    this.responsive()
+    // document.addEventListener('resize', this.responsive())
   },
   computed: {
     route() {
@@ -105,14 +110,60 @@ export default {
     },
   },
   methods: {
-    async signIn() {
-      if (window.ramper.getUser()) {
-        alert("Error: You are already signed in.");
-        return;
-      }
-      const userData = await window.ramper.signIn();
-      console.log(JSON.stringify(userData));
+    responsive() {
+      if (window.innerWidth <= 880 && this.route=='Events'||this.route=='EventsNearcon') {this.responsiveActions = true}
+      else {this.responsiveActions = false}
     },
+  async  connect() {
+  let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+  const { data: walletData } = await new Wallet().init({
+    networkName: Network.mainnet,
+    chain: Chain.near,
+    apiKey: API_KEY,
+  })
+   const { wallet, isConnected } = walletData
+    if (this.nearid === false){
+      console.log("user")
+      wallet.connect({ requestSignIn: true }).then
+      this.nearid = true
+      const { data: details } = await wallet.details()
+      this.user = details.accountId
+    }else if (this.nearid === true){
+      wallet.disconnect()
+      localStorage.clear()
+      this.$router.go()
+      this.nearid = false
+      this.user = "Login with NEAR"
+    }
+},
+ async revisar() {
+   let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+  const { data: walletData } = await new Wallet().init({
+    networkName: Network.mainnet,
+    chain: Chain.near,
+    apiKey: API_KEY,
+  })
+   const { wallet, isConnected } = walletData
+   // console.info(isConnected)
+   if(!isConnected){
+      //console.info("user")
+      wallet.connect()
+   }
+   
+   if (localStorage.getItem('Mintbase.js_wallet_auth_key') !== null){
+     this.nearid = true
+    let datos =JSON.parse(localStorage.getItem('Mintbase.js_wallet_auth_key'))
+    console.info('aca')
+    this.user = datos.accountId
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if (urlParams.get("account_id") !== null) {
+      history.replaceState(null, location.href.split("?")[0], '/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/');
+    }
+   } else{
+     this.nearid = false
+     console.info("aqui")
+   }
 
     async connect() {
       let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d";

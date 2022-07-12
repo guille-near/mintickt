@@ -20,7 +20,7 @@
         <div class="divwrap_inv" style="gap:1em">
           <v-btn>Go to live data</v-btn>
 
-          <v-menu :close-on-content-click="false" offset-y open-on-hover>
+          <v-menu :close-on-content-click="false" offset-y>
             <template v-slot:activator="{on, attrs}">
               <v-btn v-on="on" v-bind="attrs"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
             </template>
@@ -35,6 +35,45 @@
         </div>
       </template>
     </v-data-table>
+
+    <section class="vermobile">
+      <template v-for="(item,i) in dataTableMobile" >
+        <v-card :key="i" class="up acenter" style="display:flex">
+          <span class="eventName">{{item.name}}</span>
+          <span>{{item.date}}</span>
+
+          <aside class="acenter" style="gap:.5em">
+            <v-menu :close-on-content-click="false" offset-y>
+              <template v-slot:activator="{on, attrs}">
+                <v-btn class="icon">
+                  <v-icon size="1.5em">mdi-chart-line</v-icon>
+                </v-btn>
+
+                <v-btn class="icon" v-on="on" v-bind="attrs">
+                  <v-icon size="1.5em">mdi-cog-outline</v-icon>
+                </v-btn>
+              </template>
+
+              <v-card class="contMoreOptions divcol" style="display:flex" color="#A5A5A5">
+                <v-btn v-for="(item2, i) in dataMore" :key="i" color="transparent" :class="{active:item2.active}"
+                  @click="dataMore.forEach(e=>{e.active=false});item2.active=true">
+                  {{item2.name}} more
+                </v-btn>
+              </v-card>
+            </v-menu>
+
+            <v-icon large color="white" :style="item.show?'transform:rotate(180deg)':''"
+              @click="dataTableMobile.forEach(e=>{e!==item?e.show=false:null});item.show=!item.show">
+              mdi-chevron-down
+            </v-icon>
+          </aside>
+        </v-card>
+
+        <v-card :key="i" v-show="item.show" class="down">
+          <v-btn>algun texto alv</v-btn>
+        </v-card>
+      </template>
+    </section>
   </section>
 </template>
 
@@ -123,6 +162,18 @@ export default {
           listed: '283',
         },
       ],
+      dataTableMobile: [
+        {
+          name: 'Nearcon',
+          date: 'Feb 12, 2022',
+          show: false,
+        },
+        {
+          name: 'Nearcon',
+          date: 'Feb 12, 2022',
+          show: false,
+        },
+      ]
     };
   },
   mounted(){

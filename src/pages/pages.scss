@@ -655,6 +655,7 @@
 #events {
   padding-block: 160px 12em;
   padding-inline: 2.5em;
+  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
   background-color: rgba(0,0,0,.2);
   h2 {
     font-family: 'Proxima Nova', sans-serif !important;
@@ -663,15 +664,15 @@
     letter-spacing: -0.03em;
     color: #FFFFFF;
   }
+  .eventName {
+    @media (min-width: 880px) {color: #000000 !important}
+    font-weight: 700 !important;
+    font-size: clamp(1em, 1.5vw, 1.5em);
+  }
   #tableEvents {
     background-color: transparent !important;
     table {border-spacing: 0 1em}
     *:not(button span, span, i, h3) {color: #FFFFFF}
-    .eventName {
-      @media (min-width: 880px) {color: #000000 !important}
-      font-weight: 700 !important;
-      font-size: clamp(1em, 1.5vw, 1.5em);
-    }
     th {
       & :is(span, i) {
         font-family: 'Proxima Nova', sans-serif !important;
@@ -747,6 +748,30 @@
       }
     }
     .v-btn + .v-btn {padding: 6px}
+  }
+  section.vermobile {@include mq(max, x-small) {font-size: 12px}}
+  * + .v-card.up {margin-top: 2em}
+  .v-card.up {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+    border-radius: 9px;
+    padding: 1em;
+    span {flex: 1 1}
+    aside {
+      .v-btn.icon {
+        min-width: max-content;
+        height: max-content;
+        padding: 5px 6px;
+        margin-inline: auto;
+        background: #FFFFFF;
+        border-radius: 6px;
+        * {color: #000000 !important}
+        span {
+          font-family: 'Proxima Nova', sans-serif !important;
+          font-size: clamp(.7em, .8vw, .875em);
+          font-weight: 700;
+        }
+      }
+    }
   }
 }
 
