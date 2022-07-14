@@ -43,6 +43,11 @@ export default new Router({
           component: () => import('@/pages/Tienda/Tienda'),
         },
         {
+          path: '/nearcon',
+          name: 'Tienda',
+          component: () => import('@/pages/Tienda/TiendaNearcon'),
+        },
+        {
           path: '/events',
           name: 'Events',
           component: () => import('@/pages/Events/Events'),

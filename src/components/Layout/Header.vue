@@ -164,6 +164,7 @@ export default {
      this.nearid = false
      console.info("aqui")
    }
+ },
 
     async connect() {
       let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d";

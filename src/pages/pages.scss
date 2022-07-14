@@ -273,8 +273,16 @@
     position: static;
     color: white !important;
     gap: 2em;
+    z-index: 3;
     @include mq(max, small) {width: 80%}
     @include mq(max, x-small) {width: 90%}
+    h3 {
+      font-family: 'Proxima Nova', sans-serif !important;
+      font-weight: 700;
+      font-size: 1.375em;
+      letter-spacing: 0.04em;
+      color: #FF37BB;
+    }
     &#claim {
       width: min(90%, 17em);
     }
@@ -287,11 +295,31 @@
         width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
       }
     }
-    &>img {
-      width: 100%;
-      // @include mq(max, small) {
-      //   width: 100% !important;
-      // }
+    .containerTicket {
+      --distance: 3em;
+      width: calc(100% - (var(--distance) * 2));
+      .ticket {
+        width: 100%;
+        // @include mq(max, small) {
+        //   width: 100% !important;
+        // }
+      }
+      .arrows {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;;
+        i {color: #5F8AFA !important;background-color: rgba(65, 65, 65) !important;
+          transition: .5s $ease-return;}
+        &:first-of-type {
+          left: calc(var(--distance) * -1);
+          &.active:hover i {transform: translateX(-5px)}
+        }
+        &:last-of-type {
+          right: calc(var(--distance) * -1);
+          &.active:hover i {transform: translateX(5px)}
+        }
+      }
     }
 
     .contenedor_aside {
@@ -338,6 +366,26 @@
         }
         span {color: #C4C4C4}
       }
+    }
+    .payTicket {
+      box-sizing: border-box;
+      height: 52px;
+      padding: 2px;
+      background: linear-gradient(-90deg, #FF00E58F, #D3FEB8);
+      box-shadow: 0px 4px 19px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(14px);
+      border-radius: 13px;
+      text-transform: none !important;
+      position: relative;
+      isolation: isolate;
+      .v-btn__content {
+        background: linear-gradient(165.96deg, #FFFFFF 68.48%, rgba(211, 254, 184, 0.35) 128.14%);
+        border-radius: 13px;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(14px);
+      }
+      span{color: black}
     }
     .paywallet {
       border: 1.5px solid;
