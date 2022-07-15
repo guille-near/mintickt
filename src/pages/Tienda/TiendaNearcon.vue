@@ -92,7 +92,7 @@
 
       <article id="buy" class="divcol acenter nearconStyles" v-intersect="onIntersect" >
         <div class="containerTicket divcol relative">
-          <h3 class="tcenter">Choose your pass</h3>
+          <h3 class="tcenter h6-em">Choose your pass</h3>
           <img class="ticket" :src="require(`@/assets/pass/${
             passTicket==1?'general-admision':
             passTicket==2?'press-pass':
@@ -100,10 +100,10 @@
             passTicket==4?'sponsor-pass':
             null}.svg`)" alt="Ticket" />
           <v-btn class="arrows" icon @click="passTicket>1?passTicket--:null" :class="{active: passTicket>1}" :disabled="passTicket==1">
-            <v-icon x-large :color="passTicket==1?'#5F8AFA':passTicket==2?'#ffcf4d':passTicket==3?'#ff9350':passTicket==4?'#e86ffe':null">mdi-arrow-left-circle-outline</v-icon>
+            <img src="@/assets/icons/arrow-circle-left.svg">
           </v-btn>
           <v-btn class="arrows" icon @click="passTicket<4?passTicket++:null" :class="{active: passTicket<4}" :disabled="passTicket==4">
-            <v-icon x-large :color="passTicket==1?'#5F8AFA':passTicket==2?'#ffcf4d':passTicket==3?'#ff9350':passTicket==4?'#e86ffe':null">mdi-arrow-right-circle-outline</v-icon>
+            <img src="@/assets/icons/arrow-circle-right.svg">
           </v-btn>
         </div>
         <div class="contenedor_aside divcol fill-w">
@@ -434,4 +434,5 @@ async  batchMakeOffer() {
 };
 </script>
 
-<style src="../pages.scss" lang="scss" />
+<style src="../pages.scss" lang="scss"></style>
+<style src="./nearcon.scss" lang="scss" />

@@ -111,7 +111,9 @@ export default {
   },
   methods: {
     responsive() {
-      if (window.innerWidth <= 880 && this.route=='Events'||this.route=='EventsNearcon') {this.responsiveActions = true}
+      if (window.innerWidth <= 880 && this.$router.currentRoute.name=='Events' ||
+      window.innerWidth <= 880 && this.$router.currentRoute.name=='EventsNearcon')
+      {this.responsiveActions = true}
       else {this.responsiveActions = false}
     },
   async  connect() {

@@ -301,36 +301,21 @@
       //   width: 100% !important;
       // }
     }
-    .containerTicket {
-      --distance: 3em;
-      width: calc(100% - (var(--distance) * 2));
-      .arrows {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;;
-        i {background-color: rgba(65, 65, 65) !important;
-          transition: .5s $ease-return;}
-        &:first-of-type {
-          left: calc(var(--distance) * -1);
-          &.active:hover i {transform: translateX(-5px)}
-        }
-        &:last-of-type {
-          right: calc(var(--distance) * -1);
-          &.active:hover i {transform: translateX(5px)}
-        }
-      }
-    }
 
     .contenedor_aside {
       gap: 1em;
       aside {
         padding: 0.625em var(--padding);
+        height: 59px;
         background-color: rgba(255, 255, 255, 0.06);
         display: flex;
 
         .number {
           color: white;
+        }
+        .v-input__control {
+          max-height: 39px !important;
+          min-height: 39px !important;
         }
         .v-input__slot {
           background-color: hsl(0, 0%, 0%, 28%);
@@ -416,25 +401,6 @@
       text-transform: none !important;
       span{color: white}
     }
-    &.nearconStyles {
-      aside {background-color: rgba(51, 51, 51, 0.06) !important}
-      .v-input__slot {
-        background-color: transparent !important;
-        box-shadow: none !important;
-      }
-      .contenedor_aside {
-        aside {
-          .number {color: black}
-          .v-input__slot {
-            input {color: black}
-          }
-        }
-      }
-    }
-  }
-  &.nearcon {
-    background: linear-gradient(180deg, #FFFFFF 11.95%, #F0F0F0 100%) !important;
-    p {color: black !important}
   }
 }
 
@@ -836,6 +802,8 @@
         }
       }
     }
+  }
+  .v-card.down {
   }
 }
 

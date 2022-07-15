@@ -1,6 +1,6 @@
 <template>
   <section id="events" class="align divcol gap">
-    <h2>Events</h2>
+    <h2>Your Events</h2>
 
     <v-data-table
       id="tableEvents"
@@ -37,42 +37,40 @@
     </v-data-table>
 
     <section class="vermobile">
-      <template v-for="(item,i) in dataTableMobile" >
-        <v-card :key="i" class="up acenter" style="display:flex">
-          <span class="eventName">{{item.name}}</span>
-          <span>{{item.date}}</span>
+      <v-card v-for="(item,i) in dataTableMobile" :key="i" class="up acenter" style="display:flex">
+        <span class="eventName">{{item.name}}</span>
+        <span>{{item.date}}</span>
 
-          <aside class="acenter" style="gap:.5em">
-            <v-menu :close-on-content-click="false" offset-y>
-              <template v-slot:activator="{on, attrs}">
-                <v-btn class="icon">
-                  <v-icon size="1.5em">mdi-chart-line</v-icon>
-                </v-btn>
+        <aside class="acenter" style="gap:.5em">
+          <v-menu :close-on-content-click="false" offset-y>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn class="icon">
+                <v-icon size="1.5em">mdi-chart-line</v-icon>
+              </v-btn>
 
-                <v-btn class="icon" v-on="on" v-bind="attrs">
-                  <v-icon size="1.5em">mdi-cog-outline</v-icon>
-                </v-btn>
-              </template>
+              <v-btn class="icon" v-on="on" v-bind="attrs">
+                <v-icon size="1.5em">mdi-cog-outline</v-icon>
+              </v-btn>
+            </template>
 
-              <v-card class="contMoreOptions divcol" style="display:flex" color="#A5A5A5">
-                <v-btn v-for="(item2, i) in dataMore" :key="i" color="transparent" :class="{active:item2.active}"
-                  @click="dataMore.forEach(e=>{e.active=false});item2.active=true">
-                  {{item2.name}} more
-                </v-btn>
-              </v-card>
-            </v-menu>
+            <v-card class="contMoreOptions divcol" style="display:flex" color="#A5A5A5">
+              <v-btn v-for="(item2, i) in dataMore" :key="i" color="transparent" :class="{active:item2.active}"
+                @click="dataMore.forEach(e=>{e.active=false});item2.active=true">
+                {{item2.name}} more
+              </v-btn>
+            </v-card>
+          </v-menu>
 
-            <v-icon large color="white" :style="item.show?'transform:rotate(180deg)':''"
-              @click="dataTableMobile.forEach(e=>{e!==item?e.show=false:null});item.show=!item.show">
-              mdi-chevron-down
-            </v-icon>
-          </aside>
-        </v-card>
+          <v-icon large color="white" :style="item.show?'transform:rotate(180deg)':''"
+            @click="dataTableMobile.forEach(e=>{e!==item?e.show=false:null});item.show=!item.show">
+            mdi-chevron-down
+          </v-icon>
+        </aside>
 
-        <v-card :key="i" v-show="item.show" class="down">
+        <aside v-show="item.show" class="down">
           <v-btn>algun texto alv</v-btn>
-        </v-card>
-      </template>
+        </aside>
+      </v-card>
     </section>
   </section>
 </template>

@@ -87,9 +87,9 @@
     // height: clamp(2.5em, 3vw,3.125em);
   }
   .logoHeaderEvents {
-    width: clamp(8em, 10vw, 10.0625em);
+    width: clamp(1.5625em, 10vw, 1.875em) !important;
     // height: clamp(2.5em, 3vw,3.125em);
-    @include mq(max, small) {width: 35px}
+    @include mq(max, small) {width: 35px !important}
   }
   .v-btn {
     padding: clamp(1em,1.5vw, 1.5em);

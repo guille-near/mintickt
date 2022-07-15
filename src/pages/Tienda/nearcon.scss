@@ -1,0 +1,45 @@
+@import "../../styles/app";
+
+#tienda {
+  article {
+    position: static !important;
+    &.nearconStyles {
+      aside {background-color: rgba(51, 51, 51, 0.06) !important}
+      .v-input__slot {
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
+      .containerTicket {
+        --distance: 3em;
+        width: calc(100% - (var(--distance) * 2));
+        .arrows {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          transition: .5s $ease-return;
+          &:first-of-type {
+            left: calc(var(--distance) * -1.3);
+            &.active:hover {transform: translateX(-3px)}
+          }
+          &:last-of-type {
+            right: calc(var(--distance) * -1.3);
+            &.active:hover {transform: translateX(3px)}
+          }
+        }
+      }
+      .contenedor_aside {
+        aside {
+          .number {color: black}
+          .v-input__slot {
+            input {color: black}
+          }
+        }
+      }
+    }
+  }
+  &.nearcon {
+    background: linear-gradient(180deg, #FFFFFF 11.95%, #F0F0F0 100%) !important;
+    p {color: black !important}
+  }
+}

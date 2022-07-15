@@ -84,7 +84,7 @@
           </span>
         </aside>
         <aside class="relative">
-          <v-text-field  disabled  type="number" hide-spin-buttons :hide-details="true" solo v-model="cantidad">
+          <v-text-field type="number" hide-spin-buttons :hide-details="true" solo v-model="cantidad">
           </v-text-field>
             <div class="contenedor_botones">
               <v-btn color=" #C4C4C4" @click="controlAmount('less')">
