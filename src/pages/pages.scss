@@ -309,7 +309,7 @@
         top: 0;
         bottom: 0;
         margin: auto;;
-        i {color: #5F8AFA !important;background-color: rgba(65, 65, 65) !important;
+        i {background-color: rgba(65, 65, 65) !important;
           transition: .5s $ease-return;}
         &:first-of-type {
           left: calc(var(--distance) * -1);
