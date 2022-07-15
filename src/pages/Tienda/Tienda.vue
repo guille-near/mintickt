@@ -76,7 +76,7 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img src="@/assets/img/nyc landing.png" alt="Ticket" />
+        <img class="ticket" src="@/assets/img/nyc landing.png" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
           <span class="h8-em space" style="width: 100%; gap: .5em">

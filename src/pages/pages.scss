@@ -295,15 +295,15 @@
         width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
       }
     }
+    .ticket {
+      width: 100%;
+      // @include mq(max, small) {
+      //   width: 100% !important;
+      // }
+    }
     .containerTicket {
       --distance: 3em;
       width: calc(100% - (var(--distance) * 2));
-      .ticket {
-        width: 100%;
-        // @include mq(max, small) {
-        //   width: 100% !important;
-        // }
-      }
       .arrows {
         position: absolute;
         top: 0;

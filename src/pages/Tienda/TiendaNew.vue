@@ -126,7 +126,7 @@
       </div>
 
       <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
-        <img :src="duneticket" alt="Ticket" />
+        <img class="ticket" :src="duneticket" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
           <span class="h8-em space" style="width: 100%; gap: .5em">
