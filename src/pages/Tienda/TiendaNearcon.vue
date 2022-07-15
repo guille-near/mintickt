@@ -1,5 +1,5 @@
 <template>
-  <section id="tienda" class="center align divcol">
+  <section id="tienda" class="center align divcol nearcon">
     <aside>
       <!-- new -->
        <img class="eliminarmobile" src="@/assets/img/NYCbackground.png" alt="Background Image">
@@ -25,12 +25,12 @@
           <!-- <h3 class="h7-em p">About</h3> -->
 
           <div v-if="Datos.about.event" class="divcol">
-            <h3 class="p h7-em">About this event:</h3>
+            <h3 class="h7-em">About</h3>
             <p class=" h8-em" v-html="Datos.about.event.text" />
           </div>
 
           <div v-if="Datos.about.venue" class="divcol h8-em">
-            <h3 class="p h7-em">About Near NYC:</h3>
+            <h3 class="h7-em">Schedule overview</h3>
             <p class=" h8-em" v-html="Datos.about.venue.text" />
           </div>
 
@@ -54,28 +54,43 @@
         <aside class="contLocation divcol">
           <h3 class="h7-em">Location</h3>
           <p class="h8-em" style="display:flex; align-items: flex-end; gap: .5em; margin-bottom: 1em;">
-            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
+            <img src="@/assets/icons/marker-nearcon.svg" alt="marker icon" />
             {{Datos.location}}
           </p>
           <iframe
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=palomabk"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=Cais da Viscondessa, Lisboa, Portugal"
             allowfullscreen>
           </iframe>
         </aside>
 
         <aside class="divcol">
-          <!-- <h3 class="h7-em">Details</h3> -->
+          <h3 class="h7-em">Details</h3>
           <aside class="contDetails">
-            <p v-for="(item, i) in Datos.details" :key="i" class="h8-em tittles">
-              <strong>{{ item.titlesDetails }}</strong>
-              <br>{{ item.textDetails }}
+            <p class="h8-em tittles">
+              <strong>Storage Gateaway</strong>
+              <br>{{ Datos.details.storage_gateaway }}
+            </p>
+            
+            <p class="h8-em tittles">
+              <strong>Transactions ID</strong>
+              <br>{{ Datos.details.transactions_id }}
+            </p>
+            
+            <p class="h8-em tittles">
+              <strong>Contract</strong>
+              <br>{{ Datos.details.contract }}
+            </p>
+            
+            <p class="h8-em tittles">
+              <strong>Thing ID</strong>
+              <br>{{ Datos.details.thing_id }}
             </p>
           </aside>
         </aside>
       </div>
 
-      <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
+      <article id="buy" class="divcol acenter nearconStyles" v-intersect="onIntersect" >
         <div class="containerTicket divcol relative">
           <h3 class="tcenter">Choose your pass</h3>
           <img class="ticket" :src="require(`@/assets/pass/${passTicket==1?'general-admision':
@@ -213,10 +228,10 @@ export default {
       Datos: {
         about: {
           event: {
-            text: "Come join a social that also aims to educate NFT NYC goers on the ecosystem and projects on NEAR as well as community building. Open to all, with an emphasis on founders, developers, and creators striving to address problems within their communities. First we will start with a 30 minute panel, followed by a beginner's salsa lesson by the Cuban Salsa School of Fuakata. Event will emphasize participation of minority populations like latinx communities, and will pay homage to one of the greatest forms of artistic expression, dance.",
+            text: "<p>Join us in Lisbon from September 11th - 14th for the second annual NEARCON. Expect 2,000+ attendees from the NEAR & Web3 ecosystem, and 200+ hackers. This will be our biggest event yet.</p><p>At NEARCON experience, you will experience:</p><p><strong>Lasting connections</strong> - Networking opportunities to connect and build lasting relationships with the NEAR Community and Ecosystem.</p><p><strong>Range of discussions</strong> - Talks on Future of Finance, NFTs, Governance, Sustainability, Gaming, Protocol Updates, Developer Tools, and more.</p><p><strong>IRL Hackaton</strong> - Hackers get in free :) Win prizes, get onstage for a live “Dragon’s Den” with crypto titans, and most importantly… have fun building!</p>",
           },
           venue: {
-            text: "<p>NEAR NYC is the official NEAR Protocol community of NYC. NEAR is a collective, a foundation, and a development platform built on a new layer-one blockchain. Through simple, secure, and scalable technology, NEAR empowers millions to invent and explore new experiences. Business, creativity, and community are being reimagined for a more sustainable and inclusive future.Learn more at https://near.org/ and check out the NYC community at https://linktr.ee/nearnyc",
+            text: "<p><strong>September 10th - 17th: </strong>NEARCON Week</p><p><strong>September 11th - Registration Party! [2pm - 8pm]</strong><br>Beat the lines, pick up your pass, swag bag, vibe with resident DJ, network, sip on libations, snack on tacos, and more.</p><strong>September 12th - 14th</strong><br>Doors open at 10am for light breakfast and networking, score a good seat for content sessions that kick off at 11am and continue until 5pm. 5pm - 8pm | Happy Hour and sunset sets with resident DJ on the waterfront, Good drinks. Good food. GREAT people [YOU! :)].",
           },
           // movie: {
           //   text: "<p><strong>Plot: </strong>As the AIDS epidemic tears through their community during the early 90’s, the members of ACT UP Paris are fighting for survival. While they battle against governmental apathy, pharmaceutical greed and public ignorance, they also go out partying, debate politics and, occasionally, fall in love. One day, as outspoken radical Sean (Nahuel Pérez Biscayart) strikes up a conversation with shy newcomer Nathan (Arnaud Valois), they have no idea that their lives are about to change forever.",
@@ -239,27 +254,15 @@ export default {
           //     text: "French | Subtitles: English | PG: M/16",
           //   },
           // ],
-          cancelation: "",
+          // cancelation: "",
         },
-        location: "Palomas Bk - 1 Knickerbocker Avenue, Brooklyn, NY 11237",
-      //  details: [
-      //     {
-      //       titlesDetails: "Storage Gateaway",
-      //       textDetails: "https://arweave.net",
-      //     },
-      //     {
-      //       titlesDetails: "Transactions ID",
-      //       textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY",
-      //     },
-      //     {
-      //       titlesDetails: "Contract",
-      //       textDetails: "mintickt.mintbase1.near",
-      //     },
-      //     {
-      //       titlesDetails: "Thing ID",
-      //       textDetails: "crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near",
-      //     },
-      //   ]
+        location: "Cais da Viscondessa, 1200-109 Lisboa, Portugal",
+        details: {
+          storage_gateaway: "https://arweave.net",
+          transactions_id: "ZBDW8benrngFFmbKoIW_djmNWFoQtDQfX1Nq8uXYheg",
+          contract: "nearcon2.mintbase1.near",
+          thing_id: "ZBDW8benrngFFmbKoIW_djmNWFoQtDQfX1Nq8uXYheg:nearcon2.mintbase1.near",
+        }
       },
       metadata: null,
       tokens_totales: null,
