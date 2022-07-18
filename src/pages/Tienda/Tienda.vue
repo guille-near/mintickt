@@ -75,7 +75,7 @@
         </aside>
       </div>
 
-      <article id="buy" class="divcol acenter" v-intersect="onIntersect" >
+      <article id="buy" class="divcol acenter" v-intersect="onIntersect">
         <img class="ticket" src="@/assets/img/nyc landing.png" alt="Ticket" />
         <div class="contenedor_aside divcol fill-w">
         <aside class="divrow">
@@ -88,15 +88,15 @@
           </v-text-field>
             <div class="contenedor_botones">
               <v-btn color=" #C4C4C4" @click="controlAmount('less')">
-                  <v-icon color="black">
-                    mdi-minus
-                  </v-icon>
-                </v-btn>
-                <v-btn color=" #C4C4C4" @click="controlAmount('more')">
-                  <v-icon color="black">
-                    mdi-plus
-                  </v-icon>
-                </v-btn>
+                <v-icon color="black">
+                  mdi-minus
+                </v-icon>
+              </v-btn>
+              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+                <v-icon color="black">
+                  mdi-plus
+                </v-icon>
+              </v-btn>
             </div>
         </aside>
 

@@ -53,9 +53,19 @@ export default new Router({
           component: () => import('@/pages/Events/Events'),
         },
         {
-          path: '/events-nearcon',
-          name: 'EventsNearcon',
-          component: () => import('@/pages/Events/Events'),
+          path: '/events/liveData',
+          name: 'LiveData',
+          component: () => import('@/pages/Events/LiveData'),
+        },
+        {
+          path: '/events/options',
+          name: 'Options',
+          component: () => import('@/pages/Events/Options'),
+        },
+        {
+          path: '/events/register',
+          name: 'RegisterDashboard',
+          component: () => import('@/pages/Events/RegisterDashboard'),
         },
         // {
         //   path: '/tienda',

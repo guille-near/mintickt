@@ -5,13 +5,13 @@
       color="transparent"
       height="140px"
       absolute
-      :class="{ events: route == 'Events' || route == 'EventsNearcon' }"
+      :class="{ events: route == 'Events' || route == 'LiveData' ||  route == 'RegisterDashboard' ||  route == 'RegisterDashboard' }"
     >
-      <v-row class="align" :class="{ limiter: route !== 'Events' }">
+      <v-row class="align" :class="{ limiter: route !== 'Events' && route !== 'LiveData' &&  route !== 'Options' &&  route !== 'RegisterDashboard' }">
         <v-col
           class="space"
           :style="
-            route == 'Events' || route == 'EventsNearcon'
+            route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -25,14 +25,14 @@
             class="acenter"
             style="gap: 0.2em"
             :style="
-              route == 'Events' || route == 'EventsNearcon'
+              route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
                 ? ''
                 : 'display:contents'
             "
           >
             <v-btn
               class="createEventBtn h9-em"
-              v-if="route == 'Events' || route == 'EventsNearcon'"
+              v-if="route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'"
             >
               <span>create an event</span>
             </v-btn>
@@ -112,7 +112,9 @@ export default {
   methods: {
     responsive() {
       if (window.innerWidth <= 880 && this.$router.currentRoute.name=='Events' ||
-      window.innerWidth <= 880 && this.$router.currentRoute.name=='EventsNearcon')
+      window.innerWidth <= 880 && this.$router.currentRoute.name=='LiveData' ||
+      window.innerWidth <= 880 && this.$router.currentRoute.name=='Options' ||
+      window.innerWidth <= 880 && this.$router.currentRoute.name=='RegisterDashboard')
       {this.responsiveActions = true}
       else {this.responsiveActions = false}
     },

@@ -630,7 +630,7 @@
     }
     :is(label, input, textarea) {
       font-family: 'Proxima Nova', sans-serif !important;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 0.9375em;
       letter-spacing: -0.03em;
       color: #FFFFFF !important;
@@ -797,13 +797,29 @@
         * {color: #000000 !important}
         span {
           font-family: 'Proxima Nova', sans-serif !important;
-          font-size: clamp(.7em, .8vw, .875em);
+          font-size: clamp(.9em, 1.5vw, 1.5em);
           font-weight: 700;
         }
       }
     }
-  }
-  .v-card.down {
+    aside.down {
+      margin-top: 1em;
+      h3 {
+        font-family: 'Proxima Nova', sans-serif !important;
+        font-weight: 600;
+        font-size: .875em;
+        letter-spacing: -0.03em;
+        font-variant: small-caps;
+        color: #CC00B7;
+        margin-bottom: 0;
+      }
+      span {
+        font-family: 'SF Pro', sans-serif !important;
+        font-weight: 400;
+        font-size: .875em;
+        color: #FFFFFF;
+      }
+    }
   }
 }
 
@@ -823,4 +839,199 @@
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
     }
   }
+}
+
+#liveData {
+  padding-block: 160px 12em;
+  padding-inline: 2.5em;
+  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
+  background-color: rgba(0,0,0,.2);
+  label {
+    font-family: 'SF Pro', sans-serif !important;
+    font-weight: 510;
+    font-size: .8125em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  h2 {
+    font-family: 'Proxima Nova', sans-serif !important;
+    font-weight: 500;
+    font-size: 1.5625em;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  .container-info {
+    gap: 1em;
+    span {
+      font-family: 'SF Pro', sans-serif !important;
+      font-weight: 510;
+      font-size: 1.75em;
+      color: #FFFFFF;
+    }
+  }
+  .container-down {
+    display: contents;
+    @media (max-width: 880px) {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+  }
+  .container-filter {
+    .v-card {
+      display: grid !important;
+      place-content: center;
+      text-align: center;
+      width: 12.0625em;
+      height: 5.3125em;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+      border-radius: 4px;
+      &.active {
+        border: 1px solid #CC00B7;
+        box-shadow: 0 0 15px 1px #CC00B7 !important;
+      }
+      label,span {pointer-events: none}
+      span {
+        font-family: 'SF Pro', sans-serif !important;
+        font-weight: 510;
+        font-size: 1.375em;
+      }
+    }
+  }
+  #dataTable {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, rgba(41, 41, 41, 0.3) 23.08%, rgba(41, 41, 41, 0) 122.53%);
+    border-radius: 5px;
+    padding: .5em;
+    thead {
+      tr {
+        th {
+          span {
+            font-family: 'Proxima Nova', sans-serif !important;
+            font-weight: 600;
+            font-size: 0.875em;
+            letter-spacing: -0.03em;
+            font-variant: small-caps;
+            color: #CC00B7 !important;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          font-family: 'SF Pro', sans-serif !important;
+          font-weight: 510;
+          font-size: 1em;
+          color: rgba(255, 255, 255, 0.5);
+          &:first-of-type {
+            max-width: 118px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .v-btn:not(.v-btn--icon) {
+            padding: 9px 20px;
+            background: #FFFFFF;
+            border-radius: 6px;
+            span {
+              font-family: 'Proxima Nova', sans-serif !important;
+              font-weight: 600;
+              font-size: 0.875em;
+              text-align: center;
+              color: #000000;
+            }
+          }
+        }
+        &:hover {background-color: transparent}
+      }
+    }
+  }
+}
+
+
+#options {
+  &>*{width: min(100%,22.5em)}
+  padding-block: 160px 12em;
+  padding-inline: 2.5em;
+  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
+  background-color: rgba(0,0,0,.2);
+  label {
+    font-family: 'SF Pro', sans-serif !important;
+    font-weight: 510;
+    font-size: .8125em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  h2 {
+    font-family: 'Proxima Nova', sans-serif !important;
+    font-weight: 500;
+    font-size: 1.5625em;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  .container-actions {
+    gap: .1em;
+    span {
+      font-family: 'Proxima Nova', sans-serif !important;
+      font-weight: 600;
+      font-size: 1.4375em;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #FFFFFF;
+    }
+    div.space {
+      flex-wrap: wrap;
+      gap: .5em;
+      &>* {flex:1 1 106px}
+    }
+  }
+  .container-info {
+    gap: 1em;
+    span {
+      font-family: 'SF Pro', sans-serif !important;
+      font-weight: 510;
+      line-height: 1;
+      font-size: 1.75em;
+      color: #FFFFFF;
+    }
+  }
+  .v-btn:not(.v-btn--icon) {
+    height: 34px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    span {
+      font-family: 'Proxima Nova', sans-serif !important;
+      font-weight: 600;
+      font-size: 0.875em;
+      text-align: center;
+      color: #000000 !important;
+    }
+  }
+}
+
+#modalMore {
+  height: 200px;
+  display: grid;
+  place-content: center;
+  .v-input {
+    input {color: #FFFFFF !important}
+    &__slot {background-color: #aeaeae}
+    &__append-inner {
+      display: flex;
+      gap: .5em;
+      .v-btn {
+        max-height: max-content;
+        height: max-content;
+        max-width: max-content;
+        min-width: max-content;
+        padding: 0;
+        background: #C4C4C4 !important;
+      }
+    }
+  }
+}
+
+#createTickets.registerDashboard {
+  padding-block: 160px 12em !important;
+  padding-inline: 2.5em !important;
+  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em) !important}
+  background-color: rgba(0,0,0,.2) !important;
 }
