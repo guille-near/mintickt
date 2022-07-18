@@ -41,7 +41,7 @@
       >
         <template v-slot:[`item.transaction`]>
           <v-btn icon>
-            <img src="@/assets/icons/link.svg" alt="external link">
+            <img class="copyImg" src="@/assets/icons/link.svg" alt="external link">
           </v-btn>
         </template>
 

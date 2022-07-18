@@ -842,6 +842,7 @@
 }
 
 #liveData {
+  @media (max-width:420px) {font-size: 14px}
   padding-block: 160px 12em;
   padding-inline: 2.5em;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
@@ -898,6 +899,7 @@
     }
   }
   #dataTable {
+    @media (max-width:420px) {font-size: 10px}
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, rgba(41, 41, 41, 0.3) 23.08%, rgba(41, 41, 41, 0) 122.53%);
     border-radius: 5px;
     padding: .5em;
@@ -920,13 +922,17 @@
         td {
           font-family: 'SF Pro', sans-serif !important;
           font-weight: 510;
-          font-size: 1em;
+          font-size: clamp(.8em, 1vw, 1em);
           color: rgba(255, 255, 255, 0.5);
           &:first-of-type {
             max-width: 118px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+          }
+          .copyImg {
+            width: clamp(1.3em, 2vw, 2em);
+            aspect-ratio: 1 / 1;
           }
           .v-btn:not(.v-btn--icon) {
             padding: 9px 20px;
