@@ -17,7 +17,7 @@
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">SEP 11 - 14</v-chip>
         <h2>{{ tittle }}</h2>
-        <span>lisbon, Portugal</span>
+        <span>Lisbon, Portugal</span>
       </div>
     </aside>
 
@@ -433,7 +433,7 @@ export default {
       return amountInYocto;
     },
     async traerdatos() {
-      this.tittle = "NEARCON";
+      this.tittle = "Nearcon";
       this.tokens_totales = this.tokens_aggregate.aggregate.count;
       this.tokens_disponibles = this.lists_aggregate.aggregate.count;
       this.price = this.lists_aggregate.aggregate.min.price;
