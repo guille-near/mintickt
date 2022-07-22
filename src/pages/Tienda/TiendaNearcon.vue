@@ -182,8 +182,13 @@
           </aside>
         </div>
         <div style="gap: 1em" class="divcol fill-w">
-          <v-btn @click="batchMakeOffer()" class="payTicket h8-em bold">
-            Pay with NEAR
+          <v-btn  :disabled="progress" @click="batchMakeOffer()" class="payTicket h8-em bold">
+             <div  v-show="!progress"> Pay with NEAR</div>
+            <v-progress-circular
+              v-show="progress"
+              :size="30"
+              indeterminate
+            ></v-progress-circular>
           </v-btn>
           <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
         </div>
@@ -306,6 +311,7 @@ export default {
       tittle: "",
       duneticket: "",
       cantidad: 1,
+      progress: false,
       location: "",
       dialog: false,
       ultimoprecio: null,
@@ -358,15 +364,15 @@ export default {
       tokens_buy: [],
       precio_yocto: null,
       ret: null,
-      hash: '',
+      hash: "",
     };
   },
   mounted() {
+    this.gettokens();
     this.$emit("renderHeader");
     setTimeout(() => {
       this.traerdatos();
       this.NearUsd();
-      this.gettokens();
       // this.loginNear()
       this.NEARyoctoNEAR();
     }, 2000);
@@ -395,27 +401,27 @@ export default {
   },
   methods: {
     async gettokens() {
+      this.progress = true
       this.$apollo
         .query({
           query: things_by_pk,
         })
         .then((data) => {
           this.ret = data.data.things_by_pk;
-          setTimeout(() => {
-            var cantidad_tokens = 0;
-            this.ret.tokens.forEach((element) => {
-              if (
-                element.ownerId === "nearcon2.near" &&
-                !this.tokens_buy.includes(element.id) &&
-                cantidad_tokens < 1
-              ) {
-                cantidad_tokens++;
-                console.log(element.id);
-                this.tokens_buy.push(element.id);
-              }
-            });
-          }, 1000);
-          console.log(this.ret)
+          var cantidad_tokens = 0;
+          this.ret.tokens.forEach((element) => {
+            if (
+              element.ownerId === "nearcon2.near" &&
+              !this.tokens_buy.includes(element.id) &&
+              cantidad_tokens < 1
+            ) {
+              cantidad_tokens++;
+              console.log(element.id);
+              this.tokens_buy.push(element.id);
+            }
+          });
+          console.log(this.ret);
+           this.progress = false
           return this.ret; // this returns to the above promise, not the overall function
         });
     },
