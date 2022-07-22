@@ -2,14 +2,14 @@
   <section id="tienda" class="center align divcol nearcon">
     <aside>
       <!-- new -->
-       <img class="eliminarmobile" src="@/assets/img/NYCbackground.png" alt="Background Image">
-      <img class="vermobile" src="@/assets/img/NYCbackground.png" alt="Background Image">
+       <img class="eliminarmobile" src="@/assets/img/Group 166.png" alt="Background Image">
+      <img class="vermobile" src="@/assets/img/Group 167.png" alt="Background Image">
       <!-- new -->
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">JUN 23</v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">SEP 11 - 14</v-chip>
         <h2>{{tittle}}</h2>
-        <span>Palomas BK</span>
+        <span>lisbon, Portugal</span>
       </div>
     </aside>
 
@@ -181,12 +181,8 @@ import { Wallet, Chain, Network } from 'mintbase'
 import * as nearAPI from "near-api-js"
 import { CONFIG } from "@/services/api"
 const { connect, keyStores, WalletConnection, utils ,} = nearAPI
-export default {
-  name: "Tienda",
-  apollo: {
-    things_by_pk: {
-       query: gql`{
-   things_by_pk(id: "JHAaTXCxCoomlZ2WktgmVHBx2hAPEZfSiDxd1kMxNXc:mintickt.mintbase1.near") {
+const things_by_pk = gql`{
+   things_by_pk(id: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near") {
     id
     metadata {
       category
@@ -207,15 +203,55 @@ export default {
         }
       }
       ownerId
+      minter
       lists {
         price
         removedAt
+        id
+        acceptedOfferId
       }
     }
   }
+},
+` ;
+const tokens_aggregate = gql`{
+  tokens_aggregate(where: {thingId: {_eq: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near"}, burnedAt: {_is_null: true}}) {
+    aggregate {
+      count
+    }
+  }
+  }
+` ;
+const lists_aggregate = gql`{
+  lists_aggregate(where: {thingId: {_eq: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near"}, removedAt: {_is_null: true}}) {
+    aggregate {
+      count
+    }
+  }
 }
-`,
+` ;
+const tokens_availible = gql `{ lists_aggregate(where: {thingId: {_eq: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near"}, removedAt: {_is_null: true}}) {
+    aggregate {
+      count
+    }
+  }
+  }
+` ;
+export default {
+  name: "Tienda",
+  apollo: {
+    things_by_pk: {
+      query: things_by_pk
     },
+    tokens_aggregate:{
+      query: tokens_aggregate
+    },
+    lists_aggregate: {
+      query: lists_aggregate
+    },
+    tokens_availible:{
+      query: tokens_availible
+    }
   },
   data() {
     return {
@@ -260,9 +296,9 @@ export default {
         location: "Cais da Viscondessa, 1200-109 Lisboa, Portugal",
         details: {
           storage_gateaway: "https://arweave.net",
-          transactions_id: "ZBDW8benrngFFmbKoIW_djmNWFoQtDQfX1Nq8uXYheg",
+          transactions_id: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw",
           contract: "nearcon2.mintbase1.near",
-          thing_id: "ZBDW8benrngFFmbKoIW_djmNWFoQtDQfX1Nq8uXYheg:nearcon2.mintbase1.near",
+          thing_id: "dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near",
         }
       },
       metadata: null,
@@ -282,7 +318,7 @@ export default {
       this.traerdatos().then( (res) => {
           var cantidad_tokens = 0
            this.things_by_pk.tokens.forEach(element => {
-            if (element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < 1 ){
+            if (element.ownerId === "nearcon2.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < 1 ){
               cantidad_tokens++
               this.tokens_buy.push(element.id)
             }
@@ -313,18 +349,13 @@ export default {
       console.log(amountInYocto);      return amountInYocto;
     },
    async traerdatos(){
-        this.tittle =  "NEAR NYC Salsa Social"
-        this.tokens_totales =  this.things_by_pk.tokens.length
-        // this.location = this.things_by_pk.metadata.extra.location.value
-        this.cantidad_disponible = 0
+        console.log(this.tokens_availible)
+        this.tittle =  "NEARCON"
+        this.tokens_totales =   this.tokens_aggregate.aggregate.count
+        this.tokens_disponibles =  this.lists_aggregate.aggregate.count
         this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near"){
-              this.cantidad_disponible = this.cantidad_disponible +1
-          }
-        });
-        this.tokens_disponibles =  this.cantidad_disponible
-        this.things_by_pk.tokens[0].lists.forEach(element => {
-          if (element.removedAt === null){
+          if (element.lists.length  > 0 && element.lists.removedAt === null){
+            console.log(element.price)
              this.yoctoNEARNEAR(element.price)
           }
         });
@@ -348,7 +379,6 @@ export default {
     yoctoNEARNEAR2: function(yoctoNEAR) {
       const amountInNEAR = utils.format.formatNearAmount(yoctoNEAR);
       this.price = amountInNEAR
-      console.log(this.price)
       return amountInNEAR.toString();
     },
     formatPrice (price) {
@@ -363,11 +393,10 @@ export default {
         this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
         this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
         this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+          if (element.ownerId === "nearcon2.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
             cantidad_tokens++
             this.tokens_buy.push(element.id)
           }
-          console.log(this.tokens_buy)
       });
     
       }
@@ -376,11 +405,10 @@ export default {
           this.price =  this.price  * this.cantidad
           this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
           this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
+          if (element.ownerId === "nearcon2.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
             cantidad_tokens++
             this.tokens_buy.push(element.id)
           }
-          console.log(this.tokens_buy)
       });
         }
     },

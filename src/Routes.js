@@ -38,12 +38,12 @@ export default new Router({
         //  component: () => import('@/pages/Landing/Landing'),
         // },
         {
-          path: '/',
+          path: '/t',
           name: 'Tienda',
           component: () => import('@/pages/Tienda/Tienda'),
         },
         {
-          path: '/nearcon',
+          path: '/',
           name: 'Tienda',
           component: () => import('@/pages/Tienda/TiendaNearcon'),
         },
