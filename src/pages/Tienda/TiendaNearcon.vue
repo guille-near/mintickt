@@ -116,10 +116,11 @@
       <article
         id="buy"
         class="divcol acenter nearconStyles"
+        style="margin-top:4em"
         v-intersect="onIntersect"
       >
         <div class="containerTicket divcol relative">
-          <!-- <h3 class="tcenter h6-em">Choose your pass</h3> -->
+          <h3 class="tcenter h6-em">Choose your pass</h3>
           <img
             class="ticket"
             :src="

@@ -44,7 +44,7 @@
       }
       span {font-size: 1.21611875em !important}
       .v-chip__content {font-size: 1em !important}
-      @include mq(max, 340px) {font-size: 12px !important}
+      @include mq(max, 400px) {font-size: 12px !important}
     }
   }
   &>aside:nth-child(1) {
@@ -129,6 +129,12 @@
       color: #FFFFFF;
       // max-width: clamp(34.625em, 60vw, 60em) !important;
       max-width: max(calc(70% - 4vw), 34.625em) !important;
+    }
+  }
+  &.nearcon > aside:nth-child(1) h2 {
+    font-size: 4em;
+    @media (max-width:880px) {
+      font-size: 4.375em !important;
     }
   }
 
@@ -233,7 +239,6 @@
     bottom: 3%;
     width: 100vw;
     margin-inline: calc(-50vw + 50%);
-    padding-inline: clamp(2em, 4vw, 4em);
     z-index: 5;
     animation: moveup .5s $ease-return;
     &>div {
