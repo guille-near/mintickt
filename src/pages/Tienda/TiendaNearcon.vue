@@ -132,7 +132,7 @@
         <aside class="space">
           <div class="divrow acenter">
             <img src="@/assets/logo/logonear.svg" alt="Logo near" />
-            <span  style="margin-left:0.2em" class="h8-em number">{{price}}</span>
+            <strong  style="margin-left:0.5em" class="h8-em number">{{price}}</strong>
           </div>
           <span class="h8-em number">~ {{ultimoprecio}} $USD</span>
         </aside>
