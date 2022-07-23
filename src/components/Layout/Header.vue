@@ -13,6 +13,8 @@
           :style="
             route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
               ? 'padding:0'
+              : route == 'Nearcon'
+              ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
         >

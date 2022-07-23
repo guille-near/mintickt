@@ -239,6 +239,7 @@
     bottom: 3%;
     width: 100vw;
     margin-inline: calc(-50vw + 50%);
+    padding-inline: 16px;
     z-index: 5;
     animation: moveup .5s $ease-return;
     &>div {

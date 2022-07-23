@@ -44,7 +44,7 @@ export default new Router({
         },
         {
           path: '/',
-          name: 'Tienda',
+          name: 'Nearcon',
           component: () => import('@/pages/Tienda/TiendaNearcon'),
         },
         {

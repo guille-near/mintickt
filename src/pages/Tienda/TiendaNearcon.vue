@@ -297,7 +297,7 @@ const lists_aggregate = gql`
   }
 `;
 export default {
-  name: "Tienda",
+  name: "Nearcon",
   apollo: {
     tokens_aggregate: {
       query: tokens_aggregate,
