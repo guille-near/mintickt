@@ -1,0 +1,49 @@
+@use "@/styles/app" as *;
+
+//////////////////////////////////////////////////////////////////////
+// // // error // // //
+//////////////////////////////////////////////////////////////////////
+#error {
+  background: var(--bg);
+  .error-page {
+    height: 100%;
+    .col {
+      gap: 1em;
+      h1 {
+        font-size: clamp(9em, 20vw, 22em);
+        line-height: 1 !important;
+        color: #adadad;
+        letter-spacing: -7px;
+        animation: glitch 1s linear infinite;
+        &:is(:before, :after) {
+          content: attr(title);
+          position: absolute;
+          left: 0;
+        }
+        &:before {
+          animation: glitchTop 1s linear infinite;
+          clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+          -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+        &:after{
+          animation: glitchBotom 1.5s linear infinite;
+          clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+          -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+        }
+      }
+      span {
+        line-height: 1 !important;
+      }
+      .v-btn {
+        width: clamp(8em, 20vw, 20em);
+        height: clamp(2em, 5vw, 4.75em);
+        background: transparent;
+        border: 2px solid #adadad;
+        border-radius: 50.6557px;
+        span {
+          color: #adadad;
+        }
+      }
+    }
+  }
+}

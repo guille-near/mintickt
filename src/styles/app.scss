@@ -1,0 +1,18 @@
+@import "~vuetify/src/styles/styles.sass";
+@import 'variables';
+@import 'base';
+@import 'personal-base';
+@import 'responsive';
+@import 'mixins';
+
+body::-webkit-scrollbar {display: none}
+.limiter {
+  max-width: 1440px;
+  width: 100%;
+  margin-inline: auto
+}
+
+.v-btn {text-transform: none;letter-spacing: normal}
+button:not(.not_typography, .not) {
+  &::first-letter, & ::first-letter {text-transform: uppercase}
+}

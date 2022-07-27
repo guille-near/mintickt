@@ -1,0 +1,139 @@
+:root {
+  --color: #FFFFFF;
+  --colorInverted: #111011;
+  --colorCartas: #000000;
+  --colorCartasInverted: #FFFFFF;
+  --colorHover: #080e35;
+  --coloLineas: #FFFFFF;
+  --colorCartas2: #182833;
+  --mix-blend-mode: screen;
+}
+.v-icon, a {
+  color: #FFFFFF !important;
+}
+:is(span, p, h1, h2, h3, h4, h5, h6, button) {
+  color: #FFFFFF;
+}
+.colorInverted {
+  color: #111011 !important;
+}
+.colorCartas {
+  background-color: #000000 !important;
+}
+.colorCartasInverted {
+  background-color: #FFFFFF !important;
+}
+.color {
+  color: #FFFFFF !important;
+}
+#search {
+  color: #FFFFFF !important;
+}
+#autocomplete {
+  color: #FFFFFF !important;
+}
+.lineas {
+  background-color: #FFFFFF !important;
+}
+.filter {
+  filter: invert(100%) !important;
+}
+.filterInverted {
+  filter: invert(0%) !important;
+}
+.v-text-field--solo > .v-input__control > .v-input__slot {
+  border: 2px solid #FFFFFF;
+  background-color: #000000 !important;
+  box-shadow: inset 6px 5px 7px rgba(0, 0, 0, 0.25) !important;
+}
+#botonSelection {
+  background-color: #FFFFFF !important;
+}
+.iconoSelcetion {
+  color: #111011 !important;
+}
+.v-select-list {
+  background-color: #000000 !important;
+}
+.v-select__selection {
+  color: #FFFFFF !important;
+}
+.v-list-item:hover {
+  background-color: #080e35 !important;
+}
+.v-list-item__title {
+  color: #FFFFFF !important;
+}
+.buttonClose:is(:hover, :focus):before {
+  border: 3px solid #FFFFFF !important;
+}
+.containerSwitchPriceSelection {
+  border: 2px solid #FFFFFF !important;
+}
+.containerSwitchPriceSelectionActive {
+  background-color: #B7B89F !important;
+  border: 2px solid #FFFFFF !important;
+}
+.switchPriceSelection {
+  background-color: #FFFFFF !important;
+}
+
+/* header */
+#tableCollections .v-data-table__wrapper > table > tbody > tr > td:hover {
+  background-color: #080e35 !important;
+}
+.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
+  transform: scaleY(1.5) !important;
+  background-color: #FFFFFF !important;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  background: #B7B89F !important;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(98, 99, 91) !important;
+}
+.v-data-table__wrapper > table > tbody > tr > td {
+  color: #FFFFFF !important;
+}
+
+/* buy */
+.containerUp span:nth-child(1) {
+  background-color: #182833 !important;
+  border: 2px solid #FFFFFF !important;
+}
+.containerUp span:nth-child(2) {
+  color: #B7B89F !important;
+}
+.containerPagination .v-btn:nth-child(1) {
+  background-color: #111011 !important;
+}
+.containerPagination .v-btn:nth-child(2) {
+  background-color: #E5E5E5 !important;
+}
+.containerMenuBottom {
+  background-color: #000000 !important;
+  border: 4px solid #FFFFFF !important;
+}
+.containerReviewBottom {
+  border: 4px solid #FFFFFF !important;
+}
+
+/* stats */
+.containerChart {
+  background: #111011 !important;
+}
+
+/* education */
+.mainContainer button {
+  background: #132496 !important;
+}
+.mainContainer button:before {
+  border: 2px solid #FFFFFF !important;
+}
+.containerNFTProjects .v-card:hover {
+  background-color: #080e35 !important;
+}
+.divisorNFTProjects {
+  border-inline: 1px solid #FFFFFF;
+}
