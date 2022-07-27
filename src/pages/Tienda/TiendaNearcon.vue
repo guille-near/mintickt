@@ -4,12 +4,12 @@
       <!-- new -->
       <img
         class="eliminarmobile"
-        src="@/assets/img/Group 166.png"
+        src="@/assets/img/photo_2022-07-27_06-17-32.jpg"
         alt="Background Image"
       />
       <img
         class="vermobile"
-        src="@/assets/img/Group 167.png"
+        src="@/assets/img/photo_2022-07-27_06-17-32.jpg"
         alt="Background Image"
       />
       <!-- new -->
