@@ -104,7 +104,7 @@ export default {
   mounted(){
     this.revisar()
     this.responsive()
-    // document.addEventListener('resize', this.responsive())
+    window.onresize = () => {this.responsive()}
   },
   computed: {
     route() {
