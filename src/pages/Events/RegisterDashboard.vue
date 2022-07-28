@@ -7,7 +7,7 @@
         </h2>
 
         <section class="center divwrap">
-          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket-register.svg" alt="Ticket image">
 
           <aside class="divcol">
             <h3>Basic Information</h3>
@@ -91,7 +91,7 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket-register.svg" alt="Ticket image">
 
           <aside class="divcol" style="min-height:100%">
             <div class="divcol">
@@ -137,7 +137,7 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket-register.svg" alt="Ticket image">
 
           <aside class="divcol gap" style="min-height:100%">
             <div class="divcol">
@@ -173,7 +173,7 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img class="ticket" src="@/assets/img/ticket.svg" alt="Ticket image">
+          <img class="ticket" src="@/assets/img/ticket-register.svg" alt="Ticket image">
 
           <aside class="divcol" style="min-height:100%">
             <div class="divcol">
