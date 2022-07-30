@@ -4,7 +4,7 @@
       <v-btn icon to="/events">
         <v-icon style="color:#FFFFFF !important">mdi-arrow-left</v-icon>
       </v-btn>
-      <h2 class="p">Nearcon / Settings</h2>
+      <h2 class="p" style="margin:0">Nearcon / Settings</h2>
     </div>
 
     <aside class="container-actions divcol">
