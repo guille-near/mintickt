@@ -5,12 +5,13 @@
       color="transparent"
       height="140px"
       absolute
-      :class="{ events: route == 'Events' || route == 'LiveData' ||  route == 'RegisterDashboard' ||  route == 'RegisterDashboard' }"
+      :class="{ events: route == 'Landing' || route == 'Events' || route == 'LiveData' ||  route == 'RegisterDashboard' ||  route == 'RegisterDashboard' }"
     >
-      <v-row class="align" :class="{ limiter: route !== 'Events' && route !== 'LiveData' &&  route !== 'Options' &&  route !== 'RegisterDashboard' }">
+      <v-row class="align" :class="{ limiter:   route == 'Landing' || route !== 'Events' && route !== 'LiveData' &&  route !== 'Options' &&  route !== 'RegisterDashboard' }">
         <v-col
           class="space"
           :style="
+           route == 'Landing' ||
             route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
               ? 'padding:0'
               : route == 'Nearcon'
@@ -18,7 +19,7 @@
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
         >
-          <a class="center" href="/">
+          <a class="center" href="/mintick/#/">
             <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/logo-mobile.svg" alt="logo">
             <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">
           </a>
@@ -27,6 +28,7 @@
             class="acenter"
             style="gap: 0.2em"
             :style="
+             route == 'Landing' ||
               route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
                 ? ''
                 : 'display:contents'
@@ -34,7 +36,8 @@
           >
             <v-btn
               class="createEventBtn h9-em"
-              v-if="route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'"
+              v-if="  route == 'Landing' || route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'"
+              @click="$router.push('/events/register')"
             >
               <span>create an event</span>
             </v-btn>
