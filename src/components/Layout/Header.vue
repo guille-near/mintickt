@@ -8,16 +8,7 @@
       :class="{ events: route == 'Events' || route == 'LiveData' ||  route == 'RegisterDashboard' ||  route == 'RegisterDashboard' }"
     >
       <v-row class="align" :class="{ limiter: route !== 'Events' && route !== 'LiveData' &&  route !== 'Options' &&  route !== 'RegisterDashboard' }">
-        <v-col
-          class="space"
-          :style="
-            route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
-              ? 'padding:0'
-              : route == 'Nearcon'
-              ? 'padding:0'
-              : 'padding-inline: clamp(1em, 4vw, 4em)'
-          "
-        >
+        <v-col class="space marginNearcon">
           <a class="center" href="/">
             <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/logo-mobile.svg" alt="logo">
             <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo">

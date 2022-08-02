@@ -55,6 +55,9 @@
     display: flex;
     align-items: flex-end;
     position: relative;
+    background: center no-repeat url(../assets/img/photo_2022-07-27_06-17-32.jpg);
+    background-size: cover;
+    background-position-y: 30%;
     &:before {
       content: '';
       position: absolute;
@@ -79,16 +82,11 @@
       background: linear-gradient(180deg, rgba(0, 0, 0, 0.318) 1.36%, rgba(0, 0, 0, 0) 35.95%, rgba(3, 3, 3, 0) 63.16%, rgba(5, 5, 5, 0.366) 87.25%);
     }
     & > img {
-      position: absolute;
+      @include absoluteCenter;
       width: 100%;
       height: 100%;
       box-sizing: border-box;
-      @include mq(max, 1500px) {object-fit: cover};
-      // @media (min-width: 880px) and (max-width: 1500px) {object-fit: cover}
-      // @include mq(max, small) {
-      //   object-fit: fill;
-      // }
-      // @include mq(min, 600px, max, 880px) {object-fit: fill !important;}
+      object-fit: cover;
     }
     & > div {
       padding-inline: clamp(1em, 4vw, 4em);

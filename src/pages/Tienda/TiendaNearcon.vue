@@ -1,19 +1,6 @@
 <template>
   <section id="tienda" class="center align divcol nearcon">
     <aside>
-      <!-- new -->
-      <img
-        class="eliminarmobile"
-        src="@/assets/img/photo_2022-07-27_06-17-32.jpg"
-        alt="Background Image"
-      />
-      <img
-        class="vermobile"
-        src="@/assets/img/photo_2022-07-27_06-17-32.jpg"
-        alt="Background Image"
-      />
-      <!-- new -->
-      <!-- new -->
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)">SEP 11 - 14</v-chip>
         <h2>{{ tittle }}</h2>
