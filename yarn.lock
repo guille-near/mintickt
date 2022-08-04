@@ -6464,10 +6464,10 @@
   dependencies:
     "yallist" "^4.0.0"
 
-"mintbase@^0.5.0":
-  "integrity" "sha512-zIqrrCQqxjy7ut5u8wtNsNE4Oy/i65+6TiC50YAwRjQGNQd+3bPH7QmuX1Ffp3C5PpalOeKXym4lVtV/bXDgyQ=="
-  "resolved" "https://registry.npmjs.org/mintbase/-/mintbase-0.5.0.tgz"
-  "version" "0.5.0"
+"mintbase@^0.5.1":
+  "integrity" "sha512-z7RaefrMnMfkrwVbqFnyLkIOxK1sZgAU8Ygt36PGrxTrkUjDx/VfPKuMuSe/Y7gfVthnknuUoXftE0djEFCHpw=="
+  "resolved" "https://registry.npmjs.org/mintbase/-/mintbase-0.5.1.tgz"
+  "version" "0.5.1"
   dependencies:
     "@types/retry" "^0.12.1"
     "bn.js" "^5.2.0"

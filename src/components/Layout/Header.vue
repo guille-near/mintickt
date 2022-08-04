@@ -124,9 +124,9 @@ export default {
       else {this.responsiveActions = false}
     },
   async  connect() {
-  let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+  let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a"
   const { data: walletData } = await new Wallet().init({
-    networkName: Network.mainnet,
+    networkName: Network.testnet,
     chain: Chain.near,
     apiKey: API_KEY,
   })
@@ -146,9 +146,9 @@ export default {
     }
 },
  async revisar() {
-   let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+   let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a"
   const { data: walletData } = await new Wallet().init({
-    networkName: Network.mainnet,
+    networkName: Network.testnet,
     chain: Chain.near,
     apiKey: API_KEY,
   })
@@ -176,9 +176,9 @@ export default {
  },
 
     async connect() {
-      let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d";
+      let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a";
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.mainnet,
+        networkName: Network.testnet,
         chain: Chain.near,
         apiKey: API_KEY,
       });
@@ -198,9 +198,9 @@ export default {
       }
     },
     async revisar() {
-      let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d";
+      let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a";
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.mainnet,
+        networkName: Network.testnet,
         chain: Chain.near,
         apiKey: API_KEY,
       });
