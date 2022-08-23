@@ -162,7 +162,7 @@ export default {
    if (localStorage.getItem('Mintbase.js_wallet_auth_key') !== null){
      this.nearid = true
     let datos =JSON.parse(localStorage.getItem('Mintbase.js_wallet_auth_key'))
-    console.info('aca')
+    // console.info('aca')
     this.user = datos.accountId
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -171,7 +171,7 @@ export default {
     }
    } else{
      this.nearid = false
-     console.info("aqui")
+     // console.info("aqui")
    }
  },
 
@@ -229,7 +229,7 @@ export default {
         }
       } else {
         this.nearid = false;
-        console.info("aqui");
+        // console.info("aqui");
       }
     },
     // CambiarTheme(theme) {

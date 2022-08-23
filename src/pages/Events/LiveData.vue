@@ -156,7 +156,7 @@ export default {
     urlParams.get("transactionHashes")
     this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
     if (urlParams.get("transactionHashes") !== null) {
-      console.log('aqui' + urlParams.get("transactionHashes"))
+      // console.log('aqui' + urlParams.get("transactionHashes"))
       this.dialog = true
       history.replaceState(null, location.href.split("?")[0], '/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/');
     }

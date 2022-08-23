@@ -438,7 +438,7 @@
 				"https://explorer.mainnet.near.org/transactions/" +
 				urlParams.get("transactionHashes");
 			if (urlParams.get("transactionHashes") !== null) {
-				console.log("aqui" + urlParams.get("transactionHashes"));
+				// console.log("aqui" + urlParams.get("transactionHashes"));
 				this.dialog = true;
 				history.replaceState(
 					null,

@@ -111,7 +111,7 @@ export default {
     }
    } else{
      this.nearid = false
-     console.info("aqui")
+     // console.info("aqui")
    }
 
  },
