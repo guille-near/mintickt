@@ -5,7 +5,16 @@
 @import 'responsive';
 @import 'mixins';
 
-body::-webkit-scrollbar {display: none}
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+  // &:hover {background: var(--clr-bg-scroll)}
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background: $text-grey;
+}
+
 .limiter {
   max-width: 1440px;
   width: 100%;
