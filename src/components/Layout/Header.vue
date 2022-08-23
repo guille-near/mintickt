@@ -5,16 +5,19 @@
       color="transparent"
       height="140px"
       absolute
-      :class="{ events: route == 'Landing' || route == 'Events' || route == 'LiveData' ||  route == 'RegisterDashboard' ||  route == 'RegisterDashboard' }"
+      :class="{ events: $router.currentRoute.name == 'Landing' || $router.currentRoute.name == 'Events' || $router.currentRoute.name == 'LiveData' ||
+        $router.currentRoute.name == 'RegisterDashboard' ||  $router.currentRoute.name == 'RegisterDashboard' || $router.currentRoute.name == 'Options' }"
     >
-      <v-row class="align" :class="{ limiter:   route == 'Landing' || route !== 'Events' && route !== 'LiveData' &&  route !== 'Options' &&  route !== 'RegisterDashboard' }">
+      <v-row class="align" :class="{ limiter:   $router.currentRoute.name == 'Landing' || $router.currentRoute.name !== 'Events' && $router.currentRoute.name !== 'LiveData' &&
+        $router.currentRoute.name !== 'Options' &&  $router.currentRoute.name !== 'RegisterDashboard' }">
         <v-col
           class="space"
           :style="
-           route == 'Landing' ||
-            route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
+           $router.currentRoute.name == 'Landing' ||
+            $router.currentRoute.name == 'Events' || $router.currentRoute.name == 'LiveData' ||  $router.currentRoute.name == 'Options' ||
+            $router.currentRoute.name == 'RegisterDashboard'
               ? 'padding:0'
-              : route == 'Nearcon'
+              : $router.currentRoute.name == 'Nearcon'
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -28,15 +31,17 @@
             class="acenter"
             style="gap: 0.2em"
             :style="
-             route == 'Landing' ||
-              route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'
+             $router.currentRoute.name == 'Landing' ||
+              $router.currentRoute.name == 'Events' || $router.currentRoute.name == 'LiveData' ||  $router.currentRoute.name == 'Options' ||
+              $router.currentRoute.name == 'RegisterDashboard'
                 ? ''
                 : 'display:contents'
             "
           >
             <v-btn
               class="createEventBtn h9-em"
-              v-if="  route == 'Landing' || route == 'Events' || route == 'LiveData' ||  route == 'Options' ||  route == 'RegisterDashboard'"
+              v-if="  $router.currentRoute.name == 'Landing' || $router.currentRoute.name == 'Events' || $router.currentRoute.name == 'LiveData' ||
+              $router.currentRoute.name == 'Options' ||  $router.currentRoute.name == 'RegisterDashboard'"
               @click="$router.push('/events/register')"
             >
               <span>create an event</span>

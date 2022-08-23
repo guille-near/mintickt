@@ -34,8 +34,28 @@
 
       <v-data-table
         id="dataTable"
+        v-show="dataFilters[dataFilters.findIndex(e=>e.key=='fans')].active==true"
         :headers="headersTable"
         :items="dataTable"
+        hide-default-footer
+        :mobile-breakpoint="-1"
+      >
+        <template v-slot:[`item.transaction`]>
+          <v-btn icon>
+            <img class="copyImg" src="@/assets/icons/link.svg" alt="external link">
+          </v-btn>
+        </template>
+
+        <template v-slot:[`item.action`]>
+          <v-btn>Complete order</v-btn>
+        </template>
+      </v-data-table>
+
+      <v-data-table
+        id="dataTable"
+        v-show="dataFilters[dataFilters.findIndex(e=>e.key=='redeemed')].active==true"
+        :headers="headersTableVirra"
+        :items="dataTableVirra"
         hide-default-footer
         :mobile-breakpoint="-1"
       >
@@ -100,14 +120,16 @@ export default {
     return {
       dataFilters: [
         {
+          key: "fans",
           name: "Fans inside",
           value: "122/250",
-          active: true,
+          active: false,
         },
         {
+          key: "redeemed",
           name: "Goods redeemed",
           value: "12/250",
-          active: false,
+          active: true,
         }
       ],
       headersTable: [
@@ -127,6 +149,28 @@ export default {
         },
         {
           nft: "Near Beer",
+          signer: "guille.near",
+          quantity: 1,
+          created: "1 min ago"
+        },
+      ],
+      headersTableVirra: [
+        { value:"ticket", text:"TICKET" },
+        { value:"signer", text:"SIGNER" },
+        { value:"quantity", text:"QUANTITY" },
+        { value:"created", text:"CREATED" },
+        { value:"transaction", text:"TRANSACTION", sortable:false },
+        { value:"action", text:"ACTION", sortable:false },
+      ],
+      dataTableVirra: [
+        {
+          ticket: "Near Beer",
+          signer: "guille.near",
+          quantity: 1,
+          created: "1 min ago"
+        },
+        {
+          ticket: "Near Beer",
           signer: "guille.near",
           quantity: 1,
           created: "1 min ago"
