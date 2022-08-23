@@ -234,7 +234,7 @@
               <v-btn @click="step--;goodie=false">
                 <v-icon style="color:#FFFFFF !important" small>mdi-arrow-left</v-icon>Back
               </v-btn>
-              <v-btn v-show="goodie" @click="console()" style="background:linear-gradient(183.61deg, #CC00B7 49.78%, rgba(0, 0, 0, 0) 225.35%);">
+              <v-btn v-show="goodie" @click=" mint(), console()" style="background:linear-gradient(183.61deg, #CC00B7 49.78%, rgba(0, 0, 0, 0) 225.35%);">
                 Mint
               </v-btn>
             </div>
@@ -246,6 +246,8 @@
 </template>
 
 <script>
+import { Wallet, Chain, Network, OptionalMethodArgs,   Split,
+  Royalties, } from "mintbase";
 export default {
   name: "RegisterDashboard",
   data() {
@@ -269,6 +271,27 @@ export default {
         // this.dataTickets.img    - crear modelo
       )}
     },
+    async mint() {
+        let metadata = "yguio, "
+				let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a";
+				const { data: walletData } = await new Wallet().init({
+					networkName: Network.testnet,
+					chain: Chain.near,
+					apiKey: API_KEY,
+				});
+				const { wallet } = walletData;
+				wallet.mint(
+						 20,
+						 "blackcatcinema.mintspace2.testnet",
+             Royalties,
+             Split,
+             "ticket",
+             OptionalMethodArgs &
+             { metadataId: "https://assets.dicebreaker.com/yu-gi-oh-tcg-yugi-art.png/BROK/thumbnail/1600x900/quality/100/yu-gi-oh-tcg-yugi-art.png" })
+					.then((res) => {
+            console.log(res)
+          });
+			},
     console() {
       console.log(this.dataTickets, 'and', this.url)
     }
