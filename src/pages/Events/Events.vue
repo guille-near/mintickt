@@ -6,7 +6,7 @@
 			id="tableEvents"
 			:headers="headers"
 			:items="data"
-      :loading="loading"
+			:loading="loading"
 			hide-default-footer
 			calculate-widths
 			:mobile-breakpoint="880"
@@ -107,10 +107,9 @@ import { Wallet, Chain, Network } from 'mintbase'
 import * as nearAPI from "near-api-js"
 import { CONFIG } from "@/services/api"
 const { connect, keyStores, WalletConnection, utils ,} = nearAPI
-const your_events = gql`{
-    store(where: {name: {_eq: "globaldv"}}) {
-      id
-      things(where: {id: {_eq: "MVoHZwi-BOMJthyoTlEekHVquh7DA14lQGV-f0XIYTA:globaldv.mintspace2.testnet"}}) {
+const your_events = gql` query MyQuery($user: String!) { 
+    store(where: {name: {_eq: "globaldv"}, minters: {account: {_eq: $user }}}) {
+      things(order_by: {createdAt: desc}) {
         metadata {
           title
           media
@@ -181,31 +180,41 @@ export default {
 				  this.$apollo
 					.query({
 						query: your_events,
+            variables: {
+              user: localStorage.getItem('mintickt-user'),
+            },
 					})
 					.then((response) => {
             let rows = {};
             var options = { year: 'numeric', month: 'short', day: 'numeric' }; //Format data
             //Map the object
             Object.entries(response.data).forEach(([key, value]) => {
-              var arr = value[0].things[0].metadata.thing.tokens_aggregate.nodes;
-              var total = 0;
-              //Map the array and count minted series
-              var counter = arr.map(arr => arr.approvals_aggregate.aggregate.count);
-              //Reduce the object and sum the values for total minted
-              total = Object.values(counter).reduce((a, c) => a + c, 0);
-              rows = {
-               name: value[0].things[0].metadata.title,
-               date: new Date(value[0].things[0].metadata.extra.start_date.value * 1000).toLocaleDateString("en-US", options),
-               location: value[0].things[0].metadata.extra.location.value,
-               minted: total + ' / ' + value[0].things[0].metadata.thing.tokens_aggregate.aggregate.count,
-               sold: '250',
-               listed: value[0].things[0].metadata.thing.tokens_aggregate.aggregate.count,
-            }
+              // inner object entries
+              Object.entries(value[0].things).forEach(([i, value1]) => {
+                 var arr = value1.metadata.thing.tokens_aggregate.nodes;
+                 var total = 0;
+                 //Map the array and count minted series
+                 var counter = arr.map(arr => arr.approvals_aggregate.aggregate.count);
+                 //Reduce the object and sum the values for total minted
+                 total = Object.values(counter).reduce((a, c) => a + c, 0);
+                 //Only push nft listed more than 1
+                 total > 0 ? 
+                  rows = {
+                      name: value1.metadata.title,
+                      date: new Date(value1.metadata.extra.start_date.value * 1000).toLocaleDateString("en-US", options),
+                      location: value1.metadata.extra.location.value,
+                      minted: total + ' / ' + value1.metadata.thing.tokens_aggregate.aggregate.count,
+                      sold: '250',
+                      listed: total,
+                  } : rows = {};
+                 this.data.push(rows)
+                 this.data = this.data.filter(el => el.name != null)
+              }); //End inner object entries   
             });
-            this.data.push(rows)
+            
 						//console.log('data', response.data.store)
 					}).catch(err => {
-							console.log('Este es el error', err)
+							console.log('Error', err)
           }).finally(() => (this.loading = false));    
 			},
   }
