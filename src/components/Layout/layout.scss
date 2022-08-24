@@ -24,7 +24,7 @@
     // }
   }
   .v-main.events {
-    @include mq(min, small) {padding-left: calc(clamp(8em, 10vw, 10.0625em) + (clamp(1em, 4vw, 4em) * 2)) !important}
+    // @include mq(min, small) {padding-left: calc(clamp(8em, 10vw, 10.0625em) + (clamp(1em, 4vw, 4em) * 2)) !important}
     background: linear-gradient(180.22deg, rgba(246, 85, 235, 0.09) 0.19%, rgba(30, 30, 30, 0) 39.99%, rgba(102, 205, 118, 0.12) 99.82%) !important;
   }
 
@@ -80,7 +80,7 @@
 #headerApp {
   transition: 0.4s ease-in-out;
   &.events {
-    & .v-toolbar__content {padding-inline: clamp(1em, 4vw, 4em)}
+    & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
   }
   .logoHeader{
     width: clamp(8em, 10vw, 10.0625em);

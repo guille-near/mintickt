@@ -715,6 +715,13 @@
   }
   #tableEvents {
     background-color: transparent !important;
+    .v-progress-linear {
+      display: flex !important;
+      & > * > * {
+        background-color: #cc00b7 !important;
+        border-radius: 40%;
+      }
+    }
     table {border-spacing: 0 1em}
     *:not(button span, span, i, h3) {color: #FFFFFF}
     th {
