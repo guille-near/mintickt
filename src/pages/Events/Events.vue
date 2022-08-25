@@ -1,13 +1,14 @@
 <template>
   <section id="events" class="align divcol gap">
     <h2>Your Events</h2>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Buscar"
-        single-line
-        hide-details
-      />
+    <v-text-field
+      v-model="search"
+      append-icon="mdi-magnify"
+      label="Buscar"
+      single-line
+      hide-details
+      class="search"
+    />
     <v-data-table
       id="tableEvents"
       :headers="headers"

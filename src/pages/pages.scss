@@ -708,6 +708,18 @@
     letter-spacing: -0.03em;
     color: #FFFFFF;
   }
+  .search {
+    max-width: 20em;
+    margin-left: auto;
+    .v-input__slot {
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+      border-radius: .5vmax;
+      padding: .5em 1em;
+    }
+    input {caret-color: #CC00B7}
+    input,.v-label,i {color: #FFFFFF}
+    input, .v-label {font-size: 1em !important}
+  }
   .eventName {
     @media (min-width: 880px) {color: #000000 !important}
     font-weight: 700 !important;
