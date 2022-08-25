@@ -103,6 +103,18 @@
           </div>
         </aside>
       </v-card>
+
+      <!-- <section id="footer-pagination" class="end gap">
+        <span style="color:#FFFFFF">1</span>
+        <div class="center">
+          <v-btn icon>
+            <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
+          </v-btn>
+        </div>
+      </section> -->
     </section>
   </section>
 </template>

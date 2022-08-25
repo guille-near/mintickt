@@ -820,7 +820,7 @@
     }
   }
   section.vermobile {@include mq(max, x-small) {font-size: 12px}}
-  * + .v-card.up {margin-top: 2em}
+  .v-card.up {margin-bottom: 2em}
   .v-card.up {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
     border-radius: 9px;
