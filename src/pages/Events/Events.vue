@@ -1,21 +1,21 @@
 <template>
   <section id="events" class="align divcol gap">
     <h2>Your Events</h2>
+    <v-card-title>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
-        label="Buscar"
+        label="Search"
         single-line
         hide-details
       />
+    </v-card-title>
     <v-data-table
       id="tableEvents"
       :headers="headers"
       :items="data"
       :loading="loading"
       :search="search"
-      :page="page"
-      :pageCount="numberOfPages"
       calculate-widths
       :mobile-breakpoint="880"
       class="eliminarmobile"
