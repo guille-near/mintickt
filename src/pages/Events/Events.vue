@@ -4,7 +4,7 @@
     <v-text-field
       v-model="search"
       append-icon="mdi-magnify"
-      label="Buscar"
+      label="Search"
       single-line
       hide-details
       class="search"
@@ -15,8 +15,6 @@
       :items="data"
       :loading="loading"
       :search="search"
-      :page="page"
-      :pageCount="numberOfPages"
       calculate-widths
       :mobile-breakpoint="880"
       class="eliminarmobile"
