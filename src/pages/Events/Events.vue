@@ -1,12 +1,21 @@
 <template>
   <section id="events" class="align divcol gap">
     <h2>Your Events</h2>
-
+    <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
+              />
+            </v-card-title>
     <v-data-table
       id="tableEvents"
       :headers="headers"
       :items="data"
       :loading="loading"
+      :search="search"
       :page="page"
       :pageCount="numberOfPages"
       hide-default-footer
@@ -171,6 +180,7 @@ export default {
       ],
       data: [],
       earnings: [],
+      search: '',
       loading: true,
       page: 3,
       numberOfPages: 1,
