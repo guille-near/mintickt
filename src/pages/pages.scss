@@ -811,6 +811,13 @@
       }
     }
     .v-btn + .v-btn {padding: 6px}
+    .v-data-footer {
+      justify-content: flex-end;
+      &__icons-before, &__icons-after {
+        button {background: transparent !important; i {color: #FFFFFF !important}}
+      }
+      &__select {display: none !important}
+    }
   }
   section.vermobile {@include mq(max, x-small) {font-size: 12px}}
   * + .v-card.up {margin-top: 2em}
