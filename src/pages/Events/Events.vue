@@ -15,6 +15,7 @@
       :items="data"
       :loading="loading"
       :search="search"
+      :footer-props="{'items-per-page-options':[5, 10, 20, 50, -1]}"
       calculate-widths
       :mobile-breakpoint="880"
       class="eliminarmobile"
@@ -122,16 +123,12 @@
 <script>
 const axios = require("axios");
 import gql from "graphql-tag";
-import { Wallet, Chain, Network } from "mintbase";
-import * as nearAPI from "near-api-js";
-import { CONFIG } from "@/services/api";
-const { connect, keyStores, WalletConnection, utils } = nearAPI;
 const your_events = gql`
   query MyQuery($user: String!) {
     store(
       where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
     ) {
-      things(order_by: { createdAt: desc }, limit: 10, offset: 0) {
+      things(order_by: { createdAt: desc }) {
         metadata {
           title
           media
@@ -191,33 +188,18 @@ export default {
       search: "",
       loading: true,
       page: 3,
-      numberOfPages: 1,
-      dataTableMobile: [
-        {
-          name: "Nearcon",
-          date: "Sep 12-14",
-          show: false,
-          minted: "283 / 2000",
-          sold: "250",
-          listed: "283",
-        },
-        {
-          name: "Nearcon",
-          date: "Sep 12-14",
-          show: false,
-          minted: "283 / 2000",
-          sold: "250",
-          listed: "283",
-        },
-      ],
+      dataTableMobile: [],
     };
   },
   mounted() {
     this.getData();
+    this.pollData();
   },
   methods: {
     async getData() {
       this.progress = true;
+      this.data = [];
+      this.dataTableMobile = [];
       this.$apollo
         .query({
           query: your_events,
@@ -266,10 +248,13 @@ export default {
                             .count,
                         sold: response.data.earnings_aggregate.aggregate.count,
                         listed: total,
+                        show: false,
                       })
                     : (rows = {});
                   this.data.push(rows);
                   this.data = this.data.filter((el) => el.name != null);
+                  this.dataTableMobile.push(rows);
+                  this.dataTableMobile = this.data.filter((el) => el.name != null);
                 })
                 .catch((err) => {
                   console.log("Error", err);
@@ -284,6 +269,12 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    pollData() {
+				this.polling = setInterval(() => {
+					this.getData();
+          this.$forceUpdate();
+				}, 120000);
+			},
   },
 };
 </script>
