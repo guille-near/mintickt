@@ -1,5 +1,5 @@
 <template>
-  <section id="events" class="align divcol gap">
+  <section id="events" class="align divcol">
     <h2>Your Events</h2>
     <v-text-field
       v-model="search"
