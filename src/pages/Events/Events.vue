@@ -15,12 +15,12 @@
       :items="data"
       :loading="loading"
       :search="search"
-      :footer-props="{'items-per-page-options':[5, 10, 20, 50, -1]}"
+      :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
       calculate-widths
       :mobile-breakpoint="880"
       class="eliminarmobile"
     >
-      <template v-slot:[`item.name`]="{ item }">
+      <template  v-slot:[`item.name`]="{ item }">
         <img
           class="bgTicket"
           src="@/assets/img/bg-ticket_events.png"
@@ -29,24 +29,12 @@
         <span class="eventName">{{ item.name }}</span>
       </template>
 
-      <template v-slot:[`item.actions`]>
+      <template v-slot:[`item.actions`]="{ item }">
         <div class="divwrap_inv" style="gap: 1em">
-          <v-btn to="/events/liveData">Go to live data</v-btn>
-
-          <!-- <v-menu :close-on-content-click="false" offset-y>
-            <template v-slot:activator="{on, attrs}"> -->
-          <v-btn v-on="on" v-bind="attrs" to="/events/options"
+          <v-btn @click="goLiveData(item.name, item.thingid)" >Go to live data</v-btn>
+          <v-btn v-on="on" v-bind="attrs" @click="goLiveData(item.name, item.thingid)"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
-          <!-- </template>
-
-            <v-card class="contMoreOptions divcol" style="display:flex" color="#A5A5A5">
-              <v-btn v-for="(item2, i2) in dataMore" :key="i2" color="transparent" :class="{active:item2.active}"
-                @click="dataMore.forEach(e=>{e.active=false});item2.active=true;mintMore(item2, item)">
-                {{item2.name}} more
-              </v-btn>
-            </v-card>
-          </v-menu> -->
         </div>
       </template>
     </v-data-table>
@@ -200,11 +188,15 @@ export default {
       this.progress = true;
       this.data = [];
       this.dataTableMobile = [];
+      let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
       this.$apollo
         .query({
           query: your_events,
           variables: {
-            user: localStorage.getItem("mintickt-user"),
+            user: user,
           },
         })
         .then((response) => {
@@ -227,7 +219,7 @@ export default {
                 .query({
                   query: earnings,
                   variables: {
-                    user: localStorage.getItem("mintickt-user"),
+                    user: user,
                     thingId: value1.metadata.thing_id,
                   },
                 })
@@ -248,13 +240,16 @@ export default {
                             .count,
                         sold: response.data.earnings_aggregate.aggregate.count,
                         listed: total,
+                        thingid: value1.metadata.thing_id,
                         show: false,
                       })
                     : (rows = {});
                   this.data.push(rows);
                   this.data = this.data.filter((el) => el.name != null);
                   this.dataTableMobile.push(rows);
-                  this.dataTableMobile = this.data.filter((el) => el.name != null);
+                  this.dataTableMobile = this.data.filter(
+                    (el) => el.name != null
+                  );
                 })
                 .catch((err) => {
                   console.log("Error", err);
@@ -270,11 +265,14 @@ export default {
         .finally(() => (this.loading = false));
     },
     pollData() {
-				this.polling = setInterval(() => {
-					this.getData();
-          this.$forceUpdate();
-				}, 120000);
-			},
+      this.polling = setInterval(() => {
+        this.getData();
+        this.$forceUpdate();
+      }, 120000);
+    },
+    goLiveData(pevent, pthingid){
+       this.$router.push({path:'/events/liveData',query:{event: pevent, thingid: pthingid}});
+    }
   },
 };
 </script>

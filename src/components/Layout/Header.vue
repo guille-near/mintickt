@@ -192,7 +192,6 @@ export default {
       });
       const { wallet, isConnected } = walletData;
       if (this.nearid === false) {
-        console.log("user");
         wallet.connect({ requestSignIn: true }).then;
         this.nearid = true;
         const { data: details } = await wallet.details();
@@ -218,14 +217,12 @@ export default {
         //console.info("user")
         wallet.connect();
       }
-
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
         let datos = JSON.parse(
           localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         this.user = datos.accountId;
-        localStorage.setItem('mintick-user', this.user)
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         if (urlParams.get("account_id") !== null) {
