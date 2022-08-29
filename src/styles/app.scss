@@ -5,8 +5,10 @@
 @import 'responsive';
 @import 'mixins';
 
+
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
   background: transparent;
   // &:hover {background: var(--clr-bg-scroll)}
 }
