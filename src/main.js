@@ -12,8 +12,14 @@ import VueApexCharts from 'vue-apexcharts'
 import VueApollo from 'vue-apollo'
 import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+import VueMoment from 'vue-moment'
+import moment from 'moment-timezone'
 
 Vue.use(PerfectScrollbar)
+
+Vue.use(VueMoment, {
+  moment,
+})
 
 // google maps
 import * as VueGoogleMaps from 'vue2-google-maps';

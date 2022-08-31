@@ -16,7 +16,9 @@
         <label>Your incomes</label>
         <span>{{ incomes }} N</span>
       </div>
-      <label style="margin-top: auto">≈ USD 2323.50</label>
+      <label style="margin-top: auto"
+        >≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(4) }}</label
+      >
     </aside>
 
     <div class="divcol">
@@ -51,6 +53,7 @@
         "
         :headers="headersTable"
         :items="dataTable"
+        :loading="loading"
         hide-default-footer
         :mobile-breakpoint="-1"
       >
@@ -77,6 +80,7 @@
         "
         :headers="headersTableVirra"
         :items="dataTableVirra"
+        :loading="loading"
         hide-default-footer
         :mobile-breakpoint="-1"
       >
@@ -99,7 +103,7 @@
 </template>
 
 <script>
-const axios = require("axios");
+import moment from "moment";
 import gql from "graphql-tag";
 const earnings = gql`
   query MyQuery($user: String!, $thingId: String!) {
@@ -118,6 +122,32 @@ const earnings = gql`
     }
   }
 `;
+const tickets = gql`
+  query MyQuery($user: String!) {
+    store(
+      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
+    ) {
+      things(
+        order_by: { createdAt: desc }
+        where: { metadata: { extra: { _has_key: "tickets" } } }
+      ) {
+        metadata {
+          extra
+        }
+        tokens(where: { _not: { ownerId: { _eq: $user } } }) {
+          id
+          ownerId
+          lastTransferred
+        }
+        tokens_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+  }
+`;
 export default {
   name: "LiveData",
 
@@ -125,16 +155,10 @@ export default {
     return {
       dataFilters: [
         {
-          key: "fans",
-          name: "Fans inside",
-          value: "122/250",
-          active: false,
-        },
-        {
           key: "redeemed",
           name: "Goods redeemed",
           value: "12/250",
-          active: true,
+          active: false,
         },
       ],
       headersTable: [
@@ -145,20 +169,7 @@ export default {
         { value: "transaction", text: "TRANSACTION", sortable: false },
         { value: "action", text: "ACTION", sortable: false },
       ],
-      dataTable: [
-        {
-          nft: "Near Beer",
-          signer: "guille.near",
-          quantity: 1,
-          created: "1 min ago",
-        },
-        {
-          nft: "Near Beer",
-          signer: "guille.near",
-          quantity: 1,
-          created: "1 min ago",
-        },
-      ],
+      dataTable: [],
       headersTableVirra: [
         { value: "ticket", text: "TICKET" },
         { value: "signer", text: "SIGNER" },
@@ -183,33 +194,16 @@ export default {
       ],
       ticketsSold: 0,
       incomes: 0,
+      lastPrice: [],
+      fans_inside_total_of: 0,
+      fans_inside_tota: 0,
+      loading: true,
     };
   },
   mounted() {
     this.responsive();
+    this.fetch();
     this.getData();
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes");
-    this.hash =
-      "https://explorer.mainnet.near.org/transactions/" +
-      urlParams.get("transactionHashes");
-    if (urlParams.get("transactionHashes") !== null) {
-      // console.log('aqui' + urlParams.get("transactionHashes"))
-      this.dialog = true;
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
-      );
-    }
-    if (urlParams.get("errorCode") !== null) {
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
-      );
-    }
   },
   methods: {
     responsive() {
@@ -228,27 +222,106 @@ export default {
       }
     },
     async getData() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
       this.$apollo
         .query({
           query: earnings,
           variables: {
-            user: localStorage.getItem("mintickt-user"),
+            user: user,
             thingId: this.$route.query.thingid,
           },
         })
         .then((response) => {
           this.ticketsSold = response.data.earnings_aggregate.aggregate.count;
-          this.incomes = response.data.earnings_aggregate.aggregate.sum.amount / Math.pow(10,24)
+          this.incomes =
+            response.data.earnings_aggregate.aggregate.sum.amount /
+            Math.pow(10, 24);
+          this.getTicketsBurn();
         })
         .catch((err) => {
           console.log("Error", err);
         });
+    },
+    //Data to get burned
+    async getTicketsBurn() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      var rows = [];
+      var rowsfilter = [];
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: tickets,
+          variables: {
+            user: user,
+          },
+        })
+        .then((response) => {
+          //Get the first object and loop
+          Object.entries(response.data).forEach(([key, value]) => {
+            //Get the second object and loop
+            Object.entries(value[0].things).forEach(([i, value1]) => {
+              var objfilter = value1.metadata.extra.tickets.value;
+              //Get the third object and loop
+              rowsfilter = {
+                key: "fans",
+                name: "Fans inside",
+                value: value1.tokens.length + " / " + value1.tokens_aggregate.aggregate.count,
+                active: true,
+              };
+              this.dataFilters.push(rowsfilter);
+              Object.entries(value1.tokens).forEach(([x, value2]) => {
+                //Times diference handle
+                var startTime = moment.utc(value2.lastTransferred);
+                var endTime = moment.utc(new Date());
+                var minutesDiff = endTime.diff(startTime, "minutes");
+                var hoursDiff = endTime.diff(startTime, "hours");
+                var daysDiff = endTime.diff(startTime, "day");
+                var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                var time2 = time > 24 ? daysDiff : time;
+                var timedesc =
+                  minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                //Filter by thingid
+                objfilter === this.$route.query.thingid
+                  ? (rows = {
+                      nft: "Ticket",
+                      signer: value2.ownerId,
+                      quantity: 1,
+                      created: time2 + " " + timedesc2,
+                    })
+                  : null;
+                this.dataTable.push(rows);
+                //Filter by not null
+                this.dataTable = this.dataTable.filter((el) => el.nft != null);
+              });
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
     },
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
       }, 120000);
+    },
+    fetch() {
+      const BINANCE_NEAR =
+        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+      var request = new XMLHttpRequest();
+      request.open("GET", BINANCE_NEAR);
+      request.send();
+      request.onload = () => {
+        this.lastPrice = JSON.parse(request.responseText);
+      };
     },
   },
 };

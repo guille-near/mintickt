@@ -20,7 +20,7 @@
       :mobile-breakpoint="880"
       class="eliminarmobile"
     >
-      <template  v-slot:[`item.name`]="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <img
           class="bgTicket"
           src="@/assets/img/bg-ticket_events.png"
@@ -31,8 +31,10 @@
 
       <template v-slot:[`item.actions`]="{ item }">
         <div class="divwrap_inv" style="gap: 1em">
-          <v-btn @click="goLiveData(item.name, item.thingid)" >Go to live data</v-btn>
-          <v-btn v-on="on" v-bind="attrs" @click="goLiveData(item.name, item.thingid)"
+          <v-btn @click="goLiveData(item.name, item.thingid)"
+            >Go to live data</v-btn
+          >
+          <v-btn v-on="on" v-bind="attrs" to="/events/options"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
         </div>
@@ -189,7 +191,7 @@ export default {
       this.data = [];
       this.dataTableMobile = [];
       let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       const user = datos.accountId;
       this.$apollo
@@ -270,9 +272,22 @@ export default {
         this.$forceUpdate();
       }, 120000);
     },
-    goLiveData(pevent, pthingid){
-       this.$router.push({path:'/events/liveData',query:{event: pevent, thingid: pthingid}});
-    }
+    goLiveData(pevent, pthingid) {
+      this.$router.push({
+        path: "/events/liveData",
+        query: { event: pevent, thingid: pthingid },
+      });
+    },
+    fetch() {
+      const BINANCE_NEAR =
+        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+      var request = new XMLHttpRequest();
+      request.open("GET", BINANCE_NEAR);
+      request.send();
+      request.onload = () => {
+        this.lastPrice = JSON.parse(request.responseText);
+      };
+    },
   },
 };
 </script>

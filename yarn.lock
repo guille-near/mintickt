@@ -6648,6 +6648,18 @@
   dependencies:
     "minimist" "^1.2.6"
 
+"moment-timezone@^0.5.37":
+  "integrity" "sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg=="
+  "resolved" "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.37.tgz"
+  "version" "0.5.37"
+  dependencies:
+    "moment" ">= 2.9.0"
+
+"moment@^2.19.2", "moment@>= 2.9.0":
+  "integrity" "sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w=="
+  "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
+  "version" "2.29.4"
+
 "move-concurrently@^1.0.1":
   "integrity" "sha1-viwAX9oy4LKa8fBdfEszIUxwH5I="
   "resolved" "https://registry.npmjs.org/move-concurrently/-/move-concurrently-1.0.1.tgz"
@@ -9712,6 +9724,13 @@
     "vue-hot-reload-api" "^2.3.0"
     "vue-style-loader" "^4.1.0"
 
+"vue-moment@^4.1.0":
+  "integrity" "sha512-Gzisqpg82ItlrUyiD9d0Kfru+JorW2o4mQOH06lEDZNgxci0tv/fua1Hl0bo4DozDV2JK1r52Atn/8QVCu8qQw=="
+  "resolved" "https://registry.npmjs.org/vue-moment/-/vue-moment-4.1.0.tgz"
+  "version" "4.1.0"
+  dependencies:
+    "moment" "^2.19.2"
+
 "vue-router@^3.5.1":
   "integrity" "sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.5.3.tgz"
@@ -9751,7 +9770,7 @@
   "resolved" "https://registry.npmjs.org/vue-toastification/-/vue-toastification-1.7.14.tgz"
   "version" "1.7.14"
 
-"vue@^2 || ^3.0.0-0", "vue@^2.0.0", "vue@^2.0.1", "vue@^2.2.4", "vue@^2.6.0 || ^3.1.0", "vue@^2.6.11", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@^3.0.0-0 || ^2.6.0", "vue@>=1.0.0":
+"vue@^2 || ^3.0.0-0", "vue@^2.0.0", "vue@^2.0.1", "vue@^2.2.4", "vue@^2.6.0 || ^3.1.0", "vue@^2.6.11", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@^3.0.0-0 || ^2.6.0", "vue@>=1.0.0", "vue@>=1.x.x":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz"
   "version" "2.6.14"
