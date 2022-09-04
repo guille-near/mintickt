@@ -87,10 +87,6 @@
                 <label for="date">Date</label>
                 <v-select id="date" solo></v-select>
               </div>
-              <div class="divcol">
-                <label for="time">Time</label>
-                <v-select id="time" solo></v-select>
-              </div>
             </div>
 
             <div id="container-actions" class="gap">
@@ -507,7 +503,10 @@ export default {
      */
     getAddressData: function (addressData, placeResultData, id) {
       this.address = addressData;
-      console.log(placeResultData);
+      this.place_id = addressData.place_id
+      this.location = placeResultData.formatted_address
+      this.latitude = addressData.latitude
+      this.longitude = addressData.longitude
     },
   },
 };
