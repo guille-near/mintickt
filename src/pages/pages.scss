@@ -1087,6 +1087,40 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em) !important}
   background-color: rgba(0,0,0,.2) !important;
+  .ticket-wrapper {
+    width: min(var(--margin), 20em);
+    // height: 35em;
+    aspect-ratio: 1 / 2;
+    position: relative;
+    .ticket {width: 100%}
+    img:not(.ticket) {
+      position: absolute;
+      border-radius: .3vmax;
+      margin: auto;
+      &:nth-of-type(2) {
+        width: 85%;
+        height: 60.8%;
+
+        top: 9%;
+        left: 0;
+        right: 0;
+      }
+      &:nth-of-type(3) {
+        width: 33.5%;
+
+        bottom: 10%;
+        left: 7%;
+        right: auto;
+      }
+      &:nth-of-type(4) {
+        width: 33.5%;
+
+        bottom: 10%;
+        left: auto;
+        right: 7%;
+      }
+    }
+  }
   .v-btn {border: 1px solid rgba(255, 255, 255, 0.3)}
   section {
     & > aside.divcol {
@@ -1140,4 +1174,8 @@
       }
     }
   }
+}
+
+.pac-container {
+  .pac-matched {color: #CC00B7}
 }
