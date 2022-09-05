@@ -142,9 +142,6 @@
                   </template>
                   <v-date-picker v-model="dates" range no-title scrollable color="hsl(306, 100%, 50%)" dark>
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu = false">
-                      Cancel
-                    </v-btn>
                     <v-btn text color="primary" @click="$refs.menu.save(dates)">
                       OK
                     </v-btn>
@@ -242,9 +239,11 @@
                   <p class="p">
                     Drag and drop or click here to upload your main event
                     image
+                    
                   </p>
                 </template>
               </v-file-input>
+                                  <input class="uploading-image-input" type="file" accept="image/jpeg" @change="onChangeImg" />
             </div>
 
             <div id="container-actions" class="gap">
@@ -559,6 +558,9 @@ export default {
       }
     },
     ImagePreview(key) {
+      //const file = e.target.files[0];
+      //this.image = file;
+      console.log(this.image)
       if (key == "image") {
         this.url = URL.createObjectURL(this.dataTickets.img);
       }
@@ -675,6 +677,7 @@ export default {
     onChangeImg(e) {
       const file = e.target.files[0];
       this.image = file;
+      console.log(this.image)
     },
     /**
      * When the location found
