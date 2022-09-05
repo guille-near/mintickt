@@ -144,6 +144,8 @@
                     v-model="dates"
                     range
                     @input="menu1 = false"
+                    color="hsl(306, 100%, 50%)"
+                    dark
                   ></v-date-picker>
                 </v-menu>
               </div>
@@ -151,14 +153,15 @@
 
             <div id="container-actions" class="gap">
               <v-btn disabled>
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
+                <!-- <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon> -->
+                Back
               </v-btn>
               <v-btn @click="step++">
-                Next<v-icon style="color: #ffffff !important" small
+                Next
+                <!-- <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
-                >
+                > -->
               </v-btn>
 
               <v-btn @click="mint()">
@@ -166,7 +169,7 @@
               </v-btn>
               <div>
                 <img src:"previewImage" class="uploading-image" />
-                <input type="file" accept="image/jpeg" @change="onChangeImg" />
+                <input class="uploading-image-input" type="file" accept="image/jpeg" @change="onChangeImg" />
               </div>
             </div>
           </aside>
@@ -179,11 +182,46 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img
-            class="ticket"
-            src="@/assets/img/ticket-register.svg"
-            alt="Ticket image"
-          />
+          <div class="ticket-wrapper">
+            <img
+              class="ticket"
+              src="@/assets/img/ticket-register.svg"
+              alt="Ticket image"
+            />
+
+            <v-file-input
+              v-model="ticket.imgTop"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('top')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomLeft"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('left')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomRight"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('right')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+              </template>
+            </v-file-input>
+          </div>
 
           <aside class="divcol" style="min-height: 100%">
             <div class="divcol">
@@ -238,11 +276,46 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img
-            class="ticket"
-            src="@/assets/img/ticket-register.svg"
-            alt="Ticket image"
-          />
+          <div class="ticket-wrapper">
+            <img
+              class="ticket"
+              src="@/assets/img/ticket-register.svg"
+              alt="Ticket image"
+            />
+
+            <v-file-input
+              v-model="ticket.imgTop"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('top')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomLeft"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('left')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomRight"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('right')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+              </template>
+            </v-file-input>
+          </div>
 
           <aside class="divcol gap" style="min-height: 100%">
             <div class="divcol">
@@ -288,11 +361,46 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <img
-            class="ticket"
-            src="@/assets/img/ticket-register.svg"
-            alt="Ticket image"
-          />
+          <div class="ticket-wrapper">
+            <img
+              class="ticket"
+              src="@/assets/img/ticket-register.svg"
+              alt="Ticket image"
+            />
+
+            <v-file-input
+              v-model="ticket.imgTop"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('top')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomLeft"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('left')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+              </template>
+            </v-file-input>
+            
+            <v-file-input
+              v-model="ticket.imgBottomRight"
+              hide-details solo
+              prepend-icon=""
+              @change="uploadImg('right')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+              </template>
+            </v-file-input>
+          </div>
 
           <aside class="divcol" style="min-height: 100%">
             <div class="divcol">

@@ -1087,6 +1087,11 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em) !important}
   background-color: rgba(0,0,0,.2) !important;
+  .uploading-image-input::-webkit-file-upload-button {
+    background-color: #ffffff26;
+    border: 1px solid #292929;
+    border-radius: .3vmax;
+  }
   .v-input i {color: #fff}
   .ticket-wrapper {
     width: min(var(--margin), 20em);
