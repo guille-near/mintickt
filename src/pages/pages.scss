@@ -1094,7 +1094,8 @@
   }
   .quillWrapper {
     margin-bottom: 135px;
-    p {color: #fff !important}
+    p, blockquote, h1, h2, h3, h4, h5, h6, li {color: #fff !important}
+    li:before {color: #fff}
     .ql {
       &-toolbar.ql-snow {
         border-radius: .5vmax .5vmax 0 0;
