@@ -560,9 +560,9 @@ export default {
     ImagePreview(key) {
       //const file = e.target.files[0];
       //this.image = file;
-      console.log(this.image)
       if (key == "image") {
         this.url = URL.createObjectURL(this.dataTickets.img);
+        console.log(this.image)
       }
       if (key == "main") {
         this.url2 = URL
