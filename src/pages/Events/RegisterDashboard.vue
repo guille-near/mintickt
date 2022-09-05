@@ -16,6 +16,45 @@
             <img v-if="ticket.imgTop" :src="ticket.imgTop" />
             <img v-if="ticket.imgBottomLeft" :src="ticket.imgBottomLeft" />
             <img v-if="ticket.imgBottomRight" :src="ticket.imgBottomRight" />
+
+            <v-file-input
+              v-model="ticket.imgTop"
+              hide-details
+              solo
+              prepend-icon=""
+              @change="uploadImg('top')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
+              </template>
+            </v-file-input>
+
+            <v-file-input
+              v-model="ticket.imgBottomLeft"
+              hide-details
+              solo
+              prepend-icon=""
+              @change="uploadImg('left')"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
+              </template>
+            </v-file-input>
+
+            <v-file-input
+              v-model="ticket.imgBottomRight"
+              hide-details
+              solo
+              prepend-icon=""
+              @change="uploadImg('right')"
+            >
+              <template v-slot:selection>
+                <img
+                  v-if="ticket.urlBottomRight"
+                  :src="ticket.urlBottomRight"
+                />
+              </template>
+            </v-file-input>
           </div>
 
           <aside class="divcol">
@@ -94,11 +133,10 @@
                 <v-menu
                   ref="menu1"
                   v-model="menu1"
-                  :close-on-content-click="false"
+                  :nudge-right="40"
                   transition="scale-transition"
                   offset-y
-                  max-width="290px"
-                  min-width="auto"
+                  :close-on-content-click="false"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -106,6 +144,7 @@
                       range
                       label="Date"
                       hint="MM/DD/YYYY format"
+                      solo
                       prepend-icon="mdi-calendar"
                       v-bind="attrs"
                       @blur="date = parseDate(dateFormatted)"
@@ -113,7 +152,8 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="date"
+                    v-model="dates"
+                    range
                     no-title
                     @input="menu1 = false"
                   ></v-date-picker>
@@ -406,6 +446,12 @@ export default {
           "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAHcAxAMBEQACEQEDEQH/xAAcAAACAgMBAQAAAAAAAAAAAAAAAQQFAgMGBwj/xAA+EAABAwIDBQUFBQUJAAAAAAABAAIDBBEFBiESMUFWkhMXUXHSByJhgdEUFTKRsSRCcqHBIzNGYoKiwuHw/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAEDBAIFBv/EACkRAQACAgIBBAIBBAMAAAAAAAABAgMRBBIhBRMxQRRRYSJCcZEVgaH/2gAMAwEAAhEDEQA/APDVIEAgEAgYNkBxugFMICBoMtNFOksgy66iqdbZdmp6p6sS2ydUTViVDkIgBA1ILIGgYBO5SgIGEQFIaCOFQsMkG5tY33BBigEAgEGVhZAlKDsgYUjbHHdW1qsrG0yKEmwsrq0aK0ShREsvYqz2pWe1KLPTFvBV2xzCq+NDewhUzDNaNNdlw5CINSGEDQkDepQEDUoNAIIyoWGgSAQCBoHbS9wpCQPgiGTBqu6wmFhSw7VtRqdy1Y6baKLCd7MPg7QtDnnRoPir8kxhp2XWvFI39oEeNzh/9oyNzDvaG2WSvMvvz8KY5N/tPl2Xxtewe69t2+S2zqaxaPtdNotG4Vc7dSsl4Zroh3qmYUhQgBA0DUoCBogwpAgEQjKhaEAgEAgaBqUEgYUjdCy5VlXM20u8PgMjdLAhbMWpR78Q2ZqoX09HRSjVjyQ53+Zdc+J9us/Sa54yTpzPELynbpaKF5oKcO4tuPK+i9nHWYwV2j34jwiVdOWA3WW7icsSrJG2KolO2C5Se5A0AFKDRAUhoBAKUIyzrQgEDsgEAphBoBBkxtyiJnSxpYb20XUWZMl9Ohwqic97bXV+PLEPL5HI6w6nHKeGlyXXfb3ANey0AdvMnCy25s1Z48xLBweVmzc2taeY+/8ADzHAoYKjGaKCqIEUkzWuvu1PFeXh6+5Xt8bfU8q96YL2p8xEvTMSy/JBK12yNnxHBexnzRPw+Q4/qc3358uQxikdHO5pG5ebkv5e5x8/eIlQ1Eeydyq29GltoxFlK4kTIUoNA0QysbXtp4qQkApQaCKs60IBBmLFtra33oMTvQClAQNBIpmXK5mdKsk6XuH05LgLKm2TTzM+TUJGNY1UYVKKSgcI5A0GSSwJBO4Dw0U492jco4nCpnr7uWN/qHM1ddVVknaVdRLO7xkeXK16+PFTHGqREf4R76o7X1Fm/HKSJsTK58kTdzJgJAPmdVPaf2wZvTOHmntann+PC9dU/etBHXlgD33EjRuDgs18kxfUvMnF+NlnFvx9KSvg2b6b1dWzfhvtTyNsVfEt1ZYLp0aB6WFr34oBShlc2tc28ECRBhSBBFWdaEDKBtKBKUBA0GbWXIXMyLKhgNwbKm99Kbxt1mA0TJqhoe7ZBPgsGbLqHj8usxDk81jYzFXsv+GW35ALfx53iq9Xg+OPSP4VCuaggYQdzkWlfW4HiIab/ZpWuIJ4OB9K8/mW6XrLxvUcVpzUtHxpFxKLaebjyXWLJtfgpqFBUxWJW+lmyqLsq10FKTRACkNAKUGgEEVZ1oQNABAKUGEkbY2Fy4mdCfT0pJGiotkdaX2GU+oY5m/csWXIiabeiZRy72jmOlYW31BXj8rk+J0x5+N3jTynGKcYxnqqpae4+0V5haR/Fs3X0mGYxceJn6hpxY+lIpH0oZ2dlK+O99hxb+S0xO427a0F5gGCnFMKx2qaLvoKRszRfj2jb/7dpUZc8Y70rP8AdOkxG4dt7FIY6tmO0bnWe6OKRo8QC4H9QvM9Yma9LfXlnzY++mjHcOfDM9rm2IO6yr4+bcQmlNOYq6VwvovTx5FulZLERwW2t3CORZWbCXQYQCBhSgBA0QiLOuNAkDUwBEM2jVRIsKKElzbC/mFnyW06iF41kMEXaSu2WtF3G11j3a1tQs1H2v8ALtbgD52moxOnja3U9oS39bLHycPJ14qsr0n7XmMe1bC8JgdBluJ1bPs7IneDHGzTeARd38lVg9Fy5bds06j9Q4tesfDifZPQyV2eaKpe1zoaPbqp5D+7stJBJ/isvV9UyRj4toj5nxCukbs5GteJauaRv4XyOcPmVurExWIly0KR6X7EYWV9bj2Fvt+2Yc5ov52/5BeP6x2pXHlj+2drMf3Dlct41iOS8xGpbBaeEuhqKaXTaHFp8N29b8+CnLw9d+J+JcROper0+LYHmumNTRStbK0Xlgms18fnfePiNF85fjcji262jcfUwtjraHNYrSxPkc2MxusCfccD+i34b2jzMOZiHH1sPvHw4L1MV1doVUrbFbayralYBAIg1IaAQRFnWmAXGwQCQBSgIM2b1Ei1oXbtVlyw7qsKujqK6JraaRosDdpcRc6WVGPLTHM9lvS1vhTYrhVVhfZfa9kOlaXNDXXsL21WvFmpliZp9K747U12RKaYQzslMUcoY4Hs5BdrvgfgrJjcacPQz7UtjKtVhFDgNJQTzxdmZqV2ywA6E7Nr3te2pXkf8RvkRmvkm0R9Ss7+NaecE3XsKyQX2Ssy1GVMeixSnibMA0xyxONtth3i/DgfkqOTx68jHOOUxOp26/NntByzmNnaVOUjJVkf35qezcP9TRc/NebxPTuTx7f05v6f1p3a8T9PN53xvlcYYzHHf3WF21sjz4r2Y3pWusApMSgnFXBQyujMbg1xbYG4tfXeFnz3x2r0mzuK2jzpZYlDsOI+KowztFnP1OhK9GimUc71cBA1KAgYQNBDWdaEDUgRBoMgfBRIm0coaQCqb126iV9R1LWuFjosGWjVjny3Y5SffNNCYXt7eEENa7QOB4ea542WMEzE/EtOXBOesTX5hx9RBLTyGOaNzHDg4WXq1tFo3WXm3pak6tGpa1LkIEgeqA1QTcKw2oxGbYhbZn70rh7rfn/RV5M1MUbssx4rZJ1EO6qqtsEEFPA4iOCNsbfiALLxq0m95vP215IisahQV9V2jivSw00xXlTTOuSt9YUtCsAiGQ3gKQcUJNEBSIazLjQClAQNAwgzjcWqJjYn09QRbVZ749r6WWdLWWI96yzWxN+LJpYTVVNVMbDPGyVoFhtC9lRFLUndZ09CLY8sayRtE+48NkcXbUsY8Gv0/mFf+Tmhz/x3EtO/Mf8AbEYVg7d4nd5yf9LieTn/AIWR6bwfuZ/2kfdGCPpnOEczXj94S/VI5OdM+mcGfjf+0M4LhfCap8tpv0XX5WX9Qpt6Xxfq0/8AjdT4dhMTgXxvl+Mj/wCgsonPnt8eHH4fFp+5WcmJRthZBHGxsTRZoa0NsqYwzadz5V5MlaxqsahU1lTqQHXWumLTzcl1XPNfzW2lNMtp2huNyr4hwSlBhSAIGiGRtfTUeSQkKUIjRc7wNOKzLgd6lBIGgEDCkG5Bm0nUjhvUTCYlujnLeK4mi6uTTeypsd6rnG01zaSG17t19Fz7TRXk/TH7SSdCkYoT+Q2x1uw1zSbgjxT2oT+R/LWanXebJ7UOZzybaoNBJU+0qtma31ZJvdd1xM18jS+Ynira0ZrWaC4kqyIVkug7IgKQ0AEQY3KQ0HR92OdeX6nqZ9VmXA+zLOp/w/U9TPqmwd2OdeX6nqZ9U2Duyzry/U9TPqmwd2WdeX6nqZ9U2H3ZZ05fqepnqU7QO7LOnL9T1M9SbB3ZZ05fqepnqTYO7POvL9T1M+qncDLu0zpy/U9TPUo3Drcn3bZ15fqepnqTcJ7SO7bOvL9V1M9Sbg7yfdvnXl+q6mepNwnvI7t86cv1XUz1JuEd5HdvnTl+q6mepTuETaS7ts6cv1XUz1Ke0OZ2O7XOfL9V1M9SnvCNSO7bOfL9V1M9Sd4R1HdtnPl+q6mepO8HUd22c+X6rqZ6lPeDqfdtnPl+q6mepO8HWT7t858v1XUz1J3g6yO7fOfL1V1M9Sd4R1k+7fOXL1V1M9Sn3IOsju3zly9VdTPUnuQdZfVioWBAIBAIBAIBBU1cGKurHS01TE2MH3I37nDS4Pu6bjY67/kg0Npcdbe1fCSb32gCB+LcNgeLfHd8kGckGNBzjFWQ6nTtLEWueAZvsRx4fmGccGLsgc01MLnmUuDib2aQdPw6628NNNN6DKjhxZkhNXVxPaWEbLWg7Lr6HcL6W8L66DRBhVUuJvqJX09Q1se0SxhlcNobAABIb7vva8fz3BHkoscdE5or4QddkgkG3C5t8PDxPkGZpcb2T+1wF5DtdpwGrmkabPgHD4X+aCyw9lTHAW1kzZZC9x2miwsTcC3w/wDXQS7ICyAsgLIBAIBAIP/Z",
         imgBottomRight:
           "data:image/jpeg;base64,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",
+        urlTop: "",
+        imgTop: "",
+        urlBottomLeft: "",
+        imgBottomLeft: "",
+        urlBottomRight: "",
+        imgBottomRight: "",
       },
       dates: ["2019-09-10", "2019-09-20"],
     };
@@ -416,6 +462,25 @@ export default {
     },
   },
   methods: {
+    uploadImg(key) {
+      switch (key) {
+        case "top":
+          this.ticket.urlTop = URL.createObjectURL(this.ticket.imgTop);
+          break;
+        case "left":
+          this.ticket.urlBottomLeft = URL.createObjectURL(
+            this.ticket.imgBottomLeft
+          );
+          break;
+        case "right":
+          this.ticket.urlBottomRight = URL.createObjectURL(
+            this.ticket.imgBottomRight
+          );
+          break;
+        default:
+          null;
+      }
+    },
     ImagePreview(key) {
       if (key == "image") {
         this.url = URL.createObjectURL(this.dataTickets.img);
