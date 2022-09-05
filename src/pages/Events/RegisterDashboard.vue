@@ -120,33 +120,34 @@
             <div id="container-datatime" class="gap">
               <div class="divcol">
                 <v-menu
-                  ref="menu1"
-                  v-model="menu1"
+                  ref="menu"
+                  v-model="menu"
                   :close-on-content-click="false"
+                  :return-value.sync="dates"
                   transition="scale-transition"
                   offset-y
-                  max-width="290px"
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="dateRangeText"
-                      solo
                       label="Date"
-                      hint="MM/DD/YYYY format"
                       prepend-icon="mdi-calendar"
+                      readonly
+                      solo
                       v-bind="attrs"
-                      @blur="date = parseDate(dateFormatted)"
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="dates"
-                    range
-                    @input="menu1 = false"
-                    color="hsl(306, 100%, 50%)"
-                    dark
-                  ></v-date-picker>
+                  <v-date-picker v-model="dates" range no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="menu = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn text color="primary" @click="$refs.menu.save(dates)">
+                      OK
+                    </v-btn>
+                  </v-date-picker>
                 </v-menu>
               </div>
             </div>
@@ -163,14 +164,6 @@
                   >mdi-arrow-right</v-icon
                 > -->
               </v-btn>
-
-              <v-btn @click="mint()">
-                Demo<v-icon style="color: #ffffff !important" small
-              </v-btn>
-              <div>
-                <img src:"previewImage" class="uploading-image" />
-                <input class="uploading-image-input" type="file" accept="image/jpeg" @change="onChangeImg" />
-              </div>
             </div>
           </aside>
         </section>
