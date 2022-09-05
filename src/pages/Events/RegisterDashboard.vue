@@ -243,13 +243,11 @@
                 </template>
 
                 <template v-slot:label>
-                  <div id="container-tag" class="divcol center tcenter">
-                    <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                    <p class="p">
-                      Drag and drop or click here to upload your main event
-                      image
-                    </p>
-                  </div>
+                  <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+                  <p class="p">
+                    Drag and drop or click here to upload your main event
+                    image
+                  </p>
                 </template>
               </v-file-input>
             </div>
@@ -462,13 +460,11 @@
                   </template>
 
                   <template v-slot:label>
-                    <div id="container-tag" class="divcol center tcenter">
-                      <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                      <p class="p">
-                        Drag and drop or click here to upload your main event
-                        image
-                      </p>
-                    </div>
+                    <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+                    <p class="p">
+                      Drag and drop or click here to upload your main event
+                      image
+                    </p>
                   </template>
                 </v-file-input>
               </div>
