@@ -80,11 +80,12 @@
               featured guests.
             </p>
 
-            <v-textarea
+            <vue-editor v-model="dataTickets.description"></vue-editor>
+            <!-- <v-textarea
               v-model="dataTickets.description"
               solo
               auto-grow
-            ></v-textarea>
+            ></v-textarea> -->
 
             <h3>Location</h3>
             <p>
@@ -139,7 +140,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="dates" range no-title scrollable>
+                  <v-date-picker v-model="dates" range no-title scrollable color="hsl(306, 100%, 50%)" dark>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="$refs.menu.save(dates)">
                       OK
@@ -227,6 +228,7 @@
                 prepend-icon
                 accept="image/*"
                 @change="ImagePreview('image')"
+                class="input-unique"
               >
                 <template v-slot:selection>
                   <img class="imagePreview" :src="url" alt="Image preview" />
@@ -495,9 +497,13 @@
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 export default {
   name: "RegisterDashboard",
+  components: {
+    VueEditor
+  },
   data() {
     return {
       step: 1,
