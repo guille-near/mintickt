@@ -1240,6 +1240,7 @@
       }
       .v-input__slot {
         height: var(--height);
+        padding: 12px;
         *:not(label) {width:100%;height: 100%}
         .v-input__append-inner {display: none !important}
       }
