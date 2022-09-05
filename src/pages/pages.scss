@@ -1127,7 +1127,7 @@
           border-radius: .5vmax;
         }
       }
-      &-link {display: none}
+      &-link, &-image, &-video {display: none}
     }
   }
   .v-input i {color: #fff}
