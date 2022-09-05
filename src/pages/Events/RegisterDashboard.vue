@@ -13,26 +13,17 @@
               src="@/assets/img/ticket-register.svg"
               alt="Ticket image"
             />
-<<<<<<< HEAD
             <img v-if="ticket.imgTop" :src="ticket.imgTop" />
             <img v-if="ticket.imgBottomLeft" :src="ticket.imgBottomLeft" />
             <img v-if="ticket.imgBottomRight" :src="ticket.imgBottomRight" />
 
             <v-file-input
               v-model="ticket.imgTop"
-              hide-details
-              solo
-=======
-
-            <v-file-input
-              v-model="ticket.imgTop"
               hide-details solo
->>>>>>> f40611e7c740a1f21c245e160c93e4e19f21c4f3
               prepend-icon=""
               @change="uploadImg('top')"
             >
               <template v-slot:selection>
-<<<<<<< HEAD
                 <img v-if="ticket.urlTop" :src="ticket.urlTop" />
               </template>
             </v-file-input>
@@ -41,7 +32,6 @@
               v-model="ticket.imgBottomLeft"
               hide-details
               solo
-=======
                 <img v-if="ticket.urlTop" :src="ticket.urlTop">
               </template>
             </v-file-input>
