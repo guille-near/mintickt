@@ -111,7 +111,7 @@
             >
             </vuetify-google-autocomplete>
 
-            <h3>Date and time</h3>
+            <h3>Date</h3>
             <p>
               Inform attendees when the event starts and ends so they can get
               organized
@@ -119,8 +119,6 @@
 
             <div id="container-datatime" class="gap">
               <div class="divcol">
-                <label for="date">Date</label>
-                <v-select id="date" solo></v-select>
                 <v-menu
                   ref="menu1"
                   v-model="menu1"
@@ -132,8 +130,8 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="dates"
-                      range
+                      v-model="dateRangeText"
+                      solo
                       label="Date"
                       hint="MM/DD/YYYY format"
                       prepend-icon="mdi-calendar"
@@ -143,8 +141,8 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="date"
-                    no-title
+                    v-model="dates"
+                    range
                     @input="menu1 = false"
                   ></v-date-picker>
                 </v-menu>
@@ -437,7 +435,7 @@ export default {
         urlBottomRight: "",
         imgBottomRight: "",
       },
-      dates: ["2019-09-10", "2019-09-20"],
+      dates: [],
     };
   },
   computed: {
