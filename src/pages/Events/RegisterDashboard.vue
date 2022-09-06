@@ -261,6 +261,21 @@
                   </p>
                 </template>
               </v-file-input>
+<<<<<<< HEAD
+=======
+
+              <input class="uploading-image-input" type="file" accept="image/jpeg" @change="onChangeImg" />
+
+              <h3>How many tickets you would like have for your event?</h3>
+              <p>
+                You can always mint/list more NFT tickets later.
+              </p>
+
+              <v-text-field
+                solo
+                type="number"
+              ></v-text-field>
+>>>>>>> 6b671e3593ed6721b6a228887e5c708e799a71df
             </div>
 
             <div id="container-actions" class="gap">
