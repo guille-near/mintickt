@@ -76,6 +76,7 @@
               <label for="promoter">Promoter / Organizer name</label>
               <v-text-field
                 v-model="dataTickets.promoter"
+                :rules="rules.required"
                 id="promoter"
                 solo
               ></v-text-field>
@@ -87,12 +88,13 @@
               featured guests.
             </p>
 
-            <vue-editor v-model="dataTickets.description"></vue-editor>
-            <!-- <v-textarea
+            <!--<vue-editor v-model="dataTickets.description"></vue-editor>-->
+            <v-textarea
               v-model="dataTickets.description"
               solo
               auto-grow
-            ></v-textarea> -->
+              :rules="rules.required"
+            ></v-textarea>
 
             <h3>Location</h3>
             <p>
