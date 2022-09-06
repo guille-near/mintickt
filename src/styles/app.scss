@@ -5,6 +5,10 @@
 @import 'responsive';
 @import 'mixins';
 
+// input statements
+.v-text-field--solo.v-input--is-focused .v-input__slot {border: 1px solid rgba(255, 255, 255, 0.3)}
+.v-text-field--solo.error--text .v-input__slot {border: 1px solid red}
+
 
 ::-webkit-scrollbar {
   width: 10px;
