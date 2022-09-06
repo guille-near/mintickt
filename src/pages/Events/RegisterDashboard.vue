@@ -419,12 +419,11 @@
                     id="amount_list" solo
                     :rules="rules.required"
                     type="number"
-                    hide-spin-buttons
                   >
-                    <template v-slot:append>
+                    <!-- <template v-slot:append>
                       <v-btn class="btn-control" :disabled="amount_list == 0" @click="amount_list--">-</v-btn>
                       <v-btn class="btn-control" @click="amount_list++">+</v-btn>
-                    </template>
+                    </template> -->
                   </v-text-field>
                   <span class="conversion">~ 0.00 USD</span>
                 </div>
