@@ -1230,13 +1230,13 @@
     }
     //--- file-input (unique) ---//
     &.input-unique {
-      --height: 340px;
+      --height: 180px;
       label {
         text-align: center;
         overflow: visible !important;
         left: clamp(10px, 3vw, 15px) !important;
         margin: auto !important;
-        top: calc(var(--height) / 2.5);
+        top: calc(var(--height) / 3.5);
       }
       .v-input__slot {
         height: var(--height);
