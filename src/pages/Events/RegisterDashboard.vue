@@ -16,34 +16,40 @@
 
             <v-file-input
               v-model="ticket.imgTop"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('top')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomLeft"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('left')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomRight"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('right')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+                <img
+                  v-if="ticket.urlBottomRight"
+                  :src="ticket.urlBottomRight"
+                />
               </template>
             </v-file-input>
           </div>
@@ -61,6 +67,7 @@
               <v-text-field
                 v-model="dataTickets.name"
                 id="name"
+                :rules="rules.required"
                 solo
               ></v-text-field>
             </div>
@@ -140,7 +147,14 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="dates" range no-title scrollable color="hsl(306, 100%, 50%)" dark>
+                  <v-date-picker
+                    v-model="dates"
+                    range
+                    no-title
+                    scrollable
+                    color="hsl(306, 100%, 50%)"
+                    dark
+                  >
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="$refs.menu.save(dates)">
                       OK
@@ -182,34 +196,40 @@
 
             <v-file-input
               v-model="ticket.imgTop"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('top')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomLeft"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('left')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomRight"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('right')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+                <img
+                  v-if="ticket.urlBottomRight"
+                  :src="ticket.urlBottomRight"
+                />
               </template>
             </v-file-input>
           </div>
@@ -227,7 +247,7 @@
                 solo
                 prepend-icon
                 accept="image/*"
-                @change="ImagePreview('image')"
+                @change="ImagePreview"
                 class="input-unique"
               >
                 <template v-slot:selection>
@@ -237,13 +257,10 @@
                 <template v-slot:label>
                   <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
                   <p class="p">
-                    Drag and drop or click here to upload your main event
-                    image
-                    
+                    Drag and drop or click here to upload your main event image
                   </p>
                 </template>
               </v-file-input>
-                                  <input class="uploading-image-input" type="file" accept="image/jpeg" @change="onChangeImg" />
             </div>
 
             <div id="container-actions" class="gap">
@@ -277,34 +294,40 @@
 
             <v-file-input
               v-model="ticket.imgTop"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('top')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomLeft"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('left')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomRight"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('right')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+                <img
+                  v-if="ticket.urlBottomRight"
+                  :src="ticket.urlBottomRight"
+                />
               </template>
             </v-file-input>
           </div>
@@ -362,34 +385,40 @@
 
             <v-file-input
               v-model="ticket.imgTop"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('top')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop">
+                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomLeft"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('left')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft">
+                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
               </template>
             </v-file-input>
-            
+
             <v-file-input
               v-model="ticket.imgBottomRight"
-              hide-details solo
+              hide-details
+              solo
               prepend-icon=""
               @change="uploadImg('right')"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlBottomRight" :src="ticket.urlBottomRight">
+                <img
+                  v-if="ticket.urlBottomRight"
+                  :src="ticket.urlBottomRight"
+                />
               </template>
             </v-file-input>
           </div>
@@ -502,7 +531,7 @@ import { Wallet, Chain, Network, MetadataField } from "mintbase";
 export default {
   name: "RegisterDashboard",
   components: {
-    VueEditor
+    VueEditor,
   },
   data() {
     return {
@@ -538,6 +567,9 @@ export default {
         imgBottomRight: "",
       },
       dates: [],
+      rules: {
+        required: [(v) => !!v || "Field required"],
+      },
     };
   },
   computed: {
@@ -548,28 +580,37 @@ export default {
   methods: {
     uploadImg(key) {
       switch (key) {
-        case "top": this.ticket.urlTop = URL.createObjectURL(this.ticket.imgTop);
+        case "top":
+          this.ticket.urlTop = URL.createObjectURL(this.ticket.imgTop);
           break;
-        case "left": this.ticket.urlBottomLeft = URL.createObjectURL(this.ticket.imgBottomLeft);
+        case "left":
+          this.ticket.urlBottomLeft = URL.createObjectURL(
+            this.ticket.imgBottomLeft
+          );
           break;
-        case "right": this.ticket.urlBottomRight = URL.createObjectURL(this.ticket.imgBottomRight);
+        case "right":
+          this.ticket.urlBottomRight = URL.createObjectURL(
+            this.ticket.imgBottomRight
+          );
           break;
-        default: null;
+        default:
+          null;
       }
     },
-    ImagePreview(key) {
-      //const file = e.target.files[0];
-      //this.image = file;
-      if (key == "image") {
+    ImagePreview(e) {
+      if (e) {
         this.url = URL.createObjectURL(this.dataTickets.img);
-        console.log(this.image)
+        const file = e.name;
+        this.image = file;
+        console.log(this.image);
       }
-      if (key == "main") {
-        this.url2 = URL
-          .createObjectURL
-          // this.dataTickets.img    - crear modelo
-          ();
+    },
+    onFileChange(file) {
+      console.log(file);
+      if (!file) {
+        return;
       }
+      this.createImage(file);
     },
     async grantMinter() {
       let API_KEY = process.env.MINTBASE_DEV_API_KEY;
@@ -673,11 +714,6 @@ export default {
         .catch((err) => {
           console.log("Error", err);
         });
-    },
-    onChangeImg(e) {
-      const file = e.target.files[0];
-      this.image = file;
-      console.log(this.image)
     },
     /**
      * When the location found
