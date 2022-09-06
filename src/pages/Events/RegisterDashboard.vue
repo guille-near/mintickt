@@ -53,132 +53,142 @@
               </template>
             </v-file-input>
           </div>
-
           <aside class="divcol">
-            <h3>Basic Information</h3>
-            <p>
-              Choose a name for your event and tell attendees why you think they
-              will have a great time. Add details that highlight why your event
-              is unique.
-            </p>
+            <v-form ref="form" v-model="valid" @submit.prevent="next()">
+              <h3>Basic Information</h3>
+              <p>
+                Choose a name for your event and tell attendees why you think
+                they will have a great time. Add details that highlight why your
+                event is unique.
+              </p>
 
-            <div class="divcol">
-              <label for="name">Event name</label>
-              <v-text-field
-                v-model="dataTickets.name"
-                id="name"
-                :rules="rules.required"
-                solo
-              ></v-text-field>
-            </div>
-
-            <div class="divcol">
-              <label for="promoter">Promoter / Organizer name</label>
-              <v-text-field
-                v-model="dataTickets.promoter"
-                :rules="rules.required"
-                id="promoter"
-                solo
-              ></v-text-field>
-            </div>
-
-            <h3>Description</h3>
-            <p>
-              Add more details of your event, such as program, sponsors or
-              featured guests.
-            </p>
-
-            <!--<vue-editor v-model="dataTickets.description"></vue-editor>-->
-            <v-textarea
-              v-model="dataTickets.description"
-              solo
-              auto-grow
-              :rules="rules.required"
-            ></v-textarea>
-
-            <h3>Location</h3>
-            <p>
-              Help people in the area find out about the event and make sure
-              your attendees know where to go.
-            </p>
-
-            <vuetify-google-autocomplete
-              id="map"
-              :loading="loading"
-              append-icon="search"
-              v-bind:disabled="false"
-              flat
-              hide-no-data
-              hide-details
-              hide-selected
-              label="Search your location"
-              clearable
-              classname="form-control"
-              style="padding-bottom: 15px"
-              :enable-geolocation="false"
-              solo
-              v-on:placechanged="getAddressData"
-            >
-            </vuetify-google-autocomplete>
-
-            <h3>Date</h3>
-            <p>
-              Inform attendees when the event starts and ends so they can get
-              organized
-            </p>
-
-            <div id="container-datatime" class="gap">
               <div class="divcol">
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :return-value.sync="dates"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
+                <label for="name"
+                  >Event name <span style="color: red">*</span></label
                 >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="dateRangeText"
-                      label="Date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      solo
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="dates"
-                    range
-                    no-title
-                    scrollable
-                    color="hsl(306, 100%, 50%)"
-                    dark
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="$refs.menu.save(dates)">
-                      OK
-                    </v-btn>
-                  </v-date-picker>
-                </v-menu>
+                <v-text-field
+                  v-model="dataTickets.name"
+                  id="name"
+                  :rules="rules.required"
+                  solo
+                ></v-text-field>
               </div>
-            </div>
 
-            <div id="container-actions" class="gap">
-              <v-btn disabled>
-                <!-- <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon> -->
-                Back
-              </v-btn>
-              <v-btn @click="step++">
-                Next
-                <!-- <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                > -->
-              </v-btn>
-            </div>
+              <div class="divcol">
+                <label for="promoter"
+                  >Promoter / Organizer name
+                  <span style="color: red">*</span></label
+                >
+                <v-text-field
+                  v-model="dataTickets.promoter"
+                  :rules="rules.required"
+                  id="promoter"
+                  solo
+                ></v-text-field>
+              </div>
+
+              <h3>Description <span style="color: red">*</span></h3>
+              <p>
+                Add more details of your event, such as program, sponsors or
+                featured guests.
+              </p>
+
+              <!--<vue-editor v-model="dataTickets.description"></vue-editor>-->
+              <v-textarea
+                v-model="dataTickets.description"
+                solo
+                auto-grow
+                :rules="rules.required"
+              ></v-textarea>
+
+              <h3>Location</h3>
+              <p>
+                Help people in the area find out about the event and make sure
+                your attendees know where to go.
+              </p>
+
+              <vuetify-google-autocomplete
+                id="map"
+                :loading="loading"
+                append-icon="search"
+                v-bind:disabled="false"
+                flat
+                hide-no-data
+                hide-details
+                hide-selected
+                label="Search your location"
+                clearable
+                classname="form-control"
+                style="padding-bottom: 15px"
+                :enable-geolocation="false"
+                solo
+                v-on:placechanged="getAddressData"
+              >
+              </vuetify-google-autocomplete>
+
+              <h3>Date</h3>
+              <p>
+                Inform attendees when the event starts and ends so they can get
+                organized
+              </p>
+
+              <div id="container-datatime" class="gap">
+                <div class="divcol">
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="dates"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="dateRangeText"
+                        label="Date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        solo
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="dates"
+                      range
+                      no-title
+                      scrollable
+                      color="hsl(306, 100%, 50%)"
+                      dark
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(dates)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </div>
+              </div>
+
+              <div id="container-actions" class="gap">
+                <v-btn disabled>
+                  <!-- <v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-left</v-icon> -->
+                  Back
+                </v-btn>
+                <v-btn @click="next">
+                  Next
+                  <!-- <v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-right</v-icon
+                  > -->
+                </v-btn>
+              </div>
+            </v-form>
           </aside>
         </section>
       </v-window-item>
@@ -237,55 +247,54 @@
           </div>
 
           <aside class="divcol" style="min-height: 100%">
-            <div class="divcol">
-              <h3>Main event image</h3>
-              <p>
-                This is the first image attendees will see at the top of your
-                event page..
-              </p>
+            <v-form ref="form1" v-model="valid" @submit.prevent="next1()">
+              <div class="divcol">
+                <h3>Main event image <span style="color: red">*</span></h3>
+                <p>
+                  This is the first image attendees will see at the top of your
+                  event page..
+                </p>
 
-              <v-file-input
-                v-model="dataTickets.img"
-                solo
-                prepend-icon
-                accept="image/*"
-                @change="ImagePreview"
-                class="input-unique"
-              >
-                <template v-slot:selection>
-                  <img class="imagePreview" :src="url" alt="Image preview" />
-                </template>
-
-                <template v-slot:label>
-                  <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                  <p class="p">
-                    Drag and drop or click here to upload your main event image
-                  </p>
-                </template>
-              </v-file-input>
-              <h3>How many tickets you would like have for your event?</h3>
-              <p>
-                You can always mint/list more NFT tickets later.
-              </p>
-
-              <v-text-field
-                solo
-                type="number"
-              ></v-text-field>
-            </div>
-
-            <div id="container-actions" class="gap">
-              <v-btn @click="step--">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn @click="step++">
-                Next<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
+                <v-file-input
+                  v-model="dataTickets.img"
+                  solo
+                  prepend-icon
+                  accept="image/*"
+                  :rules="rules.required"
+                  @change="ImagePreview"
+                  class="input-unique"
                 >
-              </v-btn>
-            </div>
+                  <template v-slot:selection>
+                    <img class="imagePreview" :src="url" alt="Image preview" />
+                  </template>
+
+                  <template v-slot:label>
+                    <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+                    <p class="p">
+                      Drag and drop or click here to upload your main event
+                      image
+                    </p>
+                  </template>
+                </v-file-input>
+                <h3>How many tickets you would like have for your event? <span style="color: red">*</span></h3>
+                <p>You can always mint/list more NFT tickets later.</p>
+
+                <v-text-field :rules="rules.required" solo type="number"></v-text-field>
+              </div>
+
+              <div id="container-actions" class="gap">
+                <v-btn @click="step--">
+                  <v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-left</v-icon
+                  >Back
+                </v-btn>
+                <v-btn @click="mint">
+                  Next<v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-right</v-icon
+                  >
+                </v-btn>
+              </div>
+            </v-form>
           </aside>
         </section>
       </v-window-item>
@@ -581,6 +590,7 @@ export default {
       rules: {
         required: [(v) => !!v || "Field required"],
       },
+      valid: false,
     };
   },
   computed: {
@@ -641,6 +651,16 @@ export default {
         });
     },
     async mint() {
+      console.log(this.dataTickets.name)
+      console.log(this.dataTickets.promoter)
+      console.log(this.dataTickets.description)
+      console.log(this.location)
+      console.log(this.latitude)
+      console.log(this.longitude)
+      console.log(this.place_id)
+      console.log(this.dates.split())
+      console.log(this.place_id)
+      /*
       let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       const { data: walletData } = await new Wallet().init({
         networkName: Network.testnet,
@@ -724,7 +744,7 @@ export default {
         })
         .catch((err) => {
           console.log("Error", err);
-        });
+        });*/
     },
     /**
      * When the location found
@@ -738,6 +758,16 @@ export default {
       this.location = placeResultData.formatted_address;
       this.latitude = addressData.latitude;
       this.longitude = addressData.longitude;
+    },
+    next() {
+      if (this.$refs.form.validate()) {
+        this.step++;
+      }
+    },
+    next1() {
+      if (this.$refs.form1.validate()) {
+        this.step++;
+      }
     },
   },
 };
