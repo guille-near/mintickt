@@ -294,22 +294,24 @@
             <section class="container-inputs">
               <v-sheet v-for="(item,i) in dataRoyalties" :key="i">
                 <div class="divcol">
-                  <label :for="`account${i}`">NEAR account</label>
+                  <label :for="`account${i}`">NEAR account Avalilable 0%</label>
                   <v-text-field
                     v-model="item.account"
                     :id="`account${i}`"
                     solo
+                    label="account.near"
                     :rules="rules.account"
                   ></v-text-field>
                 </div>
                 
                 <div class="divcol percentage">
-                  <label :for="`percentage${i}`">%</label>
+                  <label :for="`percentage${i}`">50 %</label>
                   <v-text-field
                     ref="numberField"
                     v-model="item.percentage"
                     :id="`percentage${i}`"
                     solo
+                    label="1 %"
                     type="number"
                     :rules="rules.percentage_royalties"
                     @input="currentPercentage_royalties = item.percentage"
@@ -370,7 +372,7 @@
                   >mdi-arrow-left</v-icon
                 >Back
               </v-btn>
-              <v-btn @click="step++">
+              <v-btn @click="mint">
                 Next<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
@@ -708,6 +710,9 @@ export default {
         });
     },
     async mint() {
+      console.log('mint')
+      console.log(this.dataRoyalties)
+      /*
       let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       const { data: walletData } = await new Wallet().init({
         networkName: Network.testnet,
@@ -795,7 +800,7 @@ export default {
         })
         .catch((err) => {
           console.log("Error", err);
-        });
+        });*/
     },
     /**
      * When the location found
