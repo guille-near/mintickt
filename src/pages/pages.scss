@@ -626,7 +626,7 @@
     // height: 35em;
     aspect-ratio: 1 / 2;
   }
-  aside {
+  aside, .v-form {
     max-width: min(var(--margin), 24.4375em);
     h3 {
       font-family: 'Proxima Nova', sans-serif !important;
@@ -672,7 +672,7 @@
       letter-spacing: -0.03em;
       color: #6d6d6d !important;
     }
-    .v-btn:not(.v-btn--icon) {
+    .v-btn:not(.v-btn--icon, .btn-control) {
       margin-top: auto;
       width: 100%;
       height: 42px;
@@ -981,7 +981,7 @@
             width: clamp(1.3em, 2vw, 2em);
             aspect-ratio: 1 / 1;
           }
-          .v-btn:not(.v-btn--icon) {
+          .v-btn:not(.v-btn--icon, .btn-control) {
             padding: 9px 20px;
             background: #FFFFFF;
             border-radius: 6px;
@@ -1087,6 +1087,31 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em) !important}
   background-color: rgba(0,0,0,.2) !important;
+  .v-input {
+    .v-input__append-inner {
+      gap: .4em;
+      .btn-control {
+        padding: 0;
+        max-width: 1.75em !important;
+        min-width: 1.75em !important;
+        min-height: 1.75em !important;
+        max-height: 1.75em !important;
+        border-radius: .3vmax;
+        span {font-size: 1.5em}
+      }
+      .v-btn--disabled {
+        span {color: #ddd}
+      }
+    }
+  }
+  .conversion {
+    font-size: 0.75em;
+    position: relative;
+    color: #b3b5bd;
+    top: -14px;
+    margin-left:auto;
+    margin-top: .5em;
+  }
   .uploading-image-input::-webkit-file-upload-button {
     background-color: #ffffff26;
     border: 1px solid #292929;
@@ -1178,9 +1203,9 @@
   }
   .v-btn:not(.v-btn--icon) {border: 1px solid rgba(255, 255, 255, 0.3)}
   section {
-    & > aside.divcol {
+    & > aside.divcol, .v-form {
       overscroll-behavior: contain;
-      max-width: min(var(--margin), 24.4375em + 1em);
+      width: min(var(--margin), 24.4375em + 1em);
       padding-right: 1em;
       @media (min-width: 880px) {
         height: 640px;
@@ -1265,5 +1290,54 @@
     div.divcol {gap: .3em}
     .percentage {max-width: 5em}
     .v-btn {max-width: 20px}
+  }
+}
+
+#modalSucess {
+  position: relative;
+  isolation: isolate;
+  backdrop-filter: blur(11px);
+  background-color: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3em, 4vw, 4em);
+  padding: clamp(1em, 2vw, 4em);
+  border-radius: inherit;
+  
+  border-left: 1.5px solid hsl(97, 97%, 86%, .7);
+  border-right: 1.5px solid hsl(306, 100%, 50%, .7);
+  background-image:
+    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)),
+    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
+  background-size: 100% 1px;
+  background-position: 0 0, 0 100%;
+  div.divcol.center {gap: .5em}
+  h3 {
+    font-family: 'Proxima Nova', sans-serif !important;
+    font-weight: 700;
+    font-size: 1.5625em;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  a, span.p {
+    font-family: 'SF Pro', sans-serif !important;
+    font-weight: 400;
+    font-size: 0.9375em;
+    color: #6D6D6D;
+  }
+  img {width: 1em}
+  .v-btn {
+    padding: 17px;
+    width: min(90%, 21.6875em);
+    height: 2.625em;
+    
+    background: linear-gradient(183.61deg, #000000 49.78%, rgba(0, 0, 0, 0) 225.35%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
+    backdrop-filter: blur(14px);
+    
+    border-radius: 8px;
+    span {color: #fff}
   }
 }

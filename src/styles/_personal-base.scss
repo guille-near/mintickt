@@ -325,6 +325,7 @@
   max-height: auto !important;
   min-height: auto !important;
 }
+.pointer {cursor: pointer}
 @media (min-width: 881px) {.vermobile {display: none !important}}
 @media (max-width: 880px) and (max-height: 1180px) {
   .h1mobile {
