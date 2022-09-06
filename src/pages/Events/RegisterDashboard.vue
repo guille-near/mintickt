@@ -15,41 +15,15 @@
             />
 
             <v-file-input
-              v-model="ticket.imgTop"
+              v-for="(ticket,i) in dataTicket" :key="i"
+              v-model="ticket.img"
               hide-details
               solo
               prepend-icon=""
-              @change="uploadImg('top')"
+              @change="uploadImg(ticket)"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomLeft"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('left')"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomRight"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('right')"
-            >
-              <template v-slot:selection>
-                <img
-                  v-if="ticket.urlBottomRight"
-                  :src="ticket.urlBottomRight"
-                />
+                <img v-if="ticket.url" :src="ticket.url" />
               </template>
             </v-file-input>
           </div>
@@ -207,41 +181,15 @@
             />
 
             <v-file-input
-              v-model="ticket.imgTop"
+              v-for="(ticket,i) in dataTicket" :key="i"
+              v-model="ticket.img"
               hide-details
               solo
               prepend-icon=""
-              @change="uploadImg('top')"
+              @change="uploadImg(ticket)"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomLeft"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('left')"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomRight"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('right')"
-            >
-              <template v-slot:selection>
-                <img
-                  v-if="ticket.urlBottomRight"
-                  :src="ticket.urlBottomRight"
-                />
+                <img v-if="ticket.url" :src="ticket.url" />
               </template>
             </v-file-input>
           </div>
@@ -288,7 +236,7 @@
                     >mdi-arrow-left</v-icon
                   >Back
                 </v-btn>
-                <v-btn @click="mint">
+                <v-btn @click="next1">
                   Next<v-icon style="color: #ffffff !important" small
                     >mdi-arrow-right</v-icon
                   >
@@ -313,41 +261,15 @@
             />
 
             <v-file-input
-              v-model="ticket.imgTop"
+              v-for="(ticket,i) in dataTicket" :key="i"
+              v-model="ticket.img"
               hide-details
               solo
               prepend-icon=""
-              @change="uploadImg('top')"
+              @change="uploadImg(ticket)"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomLeft"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('left')"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomRight"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('right')"
-            >
-              <template v-slot:selection>
-                <img
-                  v-if="ticket.urlBottomRight"
-                  :src="ticket.urlBottomRight"
-                />
+                <img v-if="ticket.url" :src="ticket.url" />
               </template>
             </v-file-input>
           </div>
@@ -360,8 +282,39 @@
                 25 accounts.
               </p>
 
-              <v-btn>Add royalties</v-btn>
+              <v-btn @click="dataRoyalties.push({ account: '', percentage: ''})">Add royalties</v-btn>
             </div>
+            
+            <section class="container-inputs">
+              <v-sheet v-for="(item,i) in dataRoyalties" :key="i">
+                <div class="divcol">
+                  <label :for="`account${i}`">NEAR account</label>
+                  <v-text-field
+                    v-model="item.account"
+                    :id="`account${i}`"
+                    solo
+                    :rules="rules.account"
+                  ></v-text-field>
+                </div>
+                
+                <div class="divcol percentage">
+                  <label :for="`percentage${i}`">%</label>
+                  <v-text-field
+                    ref="numberField"
+                    v-model="item.percentage"
+                    :id="`percentage${i}`"
+                    solo
+                    type="number"
+                    :rules="rules.percentage_royalties"
+                    @input="currentPercentage_royalties = item.percentage"
+                  ></v-text-field>
+                </div>
+
+                <v-btn icon @click="dataRoyalties.splice(i,1)">
+                  <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                </v-btn>
+              </v-sheet>
+            </section>
 
             <div class="divcol">
               <h3>Split Revenue</h3>
@@ -371,8 +324,39 @@
                 splits are added.
               </p>
 
-              <v-btn>Add split</v-btn>
+              <v-btn @click="dataSplit.push({ account: '', percentage: ''})">Add split</v-btn>
             </div>
+
+            <section class="container-inputs">
+              <v-sheet v-for="(item,i) in dataSplit" :key="i">
+                <div class="divcol">
+                  <label :for="`account${i}`">NEAR account</label>
+                  <v-text-field
+                    v-model="item.account"
+                    :id="`account${i}`"
+                    solo
+                    :rules="rules.account"
+                  ></v-text-field>
+                </div>
+                
+                <div class="divcol percentage">
+                  <label :for="`percentage${i}`">%</label>
+                  <v-text-field
+                    ref="numberField"
+                    v-model="item.percentage"
+                    :id="`percentage${i}`"
+                    solo
+                    type="number"
+                    :rules="rules.percentage_split"
+                    @input="currentPercentage_split = item.percentage"
+                  ></v-text-field>
+                </div>
+
+                <v-btn icon @click="dataSplit.splice(i,1)">
+                  <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                </v-btn>
+              </v-sheet>
+            </section>
 
             <div id="container-actions" class="gap">
               <v-btn @click="step--">
@@ -404,41 +388,15 @@
             />
 
             <v-file-input
-              v-model="ticket.imgTop"
+              v-for="(ticket,i) in dataTicket" :key="i"
+              v-model="ticket.img"
               hide-details
               solo
               prepend-icon=""
-              @change="uploadImg('top')"
+              @change="uploadImg(ticket)"
             >
               <template v-slot:selection>
-                <img v-if="ticket.urlTop" :src="ticket.urlTop" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomLeft"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('left')"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.urlBottomLeft" :src="ticket.urlBottomLeft" />
-              </template>
-            </v-file-input>
-
-            <v-file-input
-              v-model="ticket.imgBottomRight"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg('right')"
-            >
-              <template v-slot:selection>
-                <img
-                  v-if="ticket.urlBottomRight"
-                  :src="ticket.urlBottomRight"
-                />
+                <img v-if="ticket.url" :src="ticket.url" />
               </template>
             </v-file-input>
           </div>
@@ -555,7 +513,7 @@ export default {
   },
   data() {
     return {
-      step: 1,
+      step: 3,
       dataTickets: {
         name: null,
         promoter: null,
@@ -578,19 +536,42 @@ export default {
       longitude: "",
       location: "",
       address: "",
-      ticket: {
-        urlTop: "",
-        imgTop: "",
-        urlBottomLeft: "",
-        imgBottomLeft: "",
-        urlBottomRight: "",
-        imgBottomRight: "",
-      },
+      menu: "",
+      dataTicket: [
+        {
+          url: "",
+          img: "",
+        },
+        {
+          url: "",
+          img: "",
+        },
+        {
+          url: "",
+          img: "",
+        },
+      ],
       dates: [],
       rules: {
         required: [(v) => !!v || "Field required"],
+        account: [
+          (v) => !!v || "Field required",
+          // v => /.+@.+\..+/.near.test(v) || 'Account must be valid'
+        ],
+        percentage_royalties: [
+          v => !!v || 'Field required',
+          () => this.currentPercentage_royalties > 50?'must be 50 or less':null
+        ],
+        percentage_split: [
+          v => !!v || 'Field required',
+          () => this.currentPercentage_split > 50?'must be 50 or less':null
+        ],
       },
       valid: false,
+      dataRoyalties: [],
+      currentPercentage_royalties: 0,
+      dataSplit: [],
+      currentPercentage_split: 0,
     };
   },
   computed: {
@@ -599,24 +580,8 @@ export default {
     },
   },
   methods: {
-    uploadImg(key) {
-      switch (key) {
-        case "top":
-          this.ticket.urlTop = URL.createObjectURL(this.ticket.imgTop);
-          break;
-        case "left":
-          this.ticket.urlBottomLeft = URL.createObjectURL(
-            this.ticket.imgBottomLeft
-          );
-          break;
-        case "right":
-          this.ticket.urlBottomRight = URL.createObjectURL(
-            this.ticket.imgBottomRight
-          );
-          break;
-        default:
-          null;
-      }
+    uploadImg(item) {
+      item.url = URL.createObjectURL(item.img);
     },
     ImagePreview(e) {
       if (e) {

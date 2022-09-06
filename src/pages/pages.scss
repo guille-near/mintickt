@@ -672,7 +672,7 @@
       letter-spacing: -0.03em;
       color: #6d6d6d !important;
     }
-    .v-btn {
+    .v-btn:not(.v-btn--icon) {
       margin-top: auto;
       width: 100%;
       height: 42px;
@@ -1176,7 +1176,7 @@
       }
     }
   }
-  .v-btn {border: 1px solid rgba(255, 255, 255, 0.3)}
+  .v-btn:not(.v-btn--icon) {border: 1px solid rgba(255, 255, 255, 0.3)}
   section {
     & > aside.divcol {
       overscroll-behavior: contain;
@@ -1251,3 +1251,83 @@
 .pac-container {
   .pac-matched {color: #CC00B7}
 }
+
+.container-inputs {
+  margin: 0 !important;
+  .v-sheet {
+    background-color: transparent !important;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    > * {flex: 1 1}
+    div.divcol {gap: .3em}
+    .percentage {max-width: 5em}
+    .v-btn {max-width: 20px}
+  }
+}
+
+// #modalEvents {
+//   padding: 24px;
+//   background-color: #292929;
+//   border-radius: .5vmax;
+//   font-weight: 600;
+//   @media (max-width: 500px) {font-size: 14px}
+//   @media (max-width: 450px) {font-size: 12px}
+//   .close {
+//     position: absolute;
+//     top: .5em;
+//     right: .5em;
+//   }
+//   h4 {font-size: 1em; color: #fff; font-weight: 600 !important}
+//   * {box-shadow: none !important;background: transparent !important}
+//   .wrapper-flexbox {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1em;
+//     max-height: 500px;
+//     overflow-y: auto;
+//     .flexbox {
+//       display: flex;
+//       gap: 1em;
+//       > * {flex: 1 1}
+//       .v-input {
+//         input {
+//           font-size: .9em !important;
+//           color: #fff;
+//           caret-color: #fff;
+//           &::placeholder {color: hsl(0, 0%, 45%)}
+//         }
+//         &__slot {
+//           background: linear-gradient(183.29deg, hsl(0, 0%, 7%) 49.8%, rgba(211, 254, 184, .4) 382.27%) !important;
+//           filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
+//           border-radius: .5vmax;
+//         }
+//         &:first-of-type {max-width: 4.91625em}
+//       }
+//     }
+//   }
+//   .hp-footer {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     margin-top: 1em;
+//     @media (max-width: 450px) {
+//       flex-direction: column-reverse;
+//       gap: 1em;
+//     }
+//     .hp-group {
+//       display: flex;
+//       gap: 1em;
+//       .v-card {
+//         display: flex;
+//         flex-direction: column;
+//         background: linear-gradient(183.29deg, #ffffff18 49.8%, hsl(0, 0%, 1%) 382.27%) !important;
+//         padding: .5em;
+//         border-radius: .5vmax;
+//         label {font-size: .8em;color: #b3b5bd}
+//         span {font-size: 1.3em;font-weight: 700}
+//       }
+//     }
+//     a {color: #fff}
+//   }
+// }
