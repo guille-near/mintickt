@@ -276,10 +276,18 @@
                     </p>
                   </template>
                 </v-file-input>
-                <h3>How many tickets you would like have for your event? <span style="color: red">*</span></h3>
+                <h3>
+                  How many tickets you would like have for your event?
+                  <span style="color: red">*</span>
+                </h3>
                 <p>You can always mint/list more NFT tickets later.</p>
 
-                <v-text-field :rules="rules.required" solo type="number"></v-text-field>
+                <v-text-field
+                  :rules="rules.required"
+                  v-model="dataTickets.mint_amount"
+                  solo
+                  type="number"
+                ></v-text-field>
               </div>
 
               <div id="container-actions" class="gap">
@@ -547,6 +555,7 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
+import moment from "moment";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 export default {
   name: "RegisterDashboard",
@@ -561,6 +570,7 @@ export default {
         promoter: null,
         img: null,
         description: null,
+        mint_amount: 0,
       },
       url: null,
       url2: null,
@@ -621,9 +631,9 @@ export default {
     ImagePreview(e) {
       if (e) {
         this.url = URL.createObjectURL(this.dataTickets.img);
-        const file = e.name;
+        const file = e;
         this.image = file;
-        console.log(this.image);
+        //console.log(e);
       }
     },
     onFileChange(file) {
@@ -651,16 +661,6 @@ export default {
         });
     },
     async mint() {
-      console.log(this.dataTickets.name)
-      console.log(this.dataTickets.promoter)
-      console.log(this.dataTickets.description)
-      console.log(this.location)
-      console.log(this.latitude)
-      console.log(this.longitude)
-      console.log(this.place_id)
-      console.log(this.dates.split())
-      console.log(this.place_id)
-      /*
       let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       const { data: walletData } = await new Wallet().init({
         networkName: Network.testnet,
@@ -705,22 +705,26 @@ export default {
           value: 9,
         },
         {
+          trait_type: "Promoter / Organizer name",
+          value: this.dataTickets.promoter,
+        },
+        {
           trait_type: "Start Date",
-          value: 1661572800,
+          value: moment(this.dates[0]).unix(),
           display_type: "date",
         },
         {
           trait_type: "End Date",
-          value: 1661918400,
+          value: moment(this.dates[1]).unix(),
           display_type: "date",
         },
       ];
-      let store = "globaldv.mintspace2.testnet";
-      let category = "Fashion";
+      let store = process.env.MINTBASE_STORE;
+      let category = "ticketing";
 
       const metadata = {
-        title: "Cinema2",
-        description: "Cinema2",
+        title: this.dataTickets.name,
+        description: this.dataTickets.description,
         extra,
         store,
         type: "NEP171",
@@ -744,7 +748,7 @@ export default {
         })
         .catch((err) => {
           console.log("Error", err);
-        });*/
+        });
     },
     /**
      * When the location found
