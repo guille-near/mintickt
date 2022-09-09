@@ -1,8 +1,8 @@
 //Cross-domain proxy prefix
 // const API_PROXY_PREFIX='/api'
 //const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API_BASE_URL : API_PROXY_PREFIX
-const BASE_URL = process.env.VUE_APP_API_BASE_URL
-const NETWORK = process.env.NODE_ENV === 'development' ? 'testnet' : 'testnet'
+// const BASE_URL = process.env.VUE_APP_API_BASE_URL
+// const NETWORK = process.env.NODE_ENV === 'development' ? 'testnet' : 'testnet'
 
 function CONFIG(keyStores) {
   switch (NETWORK) {
@@ -31,9 +31,5 @@ function CONFIG(keyStores) {
 
 
 module.exports = {
-  ROUTES: `${BASE_URL}/menu-get`,
-  GOODS: `${BASE_URL}/goods`,
-  GOODS_COLUMNS: `${BASE_URL}/columns`,
-  BINANCE_NEAR: `https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT`,
-  CONFIG,
+  CONFIG
 }
