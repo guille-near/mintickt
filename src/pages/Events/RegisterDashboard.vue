@@ -3,7 +3,7 @@
     <ModalSuccess ref="modal"></ModalSuccess>
 
     <v-window v-model="step">
-      <v-window-item :value="1">
+      <v-window-item :value="3">
         <h2 class="align" style="text-align: center">
           Let's create your NFT for your event!
         </h2>
@@ -17,7 +17,8 @@
             />
 
             <v-file-input
-              v-for="(ticket,i) in dataTicket" :key="i"
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
               v-model="ticket.img"
               hide-details
               solo
@@ -29,12 +30,17 @@
               </template>
             </v-file-input>
           </div>
-          <v-form ref="form" v-model="valid" @submit.prevent="next()" class="divcol">
+          <v-form
+            ref="form"
+            v-model="valid"
+            @submit.prevent="next()"
+            class="divcol"
+          >
             <h3>Basic Information</h3>
             <p>
-              Choose a name for your event and tell attendees why you think
-              they will have a great time. Add details that highlight why your
-              event is unique.
+              Choose a name for your event and tell attendees why you think they
+              will have a great time. Add details that highlight why your event
+              is unique.
             </p>
 
             <div class="divcol">
@@ -138,11 +144,7 @@
                     dark
                   >
                     <v-spacer></v-spacer>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.menu.save(dates)"
-                    >
+                    <v-btn text color="primary" @click="$refs.menu.save(dates)">
                       OK
                     </v-btn>
                   </v-date-picker>
@@ -181,7 +183,8 @@
             />
 
             <v-file-input
-              v-for="(ticket,i) in dataTicket" :key="i"
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
               v-model="ticket.img"
               hide-details
               solo
@@ -194,7 +197,13 @@
             </v-file-input>
           </div>
 
-          <v-form ref="form1" v-model="valid" @submit.prevent="next1()" class="divcol" style="min-height: 100%">
+          <v-form
+            ref="form1"
+            v-model="valid"
+            @submit.prevent="next1()"
+            class="divcol"
+            style="min-height: 100%"
+          >
             <div class="divcol">
               <h3>Main event image <span style="color: red">*</span></h3>
               <p>
@@ -218,8 +227,7 @@
                 <template v-slot:label>
                   <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
                   <p class="p">
-                    Drag and drop or click here to upload your main event
-                    image
+                    Drag and drop or click here to upload your main event image
                   </p>
                 </template>
               </v-file-input>
@@ -253,7 +261,7 @@
         </section>
       </v-window-item>
 
-      <v-window-item :value="3">
+      <v-window-item :value="1">
         <h2 class="align" style="text-align: center">
           Let's create your ticket!
         </h2>
@@ -267,7 +275,8 @@
             />
 
             <v-file-input
-              v-for="(ticket,i) in dataTicket" :key="i"
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
               v-model="ticket.img"
               hide-details
               solo
@@ -288,37 +297,37 @@
                 25 accounts.
               </p>
 
-              <v-btn @click="dataRoyalties.push({ account: '', percentage: ''})">Add royalties</v-btn>
+              <v-btn
+                @click="dataRoyalties.push({ account: '', percentage: '' })"
+                >Add royalties</v-btn
+              >
+              <p>Avalilable 0%</p>
             </div>
-            
+
             <section class="container-inputs">
-              <v-sheet v-for="(item,i) in dataRoyalties" :key="i">
+              <v-sheet v-for="(item, i) in dataRoyalties" :key="i">
                 <div class="divcol">
-                  <label :for="`account${i}`">NEAR account Avalilable 0%</label>
+                  <label :for="`account${i}`">NEAR account</label>
                   <v-text-field
                     v-model="item.account"
                     :id="`account${i}`"
-                    solo
                     label="account.near"
-                    :rules="rules.account"
+                    solo
                   ></v-text-field>
                 </div>
-                
+
                 <div class="divcol percentage">
-                  <label :for="`percentage${i}`">50 %</label>
+                  <label :for="`percentage${i}`">%</label>
                   <v-text-field
                     ref="numberField"
                     v-model="item.percentage"
                     :id="`percentage${i}`"
-                    solo
                     label="1 %"
+                    solo
                     type="number"
-                    :rules="rules.percentage_royalties"
-                    @input="currentPercentage_royalties = item.percentage"
                   ></v-text-field>
                 </div>
-
-                <v-btn icon @click="dataRoyalties.splice(i,1)">
+                <v-btn icon @click="dataRoyalties.splice(i, 1)">
                   <v-icon color="#868686">mdi-trash-can-outline</v-icon>
                 </v-btn>
               </v-sheet>
@@ -332,21 +341,22 @@
                 splits are added.
               </p>
 
-              <v-btn @click="dataSplit.push({ account: '', percentage: ''})">Add split</v-btn>
+              <v-btn @click="dataSplit.push({ account: '', percentage: '' })"
+                >Add split</v-btn
+              >
             </div>
 
             <section class="container-inputs">
-              <v-sheet v-for="(item,i) in dataSplit" :key="i">
+              <v-sheet v-for="(item, i) in dataSplit" :key="i">
                 <div class="divcol">
                   <label :for="`account${i}`">NEAR account</label>
                   <v-text-field
                     v-model="item.account"
                     :id="`account${i}`"
                     solo
-                    :rules="rules.account"
                   ></v-text-field>
                 </div>
-                
+
                 <div class="divcol percentage">
                   <label :for="`percentage${i}`">%</label>
                   <v-text-field
@@ -355,12 +365,10 @@
                     :id="`percentage${i}`"
                     solo
                     type="number"
-                    :rules="rules.percentage_split"
-                    @input="currentPercentage_split = item.percentage"
                   ></v-text-field>
                 </div>
 
-                <v-btn icon @click="dataSplit.splice(i,1)">
+                <v-btn icon @click="dataSplit.splice(i, 1)">
                   <v-icon color="#868686">mdi-trash-can-outline</v-icon>
                 </v-btn>
               </v-sheet>
@@ -372,7 +380,7 @@
                   >mdi-arrow-left</v-icon
                 >Back
               </v-btn>
-              <v-btn @click="mint">
+              <v-btn @click="mint()">
                 Next<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
@@ -396,7 +404,8 @@
             />
 
             <v-file-input
-              v-for="(ticket,i) in dataTicket" :key="i"
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
               v-model="ticket.img"
               hide-details
               solo
@@ -409,34 +418,54 @@
             </v-file-input>
           </div>
 
-          <v-form ref="form2" v-model="valid" @submit.prevent="next2()" class="divcol" style="min-height: 100%">
+          <v-form
+            ref="form2"
+            v-model="valid"
+            @submit.prevent="next2()"
+            class="divcol"
+            style="min-height: 100%"
+          >
             <div class="divcol">
               <h3>List NFT For Sale <span style="color: red">*</span></h3>
 
               <div class="divcol" style="margin-top: 4em">
-                <label for="amount_list">Amount to list <span style="color: red">*</span></label>
+                <label for="amount_list"
+                  >Amount to list <span style="color: red">*</span></label
+                >
                 <div class="divcol">
                   <v-text-field
                     v-model="amount_list"
-                    id="amount_list" solo
+                    id="amount_list"
+                    solo
                     :rules="rules.required"
                     type="number"
+                    hide-spin-buttons
                   >
-                    <!-- <template v-slot:append>
-                      <v-btn class="btn-control" :disabled="amount_list == 0" @click="amount_list--">-</v-btn>
-                      <v-btn class="btn-control" @click="amount_list++">+</v-btn>
-                    </template> -->
+                    <template v-slot:append>
+                      <v-btn
+                        class="btn-control"
+                        :disabled="amount_list == 0"
+                        @click="amount_list--"
+                        >-</v-btn
+                      >
+                      <v-btn class="btn-control" @click="amount_list++"
+                        >+</v-btn
+                      >
+                    </template>
                   </v-text-field>
                   <span class="conversion">~ 0.00 USD</span>
                 </div>
               </div>
 
               <div class="divcol">
-                <label for="price">Price <span style="color: red">*</span></label>
+                <label for="price"
+                  >Price <span style="color: red">*</span></label
+                >
                 <div class="divcol">
                   <v-text-field
                     v-model="price"
-                    id="price" solo
+                    id="price"
+                    solo
                     :rules="rules.required"
                     type="number"
                   ></v-text-field>
@@ -475,7 +504,8 @@
             />
 
             <v-file-input
-              v-for="(ticket,i) in dataTicket" :key="i"
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
               v-model="ticket.img"
               hide-details
               solo
@@ -591,7 +621,7 @@
 </template>
 
 <script>
-import ModalSuccess from './ModalSuccess'
+import ModalSuccess from "./ModalSuccess";
 import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
@@ -599,7 +629,7 @@ export default {
   name: "RegisterDashboard",
   components: {
     VueEditor,
-    ModalSuccess
+    ModalSuccess,
   },
   data() {
     return {
@@ -609,7 +639,7 @@ export default {
         promoter: null,
         img: null,
         description: null,
-        mint_amount: 0,
+        mint_amount: null,
       },
       url: null,
       url2: null,
@@ -652,12 +682,16 @@ export default {
           // v => /.+@.+\..+/.near.test(v) || 'Account must be valid'
         ],
         percentage_royalties: [
-          v => !!v || 'Field required',
-          () => this.currentPercentage_royalties > 50?'must be 50% or less':null
+          (v) => !!v || "Field required",
+          () =>
+            this.currentPercentage_royalties > 50
+              ? "must be 50% or less"
+              : null,
         ],
         percentage_split: [
-          v => !!v || 'Field required',
-          () => this.currentPercentage_split > 50?'must be 50% or less':null
+          (v) => !!v || "Field required",
+          () =>
+            this.currentPercentage_split > 50 ? "must be 50% or less" : null,
         ],
       },
       valid: false,
@@ -709,9 +743,6 @@ export default {
         });
     },
     async mint() {
-      console.log('mint')
-      console.log(this.dataRoyalties)
-      /*
       let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       const { data: walletData } = await new Wallet().init({
         networkName: Network.testnet,
@@ -770,7 +801,7 @@ export default {
           display_type: "date",
         },
       ];
-      let store = process.env.MINTBASE_STORE;
+      let store = "globaldv.mintspace2.testnet";
       let category = "ticketing";
 
       const metadata = {
@@ -783,14 +814,17 @@ export default {
       };
       wallet.minter.setMetadata(metadata, true);
 
-      const royalties = 0;
-      const splits = 0;
-
+      const royalties = {};
+      //console.log(obj); // outputs { a: 1, b: 2, c: 3 }
+      this.dataRoyalties.forEach((element) => {
+        royalties[element.account] = element.percentage * 1000
+      })
+      const splits = { "vicious2403.testnet": 5000, "maruja24.testnet": 5000 };
       wallet
         .mint(
-          18,
+          parseFloat(this.dataTickets.mint_amount),
           "globaldv.mintspace2.testnet",
-          !royalties ? undefined : royalties.royaltyArgs,
+          !royalties ? undefined : royalties,
           !splits ? undefined : splits,
           category
         )
@@ -799,7 +833,7 @@ export default {
         })
         .catch((err) => {
           console.log("Error", err);
-        });*/
+        });
     },
     /**
      * When the location found
@@ -827,6 +861,24 @@ export default {
     next2() {
       if (this.$refs.form2.validate()) {
         this.step++;
+      }
+    },
+    async validateNearId(nearId) {
+      try {
+        const keyStore = new keyStores.InMemoryKeyStore();
+        const near = new Near(CONFIG(keyStore));
+        const account = new Account(near.connection, nearId);
+        const response = await account
+          .state()
+          .then((response) => {
+            return true;
+          })
+          .catch((error) => {
+            return false;
+          });
+        return response;
+      } catch (error) {
+        return error;
       }
     },
   },
