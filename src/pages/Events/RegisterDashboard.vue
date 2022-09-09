@@ -312,6 +312,7 @@
                     v-model="item.account"
                     :id="`account${i}`"
                     label="account.near"
+                    :error-messages="error"
                     solo
                   ></v-text-field>
                 </div>
@@ -699,6 +700,7 @@ export default {
       currentPercentage_royalties: 0,
       dataSplit: [],
       currentPercentage_split: 0,
+      error: null
     };
   },
   computed: {
