@@ -17,6 +17,8 @@
   height: 100vh !important;
   .v-main__wrap {
     padding-inline: 0;
+    max-width: 1440px;
+    margin-inline: auto;
     // padding-top: clamp(3rem, 22vh , 8rem);
     background-color: transparent;
     // @media (max-height: 800px) {
@@ -79,6 +81,8 @@
 }
 #headerApp {
   transition: 0.4s ease-in-out;
+  max-width: 1440px;
+  margin-inline: auto;
   &.events {
     & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
   }

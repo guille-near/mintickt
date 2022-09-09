@@ -36,6 +36,8 @@
 // tienda //
 #tienda {
   padding-bottom: 10em;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw) !important;
   // padding-bottom: 70px;
   @include mq(max, small) {
     &>aside:nth-child(1) {
@@ -417,6 +419,12 @@
   gap: 2rem;
   display: flex;
   flex-direction: column;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    inset: 0;
   // background-color: #000;
   // background-image: url('../assets/landing/Landingback.png');
   background: linear-gradient(180.22deg, rgba(246, 85, 235, 0.09) 0.19%, rgba(30, 30, 30, 0) 39.99%, rgba(102, 205, 118, 0.12) 99.82%) !important;
@@ -426,7 +434,7 @@
   background-attachment: fixed;
   background-clip: border-box;
   -webkit-text-fill-color: inherit;
-  mix-blend-mode: normal;
+  mix-blend-mode: normal;}
   padding-block: $margin-layout;
   @media screen and (max-width: 991px) {background-position: 50% 50%}
   @media screen and (max-width: 479px) {
@@ -610,7 +618,7 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  overflow: hidden !important;
+  // overflow: hidden !important;
   section {gap: clamp(6em, 8vw, 8em); z-index: 2; margin-top: 4em}
   h2 {
     max-width: min(var(--margin), 18ch);
@@ -700,7 +708,16 @@
   padding-block: 160px 12em;
   padding-inline: 2.5em;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
-  background-color: rgba(0,0,0,.2);
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100vw;
+    margin-inline: calc((50% - 50vw) - 35px);
+    inset: 0;
+    background-color: rgba(0,0,0,.2);
+  }
   h2 {
     font-family: 'Proxima Nova', sans-serif !important;
     font-weight: 500;
@@ -886,7 +903,16 @@
   padding-block: 160px 12em;
   padding-inline: 2.5em;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
-  background-color: rgba(0,0,0,.2);
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100vw;
+    margin-inline: calc((50% - 50vw) - 35px);
+    inset: 0;
+    background-color: rgba(0,0,0,.2);
+  }
   label {
     font-family: 'SF Pro', sans-serif !important;
     font-weight: 510;
@@ -1006,7 +1032,16 @@
   padding-block: 160px 12em;
   padding-inline: 2.5em;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
-  background-color: rgba(0,0,0,.2);
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100vw;
+    margin-inline: calc((50% - 50vw) - 35px);
+    inset: 0;
+    background-color: rgba(0,0,0,.2);
+  }
   label {
     font-family: 'SF Pro', sans-serif !important;
     font-weight: 510;
@@ -1086,7 +1121,16 @@
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em) !important}
-  background-color: rgba(0,0,0,.2) !important;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100vw;
+    margin-inline: calc((50% - 50vw) - 35px);
+    height: 100vh;
+    background-color: rgba(0,0,0,.2);
+  }
   .v-input {
     .v-input__append-inner {
       gap: .4em;
