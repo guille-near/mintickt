@@ -301,7 +301,7 @@
                 @click="dataRoyalties.push({ account: '', percentage: '' })"
                 >Add royalties</v-btn
               >
-              <p class="p">Avalilable 0%</p>
+              <p class="p" style="margin-top: 1em">Avalilable 0%</p>
             </div>
 
             <section class="container-inputs">
