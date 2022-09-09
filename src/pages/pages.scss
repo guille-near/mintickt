@@ -1211,6 +1211,9 @@
       position: absolute;
       border-radius: .3vmax;
       margin: auto;
+      img {
+        object-fit: cover;
+      }
       * {
         cursor: pointer;
         background-color: transparent !important;
