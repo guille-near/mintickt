@@ -314,7 +314,7 @@
                     v-model="item.account"
                     :id="`account${i}`"
                     label="account.near"
-                    @change="validateNearId(item.account)"
+                    @change="validateNearId(item.account, i)"
                     :error-messages="errorAccount"
                     :success-messages="successAccount"
                     solo
@@ -699,8 +699,8 @@ export default {
       currentPercentage_royalties: 0,
       dataSplit: [],
       currentPercentage_split: 0,
-      errorAccount: null,
-      successAccount: null,
+      errorAccount: [],
+      successAccount: [],
       available: 50,
       errorPercentaje: [],
       counter: 0,
@@ -870,7 +870,7 @@ export default {
         this.step++;
       }
     },
-    async validateNearId(nearId) {
+    async validateNearId(nearId, pos) {
       const near = await connect(
         CONFIG(new keyStores.BrowserLocalStorageKeyStore())
       );
@@ -878,16 +878,15 @@ export default {
       await account
         .state()
         .then((response) => {
-          this.errorAccount = null;
-          this.successAccount = "Valid";
+          this.errorAccount[pos] = null;
+          this.successAccount[pos] = "Valid";
         })
         .catch((error) => {
-          this.errorAccount = "Not valid NEAR Account";
-          this.successAccount = null;
+          this.errorAccount[pos] = "Not valid NEAR Account";
+          this.successAccount[pos] = null;
         });
     },
     chkPercentage(pos) {
-      console.log(pos)
       let arr = [];
       for (const prop in this.dataRoyalties) {
         arr.push(parseInt(this.dataRoyalties[prop].percentage));
