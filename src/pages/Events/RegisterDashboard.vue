@@ -301,7 +301,9 @@
                 @click="dataRoyalties.push({ account: '', percentage: '' })"
                 >Add royalties</v-btn
               >
-              <p class="p" style="margin-top: 1em">Avalilable 0%</p>
+              <p class="p" style="margin-top: 1em">
+                Avalilable {{ available }} %
+              </p>
             </div>
 
             <section class="container-inputs">
@@ -312,7 +314,9 @@
                     v-model="item.account"
                     :id="`account${i}`"
                     label="account.near"
-                    :error-messages="error"
+                    @change="validateNearId(item.account)"
+                    :error-messages="errorAccount"
+                    :success-messages="successAccount"
                     solo
                   ></v-text-field>
                 </div>
@@ -325,6 +329,9 @@
                     :id="`percentage${i}`"
                     label="1 %"
                     solo
+                    :rules="rules.required"
+                    :error-messages="errorPercentaje[i]"
+                    @change="chkPercentage(i)"
                     type="number"
                   ></v-text-field>
                 </div>
@@ -624,6 +631,9 @@
 <script>
 import ModalSuccess from "./ModalSuccess";
 import { VueEditor } from "vue2-editor";
+import { CONFIG } from "@/services/api";
+import * as nearAPI from "near-api-js";
+const { connect, keyStores, WalletConnection } = nearAPI;
 import moment from "moment";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 export default {
@@ -678,17 +688,6 @@ export default {
       dates: [],
       rules: {
         required: [(v) => !!v || "Field required"],
-        account: [
-          (v) => !!v || "Field required",
-          // v => /.+@.+\..+/.near.test(v) || 'Account must be valid'
-        ],
-        percentage_royalties: [
-          (v) => !!v || "Field required",
-          () =>
-            this.currentPercentage_royalties > 50
-              ? "must be 50% or less"
-              : null,
-        ],
         percentage_split: [
           (v) => !!v || "Field required",
           () =>
@@ -700,7 +699,12 @@ export default {
       currentPercentage_royalties: 0,
       dataSplit: [],
       currentPercentage_split: 0,
-      error: null
+      errorAccount: null,
+      successAccount: null,
+      available: 50,
+      errorPercentaje: [],
+      counter: 0,
+      oldValue: {},
     };
   },
   computed: {
@@ -745,97 +749,98 @@ export default {
         });
     },
     async mint() {
-      let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-      const { data: walletData } = await new Wallet().init({
-        networkName: Network.testnet,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
-      const { wallet } = walletData;
+      // let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+      // const { data: walletData } = await new Wallet().init({
+      //   networkName: Network.testnet,
+      //   chain: Chain.near,
+      //   apiKey: API_KEY,
+      // });
+      // const { wallet } = walletData;
 
-      try {
-        const file = this.image;
-        const { data: fileUploadResult, error: fileError } =
-          await wallet.minter.uploadField(MetadataField.Media, file);
-        if (fileError) {
-          throw new Error(fileError);
-        } else {
-          console.log(fileUploadResult);
-        }
-      } catch (error) {
-        console.error(error);
-        // TODO: handle error
-      }
+      // try {
+      //   const file = this.image;
+      //   const { data: fileUploadResult, error: fileError } =
+      //     await wallet.minter.uploadField(MetadataField.Media, file);
+      //   if (fileError) {
+      //     throw new Error(fileError);
+      //   } else {
+      //     console.log(fileUploadResult);
+      //   }
+      // } catch (error) {
+      //   console.error(error);
+      //   // TODO: handle error
+      // }
 
-      let extra = [
-        {
-          trait_type: "location",
-          value: this.location,
-        },
-        {
-          trait_type: "latitude",
-          value: this.latitude,
-        },
-        {
-          trait_type: "longitude",
-          value: this.longitude,
-        },
-        {
-          trait_type: "place_id",
-          value: this.place_id,
-        },
-        {
-          trait_type: "zoom",
-          value: 9,
-        },
-        {
-          trait_type: "Promoter / Organizer name",
-          value: this.dataTickets.promoter,
-        },
-        {
-          trait_type: "Start Date",
-          value: moment(this.dates[0]).unix(),
-          display_type: "date",
-        },
-        {
-          trait_type: "End Date",
-          value: moment(this.dates[1]).unix(),
-          display_type: "date",
-        },
-      ];
-      let store = "globaldv.mintspace2.testnet";
-      let category = "ticketing";
+      // let extra = [
+      //   {
+      //     trait_type: "location",
+      //     value: this.location,
+      //   },
+      //   {
+      //     trait_type: "latitude",
+      //     value: this.latitude,
+      //   },
+      //   {
+      //     trait_type: "longitude",
+      //     value: this.longitude,
+      //   },
+      //   {
+      //     trait_type: "place_id",
+      //     value: this.place_id,
+      //   },
+      //   {
+      //     trait_type: "zoom",
+      //     value: 9,
+      //   },
+      //   {
+      //     trait_type: "Promoter / Organizer name",
+      //     value: this.dataTickets.promoter,
+      //   },
+      //   {
+      //     trait_type: "Start Date",
+      //     value: moment(this.dates[0]).unix(),
+      //     display_type: "date",
+      //   },
+      //   {
+      //     trait_type: "End Date",
+      //     value: moment(this.dates[1]).unix(),
+      //     display_type: "date",
+      //   },
+      // ];
+      // let store = "globaldv.mintspace2.testnet";
+      // let category = "ticketing";
 
-      const metadata = {
-        title: this.dataTickets.name,
-        description: this.dataTickets.description,
-        extra,
-        store,
-        type: "NEP171",
-        category,
-      };
-      wallet.minter.setMetadata(metadata, true);
+      // const metadata = {
+      //   title: this.dataTickets.name,
+      //   description: this.dataTickets.description,
+      //   extra,
+      //   store,
+      //   type: "NEP171",
+      //   category,
+      // };
+      // wallet.minter.setMetadata(metadata, true);
 
       const royalties = {};
       //console.log(obj); // outputs { a: 1, b: 2, c: 3 }
       this.dataRoyalties.forEach((element) => {
-        royalties[element.account] = element.percentage * 1000
-      })
-      const splits = { "vicious2403.testnet": 5000, "maruja24.testnet": 5000 };
-      wallet
-        .mint(
-          parseFloat(this.dataTickets.mint_amount),
-          "globaldv.mintspace2.testnet",
-          !royalties ? undefined : royalties,
-          !splits ? undefined : splits,
-          category
-        )
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+        royalties[element.account] = element.percentage * 1000;
+      });
+      console.log(this.dataRoyalties.percentage);
+      // const splits = { "vicious2403.testnet": 5000, "maruja24.testnet": 5000 };
+      // wallet
+      //   .mint(
+      //     parseFloat(this.dataTickets.mint_amount),
+      //     "globaldv.mintspace2.testnet",
+      //     !royalties ? undefined : royalties,
+      //     !splits ? undefined : splits,
+      //     category
+      //   )
+      //   .then((res) => {
+      //     console.log(res.data);
+      //   })
+      //   .catch((err) => {
+      //     console.log("Error", err);
+      //   });
     },
     /**
      * When the location found
@@ -866,21 +871,34 @@ export default {
       }
     },
     async validateNearId(nearId) {
-      try {
-        const keyStore = new keyStores.InMemoryKeyStore();
-        const near = new Near(CONFIG(keyStore));
-        const account = new Account(near.connection, nearId);
-        const response = await account
-          .state()
-          .then((response) => {
-            return true;
-          })
-          .catch((error) => {
-            return false;
-          });
-        return response;
-      } catch (error) {
-        return error;
+      const near = await connect(
+        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
+      );
+      const account = await near.account(nearId);
+      await account
+        .state()
+        .then((response) => {
+          this.errorAccount = null;
+          this.successAccount = "Valid";
+        })
+        .catch((error) => {
+          this.errorAccount = "Not valid NEAR Account";
+          this.successAccount = null;
+        });
+    },
+    chkPercentage(pos) {
+      console.log(pos)
+      let arr = [];
+      for (const prop in this.dataRoyalties) {
+        arr.push(parseInt(this.dataRoyalties[prop].percentage));
+      }
+      this.counter = arr.reduce(function (a, b) { return a + b; }, 0);
+      this.available = 50 - this.counter;
+      if (this.counter > 50) {
+        this.available = 0;
+        this.errorPercentaje[pos] = "≤ 50%";
+      } else {
+        this.errorPercentaje[pos] = null;
       }
     },
   },
