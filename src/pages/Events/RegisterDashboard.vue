@@ -290,110 +290,129 @@
           </div>
 
           <aside class="divcol gap" style="min-height: 100%">
-            <div class="divcol">
-              <h3>Royalties</h3>
-              <p>
-                Royalties are perpetual. You can add royalties up to 50% across
-                25 accounts.
-              </p>
+            <v-form
+              ref="form2"
+              v-model="valid"
+              @submit.prevent="mint()"
+              class="divcol"
+              style="min-height: 100%"
+            >
+              <div class="divcol">
+                <h3>Royalties</h3>
+                <p>
+                  Royalties are perpetual. You can add royalties up to 50%
+                  across 25 accounts.
+                </p>
 
-              <v-btn
-                @click="dataRoyalties.push({ account: '', percentage: '' })"
-                >Add royalties</v-btn
-              >
-              <p class="p" style="margin-top: 1em">
-                Avalilable {{ available }} %
-              </p>
-            </div>
-
-            <section class="container-inputs">
-              <v-sheet v-for="(item, i) in dataRoyalties" :key="i">
-                <div class="divcol">
-                  <label :for="`account${i}`">NEAR account</label>
-                  <v-text-field
-                    v-model="item.account"
-                    :id="`account${i}`"
-                    label="account.near"
-                    @change="validateNearId(item.account, i)"
-                    :error-messages="errorAccount"
-                    :success-messages="successAccount"
-                    solo
-                  ></v-text-field>
-                </div>
-
-                <div class="divcol percentage">
-                  <label :for="`percentage${i}`">%</label>
-                  <v-text-field
-                    ref="numberField"
-                    v-model="item.percentage"
-                    :id="`percentage${i}`"
-                    label="1 %"
-                    solo
-                    :rules="rules.required"
-                    :error-messages="errorPercentaje[i]"
-                    @change="chkPercentage(i)"
-                    type="number"
-                  ></v-text-field>
-                </div>
-                <v-btn icon @click="dataRoyalties.splice(i, 1)">
-                  <v-icon color="#868686">mdi-trash-can-outline</v-icon>
-                </v-btn>
-              </v-sheet>
-            </section>
-
-            <div class="divcol">
-              <h3>Split Revenue</h3>
-              <p>
-                Split revenue clears after each sale. Needs at least two wallet
-                addresses. The minter will receive 100% of split revenue unless
-                splits are added.
-              </p>
-
-              <v-btn @click="dataSplit.push({ account: '', percentage: '' })"
-                >Add split</v-btn
-              >
-            </div>
-
-            <section class="container-inputs">
-              <v-sheet v-for="(item, i) in dataSplit" :key="i">
-                <div class="divcol">
-                  <label :for="`account${i}`">NEAR account</label>
-                  <v-text-field
-                    v-model="item.account"
-                    :id="`account${i}`"
-                    solo
-                  ></v-text-field>
-                </div>
-
-                <div class="divcol percentage">
-                  <label :for="`percentage${i}`">%</label>
-                  <v-text-field
-                    ref="numberField"
-                    v-model="item.percentage"
-                    :id="`percentage${i}`"
-                    solo
-                    type="number"
-                  ></v-text-field>
-                </div>
-
-                <v-btn icon @click="dataSplit.splice(i, 1)">
-                  <v-icon color="#868686">mdi-trash-can-outline</v-icon>
-                </v-btn>
-              </v-sheet>
-            </section>
-
-            <div id="container-actions" class="gap">
-              <v-btn @click="step--">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn @click="mint()">
-                Next<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
+                <v-btn
+                  @click="dataRoyalties.push({ account: '', percentage: '' })"
+                  >Add royalties</v-btn
                 >
-              </v-btn>
-            </div>
+                <p class="p" style="margin-top: 1em">
+                  Avalilable {{ available }} %
+                </p>
+              </div>
+
+              <section class="container-inputs">
+                <v-sheet v-for="(item, i) in dataRoyalties" :key="i">
+                  <div class="divcol">
+                    <label :for="`account${i}`">NEAR account</label>
+                    <v-text-field
+                      v-model="item.account"
+                      :id="`account|${i}`"
+                      label="account.near"
+                      v-debounce:800ms="validateNearId"
+                      :error-messages="errorAccount[i]"
+                      :success-messages="successAccount[i]"
+                      solo
+                    ></v-text-field>
+                  </div>
+
+                  <div class="divcol percentage">
+                    <label :for="`percentage${i}`">%</label>
+                    <v-text-field
+                      ref="numberField"
+                      v-model="item.percentage"
+                      :id="`percentage|${i}`"
+                      label="1 %"
+                      solo
+                      :rules="rules.required"
+                      v-debounce:300ms="chkPercentage"
+                      :error-messages="errorPercentaje[i]"
+                      type="number"
+                    ></v-text-field>
+                  </div>
+                  <v-btn icon @click="remove(i)">
+                    <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </v-sheet>
+              </section>
+
+              <div class="divcol">
+                <h3>Split Revenue</h3>
+                <p>
+                  Split revenue clears after each sale. Needs at least two
+                  wallet addresses. The minter will receive 100% of split
+                  revenue unless splits are added.
+                </p>
+
+                <v-btn @click="dataSplit.push({ account: '', percentage: '' })"
+                  >Add split</v-btn
+                >
+                <p class="p" style="margin-top: 1em">
+                  Avalilable {{ available1 }} %
+                </p>
+              </div>
+
+              <section class="container-inputs">
+                <v-sheet v-for="(item, i) in dataSplit" :key="i">
+                  <div class="divcol">
+                    <label :for="`account${i}`">NEAR account</label>
+                    <v-text-field
+                      v-model="item.account"
+                      :id="`account|${i}`"
+                      label="account.near"
+                      v-debounce:800ms="validateNearId1"
+                      :error-messages="errorAccount1[i]"
+                      :success-messages="successAccount1[i]"
+                      solo
+                    ></v-text-field>
+                  </div>
+
+                  <div class="divcol percentage">
+                    <label :for="`percentage${i}`">%</label>
+                    <v-text-field
+                      ref="numberField"
+                      v-model="item.percentage"
+                      :id="`percentage|${i}`"
+                      label="1 %"
+                      solo
+                      :rules="rules.required"
+                      v-debounce:300ms="chkPercentage1"
+                      :error-messages="errorPercentaje1[i]"
+                      type="number"
+                    ></v-text-field>
+                  </div>
+
+                  <v-btn icon @click="dataSplit.splice(i, 1)">
+                    <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </v-sheet>
+              </section>
+
+              <div id="container-actions" class="gap">
+                <v-btn @click="step--">
+                  <v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-left</v-icon
+                  >Back
+                </v-btn>
+                <v-btn @click="mint" :disabled=disable>
+                  Next<v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-right</v-icon
+                  >
+                </v-btn>
+              </div>
+            </v-form>
           </aside>
         </section>
       </v-window-item>
@@ -427,7 +446,7 @@
           </div>
 
           <v-form
-            ref="form2"
+            ref="form3"
             v-model="valid"
             @submit.prevent="next2()"
             class="divcol"
@@ -633,9 +652,8 @@ import ModalSuccess from "./ModalSuccess";
 import { VueEditor } from "vue2-editor";
 import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
-const { connect, keyStores, WalletConnection } = nearAPI;
-import moment from "moment";
-import { Wallet, Chain, Network, MetadataField } from "mintbase";
+const { connect, keyStores } = nearAPI;
+import { Wallet, Chain, Network } from "mintbase";
 export default {
   name: "RegisterDashboard",
   components: {
@@ -700,11 +718,18 @@ export default {
       dataSplit: [],
       currentPercentage_split: 0,
       errorAccount: [],
+      errorAccount1: [],
       successAccount: [],
+      successAccount1: [],
       available: 50,
+      available1: 100,
       errorPercentaje: [],
+      errorPercentaje1: [],
       counter: 0,
-      oldValue: {},
+      counter1: 0,
+      arr: [],
+      arr1: [],
+      disable: false
     };
   },
   computed: {
@@ -749,6 +774,8 @@ export default {
         });
     },
     async mint() {
+     if (this.$refs.form2.validate()) { 
+      console.log('mint')
       // let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       // const { data: walletData } = await new Wallet().init({
       //   networkName: Network.testnet,
@@ -821,12 +848,18 @@ export default {
       // wallet.minter.setMetadata(metadata, true);
 
       const royalties = {};
-      //console.log(obj); // outputs { a: 1, b: 2, c: 3 }
+      const multiplied = 10000;
+      var counter = this.counter;
+      const multiplier = Math.round(multiplied / counter);
       this.dataRoyalties.forEach((element) => {
-        royalties[element.account] = element.percentage * 1000;
+        royalties[element.account] = parseInt(element.percentage * multiplier);
       });
-      console.log(this.dataRoyalties.percentage);
-      // const splits = { "vicious2403.testnet": 5000, "maruja24.testnet": 5000 };
+      const splits = {};
+      var counter1 = this.counter1;
+      const multiplier1 = Math.round(multiplied / counter1);
+      this.dataSplit.forEach((element) => {
+        splits[element.account] = parseInt(element.percentage * multiplier1);
+      });
       // wallet
       //   .mint(
       //     parseFloat(this.dataTickets.mint_amount),
@@ -841,6 +874,7 @@ export default {
       //   .catch((err) => {
       //     console.log("Error", err);
       //   });
+     }
     },
     /**
      * When the location found
@@ -870,35 +904,120 @@ export default {
         this.step++;
       }
     },
-    async validateNearId(nearId, pos) {
+    // validating NEAR account
+    async validateNearId(val, e) {
+      //get the position from target, declaring the input name and poisition split |
+      var pos = parseInt(e.target.id.split("|")[1]);
       const near = await connect(
         CONFIG(new keyStores.BrowserLocalStorageKeyStore())
       );
-      const account = await near.account(nearId);
+      const account = await near.account(val);
       await account
         .state()
         .then((response) => {
+          this.disable = false;
           this.errorAccount[pos] = null;
           this.successAccount[pos] = "Valid";
         })
         .catch((error) => {
+          this.disable = true;
           this.errorAccount[pos] = "Not valid NEAR Account";
           this.successAccount[pos] = null;
         });
     },
-    chkPercentage(pos) {
-      let arr = [];
+    // validating NEAR account
+    async validateNearId1(val, e) {
+      //get the position from target, declaring the input name and poisition split |
+      var pos = parseInt(e.target.id.split("|")[1]);
+      const near = await connect(
+        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
+      );
+      const account = await near.account(val);
+      await account
+        .state()
+        .then((response) => {
+          this.disable = false;
+          this.errorAccount1[pos] = null;
+          this.successAccount1[pos] = "Valid";
+        })
+        .catch((error) => {
+          this.disable = true;
+          this.errorAccount1[pos] = "Not valid NEAR Account";
+          this.successAccount1[pos] = null;
+        });
+    },
+    // Function to check the percentage available
+    // Get the array object and strore the values in a new array
+    // and sum all the values
+    chkPercentage(val, e) {
+      //get the position from target, declaring the input name and poisition split |
+      var pos = parseInt(e.target.id.split("|")[1]);
+      this.arr = [];
       for (const prop in this.dataRoyalties) {
-        arr.push(parseInt(this.dataRoyalties[prop].percentage));
+        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
       }
-      this.counter = arr.reduce(function (a, b) { return a + b; }, 0);
+      this.counter = this.arr.reduce(function (a, b) {
+        return a + b;
+      }, 0);
       this.available = 50 - this.counter;
       if (this.counter > 50) {
+        this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "≤ 50%";
       } else {
+        this.disable = false;
         this.errorPercentaje[pos] = null;
       }
+    },
+    chkPercentage1(val, e) {
+      //get the position from target, declaring the input name and poisition split |
+      var pos = parseInt(e.target.id.split("|")[1]);
+      this.arr = [];
+      for (const prop in this.dataSplit) {
+        this.arr.push(parseInt(this.dataSplit[prop].percentage));
+      }
+      this.counter1 = this.arr.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.available1 = 100 - this.counter1;
+      if (this.counter1 > 100) {
+        this.disable = true;
+        this.available1 = 0;
+        this.errorPercentaje1[pos] = "≤ 100%";
+      } else {
+        this.disable = false;
+        this.errorPercentaje1[pos] = null;
+      }
+    },
+    // Remove data from de object
+    remove(pos) {
+      this.dataRoyalties.splice(pos, 1);
+      this.arr = [];
+      for (const prop in this.dataRoyalties) {
+        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
+      }
+      this.counter = this.arr.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.available = 50 - this.counter;
+      this.successAccount[pos] = null;
+      this.errorAccount[pos] = null;
+      this.errorPercentaje[pos] = null;
+    },
+    // Remove data from de object
+    remove1(pos) {
+      this.dataSplit.splice(pos, 1);
+      this.arr = [];
+      for (const prop in this.dataRoyalties) {
+        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
+      }
+      this.counter1 = this.arr.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.available1 = 100 - this.counter1;
+      this.successAccount1[pos] = null;
+      this.errorAccount1[pos] = null;
+      this.errorPercentaje1[pos] = null;
     },
   },
 };

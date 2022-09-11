@@ -14,8 +14,12 @@ import PerfectScrollbar from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import VueMoment from "vue-moment";
 import moment from "moment-timezone";
+import vueDebounce from 'vue-debounce'
 
 Vue.use(PerfectScrollbar);
+
+// Or if you want to pass in the lock option
+Vue.use(vueDebounce)
 
 Vue.use(VueMoment, {
   moment,

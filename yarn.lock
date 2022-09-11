@@ -9717,6 +9717,11 @@
     "semver" "^7.1.2"
     "shelljs" "^0.8.3"
 
+"vue-debounce@^4.0.0":
+  "integrity" "sha512-+BrcKfLpyDpUJ58ZrAvI35irRCgYHFpnF3NJZwwaz8/kkKmEq6TWPXBIhLh2HQAsUZNwo52K/vQyiEFsJ/1RYA=="
+  "resolved" "https://registry.npmjs.org/vue-debounce/-/vue-debounce-4.0.0.tgz"
+  "version" "4.0.0"
+
 "vue-demi@^0.13.1":
   "integrity" "sha512-tO3K2bML3AwiHmVHeKCq6HLef2st4zBXIV5aEkoJl6HZ+gJWxWv2O8wLH8qrA3SX3lDoTDHNghLX1xZg83MXvw=="
   "resolved" "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.5.tgz"
@@ -9811,7 +9816,7 @@
   "resolved" "https://registry.npmjs.org/vue-toastification/-/vue-toastification-1.7.14.tgz"
   "version" "1.7.14"
 
-"vue@^2 || ^3.0.0-0", "vue@^2.0.0", "vue@^2.0.1", "vue@^2.2.4", "vue@^2.6.0 || ^3.1.0", "vue@^2.6.11", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@^3.0.0-0 || ^2.6.0", "vue@>=1.0.0", "vue@>=1.x.x":
+"vue@^2 || ^3.0.0-0", "vue@^2.0.0", "vue@^2.0.1", "vue@^2.2.4", "vue@^2.6.0 || ^3.1.0", "vue@^2.6.11", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@^3.0.0-0 || ^2.6.0", "vue@>= 2.0.0", "vue@>=1.0.0", "vue@>=1.x.x":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz"
   "version" "2.6.14"
