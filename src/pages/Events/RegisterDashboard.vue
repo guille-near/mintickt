@@ -3,7 +3,7 @@
     <ModalSuccess ref="modal"></ModalSuccess>
 
     <v-window v-model="step">
-      <v-window-item :value="3">
+      <v-window-item :value="1">
         <h2 class="align" style="text-align: center">
           Let's create your NFT for your event!
         </h2>
@@ -261,7 +261,7 @@
         </section>
       </v-window-item>
 
-      <v-window-item :value="1">
+      <v-window-item :value="3">
         <h2 class="align" style="text-align: center">
           Let's create your ticket!
         </h2>
@@ -305,7 +305,7 @@
                 </p>
 
                 <v-btn
-                  @click="dataRoyalties.push({ account: '', percentage: '' })"
+                  @click="dataRoyalties.push({ account: '', percentage: 0 })"
                   >Add royalties</v-btn
                 >
                 <p class="p" style="margin-top: 1em">
@@ -356,7 +356,7 @@
                   revenue unless splits are added.
                 </p>
 
-                <v-btn @click="dataSplit.push({ account: '', percentage: '' })"
+                <v-btn @click="dataSplit.push({ account: '', percentage: 0 })"
                   >Add split</v-btn
                 >
                 <p class="p" style="margin-top: 1em">
@@ -394,7 +394,7 @@
                     ></v-text-field>
                   </div>
 
-                  <v-btn icon @click="dataSplit.splice(i, 1)">
+                  <v-btn icon @click="remove1(i)">
                     <v-icon color="#868686">mdi-trash-can-outline</v-icon>
                   </v-btn>
                 </v-sheet>
@@ -406,8 +406,8 @@
                     >mdi-arrow-left</v-icon
                   >Back
                 </v-btn>
-                <v-btn @click="mint" :disabled=disable>
-                  Next<v-icon style="color: #ffffff !important" small
+                <v-btn type="submit" :loading="loading" :disabled="disable">
+                  Mint<v-icon style="color: #ffffff !important" small
                     >mdi-arrow-right</v-icon
                   >
                 </v-btn>
@@ -650,10 +650,52 @@
 <script>
 import ModalSuccess from "./ModalSuccess";
 import { VueEditor } from "vue2-editor";
+import moment from "moment";
 import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
 const { connect, keyStores } = nearAPI;
-import { Wallet, Chain, Network } from "mintbase";
+import { Wallet, Chain, Network, MetadataField } from "mintbase";
+import gql from "graphql-tag";
+const new_event = gql`
+  query MyQuery($user: String!, $tittle: String!) {
+    store(
+      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
+    ) {
+      things(
+        order_by: { createdAt: desc }
+        limit: 1
+        offset: 0
+        where: { metadata: { title: { _eq: $tittle } } }
+      ) {
+        metadata {
+          thing_id
+        }
+      }
+    }
+  }
+`;
+const tokens_id = gql`
+  query MyQuery($user: String!, $thing_id: String) {
+    store(
+      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
+    ) {
+      things(
+        order_by: { createdAt: desc }
+        where: { metadata: { thing_id: { _eq: $thing_id } } }
+      ) {
+        metadata {
+          thing {
+            tokens_aggregate {
+              nodes {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export default {
   name: "RegisterDashboard",
   components: {
@@ -722,15 +764,46 @@ export default {
       successAccount: [],
       successAccount1: [],
       available: 50,
-      available1: 100,
+      available1: 97,
       errorPercentaje: [],
       errorPercentaje1: [],
       counter: 0,
       counter1: 0,
       arr: [],
       arr1: [],
-      disable: false
+      disable: false,
     };
+  },
+  mounted() {
+    this.step = 4;
+    this.getTokensId();
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "mint"
+    ) {
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        "https://explorer.testnet.near.org/transactions/" +
+        urlParams.get("transactionHashes");
+      this.step = 4;
+      this.getData();
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events/register"
+      );
+    }
+    if (urlParams.get("errorCode") !== null) {
+      this.modal = false;
+      history.replaceState(null, location.href.split("?")[0], "/#/trade/p2p");
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events/register"
+      );
+    }
   },
   computed: {
     dateRangeText() {
@@ -774,107 +847,122 @@ export default {
         });
     },
     async mint() {
-     if (this.$refs.form2.validate()) { 
-      console.log('mint')
-      // let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-      // const { data: walletData } = await new Wallet().init({
-      //   networkName: Network.testnet,
-      //   chain: Chain.near,
-      //   apiKey: API_KEY,
-      // });
-      // const { wallet } = walletData;
+      if (this.$refs.form2.validate()) {
+        this.loading = true;
+        this.disable = true;
+        //Api key an data
+        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        const { data: walletData } = await new Wallet().init({
+          networkName: Network.testnet,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        //Loading image
+        try {
+          const file = this.image;
+          const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
+          if (fileError) {
+            throw new Error(fileError);
+          } else {
+            console.log(fileUploadResult);
+          }
+        } catch (error) {
+          console.error(error);
+          // TODO: handle error
+        }
 
-      // try {
-      //   const file = this.image;
-      //   const { data: fileUploadResult, error: fileError } =
-      //     await wallet.minter.uploadField(MetadataField.Media, file);
-      //   if (fileError) {
-      //     throw new Error(fileError);
-      //   } else {
-      //     console.log(fileUploadResult);
-      //   }
-      // } catch (error) {
-      //   console.error(error);
-      //   // TODO: handle error
-      // }
+        //Estra data location , dates, place id
+        let extra = [
+          {
+            trait_type: "location",
+            value: this.location,
+          },
+          {
+            trait_type: "latitude",
+            value: this.latitude,
+          },
+          {
+            trait_type: "longitude",
+            value: this.longitude,
+          },
+          {
+            trait_type: "place_id",
+            value: this.place_id,
+          },
+          {
+            trait_type: "zoom",
+            value: 9,
+          },
+          {
+            trait_type: "Promoter / Organizer name",
+            value: this.dataTickets.promoter,
+          },
+          {
+            trait_type: "Start Date",
+            value: moment(this.dates[0]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: "End Date",
+            value: moment(this.dates[1]).unix(),
+            display_type: "date",
+          },
+        ];
+        let store = "globaldv.mintspace2.testnet";
+        let category = "ticketing";
 
-      // let extra = [
-      //   {
-      //     trait_type: "location",
-      //     value: this.location,
-      //   },
-      //   {
-      //     trait_type: "latitude",
-      //     value: this.latitude,
-      //   },
-      //   {
-      //     trait_type: "longitude",
-      //     value: this.longitude,
-      //   },
-      //   {
-      //     trait_type: "place_id",
-      //     value: this.place_id,
-      //   },
-      //   {
-      //     trait_type: "zoom",
-      //     value: 9,
-      //   },
-      //   {
-      //     trait_type: "Promoter / Organizer name",
-      //     value: this.dataTickets.promoter,
-      //   },
-      //   {
-      //     trait_type: "Start Date",
-      //     value: moment(this.dates[0]).unix(),
-      //     display_type: "date",
-      //   },
-      //   {
-      //     trait_type: "End Date",
-      //     value: moment(this.dates[1]).unix(),
-      //     display_type: "date",
-      //   },
-      // ];
-      // let store = "globaldv.mintspace2.testnet";
-      // let category = "ticketing";
+        //Metadata Object
+        const metadata = {
+          title: this.dataTickets.name,
+          description: this.dataTickets.description,
+          extra,
+          store,
+          type: "NEP171",
+          category,
+        };
+        await wallet.minter.setMetadata(metadata, true);
+        localStorage.setItem("mint_tittle", this.dataTickets.description);
 
-      // const metadata = {
-      //   title: this.dataTickets.name,
-      //   description: this.dataTickets.description,
-      //   extra,
-      //   store,
-      //   type: "NEP171",
-      //   category,
-      // };
-      // wallet.minter.setMetadata(metadata, true);
+        //handle royalties
+        const royalties = {};
+        const multiplied = 10000;
+        var counter = this.counter;
+        const multiplier = Math.round(multiplied / counter);
+        this.dataRoyalties.forEach((element) => {
+          royalties[element.account] = parseInt(
+            element.percentage * multiplier
+          );
+        });
 
-      const royalties = {};
-      const multiplied = 10000;
-      var counter = this.counter;
-      const multiplier = Math.round(multiplied / counter);
-      this.dataRoyalties.forEach((element) => {
-        royalties[element.account] = parseInt(element.percentage * multiplier);
-      });
-      const splits = {};
-      var counter1 = this.counter1;
-      const multiplier1 = Math.round(multiplied / counter1);
-      this.dataSplit.forEach((element) => {
-        splits[element.account] = parseInt(element.percentage * multiplier1);
-      });
-      // wallet
-      //   .mint(
-      //     parseFloat(this.dataTickets.mint_amount),
-      //     "globaldv.mintspace2.testnet",
-      //     !royalties ? undefined : royalties,
-      //     !splits ? undefined : splits,
-      //     category
-      //   )
-      //   .then((res) => {
-      //     console.log(res.data);
-      //   })
-      //   .catch((err) => {
-      //     console.log("Error", err);
-      //   });
-     }
+        //handle splits
+        const splits = {};
+        var counter1 = this.counter1;
+        // const multiplier1 = Math.round(multiplied1 / counter1);
+        this.dataSplit.forEach((element) => {
+          splits[element.account] = parseInt(element.percentage * 100);
+        });
+
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+        const user = datos.accountId;
+        //Add the rest for minter
+        splits[user] = parseInt(10000 - counter1 * 100);
+
+        await wallet.mint(
+          parseFloat(this.dataTickets.mint_amount),
+          store.toString(),
+          JSON.stringify(royalties) === "{}" ? null : royalties,
+          JSON.stringify(splits) === "{}" ? null : splits,
+          category,
+          {
+            meta: "mint",
+            royaltyPercentage: this.counter * 100,
+          }
+        );
+      }
     },
     /**
      * When the location found
@@ -979,7 +1067,7 @@ export default {
       this.counter1 = this.arr.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.available1 = 100 - this.counter1;
+      this.available1 = 97 - this.counter1;
       if (this.counter1 > 100) {
         this.disable = true;
         this.available1 = 0;
@@ -1018,6 +1106,67 @@ export default {
       this.successAccount1[pos] = null;
       this.errorAccount1[pos] = null;
       this.errorPercentaje1[pos] = null;
+    },
+    //Getting new minted thingid
+    //The function getMetadataID is not working, if we call it the mint does not working
+    //Need to ask mintbase team 13/0*/2023
+    //Meanwhile getting las mint created filter by name
+    async getData() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: new_event,
+          variables: {
+            user: user,
+            tittle: localStorage.getItem("mint_tittle"),
+          },
+        })
+        .then((response) => {
+          //Map the objectvalue
+          Object.entries(response.data).forEach(([key, value]) => {
+            // inner object entries
+            Object.entries(value[0].things).forEach(([i, value1]) => {
+              localStorage.setItem("thingid", value1.metadata.thing_id);
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    },
+    //Get the tokens id minted
+    async getTokensId() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: tokens_id,
+          variables: {
+            user: user,
+            thing_id: localStorage.getItem("thingid"),
+          },
+        })
+        .then((response) => {
+          //Map the objectvalue
+          Object.entries(response.data).forEach(([key, value]) => {
+            // inner object entries
+            Object.entries(value[0].things).forEach(([i, value1]) => {
+              Object.entries(
+                value1.metadata.thing.tokens_aggregate.nodes
+              ).forEach(([i, value2]) => {
+                console.log(value2.id.split(":")[0]);
+              });
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
     },
   },
 };

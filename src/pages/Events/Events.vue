@@ -203,7 +203,7 @@ export default {
         })
         .then((response) => {
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
-          //Map the object
+          //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
             Object.entries(value[0].things).forEach(([i, value1]) => {

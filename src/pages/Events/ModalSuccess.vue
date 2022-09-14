@@ -7,8 +7,8 @@
       </div>
 
       <div class="divcol center">
-        <v-btn @click="modalSuccess=false">ok</v-btn>
-        <a class="acenter" style="gap:.3em" href="#" @click="seeTransaction()">
+        <v-btn @click="modalSuccess=false">Ok</v-btn>
+        <a class="acenter" style="gap:.3em" :href="url" target="_blank">
           <span class="p">See transaction</span>
           <img src="@/assets/icons/link.svg" alt="link icon">
         </a>
@@ -23,13 +23,9 @@ export default {
   data() {
     return {
       modalSuccess: false,
+      url: '',
     };
   },
-  methods: {
-    seeTransaction() {
-      console.log("function")
-    },
-  }
 };
 </script>
 
