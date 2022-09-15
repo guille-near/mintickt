@@ -734,15 +734,15 @@ export default {
       dataTicket: [
         {
           url: "",
-          img: "",
+          img: [],
         },
         {
           url: "",
-          img: "",
+          img: [],
         },
         {
           url: "",
-          img: "",
+          img: [],
         },
       ],
       dates: [],
