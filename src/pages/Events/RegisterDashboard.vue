@@ -448,7 +448,7 @@
           <v-form
             ref="form3"
             v-model="valid"
-            @submit.prevent="next2()"
+            @submit.prevent="list()"
             class="divcol"
             style="min-height: 100%"
           >
@@ -507,7 +507,7 @@
                   >mdi-arrow-left</v-icon
                 >Back
               </v-btn>
-              <v-btn @click="next2">
+              <v-btn type="submit" :loading="loading" :disabled="disable">
                 Next<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
@@ -653,7 +653,7 @@ import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
-const { connect, keyStores } = nearAPI;
+const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import gql from "graphql-tag";
 const new_event = gql`
@@ -772,6 +772,7 @@ export default {
       arr: [],
       arr1: [],
       disable: false,
+      txs: [],
     };
   },
   mounted() {
@@ -1142,7 +1143,9 @@ export default {
       let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
+      this.price = "2000000000000000000000000";
       const user = datos.accountId;
+      let store = "globaldv.mintspace2.testnet";
       this.$apollo
         .query({
           query: tokens_id,
@@ -1159,14 +1162,69 @@ export default {
               Object.entries(
                 value1.metadata.thing.tokens_aggregate.nodes
               ).forEach(([i, value2]) => {
-                console.log(value2.id.split(":")[0]);
+                //Create list object to executeMultipleTransactions
+                this.txs.push({
+                  receiverId: store,
+                  functionCalls: [
+                    {
+                      methodName: "nft_approve",
+                      receiverId: store,
+                      gas: "200000000000000",
+                      args: {
+                        token_id: value2.id.split(":")[0],
+                        account_id: user,
+                        msg: JSON.stringify({
+                          price: this.nearToYocto(this.price),
+                          autotransfer: true,
+                        }),
+                      },
+                      deposit: utils.format.parseNearAmount((0.1).toString()),
+                    },
+                  ],
+                });
               });
             });
           });
+          // console.log(this.txs);
         })
         .catch((err) => {
           console.log("Error", err);
         });
+    },
+    async list() {
+      if (this.$refs.form3.validate()) {
+        this.loading = true;
+        this.disable = true;
+        console.log("list");
+        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        const { data: walletData } = await new Wallet().init({
+          networkName: Network.testnet,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+        this.price = "2000000000000000000000000";
+        const user = datos.accountId;
+        await wallet.executeMultipleTransactions({
+          transactions: this.txs,
+          options: {
+            meta: "list",
+            args: {
+              autotransfer: true,
+              amount: price,
+              contractId: user,
+            },
+          },
+        })
+      }
+    },
+    nearToYocto: function (nearToYocto) {
+      const amountInYocto = utils.format.parseNearAmount(nearToYocto);
+      // console.log(amountInYocto);
+      return amountInYocto.toString();
     },
   },
 };
