@@ -1145,6 +1145,7 @@ export default {
       );
       this.price = "2000000000000000000000000";
       const user = datos.accountId;
+      const mintbase_marketplace = "market-v2-beta.mintspace2.testnet"
       let store = "globaldv.mintspace2.testnet";
       this.$apollo
         .query({
@@ -1172,7 +1173,7 @@ export default {
                       gas: "200000000000000",
                       args: {
                         token_id: value2.id.split(":")[0],
-                        account_id: user,
+                        account_id: mintbase_marketplace,
                         msg: JSON.stringify({
                           price: this.nearToYocto(this.price),
                           autotransfer: true,
@@ -1195,6 +1196,7 @@ export default {
       if (this.$refs.form3.validate()) {
         this.loading = true;
         this.disable = true;
+        let store = "globaldv.mintspace2.testnet";
         console.log("list");
         let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
         const { data: walletData } = await new Wallet().init({
@@ -1215,7 +1217,7 @@ export default {
             args: {
               autotransfer: true,
               amount: price,
-              contractId: user,
+              contractId: store,
             },
           },
         })
