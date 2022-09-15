@@ -17,7 +17,6 @@
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "apexcharts": "^3.33.2",
     "apollo-boost": "^0.4.9",
-    "axios": "^0.26.0",
     "bn.js": "^5.2.1",
     "core-js": "^3.10.1",
     "css-loader": "^4.3.0",

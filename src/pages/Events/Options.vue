@@ -97,7 +97,6 @@
 
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
-const axios = require('axios');
 import gql from 'graphql-tag'
 import { Wallet, Chain, Network } from 'mintbase'
 import * as nearAPI from "near-api-js"
