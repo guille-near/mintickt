@@ -17,7 +17,6 @@
 <script>
 import Header from "./HeaderClaim";
 import "@/components/Layout/layout.scss";
-const axios = require('axios');
 import gql from 'graphql-tag'
 import { Wallet, Chain, Network } from 'mintbase'
 import * as nearAPI from "near-api-js"

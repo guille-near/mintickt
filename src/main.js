@@ -6,7 +6,6 @@ import store from "./store/index";
 import vuetify from "./plugins/vuetify";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-import axios from "axios";
 import VueAnimateOnScroll from "vue-animate-onscroll";
 import VueApexCharts from "vue-apexcharts";
 import VueApollo from "vue-apollo";
@@ -37,7 +36,6 @@ Vue.use(VueApexCharts);
 Vue.component("apexchart", VueApexCharts);
 Vue.use(VueAnimateOnScroll);
 const i18n = initI18n("ES", "US");
-Vue.use(axios);
 Vue.use(Toast);
 Vue.use(VueGoogleMaps, {
   load: {

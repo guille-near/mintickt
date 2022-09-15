@@ -260,7 +260,6 @@
 		WALLET_PROVIDER,
 	} from "@ramper/near";
 	import BN from "bn.js";
-	const axios = require("axios");
 	import gql from "graphql-tag";
 	import { Wallet, Chain, Network } from "mintbase";
 	import * as nearAPI from "near-api-js";

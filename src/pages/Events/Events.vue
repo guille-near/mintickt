@@ -111,7 +111,6 @@
 </template>
 
 <script>
-const axios = require("axios");
 import gql from "graphql-tag";
 const your_events = gql`
   query MyQuery($user: String!) {
