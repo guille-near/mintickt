@@ -969,8 +969,16 @@
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, rgba(41, 41, 41, 0.3) 23.08%, rgba(41, 41, 41, 0) 122.53%);
     border-radius: 5px;
     padding: .5em;
+    .v-data-footer {
+      justify-content: flex-end;
+      &__icons-before, &__icons-after {
+        button {background: transparent !important; i {color: #FFFFFF !important}}
+      }
+      &__select {display: none !important}
+    }
     .v-progress-linear {
       display: flex !important;
+      max-width: 20em;
       & > * > * {
         background-color: #cc00b7 !important;
         border-radius: 40%;
