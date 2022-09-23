@@ -100,8 +100,6 @@ import { StreamBarcodeReader } from "vue-barcode-reader";
 import gql from 'graphql-tag'
 import { Wallet, Chain, Network } from 'mintbase'
 import * as nearAPI from "near-api-js"
-import { CONFIG } from "@/services/api"
-const { connect, keyStores, WalletConnection, utils ,} = nearAPI
 export default {
   name: "options",
   components: { StreamBarcodeReader },

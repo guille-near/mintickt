@@ -57,7 +57,7 @@ import ApolloClient from "apollo-boost";
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: "https://mintbase-testnet.hasura.app/v1/graphql",
+  uri: "https://interop-testnet.hasura.app/v1/graphql",
 });
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,

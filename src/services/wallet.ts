@@ -1456,7 +1456,7 @@ export class Wallet {
             contractAddress ||
             this.constants?.FACTORY_CONTRACT_NAME ||
             FACTORY_CONTRACT_NAME,
-          walletUrl: 'https://wallet.testnet.near.org',
+          walletUrl: 'https://testnet.mynearwallet.com/',
           helperUrl: 'https://helper.testnet.near.org',
         }
 

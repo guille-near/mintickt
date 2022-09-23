@@ -480,23 +480,23 @@
                       >
                     </template>
                   </v-text-field>
-                  <span class="conversion">~ 0.00 USD</span>
                 </div>
               </div>
 
               <div class="divcol">
                 <label for="price"
-                  >Price <span style="color: red">*</span></label
+                  >Price (NEAR)<span style="color: red">*</span></label
                 >
                 <div class="divcol">
                   <v-text-field
                     v-model="price"
                     id="price"
                     solo
+                    v-debounce:300ms="priceNEAR"
                     :rules="rules.required"
                     type="number"
                   ></v-text-field>
-                  <span class="conversion">~ 0.00 USD</span>
+                  <span class="conversion">~ {{ usd }} USD</span>
                 </div>
               </div>
             </div>
@@ -508,7 +508,7 @@
                 >Back
               </v-btn>
               <v-btn type="submit" :loading="loading" :disabled="disable">
-                Next<v-icon style="color: #ffffff !important" small
+                List<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
               </v-btn>
@@ -545,102 +545,121 @@
             </v-file-input>
           </div>
 
-          <aside class="divcol" style="min-height: 100%">
-            <div class="divcol">
-              <h3>
-                Would you like to give a physical goodie with your ticket?
-                (Drink, popcorn...)
-              </h3>
-              <p>
-                We will transfer this NFT once your attendes get inside the
-                venue so they can redeem it to get a real good.
-              </p>
-
-              <div id="container-actions" class="gap">
-                <v-btn @click="goodie = true">Yes</v-btn>
-                <v-btn :disabled="goodie">No</v-btn>
-              </div>
-            </div>
-
-            <template v-if="goodie">
-              <div class="divcol" style="margin-top: 1.5em">
-                <label for="attendees"
-                  >What are attendees going to receive with the NFT
-                  ticket?</label
-                >
-                <v-text-field
-                  v-model="dataTickets.attendees"
-                  id="attendees"
-                  solo
-                ></v-text-field>
-              </div>
-
+          <v-form
+            ref="form4"
+            v-model="valid"
+            @submit.prevent="mintGoodie()"
+            class="divcol"
+            style="min-height: 100%"
+          >
+            <aside class="divcol" style="min-height: 100%">
               <div class="divcol">
-                <label for="goodies"
-                  >How much goodies for each attendee per ticket?</label
-                >
-                <v-text-field
-                  v-model="dataTickets.goodies"
-                  id="goodies"
-                  type="number"
-                  solo
-                ></v-text-field>
-              </div>
-
-              <div class="divcol">
-                <h4>Main image</h4>
+                <h3>
+                  Would you like to give a physical goodie with your ticket?
+                  (Drink, popcorn...)
+                </h3>
                 <p>
-                  This is the first image attendees will see at the top of your
-                  event page..
+                  We will transfer this NFT once your attendes get inside the
+                  venue so they can redeem it to get a real good.
                 </p>
 
-                <v-file-input
-                  solo
-                  prepend-icon
-                  accept="image/*"
-                  @change="ImagePreview('main')"
-                >
-                  <template v-slot:selection>
-                    <img class="imagePreview" :src="url2" alt="Image preview" />
-                  </template>
-
-                  <template v-slot:label>
-                    <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                    <p class="p">
-                      Drag and drop or click here to upload your main event
-                      image
-                    </p>
-                  </template>
-                </v-file-input>
+                <div id="container-actions" class="gap">
+                  <v-btn @click="goodie = true">Yes</v-btn>
+                  <v-btn :disabled="goodie">No</v-btn>
+                </div>
               </div>
-            </template>
 
-            <div id="container-actions" class="gap">
-              <v-btn
-                @click="
-                  step--;
-                  goodie = false;
-                "
-              >
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn
-                v-show="goodie"
-                @click="mint(), console()"
-                style="
-                  background: linear-gradient(
-                    183.61deg,
-                    #cc00b7 49.78%,
-                    rgba(0, 0, 0, 0) 225.35%
-                  );
-                "
-              >
-                Mint
-              </v-btn>
-            </div>
-          </aside>
+              <template v-if="goodie">
+                <div class="divcol" style="margin-top: 1.5em">
+                  <label for="attendees"
+                    >What are attendees going to receive with the NFT
+                    ticket?</label
+                  >
+                  <v-text-field
+                    v-model="dataTickets.attendees"
+                    :rules="rules.required"
+                    id="attendees"
+                    solo
+                  ></v-text-field>
+                </div>
+
+                <div class="divcol">
+                  <label for="goodies"
+                    >How much goodies for each attendee per ticket?</label
+                  >
+                  <v-text-field
+                    v-model="dataTickets.goodies"
+                    :rules="rules.required"
+                    id="goodies"
+                    type="number"
+                    solo
+                  ></v-text-field>
+                </div>
+
+                <div class="divcol">
+                  <h4>Main image</h4>
+                  <p>
+                    This is the first image attendees will see at the top of
+                    your event page..
+                  </p>
+
+                  <v-file-input
+                    v-model="dataTickets.img"
+                    solo
+                    prepend-icon
+                    accept="image/*"
+                    :rules="rules.required"
+                    @change="ImagePreview"
+                    class="input-unique"
+                  >
+                    <template v-slot:selection>
+                      <img
+                        class="imagePreview"
+                        :src="url"
+                        alt="Image preview"
+                      />
+                    </template>
+
+                    <template v-slot:label>
+                      <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+                      <p class="p">
+                        Drag and drop or click here to upload your main event
+                        image
+                      </p>
+                    </template>
+                  </v-file-input>
+                </div>
+              </template>
+
+              <div id="container-actions" class="gap">
+                <v-btn
+                  @click="
+                    step--;
+                    goodie = false;
+                  "
+                >
+                  <v-icon style="color: #ffffff !important" small
+                    >mdi-arrow-left</v-icon
+                  >Back
+                </v-btn>
+                <v-btn
+                  v-show="goodie"
+                  type="submit"
+                  :loading="loading"
+                  :disabled="disable"
+                  style="
+                    background: linear-gradient(
+                      183.61deg,
+                      #cc00b7 49.78%,
+                      rgba(0, 0, 0, 0) 225.35%
+                    );
+                  "
+                >
+                  Mint
+                </v-btn>
+              </div>
+            </aside>
+          </v-form>
         </section>
       </v-window-item>
     </v-window>
@@ -656,42 +675,27 @@ import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import gql from "graphql-tag";
-const new_event = gql`
+const nft_tokens_aggregate = gql`
   query MyQuery($user: String!, $tittle: String!) {
-    store(
-      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
-    ) {
-      things(
-        order_by: { createdAt: desc }
-        limit: 1
-        offset: 0
-        where: { metadata: { title: { _eq: $tittle } } }
-      ) {
-        metadata {
-          thing_id
-        }
+    nft_metadata(
+      where: {
+        title: { _eq: $tittle }
+        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        nft_contracts: { owner_id: { _eq: $user } }
       }
+      order_by: { nft_contracts: { created_at: desc } }
+    ) {
+      id
     }
   }
 `;
 const tokens_id = gql`
-  query MyQuery($user: String!, $thing_id: String) {
-    store(
-      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
+  query MyQuery($metadata_id: String) {
+    nft_tokens_aggregate(
+      where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
     ) {
-      things(
-        order_by: { createdAt: desc }
-        where: { metadata: { thing_id: { _eq: $thing_id } } }
-      ) {
-        metadata {
-          thing {
-            tokens_aggregate {
-              nodes {
-                id
-              }
-            }
-          }
-        }
+      nodes {
+        token_id
       }
     }
   }
@@ -704,13 +708,18 @@ export default {
   },
   data() {
     return {
-      step: 1,
+      step:
+        localStorage.getItem("step") === undefined
+          ? 1
+          : parseInt(localStorage.getItem("step")),
       dataTickets: {
         name: null,
         promoter: null,
         img: null,
         description: null,
         mint_amount: null,
+        attendees: null,
+        goodies: null,
       },
       url: null,
       url2: null,
@@ -773,13 +782,14 @@ export default {
       arr1: [],
       disable: false,
       txs: [],
+      usd: 0,
     };
   },
   mounted() {
-    this.step = 4;
-    this.getTokensId();
+    // this.step = 4;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    ///Mint option
     if (
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "mint"
@@ -789,20 +799,59 @@ export default {
         "https://explorer.testnet.near.org/transactions/" +
         urlParams.get("transactionHashes");
       this.step = 4;
+      localStorage.setItem("step", 4);
       this.getData();
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/mintick/#/events/register"
       );
     }
-    if (urlParams.get("errorCode") !== null) {
-      this.modal = false;
-      history.replaceState(null, location.href.split("?")[0], "/#/trade/p2p");
+    //List option
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "list"
+    ) {
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        "https://explorer.testnet.near.org/transactions/" +
+        urlParams.get("transactionHashes");
+      this.step = 5;
+      localStorage.setItem("step", this.step);
+      this.getData();
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/mintick/#/events/register"
+      );
+    }
+    //goodies option
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "goodies"
+    ) {
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        "https://explorer.testnet.near.org/transactions/" +
+        urlParams.get("transactionHashes");
+      this.step = 5;
+      localStorage.setItem("step", this.step);
+      this.getData();
+      this.$router.push("/mintick/#/events/");
+    }
+    //
+    if (urlParams.get("errorCode") !== null) {
+      this.modal = false;
+      localStorage.setItem("step", 1);
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintick/#/trade/p2p"
+      );
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintick/#/events/register"
       );
     }
   },
@@ -839,7 +888,7 @@ export default {
       });
       const { wallet } = walletData;
       wallet
-        .grantMinter("nearp2p.testnet", "globaldv.mintspace2.testnet")
+        .grantMinter("nearp2p.testnet", "artemis.mintspace2.testnet")
         .then((res) => {
           console.log(res);
         })
@@ -911,7 +960,7 @@ export default {
             display_type: "date",
           },
         ];
-        let store = "globaldv.mintspace2.testnet";
+        let store = "artemis.mintspace2.testnet";
         let category = "ticketing";
 
         //Metadata Object
@@ -924,6 +973,8 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
+        console.log(metadata);
+
         localStorage.setItem("mint_tittle", this.dataTickets.description);
 
         //handle royalties
@@ -965,6 +1016,107 @@ export default {
         );
       }
     },
+    async mintGoodie() {
+      if (this.$refs.form4.validate()) {
+        console.log(this.dataTickets.attendees);
+        this.loading = true;
+        this.disable = true;
+        //Api key an data
+        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        const { data: walletData } = await new Wallet().init({
+          networkName: Network.testnet,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        //Loading image
+        try {
+          const file = this.image;
+          const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
+          if (fileError) {
+            throw new Error(fileError);
+          } else {
+            console.log(fileUploadResult);
+          }
+        } catch (error) {
+          console.error(error);
+          // TODO: handle error
+        }
+
+        //Estra data location , dates, place id
+        let extra = [
+          {
+            trait_type: "location",
+            value: this.location,
+          },
+          {
+            trait_type: "latitude",
+            value: this.latitude,
+          },
+          {
+            trait_type: "longitude",
+            value: this.longitude,
+          },
+          {
+            trait_type: "place_id",
+            value: this.place_id,
+          },
+          {
+            trait_type: "zoom",
+            value: 9,
+          },
+          {
+            trait_type: "Promoter / Organizer name",
+            value: this.dataTickets.promoter,
+          },
+          {
+            trait_type: "Start Date",
+            value: moment(this.dates[0]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: "End Date",
+            value: moment(this.dates[1]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: localStorage.getItem("metadata_id").split(":")[1],
+            value: this.dataTickets.attendees,
+          },
+        ];
+        let store = "artemis.mintspace2.testnet";
+        let category = "redeemed";
+
+        //Metadata Object
+        const metadata = {
+          title: this.dataTickets.attendees,
+          description: this.dataTickets.attendees,
+          extra,
+          store,
+          type: "NEP171",
+          category,
+        };
+        await wallet.minter.setMetadata(metadata, true);
+
+        //handle royalties
+        const royalties = {};
+
+        //handle splits
+        const splits = {};
+
+        await wallet.mint(
+          parseFloat(this.dataTickets.goodies),
+          store.toString(),
+          JSON.stringify(royalties) === "{}" ? null : royalties,
+          JSON.stringify(splits) === "{}" ? null : splits,
+          category,
+          {
+            meta: "goodies",
+          }
+        );
+      }
+    },
     /**
      * When the location found
      * @param {Object} addressData Data of the found location
@@ -981,16 +1133,19 @@ export default {
     next() {
       if (this.$refs.form.validate()) {
         this.step++;
+        localStorage.setItem("step", 2);
       }
     },
     next1() {
       if (this.$refs.form1.validate()) {
         this.step++;
+        localStorage.setItem("step", 3);
       }
     },
     next2() {
       if (this.$refs.form2.validate()) {
         this.step++;
+        localStorage.setItem("step", 4);
       }
     },
     // validating NEAR account
@@ -1119,7 +1274,7 @@ export default {
       const user = datos.accountId;
       this.$apollo
         .query({
-          query: new_event,
+          query: nft_tokens_aggregate,
           variables: {
             user: user,
             tittle: localStorage.getItem("mint_tittle"),
@@ -1129,9 +1284,7 @@ export default {
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
-            Object.entries(value[0].things).forEach(([i, value1]) => {
-              localStorage.setItem("thingid", value1.metadata.thing_id);
-            });
+            localStorage.setItem("metadata_id", value[0].id);
           });
         })
         .catch((err) => {
@@ -1140,30 +1293,21 @@ export default {
     },
     //Get the tokens id minted
     async getTokensId() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      this.price = "2000000000000000000000000";
-      const user = datos.accountId;
-      const mintbase_marketplace = "market-v2-beta.mintspace2.testnet"
-      let store = "globaldv.mintspace2.testnet";
+      const mintbase_marketplace = "market-v2-beta.mintspace2.testnet";
+      let store = "artemis.mintspace2.testnet";
       this.$apollo
         .query({
           query: tokens_id,
           variables: {
-            user: user,
-            thing_id: localStorage.getItem("thingid"),
+            metadata_id: localStorage.getItem("metadata_id").toString(),
           },
         })
         .then((response) => {
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
-            Object.entries(value[0].things).forEach(([i, value1]) => {
-              Object.entries(
-                value1.metadata.thing.tokens_aggregate.nodes
-              ).forEach(([i, value2]) => {
-                //Create list object to executeMultipleTransactions
+            for (let i = 0; i < value.nodes.length; i++) {
+              if (i <= this.amount_list) {
                 this.txs.push({
                   receiverId: store,
                   functionCalls: [
@@ -1172,21 +1316,20 @@ export default {
                       receiverId: store,
                       gas: "200000000000000",
                       args: {
-                        token_id: value2.id.split(":")[0],
+                        token_id: value.nodes[i].token_id.toString(),
                         account_id: mintbase_marketplace,
                         msg: JSON.stringify({
                           price: this.nearToYocto(this.price),
-                          autotransfer: true,
                         }),
                       },
                       deposit: utils.format.parseNearAmount((0.1).toString()),
                     },
                   ],
                 });
-              });
-            });
+              }
+            }
           });
-          // console.log(this.txs);
+          console.log(this.txs);
         })
         .catch((err) => {
           console.log("Error", err);
@@ -1194,32 +1337,41 @@ export default {
     },
     async list() {
       if (this.$refs.form3.validate()) {
-        this.loading = true;
-        this.disable = true;
-        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-        const { data: walletData } = await new Wallet().init({
-          networkName: Network.testnet,
-          chain: Chain.near,
-          apiKey: API_KEY,
-        });
-        const { wallet } = walletData;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        this.price = "2000000000000000000000000";
-        const user = datos.accountId;
-        await wallet.executeMultipleTransactions({
-          transactions: this.txs,
-          options: {
-            meta: "list"
-          },
-        })
+        //Gettintg the tokens ID
+        this.getTokensId();
+
+        // this.loading = true;
+        // this.disable = true;
+        // let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        // const { data: walletData } = await new Wallet().init({
+        //   networkName: Network.testnet,
+        //   chain: Chain.near,
+        //   apiKey: API_KEY,
+        // });
+        // const { wallet } = walletData;
+        // await wallet.executeMultipleTransactions({
+        //   transactions: this.txs,
+        //   options: {
+        //     meta: "list",
+        //   },
+        // });
       }
     },
     nearToYocto: function (nearToYocto) {
       const amountInYocto = utils.format.parseNearAmount(nearToYocto);
       // console.log(amountInYocto);
       return amountInYocto.toString();
+    },
+    priceNEAR() {
+      const BINANCE_NEAR =
+        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+      var request = new XMLHttpRequest();
+      request.open("GET", BINANCE_NEAR);
+      request.send();
+      request.onload = () => {
+        this.usd =
+          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price;
+      };
     },
   },
 };

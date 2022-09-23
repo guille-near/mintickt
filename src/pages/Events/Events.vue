@@ -113,51 +113,44 @@
 <script>
 import gql from "graphql-tag";
 const your_events = gql`
-  query MyQuery($user: String!) {
-    store(
-      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
+  query MyQuery {
+    mb_views_nft_metadata(
+      where: {
+        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        listings: { price: { _is_null: false } }
+      }
     ) {
-      things(order_by: { createdAt: desc }) {
-        metadata {
-          title
-          media
-          extra
-          thing_id
-          thing {
-            tokens_aggregate {
-              aggregate {
-                count
-              }
-              nodes {
-                approvals_aggregate {
-                  aggregate {
-                    count
-                  }
-                }
-                list {
-                  id
-                }
-              }
-            }
-          }
+      title
+      reference_blob
+      id
+      listings_aggregate {
+        aggregate {
+          count
         }
       }
     }
   }
 `;
-const earnings = gql`
-  query MyQuery($user: String!, $thingId: String!) {
-    earnings_aggregate(
+const mb_views_nft_tokens_aggregate = gql`
+  query MyQuery($user: String!, $metadata_id: String!) {
+   nft_tokens_aggregate(
       where: {
-        receiverId: { _eq: $user }
-        list: { thingId: { _eq: $thingId } }
+        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        metadata_id: { _eq: $metadata_id }
       }
     ) {
       aggregate {
         count
       }
     }
+  nft_earnings_aggregate(
+    where: {receiver_id: {_eq: $user}, offer: {token: {metadata_id: {_eq: $metadata_id}}}}
+  ) {
+    aggregate {
+      count
+    }
   }
+}
 `;
 export default {
   name: "Events",
@@ -181,6 +174,7 @@ export default {
     };
   },
   mounted() {
+    localStorage.setItem("step", 1);
     this.getData();
     this.pollData();
   },
@@ -193,72 +187,49 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       const user = datos.accountId;
+      var rows = [];
       this.$apollo
         .query({
           query: your_events,
-          variables: {
-            user: user,
-          },
         })
         .then((response) => {
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
-            Object.entries(value[0].things).forEach(([i, value1]) => {
-              var arr = value1.metadata.thing.tokens_aggregate.nodes;
-              var total = 0;
-              //Map the array and count minted series
-              var counter = arr.map(
-                (arr) => arr.approvals_aggregate.aggregate.count
-              );
-              //Reduce the object and sum the values for total minted
-              total = Object.values(counter).reduce((a, c) => a + c, 0);
-              //Get the earning
-              var rows = [];
+            Object.entries(value).forEach(([i, value1]) => {
+              //Getting the minted nft
+              //Tokens aggregate and earnings by metadata id
               this.$apollo
                 .query({
-                  query: earnings,
+                  query: mb_views_nft_tokens_aggregate,
                   variables: {
                     user: user,
-                    thingId: value1.metadata.thing_id,
+                    metadata_id: value1.id,
                   },
                 })
                 .then((response) => {
-                  //Only push nft listed more than 1
-                  //////////////////////////////////////////////////////////////
-                  total > 0
-                    ? (rows = {
-                        name: value1.metadata.title,
-                        date: new Date(
-                          value1.metadata.extra.start_date.value * 1000
-                        ).toLocaleDateString("en-US", options),
-                        location: value1.metadata.extra.location.value,
-                        minted:
-                          total +
-                          " / " +
-                          value1.metadata.thing.tokens_aggregate.aggregate
-                            .count,
-                        sold: response.data.earnings_aggregate.aggregate.count,
-                        listed: total,
-                        thingid: value1.metadata.thing_id,
-                        show: false,
-                      })
-                    : (rows = {});
+                  rows = {
+                    name: value1.title,
+                    date: new Date(
+                      value1.reference_blob.extra[6].value * 1000
+                    ).toLocaleDateString("en-US", options),
+                    location: value1.reference_blob.extra[0].value,
+                    minted: response.data.nft_tokens_aggregate.aggregate.count,
+                    sold: response.data.nft_earnings_aggregate.aggregate.count,
+                    listed: value1.listings_aggregate.aggregate.count,
+                    thingid: value1.id,
+                    show: false,
+                  };
                   this.data.push(rows);
-                  this.data = this.data.filter((el) => el.name != null);
                   this.dataTableMobile.push(rows);
-                  this.dataTableMobile = this.data.filter(
-                    (el) => el.name != null
-                  );
                 })
                 .catch((err) => {
                   console.log("Error", err);
                 });
-              ////End get the earning//////////////////////////////////////
-              ////Embed request///////////////////////////////////////////
-            }); //End inner object entries
+            });
           });
+          
         })
         .catch((err) => {
           console.log("Error", err);
