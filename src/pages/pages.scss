@@ -968,6 +968,19 @@
       }
     }
   }
+  .search {
+    max-width: 20em;
+    margin-left: auto;
+    @media (max-width: 880px) {margin-bottom: 2em}
+    .v-input__slot {
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+      border-radius: .5vmax;
+      padding: .5em 1em;
+    }
+    input {caret-color: #CC00B7}
+    input,.v-label,i {color: #FFFFFF}
+    input, .v-label {font-size: 1em !important}
+  }
   #dataTable {
     @media (max-width:420px) {font-size: 10px}
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, rgba(41, 41, 41, 0.3) 23.08%, rgba(41, 41, 41, 0) 122.53%);
