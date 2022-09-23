@@ -71,6 +71,14 @@
         </template>
       </v-data-table>
 
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+        class="search"
+      />
       <v-data-table
         id="dataTable"
         :loading="loading"
@@ -166,6 +174,8 @@ const goods_redeemed = gql`
       last_transfer_timestamp
       minted_receipt_id
       nft_contract_created_at
+      minted_timestamp
+      last_transfer_receipt_id
     }
   }
 `;
@@ -283,6 +293,7 @@ export default {
       );
       var rows = [];
       var rowsfilter = [];
+      var receip = null;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       this.$apollo
         .query({
@@ -293,26 +304,26 @@ export default {
         })
         .then((response) => {
           //Get the first object and loop
-          Object.entries(response.data.mb_views_nft_tokens).forEach(([key, value]) => {
-              var startTime = moment.utc(value.nft_contract_created_at);
+          Object.entries(response.data.mb_views_nft_tokens).forEach(
+            ([key, value]) => {
+              var startTime = moment.utc(value.minted_timestamp);
               var endTime = moment.utc(new Date());
               var minutesDiff = endTime.diff(startTime, "minutes");
               var hoursDiff = endTime.diff(startTime, "hours");
               var daysDiff = endTime.diff(startTime, "day");
               var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
               var time2 = time > 24 ? daysDiff : time;
-              var timedesc =
-                minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+              var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
               var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-              
+              var receipe = value.last_transfer_receipt_id === null ? value.minted_receipt_id : last_transfer_receipt_id;
               rows = {
                 ticket: value.description,
                 signer: value.owner,
                 quantity: 1,
                 created: time2 + " " + timedesc2,
-                transaction: "https://explorer.testnet.near.org/"
-              };  
-              this.dataTableExtra.push(rows);           
+                transaction: "https://explorer.testnet.near.org/?query="+receipe,
+              };
+              this.dataTableExtra.push(rows);
             }
           );
         })
