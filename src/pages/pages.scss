@@ -714,7 +714,7 @@
     position: absolute;
     top: -140px;
     width: 100vw;
-    margin-inline: calc((50% - 50vw) - 35px);
+    margin-inline: calc(50% - 50vw);
     inset: 0;
     background-color: rgba(0,0,0,.2);
   }
@@ -728,6 +728,7 @@
   .search {
     max-width: 20em;
     margin-left: auto;
+    @media (max-width: 880px) {margin-bottom: 2em}
     .v-input__slot {
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
       border-radius: .5vmax;
@@ -741,6 +742,8 @@
     @media (min-width: 880px) {color: #000000 !important}
     font-weight: 700 !important;
     font-size: clamp(1em, 1.5vw, 1.5em);
+    padding-inline: 1.2ch 2.5ch;
+    float: left;
   }
   #tableEvents {
     background-color: transparent !important;
@@ -798,13 +801,14 @@
         position: absolute;
         left: -25px;
         top: 0;
+        width: 100%;
         height: 100%;
         z-index: -1;
-        @media (max-width: 1184px) {left: -30px;
-          @media (max-width: 1162px) {left: -65px;
-            @media (max-width: 880px) {display: none}
-          }
-        }
+        // @media (max-width: 1184px) {left: -30px;
+        //   @media (max-width: 1162px) {left: -65px;
+        //     @media (max-width: 880px) {display: none}
+        //   }
+        // }
       }
       @media (min-width: 880px) {height: 91px}
       td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
@@ -971,6 +975,7 @@
     padding: .5em;
     .v-data-footer {
       justify-content: flex-end;
+      * {color: #fff}
       &__icons-before, &__icons-after {
         button {background: transparent !important; i {color: #FFFFFF !important}}
       }

@@ -21,12 +21,12 @@
       class="eliminarmobile"
     >
       <template v-slot:[`item.name`]="{ item }">
-        <img
-          class="bgTicket"
-          src="@/assets/img/bg-ticket_events.png"
-          alt="ticket image"
-        />
-        <span class="eventName">{{ item.name }}</span>
+          <img
+            class="bgTicket"
+            src="@/assets/img/bg-ticket_events.png"
+            alt="ticket image"
+          />
+          <span class="eventName">{{ item.name }}</span>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
