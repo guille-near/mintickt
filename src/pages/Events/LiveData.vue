@@ -45,6 +45,15 @@
         </v-card>
       </div>
 
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+        class="search"
+      />
+
       <v-data-table
         id="dataTable"
         v-show="
@@ -71,14 +80,6 @@
         </template>
       </v-data-table>
 
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-        class="search"
-      />
       <v-data-table
         id="dataTable"
         :loading="loading"
