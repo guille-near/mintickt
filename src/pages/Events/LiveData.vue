@@ -154,6 +154,13 @@ const fans_tokens_aggregate = gql`
   }
 }
 `;
+const burned_fans_tokens_aggregate = gql`,
+ query MyQuery {
+  fansinsides(where: {thingid: "xxxx"}) {
+    tokenid
+  }
+}, client: 'mintickClient',
+`;
 const tickets = gql`
   query MyQuery($_iregex: String!) {
     mb_views_nft_tokens(
@@ -293,7 +300,6 @@ export default {
     //Data extra to get burned, beers, tshirts, pop corn, etc
     async getExtra() {
       var rows = [];
-      var rowsfilter = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       this.$apollo
         .query({
@@ -339,6 +345,7 @@ export default {
     async getExtraFilter() {
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       //console.log(Object.values(this.dataFilters)[0].value)
+      //reedemed
       this.$apollo
         .query({
           query: redeemed_tokens_aggregate,
@@ -353,7 +360,21 @@ export default {
           console.log("Error", err);
         })
         .finally(() => (this.loading = false));
+        //Burned reedemed burned_fans_tokens_aggregate
+        this.$apollo.use('mintickClient')
+        .query({
+          query: burned_fans_tokens_aggregate,
+        })
+        .then((response) => {
+          console.log(response.data)
+          //Object.values(this.dataFilters)[1].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
 
+        //Fans inside
         this.$apollo
         .query({
           query: fans_tokens_aggregate,

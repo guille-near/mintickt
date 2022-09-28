@@ -54,14 +54,27 @@ Vue.use(VuetifyGoogleAutocomplete, {
 
 Vue.config.productionTip = false;
 import ApolloClient from "apollo-boost";
+
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
   uri: "https://interop-testnet.hasura.app/v1/graphql",
 });
+const mintickClient = new ApolloClient({
+  // You should use an absolute URL here
+  // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
+  uri: "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend",
+});
+
 const apolloProvider = new VueApollo({
+  clients: {
+    apolloClient,
+    mintickClient
+},
   defaultClient: apolloClient,
 });
+
+
 
 new Vue({
   vuetify,
