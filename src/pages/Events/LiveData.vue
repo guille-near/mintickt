@@ -104,7 +104,7 @@
         </template>
 
         <template v-slot:[`item.action`]>
-          <v-btn>Complete order</v-btn>
+          <v-btn >Complete order</v-btn>
         </template>
       </v-data-table>
     </section>
@@ -114,6 +114,9 @@
 <script>
 import moment from "moment";
 import gql from "graphql-tag";
+import { CONFIG } from "@/services/api";
+import * as nearAPI from "near-api-js";
+const { connect, keyStores } = nearAPI;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($user: String!, $metadata_id: String!) {
     nft_earnings_aggregate(
@@ -155,11 +158,18 @@ const fans_tokens_aggregate = gql`
 }
 `;
 const burned_fans_tokens_aggregate = gql`,
- query MyQuery {
-  fansinsides(where: {thingid: "xxxx"}) {
+ query MyQuery($_iregex: String!) {
+  fansinsides(where: {thingid: $_iregex}) {
     tokenid
   }
-}, client: 'mintickClient',
+}
+`;
+const burned_reedemed_tokens_aggregate = gql`,
+query MyQuery($_iregex: String!) {
+  redeemers(where: {thingid: $_iregex}) {
+    tokenid
+  }
+}
 `;
 const tickets = gql`
   query MyQuery($_iregex: String!) {
@@ -354,25 +364,28 @@ export default {
           },
         })
         .then((response) => {
-          Object.values(this.dataFilters)[1].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          //Burned reedemed burned_fans_tokens_aggregate
+        this.$apollo
+          .query({
+            query: burned_reedemed_tokens_aggregate,
+            variables: {
+            _iregex: thingid[1],
+            },
+            client: 'mintickClient'
+          })
+          .then((res) => {
+            Object.values(this.dataFilters)[1].value=res.data.redeemers.length+" / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          })
+          .finally(() => (this.loading = false));
         })
         .catch((err) => {
           console.log("Error", err);
         })
         .finally(() => (this.loading = false));
-        //Burned reedemed burned_fans_tokens_aggregate
-        this.$apollo.use('mintickClient')
-        .query({
-          query: burned_fans_tokens_aggregate,
-        })
-        .then((response) => {
-          console.log(response.data)
-          //Object.values(this.dataFilters)[1].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
+
 
         //Fans inside
         this.$apollo
@@ -383,7 +396,23 @@ export default {
           },
         })
         .then((response) => {
-          Object.values(this.dataFilters)[0].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+            //Burned reedemed burned_fans_tokens_aggregate
+        this.$apollo
+          .query({
+            query: burned_fans_tokens_aggregate,
+            variables: {
+            _iregex: thingid[1],
+            },
+            client: 'mintickClient'
+          })
+          .then((res) => {
+            Object.values(this.dataFilters)[0].value=res.data.fansinsides.length+" / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          })
+          .finally(() => (this.loading = false));
+          
         })
         .catch((err) => {
           console.log("Error", err);
@@ -450,6 +479,54 @@ export default {
       request.onload = () => {
         this.lastPrice = JSON.parse(request.responseText);
       };
+    },
+    async completeOrderFans(thingid, tokenid) {
+      const CONTRACT_NAME = "backend.andromeda2018.testnet";
+      const near = await connect(
+        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
+      );
+      // create wallet connection
+      // const account = await near.account();
+      const wallet = new WalletConnection(near);
+      var response = null;
+      // console.log(near);
+      if (wallet.isSignedIn()) {
+        //console.log(value);
+        response = await wallet.account().functionCall({
+          contractId: CONTRACT_NAME,
+          methodName: "fans_inside",
+          args: {
+            thingid: thingid,
+            tokenid: tokenid
+          }
+        });
+        this.getData();
+        this.$forceUpdate();
+      }
+    },
+    async completeOrderReedemer(thingid, tokenid) {
+      const CONTRACT_NAME = "backend.andromeda2018.testnet";
+      const near = await connect(
+        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
+      );
+      // create wallet connection
+      // const account = await near.account();
+      const wallet = new WalletConnection(near);
+      var response = null;
+      // console.log(near);
+      if (wallet.isSignedIn()) {
+        //console.log(value);
+        response = await wallet.account().functionCall({
+          contractId: CONTRACT_NAME,
+          methodName: "redeemer",
+          args: {
+            thingid: thingid,
+            tokenid: tokenid
+          }
+        });
+        this.getData();
+        this.$forceUpdate();
+      }
     },
   },
 };
