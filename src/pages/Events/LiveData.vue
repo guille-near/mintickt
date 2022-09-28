@@ -62,7 +62,7 @@
         "
         :headers="headersTable"
         :items="dataTable"
-        hide-default-footer
+        :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
         :mobile-breakpoint="-1"
       >
         <template v-slot:[`item.transaction`]="{ item }">
