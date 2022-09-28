@@ -208,7 +208,7 @@
               <h3>Main event image <span style="color: red">*</span></h3>
               <p>
                 This is the first image attendees will see at the top of your
-                event page..
+                event page.
               </p>
 
               <v-file-input
@@ -546,6 +546,83 @@
           </div>
 
           <v-form
+            ref="form5"
+            v-model="valid"
+            @submit.prevent="mintBurnTicket()"
+            class="divcol"
+            style="min-height: 100%"
+          >
+            <div class="divcol">
+              <h3>Burning ticket image <span style="color: red">*</span></h3>
+              <p>This is the image attendees will see as burning NFT ticket.</p>
+
+              <v-file-input
+                v-model="dataTickets.img"
+                solo
+                prepend-icon
+                accept="image/*"
+                :rules="rules.required"
+                @change="ImagePreview"
+                class="input-unique"
+              >
+                <template v-slot:selection>
+                  <img class="imagePreview" :src="url" alt="Image preview" />
+                </template>
+
+                <template v-slot:label>
+                  <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+                  <p class="p">
+                    Drag and drop or click here to upload your main event image
+                  </p>
+                </template>
+              </v-file-input>
+            </div>
+
+            <div id="container-actions" class="gap">
+              <v-btn @click="step--">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >Back
+              </v-btn>
+              <v-btn type="submit" :loading="loading" :disabled="disable">
+                Mint<v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-right</v-icon
+                >
+              </v-btn>
+            </div>
+          </v-form>
+        </section>
+      </v-window-item>
+
+      <v-window-item :value="6">
+        <h2 class="align" style="text-align: center">
+          Let's create your ticket!
+        </h2>
+
+        <section class="jcenter divwrap">
+          <div class="ticket-wrapper">
+            <img
+              class="ticket"
+              src="@/assets/img/ticket-register.svg"
+              alt="Ticket image"
+            />
+
+            <v-file-input
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
+              v-model="ticket.img"
+              hide-details
+              solo
+              prepend-icon=""
+              @change="uploadImg(ticket)"
+            >
+              <template v-slot:selection>
+                <img v-if="ticket.url" :src="ticket.url" />
+              </template>
+            </v-file-input>
+          </div>
+
+          <v-form
             ref="form4"
             v-model="valid"
             @submit.prevent="mintGoodie()"
@@ -676,12 +753,13 @@ const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import gql from "graphql-tag";
 const nft_tokens_aggregate = gql`
-  query MyQuery($user: String!, $tittle: String!) {
+  query MyQuery($user: String!, $tittle: String!, $_iregex: String!) {
     nft_metadata(
       where: {
         title: { _eq: $tittle }
         nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
         nft_contracts: { owner_id: { _eq: $user } }
+        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
       }
       order_by: { nft_contracts: { created_at: desc } }
     ) {
@@ -804,7 +882,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/events/register"
+        "/events/register"
       );
     }
     //List option
@@ -822,7 +900,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/events/register"
+        "/events/register"
       );
     }
     //goodies option
@@ -837,21 +915,36 @@ export default {
       this.step = 5;
       localStorage.setItem("step", this.step);
       this.getData();
-      this.$router.push("/mintick/#/events/");
+      this.$router.push("/events/register");
+    }
+    //fasninside option
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "fansinside"
+    ) {
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        "https://explorer.testnet.near.org/transactions/" +
+        urlParams.get("transactionHashes");
+      this.step = 6;
+      localStorage.setItem("step", this.step);
+      this.getData();
+      this.$router.push("/events/");
     }
     //
     if (urlParams.get("errorCode") !== null) {
       this.modal = false;
-      localStorage.setItem("step", 1);
+      this.step = 1;
+      localStorage.setItem("step", this.step);
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/trade/p2p"
+        "/trade/p2p"
       );
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/events/register"
+        "/events/register"
       );
     }
   },
@@ -923,6 +1016,16 @@ export default {
           // TODO: handle error
         }
 
+        const random = (length = 8) => {
+          localStorage.setItem(
+            "tempid",
+            Math.random().toString(16).substr(2, length)
+          );
+          return Math.random().toString(16).substr(2, length);
+        };
+
+        random(14);
+
         //Estra data location , dates, place id
         let extra = [
           {
@@ -959,6 +1062,10 @@ export default {
             value: moment(this.dates[1]).unix(),
             display_type: "date",
           },
+          {
+            trait_type: localStorage.getItem("tempid"),
+            value: "NFT",
+          },
         ];
         let store = "artemis.mintspace2.testnet";
         let category = "ticketing";
@@ -973,9 +1080,11 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
-        console.log(metadata);
+        // console.log(metadata);
 
         localStorage.setItem("mint_tittle", this.dataTickets.description);
+        //LocalStorage Metadata
+        localStorage.setItem("metadata", JSON.stringify(metadata));
 
         //handle royalties
         const royalties = {};
@@ -988,6 +1097,12 @@ export default {
           );
         });
 
+        //LocalStora Royalties
+        localStorage.setItem(
+          "dataRoyalties",
+          JSON.stringify(this.dataRoyalties)
+        );
+
         //handle splits
         const splits = {};
         var counter1 = this.counter1;
@@ -996,12 +1111,18 @@ export default {
           splits[element.account] = parseInt(element.percentage * 100);
         });
 
+        //LocalStora Splits
+        localStorage.setItem("splits", JSON.stringify(this.dataSplit));
+
         let datos = JSON.parse(
           localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         const user = datos.accountId;
         //Add the rest for minter
         splits[user] = parseInt(10000 - counter1 * 100);
+
+        //LocalStora Mint amount
+        localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
 
         await wallet.mint(
           parseFloat(this.dataTickets.mint_amount),
@@ -1018,7 +1139,7 @@ export default {
     },
     async mintGoodie() {
       if (this.$refs.form4.validate()) {
-        console.log(this.dataTickets.attendees);
+        // console.log(this.dataTickets.attendees);
         this.loading = true;
         this.disable = true;
         //Api key an data
@@ -1043,8 +1164,9 @@ export default {
           console.error(error);
           // TODO: handle error
         }
+        
 
-        //Estra data location , dates, place id
+        //Extra data location , dates, place id
         let extra = [
           {
             trait_type: "location",
@@ -1113,6 +1235,60 @@ export default {
           category,
           {
             meta: "goodies",
+          }
+        );
+      }
+    },
+    async mintBurnTicket() {
+      if (this.$refs.form5.validate()) {
+        this.loading = true;
+        this.disable = true;
+        //Api key an data
+        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        const { data: walletData } = await new Wallet().init({
+          networkName: Network.testnet,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        //Loading image
+        try {
+          const file = this.image;
+          const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
+          if (fileError) {
+            throw new Error(fileError);
+          } else {
+            console.log(fileUploadResult);
+          }
+        } catch (error) {
+          console.error(error);
+          // TODO: handle error
+        }
+        let store = "artemis.mintspace2.testnet";
+        let category = "fansinside";
+
+        //Metadata Object
+        const metadata = JSON.parse(localStorage.getItem("metadata"));
+        metadata.extra.push({"trait_type":localStorage.getItem("metadata_id").split(":")[1],"value":"BurnTicket"})
+        await wallet.minter.setMetadata(metadata, true);
+
+        // console.log(metadata);
+
+        //handle royalties
+        const royalties = {};
+
+        //handle splits
+        const splits = {};
+
+        await wallet.mint(
+          parseFloat(localStorage.getItem("mint_amount")),
+          store.toString(),
+          JSON.stringify(royalties) === "{}" ? null : royalties,
+          JSON.stringify(splits) === "{}" ? null : splits,
+          category,
+          {
+            meta: "fansinside",
           }
         );
       }
@@ -1278,6 +1454,7 @@ export default {
           variables: {
             user: user,
             tittle: localStorage.getItem("mint_tittle"),
+            _iregex: localStorage.getItem("tempid")
           },
         })
         .then((response) => {
@@ -1293,6 +1470,7 @@ export default {
     },
     //Get the tokens id minted
     async getTokensId() {
+      this.getData();
       const mintbase_marketplace = "market-v2-beta.mintspace2.testnet";
       let store = "artemis.mintspace2.testnet";
       this.$apollo
@@ -1340,21 +1518,21 @@ export default {
         //Gettintg the tokens ID
         this.getTokensId();
 
-        // this.loading = true;
-        // this.disable = true;
-        // let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-        // const { data: walletData } = await new Wallet().init({
-        //   networkName: Network.testnet,
-        //   chain: Chain.near,
-        //   apiKey: API_KEY,
-        // });
-        // const { wallet } = walletData;
-        // await wallet.executeMultipleTransactions({
-        //   transactions: this.txs,
-        //   options: {
-        //     meta: "list",
-        //   },
-        // });
+        this.loading = true;
+        this.disable = true;
+        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        const { data: walletData } = await new Wallet().init({
+          networkName: Network.testnet,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        await wallet.executeMultipleTransactions({
+          transactions: this.txs,
+          options: {
+            meta: "list",
+          },
+        });
       }
     },
     nearToYocto: function (nearToYocto) {

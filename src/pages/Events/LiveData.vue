@@ -56,8 +56,8 @@
         hide-default-footer
         :mobile-breakpoint="-1"
       >
-        <template v-slot:[`item.transaction`]>
-          <v-btn icon>
+        <template v-slot:[`item.transaction`]="{ item }">
+          <v-btn :href="item.transaction" target="_blank" icon>
             <img
               class="copyImg"
               src="@/assets/icons/link.svg"
@@ -130,42 +130,36 @@ const mb_views_nft_tokens_aggregate = gql`
     }
   }
 `;
-const tickets = gql`
-  query MyQuery($user: String!) {
-    store(
-      where: { name: { _eq: "globaldv" }, minters: { account: { _eq: $user } } }
-    ) {
-      things(
-        order_by: { createdAt: desc }
-        where: { metadata: { extra: { _has_key: "tickets" } } }
-      ) {
-        metadata {
-          extra
-        }
-        tokens(
-          where: {
-            _not: { ownerId: { _eq: $user }, burnedAt: { _is_null: true } }
-          }
-        ) {
-          id
-          ownerId
-          lastTransferred
-        }
-        tokens_aggregate {
-          aggregate {
-            count
-          }
-        }
-      }
+const redeemed_tokens_aggregate = gql`
+ query MyQuery($_iregex: String!) {
+    mb_views_nft_tokens_aggregate(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}, extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}}
+  ) {
+    aggregate {
+      count
     }
   }
+}
 `;
-const goods_redeemed = gql`
+const fans_tokens_aggregate = gql`
+ query MyQuery($_iregex: String!) {
+  mb_views_nft_tokens_aggregate(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "fansinside"}, burned_receipt_id: {_is_null: false}}
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
+`;
+const tickets = gql`
   query MyQuery($_iregex: String!) {
     mb_views_nft_tokens(
       where: {
         reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "ticketing" }
+        extra: { _eq: "fansinside" }
+        burned_receipt_id: { _is_null: false }
       }
     ) {
       description
@@ -176,6 +170,28 @@ const goods_redeemed = gql`
       nft_contract_created_at
       minted_timestamp
       last_transfer_receipt_id
+      burned_receipt_id
+    }
+  }
+`;
+const goods_redeemed = gql`
+  query MyQuery($_iregex: String!) {
+    mb_views_nft_tokens(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
+        extra: { _eq: "redeemed" }
+        burned_receipt_id: { _is_null: false }
+      }
+    ) {
+      description
+      token_id
+      owner
+      last_transfer_timestamp
+      minted_receipt_id
+      nft_contract_created_at
+      minted_timestamp
+      last_transfer_receipt_id
+      burned_receipt_id
     }
   }
 `;
@@ -205,20 +221,7 @@ export default {
         { value: "transaction", text: "TRANSACTION", sortable: false },
         { value: "action", text: "ACTION", sortable: false },
       ],
-      dataTable: [
-        {
-          nft: "Near Beer",
-          signer: "guille.near",
-          quantity: 1,
-          created: "1 min ago",
-        },
-        {
-          nft: "Near Beer",
-          signer: "guille.near",
-          quantity: 1,
-          created: "1 min ago",
-        },
-      ],
+      dataTable: [],
       headersTableExtra: [
         { value: "ticket", text: "TICKET" },
         { value: "signer", text: "SIGNER" },
@@ -264,7 +267,6 @@ export default {
       );
       const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
-      console.log(metadata_id);
       this.$apollo
         .query({
           query: mb_views_nft_tokens_aggregate,
@@ -279,8 +281,8 @@ export default {
           this.incomes =
             response.data.nft_earnings_aggregate.aggregate.sum.amount /
             Math.pow(10, 24);
-          //this.getTicketsBurn();
-          this.getExtra();
+            this.getFansInside();
+            this.getExtra();
         })
         .catch((err) => {
           console.log("Error", err);
@@ -288,12 +290,8 @@ export default {
     },
     //Data extra to get burned, beers, tshirts, pop corn, etc
     async getExtra() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
       var rows = [];
       var rowsfilter = [];
-      var receip = null;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       this.$apollo
         .query({
@@ -306,7 +304,10 @@ export default {
           //Get the first object and loop
           Object.entries(response.data.mb_views_nft_tokens).forEach(
             ([key, value]) => {
-              var startTime = moment.utc(value.minted_timestamp);
+              var startTime =
+                value.last_transfer_receipt_id === null
+                  ? moment.utc(value.minted_timestamp)
+                  : moment.utc(last_transfer_timestamp);
               var endTime = moment.utc(new Date());
               var minutesDiff = endTime.diff(startTime, "minutes");
               var hoursDiff = endTime.diff(startTime, "hours");
@@ -315,15 +316,62 @@ export default {
               var time2 = time > 24 ? daysDiff : time;
               var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
               var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-              var receipe = value.last_transfer_receipt_id === null ? value.minted_receipt_id : last_transfer_receipt_id;
+              var receipe = value.burned_receipt_id;
               rows = {
                 ticket: value.description,
                 signer: value.owner,
                 quantity: 1,
                 created: time2 + " " + timedesc2,
-                transaction: "https://explorer.testnet.near.org/?query="+receipe,
+                transaction:
+                  "https://explorer.testnet.near.org/?query=" + receipe,
               };
               this.dataTableExtra.push(rows);
+            }
+          );
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    //Data extra to get burned, beers, tshirts, pop corn, etc
+    async getFansInside() {
+      var rows = [];
+      var rowsfilter = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      this.$apollo
+        .query({
+          query: tickets,
+          variables: {
+            _iregex: thingid[1],
+          },
+        })
+        .then((response) => {
+          //Get the first object and loop
+          Object.entries(response.data.mb_views_nft_tokens).forEach(
+            ([key, value]) => {
+              var startTime =
+                value.last_transfer_receipt_id === null
+                  ? moment.utc(value.minted_timestamp)
+                  : moment.utc(last_transfer_timestamp);
+              var endTime = moment.utc(new Date());
+              var minutesDiff = endTime.diff(startTime, "minutes");
+              var hoursDiff = endTime.diff(startTime, "hours");
+              var daysDiff = endTime.diff(startTime, "day");
+              var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+              var time2 = time > 24 ? daysDiff : time;
+              var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+              var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+              var receipe = value.burned_receipt_id;
+              rows = {
+                nft: value.description,
+                signer: value.owner,
+                quantity: 1,
+                created: time2 + " " + timedesc2,
+                transaction:
+                  "https://explorer.testnet.near.org/?query=" + receipe,
+              };
+              this.dataTable.push(rows);
             }
           );
         })
