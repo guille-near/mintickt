@@ -742,7 +742,7 @@
     @media (min-width: 880px) {color: #000000 !important}
     font-weight: 700 !important;
     font-size: clamp(1em, 1.5vw, 1.5em);
-    padding-inline: 1.2ch 2.5ch;
+    margin-inline: 5%;
     float: left;
   }
   #tableEvents {
@@ -799,7 +799,7 @@
       }
       .bgTicket {
         position: absolute;
-        left: -25px;
+        left: -7%;
         top: 0;
         width: 100%;
         height: 100%;
