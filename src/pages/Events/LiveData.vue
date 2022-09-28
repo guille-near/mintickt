@@ -284,6 +284,7 @@ export default {
             Math.pow(10, 24);
             this.getFansInside();
             this.getExtra();
+            this.getExtraFilter()
         })
         .catch((err) => {
           console.log("Error", err);
@@ -335,10 +336,42 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    async getExtraFilter() {
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      //console.log(Object.values(this.dataFilters)[0].value)
+      this.$apollo
+        .query({
+          query: redeemed_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+        })
+        .then((response) => {
+          Object.values(this.dataFilters)[1].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+
+        this.$apollo
+        .query({
+          query: fans_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+        })
+        .then((response) => {
+          Object.values(this.dataFilters)[0].value="1 / "+response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
     //Data extra to get burned, beers, tshirts, pop corn, etc
     async getFansInside() {
       var rows = [];
-      var rowsfilter = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       this.$apollo
         .query({
