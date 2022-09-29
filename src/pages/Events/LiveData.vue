@@ -76,7 +76,7 @@
         </template>
 
         <template v-slot:[`item.action`]="{ item }">
-          <v-btn @click="completeOrderFans(item.tokenid)" :loading="loadingBtn"
+          <v-btn @click="completeOrderFans(item)" :loading="item.loadingBtn"
             >Complete order</v-btn
           >
         </template>
@@ -107,8 +107,8 @@
 
         <template v-slot:[`item.action`]="{ item }">
           <v-btn
-            @click="completeOrderReedemer(item.tokenid)"
-            :loading="loadingBtn"
+            @click="completeOrderReedemer(item)"
+            :loading="item.loadingBtn"
             >Complete order</v-btn
           >
         </template>
@@ -266,7 +266,6 @@ export default {
       fans_inside_total_of: 0,
       fans_inside_tota: 0,
       loading: true,
-      loadingBtn: false,
       search: "",
     };
   },
@@ -357,6 +356,7 @@ export default {
                 transaction:
                   "https://explorer.testnet.near.org/?query=" + receipe,
                 tokenid: value.token_id,
+                loadingBtn: false,
               };
               this.dataTableExtra.push(rows);
             }
@@ -490,6 +490,7 @@ export default {
                     transaction:
                       "https://explorer.testnet.near.org/?query=" + receipe,
                     tokenid: value.token_id,
+                    loadingBtn: false,
                   };
                   this.dataTable.push(rows);
                 }
@@ -520,14 +521,14 @@ export default {
         this.lastPrice = JSON.parse(request.responseText);
       };
     },
-    async completeOrderFans(tokenid) {
-      console.log(tokenid)
-      this.loadingBtn = true;
+    async completeOrderFans(element) {
+      console.log(element.tokenid)
+      element.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       const url = "/fans";
       let item = {
         thingid: thingid[1],
-        tokenid: tokenid,
+        tokenid: element.tokenid,
       };
       // this.axios
       //   .post(url, item)
@@ -540,13 +541,13 @@ export default {
       //     console.log(error);
       //   });
     },
-    async completeOrderReedemer(tokenid) {
-      this.loadingBtn = true;
+    async completeOrderReedemer(element) {
+      element.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       const url = "/redeemed";
       let item = {
         thingid: thingid[1],
-        tokenid: tokenid,
+        tokenid: element.tokenid,
       };
       this.axios
         .post(url, item)
