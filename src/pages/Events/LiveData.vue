@@ -521,7 +521,7 @@ export default {
       };
     },
     async completeOrderFans(tokenid) {
-      console.log(tokenid)
+      //console.log(tokenid)
       this.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       const url = "/fans";
@@ -529,16 +529,16 @@ export default {
         thingid: thingid[1],
         tokenid: tokenid,
       };
-      // this.axios
-      //   .post(url, item)
-      //   .then(() => {
-      //     this.getData();
-      //     this.$router.go(0);
-      //     this.loadingBtn = false;
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+      this.axios
+        .post(url, item)
+        .then(() => {
+          this.getData();
+          this.$router.go(0);
+          this.loadingBtn = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async completeOrderReedemer(tokenid) {
       this.loadingBtn = true;
