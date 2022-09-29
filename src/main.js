@@ -13,9 +13,14 @@ import PerfectScrollbar from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import VueMoment from "vue-moment";
 import moment from "moment-timezone";
-import vueDebounce from 'vue-debounce'
+import vueDebounce from 'vue-debounce';
+import axios from 'axios';
+import VueAxios from "vue-axios";
 
 Vue.use(PerfectScrollbar);
+
+Vue.use(VueAxios,axios);
+axios.defaults.baseURL='http://localhost:3090/api/v1/mintick'
 
 // Or if you want to pass in the lock option
 Vue.use(vueDebounce)
@@ -80,6 +85,7 @@ new Vue({
   vuetify,
   apolloProvider,
   router,
+  axios,
   i18n,
   render: (h) => h(App),
   store,

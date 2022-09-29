@@ -184,7 +184,7 @@ export default {
       }
     },
     async connect() {
-      let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a";
+      let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
       const { data: walletData } = await new Wallet().init({
         networkName: Network.testnet,
         chain: Chain.near,
