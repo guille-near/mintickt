@@ -9,7 +9,7 @@
         </h2>
 
         <section class="center divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" id="my-node">
             <img
               class="ticket"
               src="@/assets/img/ticket-register.svg"
@@ -246,7 +246,7 @@
             </div>
 
             <div id="container-actions" class="gap">
-              <v-btn @click="step--">
+              <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
                 >Back
@@ -401,7 +401,7 @@
               </section>
 
               <div id="container-actions" class="gap">
-                <v-btn @click="step--">
+                <v-btn @click="back">
                   <v-icon style="color: #ffffff !important" small
                     >mdi-arrow-left</v-icon
                   >Back
@@ -502,7 +502,7 @@
             </div>
 
             <div id="container-actions" class="gap">
-              <v-btn @click="step--">
+              <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
                 >Back
@@ -579,7 +579,7 @@
             </div>
 
             <div id="container-actions" class="gap">
-              <v-btn @click="step--">
+              <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
                 >Back
@@ -711,7 +711,7 @@
               <div id="container-actions" class="gap">
                 <v-btn
                   @click="
-                    step--;
+                    back;
                     goodie = false;
                   "
                 >
@@ -751,6 +751,7 @@ import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
+import html2canvas from 'html2canvas';
 import gql from "graphql-tag";
 const nft_tokens_aggregate = gql`
   query MyQuery($user: String!, $tittle: String!, $_iregex: String!) {
@@ -936,11 +937,7 @@ export default {
       this.modal = false;
       this.step = 1;
       localStorage.setItem("step", this.step);
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/trade/p2p"
-      );
+      history.replaceState(null, location.href.split("?")[0], "/trade/p2p");
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -1164,7 +1161,6 @@ export default {
           console.error(error);
           // TODO: handle error
         }
-        
 
         //Extra data location , dates, place id
         let extra = [
@@ -1270,7 +1266,10 @@ export default {
 
         //Metadata Object
         const metadata = JSON.parse(localStorage.getItem("metadata"));
-        metadata.extra.push({"trait_type":localStorage.getItem("metadata_id").split(":")[1],"value":"BurnTicket"})
+        metadata.extra.push({
+          trait_type: localStorage.getItem("metadata_id").split(":")[1],
+          value: "BurnTicket",
+        });
         await wallet.minter.setMetadata(metadata, true);
 
         // console.log(metadata);
@@ -1310,6 +1309,16 @@ export default {
       if (this.$refs.form.validate()) {
         this.step++;
         localStorage.setItem("step", 2);
+
+        var container = document.getElementById("my-node"); /* full page */
+        html2canvas(container, { allowTaint: true, backgroundColor: '#000000'}).then(function (canvas) {
+          var link = document.createElement("a");
+          document.body.appendChild(link);
+          link.download = "html_image.jpg";
+          link.href = canvas.toDataURL();
+          link.target = "_blank";
+          link.click();
+        });
       }
     },
     next1() {
@@ -1323,6 +1332,11 @@ export default {
         this.step++;
         localStorage.setItem("step", 4);
       }
+    },
+    back() {
+      this.step--;
+      var step = parseInt(localStorage.getItem("step")) - 1;
+      localStorage.setItem("step", step);
     },
     // validating NEAR account
     async validateNearId(val, e) {
@@ -1454,7 +1468,7 @@ export default {
           variables: {
             user: user,
             tittle: localStorage.getItem("mint_tittle"),
-            _iregex: localStorage.getItem("tempid")
+            _iregex: localStorage.getItem("tempid"),
           },
         })
         .then((response) => {
