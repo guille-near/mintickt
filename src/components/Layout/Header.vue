@@ -122,14 +122,14 @@ import { Wallet, Chain, Network } from "mintbase";
 //     }, 80);
 //   }
 // }
-window.ramper.setConfig({
-  appName: "Near Test App",
-  chainName: "near",
-  defaultTokenAddresses: [],
-  theme: "dark",
-  network: "testnet",
-  authProviders: ["twitter", "google", "facebook", "apple", "email"],
-});
+// window.ramper.setConfig({
+//   appName: "Near Test App",
+//   chainName: "near",
+//   defaultTokenAddresses: [],
+//   theme: "dark",
+//   network: "testnet",
+//   authProviders: ["twitter", "google", "facebook", "apple", "email"],
+// });
 export default {
   name: "Header",
   i18n: require("./i18n"),

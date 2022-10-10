@@ -18,9 +18,8 @@ import axios from 'axios';
 import VueAxios from "vue-axios";
 
 Vue.use(PerfectScrollbar);
-
 Vue.use(VueAxios,axios);
-axios.defaults.baseURL='http://localhost:3090/api/v1/mintick'
+axios.defaults.baseURL='http://localhost:3090/api/v1/mintickt'
 
 // Or if you want to pass in the lock option
 Vue.use(vueDebounce)
@@ -28,6 +27,7 @@ Vue.use(vueDebounce)
 Vue.use(VueMoment, {
   moment,
 });
+
 
 // google maps
 import * as VueGoogleMaps from "vue2-google-maps";

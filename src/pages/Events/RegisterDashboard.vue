@@ -200,6 +200,7 @@
           <v-form
             ref="form1"
             v-model="valid"
+            enctype="multipart/form-data"
             @submit.prevent="next1()"
             class="divcol"
             style="min-height: 100%"
@@ -215,6 +216,7 @@
                 v-model="dataTickets.img"
                 solo
                 prepend-icon
+                name="uploaded_file"
                 accept="image/*"
                 :rules="rules.required"
                 @change="ImagePreview"
@@ -424,25 +426,12 @@
 
         <section class="jcenter divwrap">
           <div class="ticket-wrapper">
+            
             <img
               class="ticket"
-              src="@/assets/img/ticket-register.svg"
+              :src="canvas"
               alt="Ticket image"
             />
-
-            <v-file-input
-              v-for="(ticket, i) in dataTicket"
-              :key="i"
-              v-model="ticket.img"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg(ticket)"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.url" :src="ticket.url" />
-              </template>
-            </v-file-input>
           </div>
 
           <v-form
@@ -523,84 +512,7 @@
         </h2>
 
         <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
-            <img
-              class="ticket"
-              src="@/assets/img/ticket-register.svg"
-              alt="Ticket image"
-            />
-
-            <v-file-input
-              v-for="(ticket, i) in dataTicket"
-              :key="i"
-              v-model="ticket.img"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg(ticket)"
-            >
-              <template v-slot:selection>
-                <img v-if="ticket.url" :src="ticket.url" />
-              </template>
-            </v-file-input>
-          </div>
-
-          <v-form
-            ref="form5"
-            v-model="valid"
-            @submit.prevent="mintBurnTicket()"
-            class="divcol"
-            style="min-height: 100%"
-          >
-            <div class="divcol">
-              <h3>Burning ticket image <span style="color: red">*</span></h3>
-              <p>This is the image attendees will see as burning NFT ticket.</p>
-
-              <v-file-input
-                v-model="dataTickets.img"
-                solo
-                prepend-icon
-                accept="image/*"
-                :rules="rules.required"
-                @change="ImagePreview"
-                class="input-unique"
-              >
-                <template v-slot:selection>
-                  <img class="imagePreview" :src="url" alt="Image preview" />
-                </template>
-
-                <template v-slot:label>
-                  <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                  <p class="p">
-                    Drag and drop or click here to upload your main event image
-                  </p>
-                </template>
-              </v-file-input>
-            </div>
-
-            <div id="container-actions" class="gap">
-              <v-btn @click="back">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn type="submit" :loading="loading" :disabled="disable">
-                Mint<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                >
-              </v-btn>
-            </div>
-          </v-form>
-        </section>
-      </v-window-item>
-
-      <v-window-item :value="6">
-        <h2 class="align" style="text-align: center">
-          Let's create your ticket!
-        </h2>
-
-        <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" id="my-node">
             <img
               class="ticket"
               src="@/assets/img/ticket-register.svg"
@@ -672,47 +584,12 @@
                     solo
                   ></v-text-field>
                 </div>
-
-                <div class="divcol">
-                  <h4>Main image</h4>
-                  <p>
-                    This is the first image attendees will see at the top of
-                    your event page..
-                  </p>
-
-                  <v-file-input
-                    v-model="dataTickets.img"
-                    solo
-                    prepend-icon
-                    accept="image/*"
-                    :rules="rules.required"
-                    @change="ImagePreview"
-                    class="input-unique"
-                  >
-                    <template v-slot:selection>
-                      <img
-                        class="imagePreview"
-                        :src="url"
-                        alt="Image preview"
-                      />
-                    </template>
-
-                    <template v-slot:label>
-                      <img src="@/assets/icons/drag-img.svg" alt="drag icon" />
-                      <p class="p">
-                        Drag and drop or click here to upload your main event
-                        image
-                      </p>
-                    </template>
-                  </v-file-input>
-                </div>
               </template>
 
               <div id="container-actions" class="gap">
                 <v-btn
                   @click="
-                    back;
-                    goodie = false;
+                    back
                   "
                 >
                   <v-icon style="color: #ffffff !important" small
@@ -751,7 +628,7 @@ import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 import gql from "graphql-tag";
 const nft_tokens_aggregate = gql`
   query MyQuery($user: String!, $tittle: String!, $_iregex: String!) {
@@ -862,10 +739,17 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
+      canvas: localStorage.getItem("canvas")
     };
   },
   mounted() {
     // this.step = 4;
+    console.log(process.env.MINTBASE_STORE)
+    let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+    const user = datos.accountId;
+    this.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
@@ -875,11 +759,12 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/transactions/" +
-        urlParams.get("transactionHashes");
+        "https://explorer.testnet.near.org/"+"/accounts/"+user
       this.step = 4;
       localStorage.setItem("step", 4);
-      this.getData();
+      this.getData().then(()=>{
+          this.completeIpfs()
+      })
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -893,8 +778,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/transactions/" +
-        urlParams.get("transactionHashes");
+        "https://explorer.testnet.near.org/"+"/accounts/"+user
       this.step = 5;
       localStorage.setItem("step", this.step);
       this.getData();
@@ -911,26 +795,12 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/transactions/" +
-        urlParams.get("transactionHashes");
-      this.step = 5;
+        "https://explorer.testnet.near.org/"+"/accounts/"+user
+      this.step = 1;
       localStorage.setItem("step", this.step);
       this.getData();
-      this.$router.push("/events/register");
-    }
-    //fasninside option
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "fansinside"
-    ) {
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url =
-        "https://explorer.testnet.near.org/transactions/" +
-        urlParams.get("transactionHashes");
-      this.step = 6;
-      localStorage.setItem("step", this.step);
-      this.getData();
-      this.$router.push("/events/");
+      this.$router.push("/events");
+      localStorage.removeItem("canvas")
     }
     //
     if (urlParams.get("errorCode") !== null) {
@@ -958,7 +828,7 @@ export default {
       if (e) {
         this.url = URL.createObjectURL(this.dataTickets.img);
         const file = e;
-        this.image = file;
+        // this.image = file;
         //console.log(e);
       }
     },
@@ -1000,9 +870,14 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
-          const file = this.image;
+          var image = new Image();
+          image.src = localStorage.getItem("canvas");
+          this.image = image;
+
+          const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
             await wallet.minter.uploadField(MetadataField.Media, file);
+          // localStorage.setItem("file", file);
           if (fileError) {
             throw new Error(fileError);
           } else {
@@ -1077,7 +952,7 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
-        // console.log(metadata);
+        console.log(metadata);
 
         localStorage.setItem("mint_tittle", this.dataTickets.description);
         //LocalStorage Metadata
@@ -1149,9 +1024,14 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
-          const file = this.image;
+          var image = new Image();
+          image.src = localStorage.getItem("canvas");
+          this.image = image;
+
+          const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
             await wallet.minter.uploadField(MetadataField.Media, file);
+          // localStorage.setItem("file", file);
           if (fileError) {
             throw new Error(fileError);
           } else {
@@ -1235,63 +1115,6 @@ export default {
         );
       }
     },
-    async mintBurnTicket() {
-      if (this.$refs.form5.validate()) {
-        this.loading = true;
-        this.disable = true;
-        //Api key an data
-        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-        const { data: walletData } = await new Wallet().init({
-          networkName: Network.testnet,
-          chain: Chain.near,
-          apiKey: API_KEY,
-        });
-        const { wallet } = walletData;
-        //Loading image
-        try {
-          const file = this.image;
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
-          if (fileError) {
-            throw new Error(fileError);
-          } else {
-            console.log(fileUploadResult);
-          }
-        } catch (error) {
-          console.error(error);
-          // TODO: handle error
-        }
-        let store = "artemis.mintspace2.testnet";
-        let category = "fansinside";
-
-        //Metadata Object
-        const metadata = JSON.parse(localStorage.getItem("metadata"));
-        metadata.extra.push({
-          trait_type: localStorage.getItem("metadata_id").split(":")[1],
-          value: "BurnTicket",
-        });
-        await wallet.minter.setMetadata(metadata, true);
-
-        // console.log(metadata);
-
-        //handle royalties
-        const royalties = {};
-
-        //handle splits
-        const splits = {};
-
-        await wallet.mint(
-          parseFloat(localStorage.getItem("mint_amount")),
-          store.toString(),
-          JSON.stringify(royalties) === "{}" ? null : royalties,
-          JSON.stringify(splits) === "{}" ? null : splits,
-          category,
-          {
-            meta: "fansinside",
-          }
-        );
-      }
-    },
     /**
      * When the location found
      * @param {Object} addressData Data of the found location
@@ -1311,20 +1134,40 @@ export default {
         localStorage.setItem("step", 2);
 
         var container = document.getElementById("my-node"); /* full page */
-        html2canvas(container, { allowTaint: true, backgroundColor: '#000000'}).then(function (canvas) {
-          var link = document.createElement("a");
-          document.body.appendChild(link);
-          link.download = "html_image.jpg";
-          link.href = canvas.toDataURL();
-          link.target = "_blank";
-          link.click();
+        html2canvas(container, {
+          allowTaint: true,
+          backgroundColor: "#000000",
+          scale: 1,
+        }).then((canvas) => {
+          // let link = document.createElement("a");
+          // link.download = "image_name.png";
+          // link.href = canvas.toDataURL("image/png", 1.0);
+          // link.click();
+
+          var image = new Image();
+          image.src = canvas.toDataURL("image/png", 1.0);
+          localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
+          this.image = image;
+          // console.log(this.image);
         });
       }
     },
-    next1() {
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    async next1() {
       if (this.$refs.form1.validate()) {
         this.step++;
         localStorage.setItem("step", 3);
+        this.ipfs();
       }
     },
     next2() {
@@ -1335,6 +1178,7 @@ export default {
     },
     back() {
       this.step--;
+      this.goodie = false;
       var step = parseInt(localStorage.getItem("step")) - 1;
       localStorage.setItem("step", step);
     },
@@ -1475,6 +1319,7 @@ export default {
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
+            // console.log(value);
             localStorage.setItem("metadata_id", value[0].id);
           });
         })
@@ -1483,10 +1328,53 @@ export default {
         });
     },
     //Get the tokens id minted
-    async getTokensId() {
+    async list() {
+      if (this.$refs.form3.validate()) {
       this.getData();
+      this.loading = true;
+      this.disable = true;
       const mintbase_marketplace = "market-v2-beta.mintspace2.testnet";
       let store = "artemis.mintspace2.testnet";
+      let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+      const { data: walletData } = await new Wallet().init({
+        networkName: Network.testnet,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      const { wallet } = walletData;
+      //Adding metadatada for teh burned ticket
+      //Loading image
+      try {
+        var image = new Image();
+        image.src = localStorage.getItem("canvas");
+        this.image = image;
+
+        const file = this.dataURLtoFile(this.image, "mint.png");
+        const { data: fileUploadResult, error: fileError } =
+          await wallet.minter.uploadField(MetadataField.Media, file);
+        // localStorage.setItem("file", file);
+        if (fileError) {
+          throw new Error(fileError);
+        } else {
+          console.log(fileUploadResult);
+        }
+      } catch (error) {
+        console.error(error);
+        // TODO: handle error
+      }
+
+      //Metadata Object
+      const metadata = JSON.parse(localStorage.getItem("metadata"));
+      metadata.extra.push({
+        trait_type: localStorage.getItem("metadata_id").split(":")[1],
+        value: "BurnTicket",
+      });
+      await wallet.minter.setMetadata(metadata, true);
+
+      const { data: metadataId, error } = await wallet.minter.getMetadataId();
+      localStorage.setItem("metadata_reference", metadataId);
+      console.log("metadata_reference", metadataId);
+
       this.$apollo
         .query({
           query: tokens_id,
@@ -1499,7 +1387,7 @@ export default {
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
             for (let i = 0; i < value.nodes.length; i++) {
-              if (i <= this.amount_list) {
+              if (i < this.amount_list) {
                 this.txs.push({
                   receiverId: store,
                   functionCalls: [
@@ -1520,20 +1408,52 @@ export default {
                 });
               }
             }
+            //console.log(this.txs)
           });
-          console.log(this.txs);
+
+          let datos = JSON.parse(
+            localStorage.getItem("Mintbase.js_wallet_auth_key")
+          );
+          const user = datos.accountId;
+          const owners = {};
+          owners[datos.accountId] = 9000;
+          owners["vicious2403.testnet"] = 1000;
+
+          // Push object to mint store
+          this.txs.push({
+            receiverId: store,
+            functionCalls: [
+              {
+                methodName: "nft_batch_mint",
+                receiverId: store,
+                gas: "200000000000000",
+                args: {
+                  owner_id: user,
+                  metadata: {
+                    reference: localStorage.getItem("metadata_reference"),
+                    extra: "ticketing",
+                  },
+                  num_to_mint: parseFloat(localStorage.getItem("mint_amount")),
+                  royalty_args: null,
+                  split_owners: owners,
+                },
+                deposit: utils.format.parseNearAmount((0.1).toString()),
+              },
+            ],
+          });
         })
         .catch((err) => {
           console.log("Error", err);
         });
+        this.executeMultipleTransactions();
+      }
     },
-    async list() {
-      if (this.$refs.form3.validate()) {
+    async executeMultipleTransactions() {
         //Gettintg the tokens ID
-        this.getTokensId();
+        //this.getTokensId();
 
-        this.loading = true;
-        this.disable = true;
+        //Adding metadata for the burn ticket
+
         let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
         const { data: walletData } = await new Wallet().init({
           networkName: Network.testnet,
@@ -1541,13 +1461,14 @@ export default {
           apiKey: API_KEY,
         });
         const { wallet } = walletData;
+
         await wallet.executeMultipleTransactions({
           transactions: this.txs,
           options: {
             meta: "list",
           },
         });
-      }
+      
     },
     nearToYocto: function (nearToYocto) {
       const amountInYocto = utils.format.parseNearAmount(nearToYocto);
@@ -1564,6 +1485,30 @@ export default {
         this.usd =
           parseFloat(JSON.parse(request.responseText).lastPrice) * this.price;
       };
+    },
+    async ipfs() {
+      const formData = new FormData()
+      formData.append('uploaded_file', this.dataTickets.img)
+      formData.append('name', this.dataTickets.name)
+      await this.axios.post('http://localhost:3070/api/ipfs/', formData).then((res) => {
+        // console.log(res.data.IpfsHash)
+        localStorage.setItem('IpfsHash', res.data.IpfsHash)
+      })
+    },
+    async completeIpfs() {
+      const url = "/ipfs";
+      let item = {
+        thingid: localStorage.getItem('metadata_id'),
+        tokenid: localStorage.getItem('IpfsHash'),
+      };
+      this.axios
+        .post(url, item)
+        .then(() => {
+          console.log('Hash up')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

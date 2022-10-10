@@ -522,7 +522,6 @@ export default {
       };
     },
     async completeOrderFans(element) {
-      console.log(element.tokenid)
       element.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       const url = "/fans";
