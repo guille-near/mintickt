@@ -1237,6 +1237,7 @@
       position: absolute;
       border-radius: .2vmax;
       margin: auto;
+      &.active .v-input__slot {box-shadow: none !important}
       img {
         object-fit: cover;
       }

@@ -24,6 +24,7 @@
               solo
               prepend-icon=""
               @change="uploadImg(ticket)"
+              :class="{active: ticket.img}"
             >
               <template v-slot:selection>
                 <img v-if="ticket.url" :src="ticket.url" />
@@ -190,6 +191,7 @@
               solo
               prepend-icon=""
               @change="uploadImg(ticket)"
+              :class="{active: ticket.img}"
             >
               <template v-slot:selection>
                 <img v-if="ticket.url" :src="ticket.url" />
@@ -284,6 +286,7 @@
               solo
               prepend-icon=""
               @change="uploadImg(ticket)"
+              :class="{active: ticket.img}"
             >
               <template v-slot:selection>
                 <img v-if="ticket.url" :src="ticket.url" />
@@ -527,6 +530,7 @@
               solo
               prepend-icon=""
               @change="uploadImg(ticket)"
+              :class="{active: ticket.img}"
             >
               <template v-slot:selection>
                 <img v-if="ticket.url" :src="ticket.url" />
@@ -699,15 +703,15 @@ export default {
       dataTicket: [
         {
           url: "",
-          img: [],
+          img: undefined,
         },
         {
           url: "",
-          img: [],
+          img: undefined,
         },
         {
           url: "",
-          img: [],
+          img: undefined,
         },
       ],
       dates: [],
@@ -822,7 +826,7 @@ export default {
   },
   methods: {
     uploadImg(item) {
-      item.url = URL.createObjectURL(item.img);
+      if (item.img) {item.url = URL.createObjectURL(item.img)}
     },
     ImagePreview(e) {
       if (e) {
