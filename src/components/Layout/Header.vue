@@ -177,7 +177,7 @@ export default {
           this.$router.currentRoute.name == "Options") ||
         (window.innerWidth <= 880 &&
           this.$router.currentRoute.name == "RegisterDashboard") ||
-          this.$router.currentRoute.path == '/'
+        (window.innerWidth <= 880 && this.$router.currentRoute.path == '/')
       ) {
         this.responsiveActions = true;
       } else {

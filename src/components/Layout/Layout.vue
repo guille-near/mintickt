@@ -13,17 +13,17 @@
     >
       <router-view @renderHeader="RenderHeader"></router-view>
     </v-main>
-    <Footer v-show="$router.currentRoute.path != '/'" />
+    <!-- <Footer /> -->
   </v-app>
 </template>
 
 <script>
 import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
+// import Footer from "@/components/Layout/Footer";
 import "./layout.scss";
 export default {
   name: "Layout",
-  components: { Header, Footer },
+  components: { Header },
   data() {
     return {
       renderHeader: true,

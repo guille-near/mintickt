@@ -1,8 +1,28 @@
 @import 'webflow';
 @import '@/styles/app.scss';
 
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima Nova'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-black.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-blackit.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-bold.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-boldit.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-extrabold.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-extraboldit.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-light.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-lightit.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-medium.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-medium.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-mediumit.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-regular.otf) format('opentype'),
+      url(/fonts/proxima-nova/Fontspring-DEMO-proximanova-regularit.otf) format('opentype');
+}
+
 #landing {
   padding-bottom: 3em !important;
+  * {font-family: 'Proxima Nova', sans-serif !important}
+  h1 {font-weight: bolder}
   .w-layout-grid {
     display: -ms-grid;
     display: grid;
