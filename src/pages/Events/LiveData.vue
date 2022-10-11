@@ -513,7 +513,7 @@ export default {
     },
     fetch() {
       const BINANCE_NEAR =
-        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+        this.$binance;
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();

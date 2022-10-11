@@ -17,9 +17,20 @@ import vueDebounce from 'vue-debounce';
 import axios from 'axios';
 import VueAxios from "vue-axios";
 
+//Global Variables
+Vue.config.productionTip = false
+Vue.prototype.$network= (Vue.config.productionTip) ? 'testnet' : 'mainnet';
+Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'artemis.mintspace2.testnet' : 'artemis.mintspace2.testnet';
+Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
+Vue.prototype.$dev_key= "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.testnet.near.org/' : 'https://explorer.near.org/';
+Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'http://localhost:3070/api/ipfs/' : 'https://www.mintickt.com:3070/api/ipfs/';
+Vue.prototype.$binance= "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+
+
 Vue.use(PerfectScrollbar);
 Vue.use(VueAxios,axios);
-axios.defaults.baseURL='http://localhost:3090/api/v1/mintickt'
+axios.defaults.baseURL= (Vue.config.productionTip) ? 'http://localhost:3090/api/v1/mintickt' : 'https://www.mintickt.com:3090/api/v1/mintickt'
 
 // Or if you want to pass in the lock option
 Vue.use(vueDebounce)
@@ -63,12 +74,12 @@ import ApolloClient from "apollo-boost";
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: "https://interop-testnet.hasura.app/v1/graphql",
+  uri: (Vue.config.productionTip) ? "https://interop-testnet.hasura.app/v1/graphql" : "https://interop-testnet.hasura.app/v1/graphql",
 });
 const mintickClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend",
+  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend" : "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend",
 });
 
 const apolloProvider = new VueApollo({
@@ -78,7 +89,6 @@ const apolloProvider = new VueApollo({
 },
   defaultClient: apolloClient,
 });
-
 
 
 new Vue({
