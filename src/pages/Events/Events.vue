@@ -115,10 +115,10 @@
 <script>
 import gql from "graphql-tag";
 const your_events = gql`
-  query MyQuery {
+  query MyQuery($store: String!) {
     mb_views_nft_metadata(
       where: {
-        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        nft_contract_id: { _eq: $store }
         listings: { price: { _is_null: false } }
       }
     ) {
@@ -134,10 +134,10 @@ const your_events = gql`
   }
 `;
 const mb_views_nft_tokens_aggregate = gql`
-  query MyQuery($user: String!, $metadata_id: String!) {
+  query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
    nft_tokens_aggregate(
       where: {
-        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        nft_contract_id: { _eq: $store }
         metadata_id: { _eq: $metadata_id }
       }
     ) {
@@ -193,6 +193,9 @@ export default {
       this.$apollo
         .query({
           query: your_events,
+          variables: {
+            store: this.$store_mintbase,
+          },
         })
         .then((response) => {
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
@@ -206,6 +209,7 @@ export default {
                 .query({
                   query: mb_views_nft_tokens_aggregate,
                   variables: {
+                    store: this.$store_mintbase,
                     user: user,
                     metadata_id: value1.id,
                   },

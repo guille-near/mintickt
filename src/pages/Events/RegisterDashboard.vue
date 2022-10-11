@@ -635,11 +635,11 @@ import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import html2canvas from "html2canvas";
 import gql from "graphql-tag";
 const nft_tokens_aggregate = gql`
-  query MyQuery($user: String!, $tittle: String!, $_iregex: String!) {
+  query MyQuery($store: String!, $user: String!, $tittle: String!, $_iregex: String!) {
     nft_metadata(
       where: {
         title: { _eq: $tittle }
-        nft_contract_id: { _eq: "artemis.mintspace2.testnet" }
+        nft_contract_id: { _eq: $store}
         nft_contracts: { owner_id: { _eq: $user } }
         reference_blob: { _cast: { String: { _iregex: $_iregex } } }
       }
@@ -748,7 +748,7 @@ export default {
   },
   mounted() {
     // this.step = 4;
-    console.log(process.env.MINTBASE_STORE)
+    console.log('store', this.$store_mintbase)
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
@@ -763,7 +763,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/"+"/accounts/"+user
+        this.$explorer+"/accounts/"+user
       this.step = 4;
       localStorage.setItem("step", 4);
       this.getData().then(()=>{
@@ -782,7 +782,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/"+"/accounts/"+user
+        this.$explorer+"/accounts/"+user
       this.step = 5;
       localStorage.setItem("step", this.step);
       this.getData();
@@ -799,7 +799,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        "https://explorer.testnet.near.org/"+"/accounts/"+user
+        this.$explorer+"/accounts/"+user
       this.step = 1;
       localStorage.setItem("step", this.step);
       this.getData();
@@ -844,11 +844,10 @@ export default {
       this.createImage(file);
     },
     async grantMinter() {
-      let API_KEY = process.env.MINTBASE_DEV_API_KEY;
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.testnet,
+        networkName: this.$network,
         chain: Chain.near,
-        apiKey: API_KEY,
+        apiKey: this.$dev_key,
       });
       const { wallet } = walletData;
       wallet
@@ -865,9 +864,9 @@ export default {
         this.loading = true;
         this.disable = true;
         //Api key an data
-        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        let API_KEY = this.$dev_key;
         const { data: walletData } = await new Wallet().init({
-          networkName: Network.testnet,
+          networkName: this.$network,
           chain: Chain.near,
           apiKey: API_KEY,
         });
@@ -943,7 +942,7 @@ export default {
             value: "NFT",
           },
         ];
-        let store = "artemis.mintspace2.testnet";
+        let store = this.$store_mintbase;
         let category = "ticketing";
 
         //Metadata Object
@@ -1019,9 +1018,9 @@ export default {
         this.loading = true;
         this.disable = true;
         //Api key an data
-        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        let API_KEY = this.$dev_key;
         const { data: walletData } = await new Wallet().init({
-          networkName: Network.testnet,
+          networkName: this.$network,
           chain: Chain.near,
           apiKey: API_KEY,
         });
@@ -1087,7 +1086,7 @@ export default {
             value: this.dataTickets.attendees,
           },
         ];
-        let store = "artemis.mintspace2.testnet";
+        let store = this.$store_mintbase;
         let category = "redeemed";
 
         //Metadata Object
@@ -1314,6 +1313,7 @@ export default {
         .query({
           query: nft_tokens_aggregate,
           variables: {
+            store: this.$store_mintbase,
             user: user,
             tittle: localStorage.getItem("mint_tittle"),
             _iregex: localStorage.getItem("tempid"),
@@ -1337,11 +1337,11 @@ export default {
       this.getData();
       this.loading = true;
       this.disable = true;
-      const mintbase_marketplace = "market-v2-beta.mintspace2.testnet";
-      let store = "artemis.mintspace2.testnet";
-      let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+      const mintbase_marketplace = this.$mintbase_marketplace;
+      let store = this.$store_mintbase;
+      let API_KEY = this.$dev_key;
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.testnet,
+        networkName: this.$network,
         chain: Chain.near,
         apiKey: API_KEY,
       });
@@ -1458,9 +1458,9 @@ export default {
 
         //Adding metadata for the burn ticket
 
-        let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+        let API_KEY = this.$dev_key;
         const { data: walletData } = await new Wallet().init({
-          networkName: Network.testnet,
+          networkName: this.$network,
           chain: Chain.near,
           apiKey: API_KEY,
         });
@@ -1481,7 +1481,7 @@ export default {
     },
     priceNEAR() {
       const BINANCE_NEAR =
-        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+        this.$binance;
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();
@@ -1494,7 +1494,7 @@ export default {
       const formData = new FormData()
       formData.append('uploaded_file', this.dataTickets.img)
       formData.append('name', this.dataTickets.name)
-      await this.axios.post('http://localhost:3070/api/ipfs/', formData).then((res) => {
+      await this.axios.post(this.$ipfs, formData).then((res) => {
         // console.log(res.data.IpfsHash)
         localStorage.setItem('IpfsHash', res.data.IpfsHash)
       })
