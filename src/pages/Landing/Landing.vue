@@ -5,14 +5,14 @@
         <div class="div-block-6">
           <div class="div-block-5 divwrap">
             <h1 class="hero-title">Memorable</h1>
-            <h1 class="hero-title"><span class="hero_title_animation">conventions</span></h1>
+            <h1 class="hero-title"><span class="hero_title_animation">gigs</span></h1>
           </div>
           <h1 class="hero-title">bringing you to NFT world</h1>
         </div>
-        <div class="div-block-7">
+        <!-- <div class="div-block-7">
           <a href="https://twitter.com/mintickt" target="_blank" class="social_link w-inline-block"><img src="@/assets/landing/Social-media-logo.svg" loading="lazy" alt="" class="image-5"></a>
           <a href="https://discord.gg/Evk3KMYefX" target="_blank" class="social_link w-inline-block"><img src="@/assets/landing/Logo-Mark-White.svg" loading="lazy" alt="" class="image-6"></a>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -46,7 +46,7 @@
       </v-slide-group>
     </section>
 
-    <div data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146" class="just-in-case">
+    <!-- <div data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146" class="just-in-case">
       <h3 class="heading-boxes">Just in case</h3>
       <div class="faq w-container">
         <div class="w-layout-grid grid">
@@ -95,7 +95,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
 

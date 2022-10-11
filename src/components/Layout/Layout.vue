@@ -13,7 +13,7 @@
     >
       <router-view @renderHeader="RenderHeader"></router-view>
     </v-main>
-    <Footer />
+    <Footer v-show="$router.currentRoute.path != '/'" />
   </v-app>
 </template>
 

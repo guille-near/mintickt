@@ -1252,26 +1252,29 @@
       &:nth-of-type(1) {
         width: 85%;
         height: 61%;
+        border: 1px solid green;
   
         top: 9%;
         left: 0;
         right: 0;
       }
       &:nth-of-type(2) {
-        width: 33%;
-        height: 10%;
+        width: 33.5%;
+        height: 10.5%;
+        border: 1px solid green;
 
-        bottom: 10.2%;
-        left: 8%;
+        bottom: 9.8%;
+        left: 7.6%;
         right: auto;
       }
       &:nth-of-type(3) {
-        width: 33%;
-        height: 10%;
+        width: 33.5%;
+        height: 10.5%;
+        border: 1px solid green;
 
-        bottom: 10.2%;
+        bottom: 9.8%;
         left: auto;
-        right: 8%;
+        right: 7.6%;
       }
     }
   }
