@@ -748,7 +748,6 @@ export default {
   },
   mounted() {
     // this.step = 4;
-    console.log('store', this.$store_mintbase)
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
