@@ -33,9 +33,9 @@ export default new Router({
          component: () => import('@/pages/Landing/Landing'),
         },
         {
-          path: '/tienda',
-          name: 'Tienda',
-          component: () => import('@/pages/Tienda/Tienda'),
+          path: '/store',
+          name: 'Store',
+          component: () => import('@/pages/Store/store'),
         },
         {
           path: '/events',
