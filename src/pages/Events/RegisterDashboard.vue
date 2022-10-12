@@ -752,7 +752,7 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
     const user = datos.accountId;
-    this.getData();
+    //this.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
@@ -843,10 +843,11 @@ export default {
       this.createImage(file);
     },
     async grantMinter() {
+      let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
-        networkName: this.$network,
+        networkName: networkName,
         chain: Chain.near,
-        apiKey: this.$dev_key,
+        apiKey: this.$dev_key.toString(),
       });
       const { wallet } = walletData;
       wallet
@@ -863,9 +864,10 @@ export default {
         this.loading = true;
         this.disable = true;
         //Api key an data
-        let API_KEY = this.$dev_key;
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
         const { data: walletData } = await new Wallet().init({
-          networkName: this.$network,
+          networkName: networkName,
           chain: Chain.near,
           apiKey: API_KEY,
         });
@@ -956,7 +958,7 @@ export default {
         await wallet.minter.setMetadata(metadata, true);
         console.log(metadata);
 
-        localStorage.setItem("mint_tittle", this.dataTickets.description);
+        localStorage.setItem("mint_tittle", this.dataTickets.title);
         //LocalStorage Metadata
         localStorage.setItem("metadata", JSON.stringify(metadata));
 
@@ -1017,9 +1019,10 @@ export default {
         this.loading = true;
         this.disable = true;
         //Api key an data
-        let API_KEY = this.$dev_key;
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
         const { data: walletData } = await new Wallet().init({
-          networkName: this.$network,
+          networkName: networkName,
           chain: Chain.near,
           apiKey: API_KEY,
         });
@@ -1085,7 +1088,7 @@ export default {
             value: this.dataTickets.attendees,
           },
         ];
-        let store = this.$store_mintbase;
+        let store = "artemis.mintspace2.testnet";
         let category = "redeemed";
 
         //Metadata Object
@@ -1308,11 +1311,15 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       const user = datos.accountId;
+      // console.log(this.$store_mintbase.toString())
+      // console.log(user)
+      // console.log(localStorage.getItem("mint_tittle"))
+      // console.log(localStorage.getItem("tempid"))
       this.$apollo
         .query({
           query: nft_tokens_aggregate,
           variables: {
-            store: this.$store_mintbase,
+            store: this.$store_mintbase.toString(),
             user: user,
             tittle: localStorage.getItem("mint_tittle"),
             _iregex: localStorage.getItem("tempid"),
@@ -1322,7 +1329,7 @@ export default {
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
-            // console.log(value);
+            console.log(value);
             localStorage.setItem("metadata_id", value[0].id);
           });
         })
@@ -1338,9 +1345,10 @@ export default {
       this.disable = true;
       const mintbase_marketplace = this.$mintbase_marketplace;
       let store = this.$store_mintbase;
-      let API_KEY = this.$dev_key;
+      let API_KEY = this.$dev_key.toString();
+      let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
-        networkName: this.$network,
+        networkName: networkName,
         chain: Chain.near,
         apiKey: API_KEY,
       });
@@ -1454,12 +1462,11 @@ export default {
     async executeMultipleTransactions() {
         //Gettintg the tokens ID
         //this.getTokensId();
-
         //Adding metadata for the burn ticket
-
-        let API_KEY = this.$dev_key;
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
         const { data: walletData } = await new Wallet().init({
-          networkName: this.$network,
+          networkName: networkName,
           chain: Chain.near,
           apiKey: API_KEY,
         });

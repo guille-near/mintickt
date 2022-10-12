@@ -19,18 +19,18 @@ import VueAxios from "vue-axios";
 
 //Global Variables
 Vue.config.productionTip = false
-Vue.prototype.$network= (Vue.config.productionTip) ? 'testnet' : 'mainnet';
+Vue.prototype.$networkName= (Vue.config.productionTip) ? 'mainnet' : 'testnet';
 Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'artemis.mintspace2.testnet' : 'artemis.mintspace2.testnet';
 Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
-Vue.prototype.$dev_key= "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
-Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.testnet.near.org/' : 'https://explorer.near.org/';
-Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'http://localhost:3070/api/ipfs/' : 'https://www.mintickt.com:3070/api/ipfs/';
-Vue.prototype.$binance= "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+Vue.prototype.$dev_key= '63b2aa55-8acd-4b7c-85b4-397cea9bcae9';
+Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.near.org/' : 'https://explorer.testnet.near.org/';
+Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://www.mintickt.com:3070/api/ipfs/' : 'http://localhost:3070/api/ipfs/';
+Vue.prototype.$binance= 'https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT';
 
 
 Vue.use(PerfectScrollbar);
 Vue.use(VueAxios,axios);
-axios.defaults.baseURL= (Vue.config.productionTip) ? 'http://localhost:3090/api/v1/mintickt' : 'https://www.mintickt.com:3090/api/v1/mintickt'
+axios.defaults.baseURL= (Vue.config.productionTip) ? 'https://www.mintickt.com:3090/api/v1/mintickt' : 'http://localhost:3090/api/v1/mintickt'
 
 // Or if you want to pass in the lock option
 Vue.use(vueDebounce)
