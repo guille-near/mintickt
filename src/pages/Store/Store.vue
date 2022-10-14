@@ -79,7 +79,7 @@
               hide-spin-buttons
               :hide-details="true"
               solo
-              v-model="cantidad"
+              v-model="quantity"
             >
             </v-text-field>
             <div class="contenedor_botones">
@@ -97,11 +97,11 @@
               <img src="@/assets/logo/logonear.svg" alt="Logo near" />
               <span class="h8-em number ml-3">{{ price_near }}</span>
             </div>
-            <span class="tend">~ {{ (lastPrice.lastPrice * price_near).toFixed(2) }} $USD</span>
+            <span class="tend">~ {{ (price_token_usd).toFixed(2) }} $USD</span>
           </aside>
         </div>
         <div style="gap: 1em" class="divcol fill-w">
-          <v-btn @click="batchMakeOffer()" class="paywallet h8-em">
+          <v-btn @click="batchMakeOffer()" :loading="loading" class="paywallet h8-em">
             Pay with NEAR
           </v-btn>
           <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
@@ -155,6 +155,7 @@ const your_events = gql`
 		nodes {
         price
         reference
+        token_id
       }
       }
     }
@@ -191,9 +192,10 @@ export default {
     return {
       tittle: "",
       ticket_img: "",
-      cantidad: 1,
+      quantity: 0,
       location: "",
       dialog: false,
+      loading: false,
       lastPrice: [],
       showCarousel: null,
       Datos: {
@@ -210,11 +212,12 @@ export default {
       isIntersecting: false,
       tokens_listed: null,
       price_near: 0,
-      precio_token_usd: null,
+      price_token_usd: 0,
+      tokens: [],
       tokens_buy: [],
       precio_yocto: null,
       hash: "",
-      src: "https://gateway.pinata.cloud/ipfs/QmdyChAqqQDx5P46bMq9kKm8g997Y4L4f4R91UwXiwzqXB",
+      src: this.$pinata_gateway+"Qmdsg8TxEm91rwKq1bFnmEgn7Wfwefxx4og5m75f81hf19",
       date: "",
       date_start: "",
       date_end: "",
@@ -224,8 +227,8 @@ export default {
   },
   mounted() {
     this.$emit("renderHeader");
-    this.fetch();
     this.getData();
+    this.fetch();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -239,14 +242,14 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/"
+        "/mintickt/#/store/?thingid=evento2.mintspace2.testnet:92491d464372586d487957a172e474f4"
       );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/"
+        "/mintickt/#/store/?thingid=evento2.mintspace2.testnet:92491d464372586d487957a172e474f4"
       );
     }
   },
@@ -258,7 +261,7 @@ export default {
       return amountInYocto;
     },
     async getData() {
-      this.progress = true;
+      this.loading = true;
       this.data = [];
       this.dataTableMobile = [];
       let datos = JSON.parse(
@@ -266,7 +269,6 @@ export default {
       );
       const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
-      var rows = [];
       this.$apollo
         .query({
           query: your_events,
@@ -282,8 +284,7 @@ export default {
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
-			//Dates
-			// console.log(value)
+            //Dates
             this.date = new Date(
               value[0].reference_blob.extra[6].value * 1000
             ).toLocaleDateString("en-US", options);
@@ -293,19 +294,19 @@ export default {
             this.date_end = new Date(
               value[0].reference_blob.extra[7].value * 1000
             ).toLocaleDateString("en-US", options_end);
-			//Tittle
+			      //Tittle
             this.tittle = value[0].title;
-			//Ticket image
+			      //Ticket image
             this.ticket_img = value[0].reference_blob.media;
-			//Html description
+			      //Html description
             this.Datos.about.event.text = value[0].reference_blob.description;
-			//Location
+			      //Location
             this.Datos.location = value[0].reference_blob.extra[0].value;
-			//Google map location
+			      //Google map location
             this.googlemap =
               "https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=" +
               this.Datos.location;
-			//Extra data  
+			      //Extra data  
             this.Datos.details = [
               {
                 titlesDetails: "Storage Gateaway",
@@ -326,7 +327,9 @@ export default {
               },
             ];
             //Last price
-			this.price_near = value[0].listings_aggregate.nodes[0].price /  Math.pow(10, 24);
+			      this.price_near = value[0].listings_aggregate.nodes[0].price /  Math.pow(10, 24);
+            //Add tokens
+            this.tokens = value[0].listings_aggregate.nodes;
             Object.entries(value).forEach(([i, value1]) => {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
@@ -340,9 +343,8 @@ export default {
                   },
                 })
                 .then((response) => {
-                  // console.log(response.data);
-				  this.tokens_minted = response.data.nft_tokens_aggregate.aggregate.count;
-				  this.tokens_listed = value1.listings_aggregate.aggregate.count;
+                  this.tokens_minted = response.data.nft_tokens_aggregate.aggregate.count;
+                  this.tokens_listed = value1.listings_aggregate.aggregate.count;
                 })
                 .catch((err) => {
                   console.log("Error", err);
@@ -367,21 +369,10 @@ export default {
       request.open("GET", BINANCE_NEAR);
       request.send();
       request.onload = () => {
-        this.lastPrice = JSON.parse(request.responseText);
+        this.lastPrice = JSON.parse(request.responseText).lastPrice;
+        this.price_token_usd = parseFloat(this.lastPrice) * parseFloat(this.price_near) * (this.quantity === 0 ? 1 : parseFloat(this.quantity))
       };
-    },
-    yoctoNEARNEAR: function (yoctoNEAR) {
-      const amountInNEAR = utils.format.parseNearAmount(
-        this.formatPrice(yoctoNEAR).toString()
-      );
-      this.yoctoNEARNEAR2(amountInNEAR);
-      this.precio_yocto = amountInNEAR;
-    },
-    yoctoNEARNEAR2: function (yoctoNEAR) {
-      const amountInNEAR = utils.format.formatNearAmount(yoctoNEAR);
-      this.price = amountInNEAR;
-      console.log(this.price);
-      return amountInNEAR.toString();
+      
     },
     formatPrice(price) {
       return Number(
@@ -391,44 +382,36 @@ export default {
       );
     },
     controlAmount(item) {
-      this.traerdatos();
-      var cantidad_tokens = 0;
-      this.tokens_buy = [];
-      if (item == "more" && this.cantidad < this.tokens_listed) {
-        this.cantidad++;
-        this.price = parseFloat(this.price * this.cantidad).toFixed(1);
-        this.lastPrice = parseFloat(
-          this.price * this.precio_token_usd
-        ).toFixed(2);
-        this.things_by_pk.tokens.forEach((element) => {
+      var quantity_tokens = 0;    
+      if (item == "more" && this.quantity < this.tokens_listed) {
+        this.quantity= this.quantity+1;
+        // this.lastPrice = this.lastPrice.lastPrice * this.quantity * this.price_near
+        this.getData();
+        this.fetch();
+        this.tokens_buy = [];
+        this.tokens.forEach((element) => {
           if (
-            element.list !== null &&
-            element.ownerId === "mintickt.near" &&
-            !this.tokens_buy.includes(element.id) &&
-            cantidad_tokens < this.cantidad
+            !this.tokens_buy.includes(element.token_id) &&
+            quantity_tokens < this.quantity
           ) {
-            cantidad_tokens++;
-            this.tokens_buy.push(element.id);
+            quantity_tokens++;
+            this.tokens_buy.push(element.token_id + ":" + this.$store_mintbase);
           }
-          console.log(this.tokens_buy);
         });
       }
-      if (item == "less" && this.cantidad > 1) {
-        this.cantidad--;
-        this.price = parseFloat(this.price * this.cantidad).toFixed(1);
-        this.lastPrice = parseFloat(
-          this.price * this.precio_token_usd
-        ).toFixed(2);
-        this.things_by_pk.tokens.forEach((element) => {
+      if (item == "less" && this.quantity > 1) {
+        this.quantity--;
+        this.getData();
+        this.fetch();
+        this.tokens_buy = [];
+        this.tokens.forEach((element) => {
           if (
-            element.list !== null &&
-            element.ownerId === "mintickt.near" &&
-            !this.tokens_buy.includes(element.id) &&
-            cantidad_tokens < this.cantidad
+            !this.tokens_buy.includes(element.token_id) &&
+            quantity_tokens < this.quantity
           ) {
-            cantidad_tokens++;
+            quantity_tokens++;
+            this.tokens_buy.push(element.token_id);
           }
-          console.log(this.tokens_buy);
         });
       }
     },
@@ -436,26 +419,26 @@ export default {
       this.isIntersecting = entries[0].isIntersecting;
     },
     async batchMakeOffer() {
-      let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d";
+      this.loading = true;
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.mainnet,
+        networkName: networkName,
         chain: Chain.near,
         apiKey: API_KEY,
       });
       const { wallet } = walletData;
       var prices_tokens = [];
       this.tokens_buy.forEach((element) => {
-        prices_tokens.push(this.precio_yocto.toString());
-
-        console.log(element);
+        prices_tokens.push(this.price_near.toString());
+        //console.log(element);
       });
       wallet
         .batchMakeOffer(
           this.tokens_buy,
-          prices_tokens
-          //  "75000000000000", // attached GAS (optional)
+          prices_tokens * Math.pow(10, 24)
         )
-        .then(() => {});
+        .then(() => { this.loading = false });
     },
   },
 };

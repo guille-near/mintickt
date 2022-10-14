@@ -75,13 +75,13 @@
               featured guests.
             </p>
 
-            <!--<vue-editor v-model="dataTickets.description"></vue-editor>-->
-            <v-textarea
+            <vue-editor v-model="dataTickets.description"></vue-editor>
+            <!--<v-textarea
               v-model="dataTickets.description"
               solo
               auto-grow
               :rules="rules.required"
-            ></v-textarea>
+            ></v-textarea>-->
 
             <h3>Location</h3>
             <p>
@@ -605,6 +605,7 @@
                   type="submit"
                   :loading="loading"
                   :disabled="disable"
+                  @click="nextLast"
                   style="
                     background: linear-gradient(
                       183.61deg,
@@ -747,7 +748,6 @@ export default {
     };
   },
   mounted() {
-    // this.step = 4;
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
@@ -771,7 +771,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/register"
+        "/mintick/#/events/register"
       );
     }
     //List option
@@ -788,7 +788,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/register"
+        "/mintickt/#/events/register"
       );
     }
     //goodies option
@@ -814,7 +814,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/register"
+        "mintickt/#/events/register"
       );
     }
   },
@@ -958,7 +958,7 @@ export default {
         await wallet.minter.setMetadata(metadata, true);
         console.log(metadata);
 
-        localStorage.setItem("mint_tittle", this.dataTickets.title);
+        localStorage.setItem("mint_tittle", this.dataTickets.name);
         //LocalStorage Metadata
         localStorage.setItem("metadata", JSON.stringify(metadata));
 
@@ -1088,7 +1088,7 @@ export default {
             value: this.dataTickets.attendees,
           },
         ];
-        let store = "artemis.mintspace2.testnet";
+        let store = this.$store_mintbase;
         let category = "redeemed";
 
         //Metadata Object
@@ -1101,6 +1101,7 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
+        console.log(metadata);
 
         //handle royalties
         const royalties = {};
@@ -1140,13 +1141,14 @@ export default {
 
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
-          allowTaint: true,
           backgroundColor: "#000000",
-          scale: 1,
+          y: (container/2, container/2, 30),
+          height: 580
         }).then((canvas) => {
           // let link = document.createElement("a");
           // link.download = "image_name.png";
           // link.href = canvas.toDataURL("image/png", 1.0);
+          // document.body.appendChild(link);
           // link.click();
 
           var image = new Image();
@@ -1154,6 +1156,28 @@ export default {
           localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
           this.image = image;
           // console.log(this.image);
+        });
+      }
+    },
+    nextLast() {
+      if (this.$refs.form4.validate()) {
+        var container = document.getElementById("my-node"); /* full page */
+        html2canvas(container, {
+          backgroundColor: "#000000",
+          y: (container/2, container/2, 30),
+          height: 580
+        }).then((canvas) => {
+          // let link = document.createElement("a");
+          // link.download = "image_name.png";
+          // link.href = canvas.toDataURL("image/png", 1.0);
+          // document.body.appendChild(link);
+          // link.click();
+
+          var image = new Image();
+          image.src = canvas.toDataURL("image/png", 1.0);
+          localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
+          this.image = image;
+          console.log(this.image);
         });
       }
     },
@@ -1506,7 +1530,8 @@ export default {
       })
     },
     async completeIpfs() {
-      const url = "/ipfs";
+      const url =  this.$node_url + "/ipfs";
+      console.log(url)
       let item = {
         thingid: localStorage.getItem('metadata_id'),
         tokenid: localStorage.getItem('IpfsHash'),

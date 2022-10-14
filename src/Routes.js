@@ -35,7 +35,7 @@ export default new Router({
         {
           path: '/store',
           name: 'Store',
-          component: () => import('@/pages/Store/store'),
+          component: () => import('@/pages/Store/Store'),
         },
         {
           path: '/events',
