@@ -179,13 +179,12 @@ export default {
     localStorage.setItem("step", 1);
     this.getData();
     this.pollData();
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
     if (
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "goodies"
     ) {
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url =
-        this.$explorer+"/accounts/"+user
       this.step = 4;
       localStorage.setItem("step", 4);
       this.getData().then(()=>{

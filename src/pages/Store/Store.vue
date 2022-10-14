@@ -185,6 +185,13 @@ const mb_views_nft_tokens_aggregate = gql`
     }
   }
 `;
+const main_image = gql`
+  query MyQuery($_iregex: String!) {
+    ipfs(where: { thingid: $_iregex }) {
+      tokenid
+    }
+  }
+`;
 
 export default {
   name: "Tienda",
@@ -439,6 +446,77 @@ export default {
           prices_tokens * Math.pow(10, 24)
         )
         .then(() => { this.loading = false });
+    },
+        async getExtraFilter() {
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      //console.log(Object.values(this.dataFilters)[0].value)
+      //reedemed
+      this.$apollo
+        .query({
+          query: redeemed_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+        })
+        .then((response) => {
+          //Burned reedemed burned_fans_tokens_aggregate
+          this.$apollo
+            .query({
+              query: burned_reedemed_tokens_aggregate,
+              variables: {
+                _iregex: thingid[1],
+              },
+              client: "mintickClient",
+            })
+            .then((res) => {
+              Object.values(this.dataFilters)[1].value =
+                res.data.redeemers.length +
+                " / " +
+                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+            })
+            .catch((err) => {
+              console.log("Error", err);
+            })
+            .finally(() => (this.loading = false));
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+
+      //Fans inside
+      this.$apollo
+        .query({
+          query: fans_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+        })
+        .then((response) => {
+          //Burned reedemed burned_fans_tokens_aggregate
+          this.$apollo
+            .query({
+              query: burned_fans_tokens_aggregate,
+              variables: {
+                _iregex: thingid[1],
+              },
+              client: "mintickClient",
+            })
+            .then((res) => {
+              Object.values(this.dataFilters)[0].value =
+                res.data.fansinsides.length +
+                " / " +
+                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+            })
+            .catch((err) => {
+              console.log("Error", err);
+            })
+            .finally(() => (this.loading = false));
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
     },
   },
 };
