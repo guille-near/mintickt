@@ -1430,8 +1430,9 @@ export default {
               {
                 methodName: "deposit_storage",
                 receiverId: mintbase_marketplace,
-                //gas: "200000000000000",
+                gas: "200000000000000",
                 args: {},
+                deposit: utils.format.parseNearAmount((0.01*this.amount_list).toString()),
               },
             ],
           });
@@ -1452,6 +1453,7 @@ export default {
                         account_id: mintbase_marketplace,
                         msg: JSON.stringify({
                           price: this.nearToYocto(this.price),
+                          autotransfer: true,
                         }),
                       },
                       deposit: utils.format.parseNearAmount((0.108).toString()),

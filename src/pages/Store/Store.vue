@@ -1,6 +1,5 @@
 <template>
   <section id="tienda" class="center align divcol">
-    <ModalSuccess ref="modal"></ModalSuccess>
     <aside>
       <!-- new -->
       <img class="eliminarmobile" :src="src" alt="Background Image" />
@@ -14,7 +13,6 @@
         <span>{{ tittle }}</span>
       </div>
     </aside>
-
     <aside class="jspace divcolmobile gapmobile acentermobile limiter">
       <div v-if="!isIntersecting" class="floatButton vermobile">
         <div class="fill-w">
@@ -135,6 +133,7 @@
         </v-card>
       </v-dialog>
     </aside>
+      <ModalSuccess ref="modal"></ModalSuccess>
   </section>
 </template>
 
