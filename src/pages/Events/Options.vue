@@ -146,11 +146,11 @@
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import gql from "graphql-tag";
 const your_events = gql`
-  query MyQuery($store: String!, $user: String!) {
+  query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
   mb_views_nft_metadata(
     where: {nft_contract_id: {_eq: $store}
-      , listings: {price: {_is_null: false}}
-      , nft_contract_owner_id: {_eq: $user}}
+      , listings: {price: {_is_null: false}
+        , metadata_id: {_eq: $metadata_id}}, nft_contract_owner_id: {_eq: $user}}
   ) {
     title
     reference_blob
@@ -256,7 +256,8 @@ export default {
           query: your_events,
           variables: {
             store: this.$store_mintbase,
-            user: user
+            user: user,
+            metadata_id: this.$route.query.thingid.toLowerCase(),
           },
         })
         .then((response) => {
@@ -272,11 +273,11 @@ export default {
                   variables: {
                     store: this.$store_mintbase,
                     user: user,
-                    metadata_id: value1.id,
+                    metadata_id: this.$route.query.thingid.toLowerCase(),
                   },
                 })
                 .then((response) => {
-                  this.name = value1.title,
+                  this.name = this.$route.query.event,
                   this.minted = response.data.nft_tokens_aggregate.aggregate.count,
                   this.listed = value1.listings_aggregate.aggregate.count
                 })
