@@ -272,12 +272,15 @@ export default {
         query: { event: pevent, thingid: pthingid },
       });
       localStorage.setItem('eventid', pthingid)
+      localStorage.setItem('event_name', pevent)
     },
     goOptions(pevent, pthingid) {
       this.$router.push({
         path: "/events/options",
         query: { event: pevent, thingid: pthingid },
       });
+      localStorage.setItem('eventid', pthingid)
+      localStorage.setItem('event_name', pevent)
     },
     fetch() {
       const BINANCE_NEAR =

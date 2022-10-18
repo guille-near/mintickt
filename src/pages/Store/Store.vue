@@ -505,6 +505,26 @@ export default {
         });
       
     },
+    async sendTicket() {
+      const url =  this.$node_url + "/nft-transfer";
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      //console.log(url)
+      let item = {
+        receiver_id: user,
+        tokenid: localStorage.getItem('IpfsHash'),
+      };
+      this.axios
+        .post(url, item)
+        .then(() => {
+          console.log('Hash up')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

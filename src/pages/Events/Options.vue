@@ -193,7 +193,7 @@ export default {
     return {
       modalMintMore: false,
       modalListMore: false,
-      cantidad: 1,
+      cantidad: 0,
       modalQR: false,
       minted: 0,
       listed: 0,
@@ -213,19 +213,20 @@ export default {
       "https://explorer.mainnet.near.org/transactions/" +
       urlParams.get("transactionHashes");
     if (urlParams.get("transactionHashes") !== null) {
-      //console.log('aqui' + urlParams.get("transactionHashes"))
-      this.dialog = true;
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        this.$explorer+"/accounts/"+user
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
+        "/mintickt/#/events/options?event="+localStorage.getItem('event_name')+"&thingid="+localStorage.getItem('eventid')
       );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
+        "/mintickt/#/events/options?event="+localStorage.getItem('event_name')+"&thingid="+localStorage.getItem('eventid')
       );
     }
   },
@@ -298,44 +299,12 @@ export default {
       }, 120000);
     },
     controlAmount(item) {
-      this.traerdatos();
-      var cantidad_tokens = 0;
-      this.tokens_buy = [];
-      if (item == "more" && this.cantidad < this.tokens_disponibles) {
+      this.getData();
+      if (item == "more") {
         this.cantidad++;
-        this.price = parseFloat(this.price * this.cantidad).toFixed(1);
-        this.ultimoprecio = parseFloat(
-          this.price * this.precio_token_usd
-        ).toFixed(2);
-        this.things_by_pk.tokens.forEach((element) => {
-          if (
-            element.ownerId === "mintickt.near" &&
-            !this.tokens_buy.includes(element.id) &&
-            cantidad_tokens < this.cantidad
-          ) {
-            cantidad_tokens++;
-            this.tokens_buy.push(element.id);
-          }
-          console.log(this.tokens_buy);
-        });
       }
       if (item == "less" && this.cantidad > 1) {
         this.cantidad--;
-        this.price = this.price * this.cantidad;
-        this.ultimoprecio = parseFloat(
-          this.price * this.precio_token_usd
-        ).toFixed(2);
-        this.things_by_pk.tokens.forEach((element) => {
-          if (
-            element.ownerId === "mintickt.near" &&
-            !this.tokens_buy.includes(element.id) &&
-            cantidad_tokens < this.cantidad
-          ) {
-            cantidad_tokens++;
-            this.tokens_buy.push(element.id);
-          }
-          console.log(this.tokens_buy);
-        });
       }
     },
   },

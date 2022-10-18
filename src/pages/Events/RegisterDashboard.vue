@@ -103,6 +103,7 @@
               classname="form-control"
               style="padding-bottom: 15px"
               :enable-geolocation="false"
+              :rules="rules.required"
               solo
               v-on:placechanged="getAddressData"
             >
@@ -121,6 +122,7 @@
                   v-model="menu"
                   :close-on-content-click="false"
                   :return-value.sync="dates"
+                  :rules="rules.required"
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
@@ -1145,11 +1147,11 @@ export default {
           y: (container/2, container/2, 30),
           height: 580
         }).then((canvas) => {
-          // let link = document.createElement("a");
-          // link.download = "image_name.png";
-          // link.href = canvas.toDataURL("image/png", 1.0);
-          // document.body.appendChild(link);
-          // link.click();
+          let link = document.createElement("a");
+          link.download = "image_name.png";
+          link.href = canvas.toDataURL("image/png", 1.0);
+          document.body.appendChild(link);
+          link.click();
 
           var image = new Image();
           image.src = canvas.toDataURL("image/png", 1.0);
