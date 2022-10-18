@@ -1,5 +1,6 @@
 <template>
   <section id="tienda" class="center align divcol">
+    <ModalSuccess ref="modal"></ModalSuccess>
     <aside>
       <!-- new -->
       <img class="eliminarmobile" :src="src" alt="Background Image" />
@@ -97,11 +98,16 @@
               <img src="@/assets/logo/logonear.svg" alt="Logo near" />
               <span class="h8-em number ml-3">{{ price_near }}</span>
             </div>
-            <span class="tend">~ {{ (price_token_usd).toFixed(2) }} $USD</span>
+            <span class="tend">~ {{ price_token_usd.toFixed(2) }} $USD</span>
           </aside>
         </div>
         <div style="gap: 1em" class="divcol fill-w">
-          <v-btn @click="batchMakeOffer()" :loading="loading" class="paywallet h8-em">
+          <v-btn
+            @click="buy"
+            :loading="loading"
+            :disabled="disable"
+            class="paywallet h8-em"
+          >
             Pay with NEAR
           </v-btn>
           <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
@@ -134,6 +140,7 @@
 
 <script>
 import gql from "graphql-tag";
+import ModalSuccess from "./ModalSuccess";
 import { Wallet, Chain, Network } from "mintbase";
 import * as nearAPI from "near-api-js";
 const your_events = gql`
@@ -152,38 +159,32 @@ const your_events = gql`
         aggregate {
           count
         }
-		nodes {
-        price
-        reference
-        token_id
-      }
+        nodes {
+          price
+          reference
+          token_id
+        }
       }
     }
   }
 `;
 const mb_views_nft_tokens_aggregate = gql`
-  query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-    nft_tokens_aggregate(
-      where: {
-        nft_contract_id: { _eq: $store }
-        metadata_id: { _eq: $metadata_id }
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-    nft_earnings_aggregate(
-      where: {
-        receiver_id: { _eq: $user }
-        offer: { token: { metadata_id: { _eq: $metadata_id } } }
-      }
-    ) {
-      aggregate {
-        count
-      }
+  query MyQuery($store: String!,  $metadata_id: String!) {
+  nft_tokens_aggregate(
+    where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}}
+  ) {
+    aggregate {
+      count
     }
   }
+  nft_earnings_aggregate(
+    where: {offer: {token: {metadata_id: {_eq: $metadata_id}}}}
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
 `;
 const main_image = gql`
   query MyQuery($_iregex: String!) {
@@ -195,6 +196,9 @@ const main_image = gql`
 
 export default {
   name: "Tienda",
+  components: {
+    ModalSuccess,
+  },
   data() {
     return {
       tittle: "",
@@ -203,6 +207,7 @@ export default {
       location: "",
       dialog: false,
       loading: false,
+      disable: false,
       lastPrice: [],
       showCarousel: null,
       Datos: {
@@ -222,9 +227,10 @@ export default {
       price_token_usd: 0,
       tokens: [],
       tokens_buy: [],
+      txs: [],
       precio_yocto: null,
       hash: "",
-      src: this.$pinata_gateway+"Qmdsg8TxEm91rwKq1bFnmEgn7Wfwefxx4og5m75f81hf19",
+      src: "",
       date: "",
       date_start: "",
       date_end: "",
@@ -236,45 +242,44 @@ export default {
     this.$emit("renderHeader");
     this.getData();
     this.fetch();
-
+    this.mainImg();
+    this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes");
-    this.hash =
-      "https://explorer.mainnet.near.org/transactions/" +
-      urlParams.get("transactionHashes");
+    let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+    const user = datos.accountId;
     if (urlParams.get("transactionHashes") !== null) {
-      console.log("aqui" + urlParams.get("transactionHashes"));
-      this.dialog = true;
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url =
+        this.$explorer+"/accounts/"+user
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/store/?thingid=evento2.mintspace2.testnet:92491d464372586d487957a172e474f4"
+        "/mintickt/#/store/?thingid="+localStorage.getItem('eventid')
       );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/store/?thingid=evento2.mintspace2.testnet:92491d464372586d487957a172e474f4"
+        "/mintickt/#/store/?thingid="+localStorage.getItem('eventid')
       );
     }
   },
   methods: {
-    NEARyoctoNEAR: function () {
+    NEARyoctoNEAR: function (NEARyocto) {
       const { utils } = nearAPI;
-      const amountInYocto = utils.format.parseNearAmount(1);
-      console.log(amountInYocto);
-      return amountInYocto;
+      const amountInYocto = utils.format.parseNearAmount(NEARyocto);
+      // console.log(amountInYocto);
+      return amountInYocto.toString();
     },
     async getData() {
       this.loading = true;
       this.data = [];
       this.dataTableMobile = [];
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
       this.$apollo
         .query({
@@ -301,19 +306,19 @@ export default {
             this.date_end = new Date(
               value[0].reference_blob.extra[7].value * 1000
             ).toLocaleDateString("en-US", options_end);
-			      //Tittle
+            //Tittle
             this.tittle = value[0].title;
-			      //Ticket image
+            //Ticket image
             this.ticket_img = value[0].reference_blob.media;
-			      //Html description
+            //Html description
             this.Datos.about.event.text = value[0].reference_blob.description;
-			      //Location
+            //Location
             this.Datos.location = value[0].reference_blob.extra[0].value;
-			      //Google map location
+            //Google map location
             this.googlemap =
               "https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=" +
               this.Datos.location;
-			      //Extra data  
+            //Extra data
             this.Datos.details = [
               {
                 titlesDetails: "Storage Gateaway",
@@ -329,12 +334,12 @@ export default {
               },
               {
                 titlesDetails: "Thing ID",
-                textDetails:
-                  value[0].id,
+                textDetails: value[0].id,
               },
             ];
             //Last price
-			      this.price_near = value[0].listings_aggregate.nodes[0].price /  Math.pow(10, 24);
+            this.price_near =
+              value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
             //Add tokens
             this.tokens = value[0].listings_aggregate.nodes;
             Object.entries(value).forEach(([i, value1]) => {
@@ -345,13 +350,14 @@ export default {
                   query: mb_views_nft_tokens_aggregate,
                   variables: {
                     store: this.$store_mintbase,
-                    user: user,
                     metadata_id: value1.id,
                   },
                 })
                 .then((response) => {
-                  this.tokens_minted = response.data.nft_tokens_aggregate.aggregate.count;
-                  this.tokens_listed = value1.listings_aggregate.aggregate.count;
+                  this.tokens_minted =
+                    response.data.nft_tokens_aggregate.aggregate.count;
+                  this.tokens_listed =
+                    value1.listings_aggregate.aggregate.count;
                 })
                 .catch((err) => {
                   console.log("Error", err);
@@ -377,9 +383,11 @@ export default {
       request.send();
       request.onload = () => {
         this.lastPrice = JSON.parse(request.responseText).lastPrice;
-        this.price_token_usd = parseFloat(this.lastPrice) * parseFloat(this.price_near) * (this.quantity === 0 ? 1 : parseFloat(this.quantity))
+        this.price_token_usd =
+          parseFloat(this.lastPrice) *
+          parseFloat(this.price_near) *
+          (this.quantity === 0 ? 1 : parseFloat(this.quantity));
       };
-      
     },
     formatPrice(price) {
       return Number(
@@ -389,9 +397,9 @@ export default {
       );
     },
     controlAmount(item) {
-      var quantity_tokens = 0;    
+      var quantity_tokens = 0;
       if (item == "more" && this.quantity < this.tokens_listed) {
-        this.quantity= this.quantity+1;
+        this.quantity = this.quantity + 1;
         // this.lastPrice = this.lastPrice.lastPrice * this.quantity * this.price_near
         this.getData();
         this.fetch();
@@ -402,7 +410,9 @@ export default {
             quantity_tokens < this.quantity
           ) {
             quantity_tokens++;
-            this.tokens_buy.push(element.token_id + ":" + this.$store_mintbase);
+            this.tokens_buy.push(element.token_id);
+            this.quantity == 0 ? (this.disable = true) : (this.disable = false);
+            console.log(this.tokens_buy);
           }
         });
       }
@@ -418,6 +428,7 @@ export default {
           ) {
             quantity_tokens++;
             this.tokens_buy.push(element.token_id);
+            this.quantity == 0 ? (this.disable = true) : (this.disable = false);
           }
         });
       }
@@ -425,98 +436,75 @@ export default {
     onIntersect(entries) {
       this.isIntersecting = entries[0].isIntersecting;
     },
-    async batchMakeOffer() {
-      this.loading = true;
-      let API_KEY = this.$dev_key;
-      let networkName = this.$networkName.toString();
-      const { data: walletData } = await new Wallet().init({
-        networkName: networkName,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
-      const { wallet } = walletData;
-      var prices_tokens = [];
-      this.tokens_buy.forEach((element) => {
-        prices_tokens.push(this.price_near.toString());
-        //console.log(element);
-      });
-      wallet
-        .batchMakeOffer(
-          this.tokens_buy,
-          prices_tokens * Math.pow(10, 24)
-        )
-        .then(() => { this.loading = false });
+    padWithZero(num, targetLength) {
+      return String(num).padEnd(targetLength, "0");
     },
-        async getExtraFilter() {
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+    async buy() {
+      this.quantity == 0 ? (this.disable = true) : (this.disable = false);
+      this.loading = true;
+      const mintbase_marketplace = this.$mintbase_marketplace;
+      let store = this.$store_mintbase;
+      this.tokens_buy.forEach((element) => {
+        console.log(element)
+        // Pushh array for each element of the tokens selected
+        this.txs.push({
+                  receiverId: mintbase_marketplace,
+                  functionCalls: [
+                    {
+                      methodName: "buy",
+                      receiverId: mintbase_marketplace,
+                      gas: "200000000000000",
+                      args: {
+                        nft_contract_id: store,
+                        token_id: element,
+                      },
+                      deposit: this.padWithZero(this.price_near, String(this.price_near).length + 24),
+                    },
+                  ],
+                });
+      });
+      this.executeMultipleTransactions();
+    },
+    async mainImg() {
+      var thingid = this.$route.query.thingid.toLowerCase();
       //console.log(Object.values(this.dataFilters)[0].value)
       //reedemed
       this.$apollo
         .query({
-          query: redeemed_tokens_aggregate,
+          query: main_image,
           variables: {
-            _iregex: thingid[1],
+            _iregex: thingid,
           },
+          client: "mintickClient",
         })
         .then((response) => {
-          //Burned reedemed burned_fans_tokens_aggregate
-          this.$apollo
-            .query({
-              query: burned_reedemed_tokens_aggregate,
-              variables: {
-                _iregex: thingid[1],
-              },
-              client: "mintickClient",
-            })
-            .then((res) => {
-              Object.values(this.dataFilters)[1].value =
-                res.data.redeemers.length +
-                " / " +
-                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-            })
-            .catch((err) => {
-              console.log("Error", err);
-            })
-            .finally(() => (this.loading = false));
+          // console.log(response.data)
+          this.src = this.$pinata_gateway + response.data.ipfs[0].tokenid;
         })
         .catch((err) => {
           console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
+        });
+    },
+    async executeMultipleTransactions() {
+        //Gettintg the tokens ID
+        //this.getTokensId();
+        //Adding metadata for the burn ticket
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
 
-      //Fans inside
-      this.$apollo
-        .query({
-          query: fans_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
+        await wallet.executeMultipleTransactions({
+          transactions: this.txs,
+          options: {
+            meta: "buy",
           },
-        })
-        .then((response) => {
-          //Burned reedemed burned_fans_tokens_aggregate
-          this.$apollo
-            .query({
-              query: burned_fans_tokens_aggregate,
-              variables: {
-                _iregex: thingid[1],
-              },
-              client: "mintickClient",
-            })
-            .then((res) => {
-              Object.values(this.dataFilters)[0].value =
-                res.data.fansinsides.length +
-                " / " +
-                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-            })
-            .catch((err) => {
-              console.log("Error", err);
-            })
-            .finally(() => (this.loading = false));
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
+        });
+      
     },
   },
 };

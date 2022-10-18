@@ -185,9 +185,10 @@ export default {
       }
     },
     async connect() {
-      let API_KEY = "63b2aa55-8acd-4b7c-85b4-397cea9bcae9";
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.testnet,
+        networkName: networkName,
         chain: Chain.near,
         apiKey: API_KEY,
       });
@@ -206,9 +207,10 @@ export default {
       }
     },
     async revisar() {
-      let API_KEY = "020f6987-2904-4834-8d5a-23efb657fa2a";
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
-        networkName: Network.testnet,
+        networkName: networkName,
         chain: Chain.near,
         apiKey: API_KEY,
       });

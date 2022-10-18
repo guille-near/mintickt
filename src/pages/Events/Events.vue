@@ -36,7 +36,7 @@
           <v-btn @click="goLiveData(item.name, item.thingid)"
             >Go to live data</v-btn
           >
-          <v-btn v-on="on" v-bind="attrs" to="/events/options"
+          <v-btn @click="goOptions(item.name, item.thingid)" v-on="on" v-bind="attrs"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
         </div>
@@ -115,23 +115,23 @@
 <script>
 import gql from "graphql-tag";
 const your_events = gql`
-  query MyQuery($store: String!) {
-    mb_views_nft_metadata(
-      where: {
-        nft_contract_id: { _eq: $store }
-        listings: { price: { _is_null: false } }
-      }
-    ) {
-      title
-      reference_blob
-      id
-      listings_aggregate {
-        aggregate {
-          count
-        }
+  query MyQuery($store: String!, $user: String!) {
+  mb_views_nft_metadata(
+    where: {nft_contract_id: {_eq: $store}
+      , listings: {price: {_is_null: false}}
+      , nft_contract_owner_id: {_eq: $user}}
+  ) {
+    title
+    reference_blob
+    id
+    listings_aggregate {
+      aggregate {
+        count
       }
     }
+    nft_contract_owner_id
   }
+}
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
@@ -212,6 +212,7 @@ export default {
           query: your_events,
           variables: {
             store: this.$store_mintbase,
+            user: user
           },
         })
         .then((response) => {
@@ -268,6 +269,13 @@ export default {
     goLiveData(pevent, pthingid) {
       this.$router.push({
         path: "/events/liveData",
+        query: { event: pevent, thingid: pthingid },
+      });
+      localStorage.setItem('eventid', pthingid)
+    },
+    goOptions(pevent, pthingid) {
+      this.$router.push({
+        path: "/events/options",
         query: { event: pevent, thingid: pthingid },
       });
     },

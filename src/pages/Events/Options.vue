@@ -2,36 +2,36 @@
   <section id="options" class="divcol gap align">
     <div class="acenter">
       <v-btn icon to="/events">
-        <v-icon style="color:#FFFFFF !important">mdi-arrow-left</v-icon>
+        <v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
       </v-btn>
-      <h2 class="p" style="margin:0">Nearcon / Settings</h2>
+      <h2 class="p" style="margin: 0">{{ name }} / Settings</h2>
     </div>
 
     <aside class="container-actions divcol">
       <span>Burn a ticket</span>
-      <label>Nearcon (Access Control)</label>
+      <label>(Access Control)</label>
       <div class="space">
         <v-btn @click="ModalQR('ticket')">
-          <img src="@/assets/icons/qr.svg" alt="qr icon">
+          <img src="@/assets/icons/qr.svg" alt="qr icon" />
           Show QR
         </v-btn>
         <v-btn>
-          <img src="@/assets/icons/copy.svg" alt="copy icon">
+          <img src="@/assets/icons/copy.svg" alt="copy icon" />
           Copy url
         </v-btn>
       </div>
     </aside>
-    
+
     <aside class="container-actions divcol">
       <span>Burn a goodie</span>
-      <label>Near beer</label>
+      <label>(Goodies)</label>
       <div class="space">
         <v-btn @click="ModalQR('goodie')">
-          <img src="@/assets/icons/qr.svg" alt="qr icon">
+          <img src="@/assets/icons/qr.svg" alt="qr icon" />
           Show QR
         </v-btn>
         <v-btn>
-          <img src="@/assets/icons/copy.svg" alt="copy icon">
+          <img src="@/assets/icons/copy.svg" alt="copy icon" />
           Copy url
         </v-btn>
       </div>
@@ -41,22 +41,21 @@
       <div class="space">
         <div class="divcol">
           <label>Tickets minted</label>
-          <span>283/2000</span>
+          <span>{{ listed }} / {{ minted }}</span>
         </div>
 
-        <v-btn @click="modalMore=true">Mint more</v-btn>
+        <v-btn @click="modalMore = true">Mint more</v-btn>
       </div>
-      
+
       <div class="space">
         <div class="divcol">
           <label>Tickets listed</label>
-          <span>283</span>
+          <span>{{ listed }}</span>
         </div>
 
         <v-btn>List more</v-btn>
       </div>
     </aside>
-
 
     <!-- modalQr -->
     <v-dialog v-model="modalQR" width="300px">
@@ -65,7 +64,6 @@
         @loaded="onLoaded"
       ></StreamBarcodeReader>
     </v-dialog>
-
 
     <!-- modalmore -->
     <v-dialog v-model="modalMore" width="300px">
@@ -79,14 +77,10 @@
         >
           <template v-slot:append>
             <v-btn color=" #C4C4C4" @click="controlAmount('less')">
-              <v-icon color="black">
-                mdi-minus
-              </v-icon>
+              <v-icon color="black"> mdi-minus </v-icon>
             </v-btn>
             <v-btn color=" #C4C4C4" @click="controlAmount('more')">
-              <v-icon color="black">
-                mdi-plus
-              </v-icon>
+              <v-icon color="black"> mdi-plus </v-icon>
             </v-btn>
           </template>
         </v-text-field>
@@ -97,113 +91,198 @@
 
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
-import gql from 'graphql-tag'
-import { Wallet, Chain, Network } from 'mintbase'
-import * as nearAPI from "near-api-js"
+import gql from "graphql-tag";
+const your_events = gql`
+  query MyQuery($store: String!, $user: String!) {
+  mb_views_nft_metadata(
+    where: {nft_contract_id: {_eq: $store}
+      , listings: {price: {_is_null: false}}
+      , nft_contract_owner_id: {_eq: $user}}
+  ) {
+    title
+    reference_blob
+    id
+    listings_aggregate {
+      aggregate {
+        count
+      }
+    }
+    nft_contract_owner_id
+  }
+}
+`;
+const mb_views_nft_tokens_aggregate = gql`
+  query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
+    nft_tokens_aggregate(
+      where: {
+        nft_contract_id: { _eq: $store }
+        metadata_id: { _eq: $metadata_id }
+      }
+    ) {
+      aggregate {
+        count
+      }
+    }
+    nft_earnings_aggregate(
+      where: {
+        receiver_id: { _eq: $user }
+        offer: { token: { metadata_id: { _eq: $metadata_id } } }
+      }
+    ) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
 export default {
   name: "options",
   components: { StreamBarcodeReader },
-  apollo: {
-    things_by_pk: {
-       query: gql`{
-        things_by_pk(id: "JHAaTXCxCoomlZ2WktgmVHBx2hAPEZfSiDxd1kMxNXc:mintickt.mintbase1.near") {
-          id
-          metadata {
-            category
-            description
-            extra
-            media
-            document
-            title
-          }
-          tokens {
-            id
-            burnedAt
-            list {
-              price
-              acceptedOfferId
-              offer {
-                price
-              }
-            }
-            ownerId
-            lists {
-              price
-              removedAt
-            }
-          }
-        }
-      }
-      `,
-    },
-  },
   data() {
     return {
       modalMore: false,
       cantidad: 1,
       modalQR: false,
+      minted: 0,
+      listed: 0,
+      name: ""
     };
   },
-  mounted(){
+  mounted() {
+    this.getData();
+    this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes")
-    this.hash = "https://explorer.mainnet.near.org/transactions/" + urlParams.get("transactionHashes")
+    urlParams.get("transactionHashes");
+    this.hash =
+      "https://explorer.mainnet.near.org/transactions/" +
+      urlParams.get("transactionHashes");
     if (urlParams.get("transactionHashes") !== null) {
       //console.log('aqui' + urlParams.get("transactionHashes"))
-      this.dialog = true
-      history.replaceState(null, location.href.split("?")[0], '/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/');
+      this.dialog = true;
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
+      );
     }
     if (urlParams.get("errorCode") !== null) {
-      history.replaceState(null, location.href.split("?")[0], '/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/');
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/events/crOw6WeCbB0ZaSXLOAVnJk0CAVKA3ClwSMW1rEYY1kY:mintickt.mintbase1.near/#/"
+      );
     }
   },
   methods: {
     onDecode(text) {
-      console.log(`Decode text from QR code is ${text}`)
+      console.log(`Decode text from QR code is ${text}`);
     },
     onLoaded() {
-      console.log(`Ready to start scanning barcodes`)
+      console.log(`Ready to start scanning barcodes`);
     },
     ModalQR(key) {
-      if (key=='ticket') {
-        this.modalQR=true
+      if (key == "ticket") {
+        this.modalQR = true;
       }
-      if (key=='goodie') {
-        this.modalQR=true
+      if (key == "goodie") {
+        this.modalQR = true;
       }
+    },
+    async getData() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: your_events,
+          variables: {
+            store: this.$store_mintbase,
+            user: user
+          },
+        })
+        .then((response) => {
+          //Map the objectvalue
+          Object.entries(response.data).forEach(([key, value]) => {
+            // inner object entries
+            Object.entries(value).forEach(([i, value1]) => {
+              //Getting the minted nft
+              //Tokens aggregate and earnings by metadata id
+              this.$apollo
+                .query({
+                  query: mb_views_nft_tokens_aggregate,
+                  variables: {
+                    store: this.$store_mintbase,
+                    user: user,
+                    metadata_id: value1.id,
+                  },
+                })
+                .then((response) => {
+                  this.name = value1.title,
+                  this.minted = response.data.nft_tokens_aggregate.aggregate.count,
+                  this.listed = value1.listings_aggregate.aggregate.count
+                })
+                .catch((err) => {
+                  console.log("Error", err);
+                });
+            });
+          });
+          
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    pollData() {
+      this.polling = setInterval(() => {
+        this.getData();
+        this.$forceUpdate();
+      }, 120000);
     },
     controlAmount(item) {
-      this.traerdatos()
-      var cantidad_tokens = 0
-      this.tokens_buy = []
-      if (item == 'more' && this.cantidad < this.tokens_disponibles) { 
-        this.cantidad++ 
-        this.price = parseFloat(this.price  * this.cantidad).toFixed(1)
-        this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
-        this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            cantidad_tokens++
-            this.tokens_buy.push(element.id)
+      this.traerdatos();
+      var cantidad_tokens = 0;
+      this.tokens_buy = [];
+      if (item == "more" && this.cantidad < this.tokens_disponibles) {
+        this.cantidad++;
+        this.price = parseFloat(this.price * this.cantidad).toFixed(1);
+        this.ultimoprecio = parseFloat(
+          this.price * this.precio_token_usd
+        ).toFixed(2);
+        this.things_by_pk.tokens.forEach((element) => {
+          if (
+            element.ownerId === "mintickt.near" &&
+            !this.tokens_buy.includes(element.id) &&
+            cantidad_tokens < this.cantidad
+          ) {
+            cantidad_tokens++;
+            this.tokens_buy.push(element.id);
           }
-          console.log(this.tokens_buy)
-      });
-    
+          console.log(this.tokens_buy);
+        });
       }
-      if (item == 'less' && this.cantidad > 1) { 
-          this.cantidad-- 
-          this.price =  this.price  * this.cantidad
-          this.ultimoprecio =  parseFloat(this.price * this.precio_token_usd).toFixed(2)
-          this.things_by_pk.tokens.forEach(element => {
-          if (element.ownerId === "mintickt.near" && !this.tokens_buy.includes(element.id) && cantidad_tokens < this.cantidad ){
-            cantidad_tokens++
-            this.tokens_buy.push(element.id)
+      if (item == "less" && this.cantidad > 1) {
+        this.cantidad--;
+        this.price = this.price * this.cantidad;
+        this.ultimoprecio = parseFloat(
+          this.price * this.precio_token_usd
+        ).toFixed(2);
+        this.things_by_pk.tokens.forEach((element) => {
+          if (
+            element.ownerId === "mintickt.near" &&
+            !this.tokens_buy.includes(element.id) &&
+            cantidad_tokens < this.cantidad
+          ) {
+            cantidad_tokens++;
+            this.tokens_buy.push(element.id);
           }
-          console.log(this.tokens_buy)
-      });
-        }
+          console.log(this.tokens_buy);
+        });
+      }
     },
-  }
+  },
 };
 </script>
 

@@ -752,7 +752,7 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
     const user = datos.accountId;
-    //this.getData();
+    this.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
@@ -1215,6 +1215,7 @@ export default {
     async validateNearId(val, e) {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
+      
       const near = await connect(
         CONFIG(new keyStores.BrowserLocalStorageKeyStore())
       );
@@ -1225,11 +1226,13 @@ export default {
           this.disable = false;
           this.errorAccount[pos] = null;
           this.successAccount[pos] = "Valid";
+          this.disable = false
         })
         .catch((error) => {
           this.disable = true;
           this.errorAccount[pos] = "Not valid NEAR Account";
           this.successAccount[pos] = null;
+          this.disable = true
         });
     },
     // validating NEAR account
@@ -1246,11 +1249,13 @@ export default {
           this.disable = false;
           this.errorAccount1[pos] = null;
           this.successAccount1[pos] = "Valid";
+          this.disable = false
         })
         .catch((error) => {
           this.disable = true;
           this.errorAccount1[pos] = "Not valid NEAR Account";
           this.successAccount1[pos] = null;
+          this.disable = true
         });
     },
     // Function to check the percentage available
@@ -1418,6 +1423,18 @@ export default {
           },
         })
         .then((response) => {
+          //Firts call storage deposit
+          this.txs.push({
+            receiverId: mintbase_marketplace,
+            functionCalls: [
+              {
+                methodName: "deposit_storage",
+                receiverId: mintbase_marketplace,
+                //gas: "200000000000000",
+                args: {},
+              },
+            ],
+          });
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
@@ -1437,7 +1454,7 @@ export default {
                           price: this.nearToYocto(this.price),
                         }),
                       },
-                      deposit: utils.format.parseNearAmount((0.1).toString()),
+                      deposit: utils.format.parseNearAmount((0.108).toString()),
                     },
                   ],
                 });
@@ -1472,7 +1489,7 @@ export default {
                   royalty_args: null,
                   split_owners: owners,
                 },
-                deposit: utils.format.parseNearAmount((0.1).toString()),
+                deposit: "1" //utils.format.parseNearAmount((0.01).toString()),
               },
             ],
           });

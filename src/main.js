@@ -20,7 +20,7 @@ import VueAxios from "vue-axios";
 //Global Variables
 Vue.config.productionTip = false
 Vue.prototype.$networkName= (Vue.config.productionTip) ? 'mainnet' : 'testnet';
-Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'evento2.mintspace2.testnet' : 'evento2.mintspace2.testnet';
+Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'artemis3.mintspace2.testnet' : 'artemis3.mintspace2.testnet';
 Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
 Vue.prototype.$dev_key= '63b2aa55-8acd-4b7c-85b4-397cea9bcae9';
 Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.near.org/' : 'https://explorer.testnet.near.org/';
