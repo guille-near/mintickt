@@ -67,7 +67,7 @@
 
     <!-- modal mint more -->
     <v-dialog v-model="modalMintMore" width="300px">
-      <v-card class="modalMore" color="rgb(225 225 225 / .1)">
+      <v-card class="modalMore" color="hsl(0 0% 7% / .98)">
         <label for="cantidad">Amount</label>
         <v-text-field
           id="cantidad"
@@ -86,13 +86,14 @@
             </v-btn>
           </template>
         </v-text-field>
+        <v-btn style="margin-top: 2em">Mint</v-btn>
       </v-card>
     </v-dialog>
     
     
     <!-- modal list more -->
     <v-dialog v-model="modalListMore" width="300px">
-      <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)" style="gap: 2em">
+      <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)">
         <div class="divcol">
           <label for="cantidad">Amount</label>
           <v-text-field
@@ -114,7 +115,7 @@
           </v-text-field>
         </div>
 
-        <div class="divcol">
+        <div class="divcol" style="margin-top: 2em">
           <label for="cantidad">Price (NEAR)</label>
           <v-text-field
             id="cantidad"
@@ -135,6 +136,7 @@
           </v-text-field>
           <span class="conversion">~ {{ usd }} USD</span>
         </div>
+        <v-btn>List</v-btn>
       </v-card>
     </v-dialog>
   </section>

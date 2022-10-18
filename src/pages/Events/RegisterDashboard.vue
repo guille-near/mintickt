@@ -83,7 +83,7 @@
               :rules="rules.required"
             ></v-textarea>-->
 
-            <h3>Location</h3>
+            <h3>Location <span style="color: red">*</span></h3>
             <p>
               Help people in the area find out about the event and make sure
               your attendees know where to go.
@@ -96,7 +96,6 @@
               v-bind:disabled="false"
               flat
               hide-no-data
-              hide-details
               hide-selected
               label="Search your location"
               clearable
@@ -106,10 +105,11 @@
               :rules="rules.required"
               solo
               v-on:placechanged="getAddressData"
+              :rules="rules.required"
             >
             </vuetify-google-autocomplete>
 
-            <h3>Date</h3>
+            <h3>Date <span style="color: red">*</span></h3>
             <p>
               Inform attendees when the event starts and ends so they can get
               organized
@@ -136,6 +136,7 @@
                       solo
                       v-bind="attrs"
                       v-on="on"
+                      :rules="rules.required"
                     ></v-text-field>
                   </template>
                   <v-date-picker
