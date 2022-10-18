@@ -1121,13 +1121,29 @@
   }
 }
 
-#modalMore {
-  height: 200px;
+.modalMore {
+  min-height: 200px;
+  padding: 1em;
   display: grid;
   place-content: center;
+  .conversion {
+    font-size: 0.75em;
+    position: relative;
+    color: #b3b5bd;
+    margin-left:auto;
+    margin-top: .5em;
+  }
+  label {text-transform: capitalize}
+  :is(label, input, textarea) {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 500;
+    font-size: 0.9375em;
+    letter-spacing: -0.03em;
+    color: #FFFFFF !important;
+  }
   .v-input {
     input {color: #FFFFFF !important}
-    &__slot {background-color: #aeaeae}
+    &__slot {background-color: #ffffff26 !important}
     &__append-inner {
       display: flex;
       gap: .5em;

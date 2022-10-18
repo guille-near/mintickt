@@ -44,7 +44,7 @@
           <span>{{ listed }} / {{ minted }}</span>
         </div>
 
-        <v-btn @click="modalMore = true">Mint more</v-btn>
+        <v-btn @click="modalMintMore = true">Mint more</v-btn>
       </div>
 
       <div class="space">
@@ -53,7 +53,7 @@
           <span>{{ listed }}</span>
         </div>
 
-        <v-btn>List more</v-btn>
+        <v-btn @click="modalListMore = true">List more</v-btn>
       </div>
     </aside>
 
@@ -65,10 +65,12 @@
       ></StreamBarcodeReader>
     </v-dialog>
 
-    <!-- modalmore -->
-    <v-dialog v-model="modalMore" width="300px">
-      <v-card id="modalMore" color="#d9d9d9">
+    <!-- modal mint more -->
+    <v-dialog v-model="modalMintMore" width="300px">
+      <v-card class="modalMore" color="rgb(225 225 225 / .1)">
+        <label for="cantidad">Amount</label>
         <v-text-field
+          id="cantidad"
           v-model="cantidad"
           type="number"
           hide-spin-buttons
@@ -84,6 +86,55 @@
             </v-btn>
           </template>
         </v-text-field>
+      </v-card>
+    </v-dialog>
+    
+    
+    <!-- modal list more -->
+    <v-dialog v-model="modalListMore" width="300px">
+      <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)" style="gap: 2em">
+        <div class="divcol">
+          <label for="cantidad">Amount</label>
+          <v-text-field
+            id="cantidad"
+            v-model="cantidad_list"
+            type="number"
+            hide-spin-buttons
+            hide-details
+            solo
+          >
+            <template v-slot:append>
+              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
+                <v-icon color="black"> mdi-minus </v-icon>
+              </v-btn>
+              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+                <v-icon color="black"> mdi-plus </v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
+        </div>
+
+        <div class="divcol">
+          <label for="cantidad">Price (NEAR)</label>
+          <v-text-field
+            id="cantidad"
+            v-model="price_list"
+            type="number"
+            hide-spin-buttons
+            hide-details
+            solo
+          >
+            <template v-slot:append>
+              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
+                <v-icon color="black"> mdi-minus </v-icon>
+              </v-btn>
+              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+                <v-icon color="black"> mdi-plus </v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
+          <span class="conversion">~ {{ usd }} USD</span>
+        </div>
       </v-card>
     </v-dialog>
   </section>
@@ -140,12 +191,16 @@ export default {
   components: { StreamBarcodeReader },
   data() {
     return {
-      modalMore: false,
+      modalMintMore: false,
+      modalListMore: false,
       cantidad: 1,
       modalQR: false,
       minted: 0,
       listed: 0,
-      name: ""
+      usd: 0,
+      name: "",
+      price_list: 0,
+      cantidad_list: 0,
     };
   },
   mounted() {
