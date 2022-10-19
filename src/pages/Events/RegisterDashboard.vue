@@ -75,7 +75,7 @@
               featured guests.
             </p>
 
-            <vue-editor v-model="dataTickets.description"></vue-editor>
+            <vue-editor v-model="dataTickets.description" class="editor" :class="{rules: editorRules}"></vue-editor>
             <!--<v-textarea
               v-model="dataTickets.description"
               solo
@@ -746,10 +746,16 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas: localStorage.getItem("canvas")
+      canvas: localStorage.getItem("canvas"),
+      emptyEditor: true,
+      editorRules: false,
     };
   },
   mounted() {
+    const editor = document.querySelector(".editor .ql-editor");
+    const child = editor.querySelector("p")
+    editor.addEventListener("keyup", () => this.listenValidatorEditor(child))
+
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
@@ -1137,7 +1143,8 @@ export default {
       this.longitude = addressData.longitude;
     },
     next() {
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && !this.emptyEditor) {
+        this.editorRules = false
         this.step++;
         localStorage.setItem("step", 2);
 
@@ -1159,6 +1166,9 @@ export default {
           this.image = image;
           // console.log(this.image);
         });
+      }
+      if (this.emptyEditor) {
+        this.editorRules = true
       }
     },
     nextLast() {
@@ -1566,6 +1576,15 @@ export default {
           console.log(error);
         });
     },
+    listenValidatorEditor(child) {
+      if (child.innerHTML === "<br>") {
+        this.emptyEditor = true
+        this.editorRules = true
+      } else {
+        this.emptyEditor = false
+        this.editorRules = false
+      }
+    }
   },
 };
 </script>
