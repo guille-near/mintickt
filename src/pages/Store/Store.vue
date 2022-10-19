@@ -162,6 +162,7 @@ const your_events = gql`
           price
           reference
           token_id
+          minter
         }
       }
     }
@@ -192,16 +193,22 @@ const main_image = gql`
     }
   }
 `;
-const getTickettoSend = gql`
-  query MyQuery($_iregex: String!) {
+const get_ticket_to_send = gql`
+  query MyQuery($_iregex: String!, $owner: String!) {
   mb_views_nft_tokens_aggregate(
-    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}, extra: {_eq: "redeemed"}}
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "ticketing"}
+      , owner: {_eq: $owner}
+      , burned_receipt_id: {_is_null: true}}
+    order_by: {token_id: asc}  
   ) {
     aggregate {
       count
     }
     nodes {
       token_id
+      owner
+      extra
     }
   }
 }
@@ -248,14 +255,18 @@ export default {
       date_start: "",
       date_end: "",
       googlemap: "",
-      store: "",
+      store: ""
     };
   },
   mounted() {
     this.$emit("renderHeader");
-    this.getData();
+    this.getData().then(() => {
+      this.getTickettoSend();
+    });
     this.fetch();
     this.mainImg();
+    //this.sendTicket()
+    // 
     this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -268,6 +279,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
         this.$explorer+"/accounts/"+user
+      this.sendTicket();
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -355,6 +367,7 @@ export default {
               value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
             //Add tokens
             this.tokens = value[0].listings_aggregate.nodes;
+            localStorage.setItem('minter', value[0].listings_aggregate.nodes[0].minter)
             Object.entries(value).forEach(([i, value1]) => {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
@@ -425,7 +438,7 @@ export default {
             quantity_tokens++;
             this.tokens_buy.push(element.token_id);
             this.quantity == 0 ? (this.disable = true) : (this.disable = false);
-            console.log(this.tokens_buy);
+            //console.log(this.tokens_buy);
           }
         });
       }
@@ -458,7 +471,7 @@ export default {
       const mintbase_marketplace = this.$mintbase_marketplace;
       let store = this.$store_mintbase;
       this.tokens_buy.forEach((element) => {
-        console.log(element)
+        //console.log(element)
         // Pushh array for each element of the tokens selected
         this.txs.push({
                   receiverId: mintbase_marketplace,
@@ -525,11 +538,13 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       const user = datos.accountId;
+      this.getTickettoSend()
       //console.log(url)
       let item = {
         receiver_id: user,
-        tokenid: localStorage.getItem('IpfsHash'),
+        token_id: localStorage.getItem('ticket_to_send').toString(),
       };
+      console.log(item)
       this.axios
         .post(url, item)
         .then(() => {
@@ -539,6 +554,22 @@ export default {
           console.log(error);
         });
     },
+    async getTickettoSend(){
+      this.$apollo
+        .query({
+          query: get_ticket_to_send,
+          variables: {
+            _iregex: localStorage.getItem('eventid').split(":")[1],
+            owner: localStorage.getItem('minter')
+          },
+        })
+        .then((response) => {
+          localStorage.setItem('ticket_to_send', response.data.mb_views_nft_tokens_aggregate.nodes[0].token_id)
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   },
 };
 </script>
