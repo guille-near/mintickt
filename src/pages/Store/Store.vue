@@ -192,6 +192,20 @@ const main_image = gql`
     }
   }
 `;
+const getTickettoSend = gql`
+  query MyQuery($_iregex: String!) {
+  mb_views_nft_tokens_aggregate(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}, extra: {_eq: "redeemed"}}
+  ) {
+    aggregate {
+      count
+    }
+    nodes {
+      token_id
+    }
+  }
+}
+`;
 
 export default {
   name: "Tienda",

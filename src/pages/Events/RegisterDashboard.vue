@@ -105,7 +105,6 @@
               :rules="rules.required"
               solo
               v-on:placechanged="getAddressData"
-              :rules="rules.required"
             >
             </vuetify-google-autocomplete>
 
