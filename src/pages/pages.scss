@@ -1222,7 +1222,26 @@
     border-radius: .3vmax;
   }
   .quillWrapper {
-    margin-bottom: 135px;
+    margin-bottom: 155px;
+    &.rules {
+      &::after {
+        content: "Field required";
+        color: #ff4081;
+        font-size: 12px;
+        font-family: "Roboto", sans-serif;
+        padding-left: 12px;
+      }
+      .ql {
+        &-toolbar.ql-snow {
+          border: 2px solid red !important;
+          border-bottom: none !important;
+        }
+        &-container.ql-snow {
+          border: 2px solid red !important;
+          border-top: none !important;
+        }
+      }
+    }
     p, blockquote, h1, h2, h3, h4, h5, h6, li {color: #fff !important}
     li:before {color: #fff}
     .ql {
