@@ -157,7 +157,7 @@ const fans_tokens_aggregate = gql`
     mb_views_nft_tokens_aggregate(
       where: {
         reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "fansinside" }
+        extra: { _eq: "ticketing" }
         burned_receipt_id: { _is_null: false }
       }
     ) {
@@ -186,7 +186,7 @@ const tickets = gql`
     mb_views_nft_tokens(
       where: {
         reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "fansinside" }
+        extra: { _eq: "ticketing" }
         burned_receipt_id: { _is_null: false }
         token_id: { _nin: $tokens }
       }
@@ -200,6 +200,7 @@ const tickets = gql`
       minted_timestamp
       last_transfer_receipt_id
       burned_receipt_id
+      title
     }
   }
 `;
@@ -483,7 +484,7 @@ export default {
                   var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
                   var receipe = value.burned_receipt_id;
                   rows = {
-                    nft: value.description,
+                    nft: value.title,
                     signer: value.owner,
                     quantity: 1,
                     created: time2 + " " + timedesc2,
@@ -524,7 +525,7 @@ export default {
     async completeOrderFans(element) {
       element.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      const url = "/fans";
+      const url = this.$node_url + "/fans";
       let item = {
         thingid: thingid[1],
         tokenid: element.tokenid,
@@ -543,7 +544,7 @@ export default {
     async completeOrderReedemer(element) {
       element.loadingBtn = true;
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      const url = "/redeemed";
+      const url = this.$node_url + "/redeemed";
       let item = {
         thingid: thingid[1],
         tokenid: element.tokenid,

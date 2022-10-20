@@ -120,6 +120,7 @@ const your_events = gql`
     where: {nft_contract_id: {_eq: $store}
       , listings: {price: {_is_null: false}}
       , nft_contract_owner_id: {_eq: $user}}
+  order_by: {reference_blob: desc}    
   ) {
     title
     reference_blob
