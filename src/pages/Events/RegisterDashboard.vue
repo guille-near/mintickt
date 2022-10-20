@@ -805,6 +805,10 @@ export default {
     };
   },
   mounted() {
+    const editor = document.querySelector(".editor .ql-editor");
+    const child = editor.querySelector("p")
+    editor.addEventListener("keyup", () => this.listenValidatorEditor(child))
+
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
