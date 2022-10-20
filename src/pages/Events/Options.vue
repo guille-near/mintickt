@@ -68,10 +68,10 @@
     <!-- modal mint more -->
     <v-dialog v-model="modalMintMore" width="300px">
       <v-card class="modalMore" color="hsl(0 0% 7% / .98)">
-        <label for="cantidad">Amount</label>
+        <label for="amount">Amount</label>
         <v-text-field
-          id="cantidad"
-          v-model="cantidad"
+          id="amount"
+          v-model="mint_amount"
           type="number"
           hide-spin-buttons
           hide-details
@@ -86,7 +86,7 @@
             </v-btn>
           </template>
         </v-text-field>
-        <v-btn style="margin-top: 2em">Mint</v-btn>
+        <v-btn style="margin-top: 2em" @click="mint" :loading="loading">Mint More</v-btn>
       </v-card>
     </v-dialog>
     
@@ -95,10 +95,10 @@
     <v-dialog v-model="modalListMore" width="300px">
       <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)">
         <div class="divcol">
-          <label for="cantidad">Amount</label>
+          <label for="amount">Amount</label>
           <v-text-field
-            id="cantidad"
-            v-model="cantidad_list"
+            id="amount"
+            v-model="amount_list"
             type="number"
             hide-spin-buttons
             hide-details
@@ -116,9 +116,9 @@
         </div>
 
         <div class="divcol" style="margin-top: 2em">
-          <label for="cantidad">Price (NEAR)</label>
+          <label for="amount">Price (NEAR)</label>
           <v-text-field
-            id="cantidad"
+            id="amount"
             v-model="price_list"
             type="number"
             hide-spin-buttons
@@ -145,6 +145,7 @@
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import gql from "graphql-tag";
+import { Wallet, Chain } from "mintbase";
 const your_events = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
   mb_views_nft_metadata(
@@ -195,14 +196,16 @@ export default {
     return {
       modalMintMore: false,
       modalListMore: false,
-      cantidad: 0,
+      mint_amount: 1,
       modalQR: false,
       minted: 0,
       listed: 0,
       usd: 0,
       name: "",
       price_list: 0,
-      cantidad_list: 0,
+      amount_list: 0,
+      disable: true,
+      loading: false
     };
   },
   mounted() {
@@ -294,6 +297,22 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    async mint() {
+        this.loading = true;
+        //Api key an data
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        await wallet.mintMore(
+          parseFloat(this.mint_amount),
+          this.$route.query.thingid.toLowerCase(),
+        );
+    },
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
@@ -303,10 +322,10 @@ export default {
     controlAmount(item) {
       this.getData();
       if (item == "more") {
-        this.cantidad++;
+        this.mint_amount++;
       }
-      if (item == "less" && this.cantidad > 1) {
-        this.cantidad--;
+      if (item == "less" && this.mint_amount > 1) {
+        this.mint_amount--;
       }
     },
   },
