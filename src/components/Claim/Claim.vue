@@ -13,7 +13,7 @@
     </v-main>
   </v-app>
 </template>
-
+  
 <script>
 import Header from "./HeaderClaim";
 import "@/components/Layout/layout.scss";
