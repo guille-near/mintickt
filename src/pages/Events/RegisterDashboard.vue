@@ -799,6 +799,8 @@ export default {
       txs: [],
       usd: 0,
       canvas: localStorage.getItem("canvas"),
+      emptyEditor: true,
+      editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
     };
   },
