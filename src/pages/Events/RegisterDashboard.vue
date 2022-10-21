@@ -1517,7 +1517,7 @@ export default {
                   gas: "200000000000000",
                   args: {},
                   deposit: utils.format.parseNearAmount(
-                    (0.01 * this.amount_list).toString()
+                    (0.0108 * this.amount_list).toString()
                   ),
                 },
               ],
@@ -1542,9 +1542,9 @@ export default {
                             autotransfer: true,
                           }),
                         },
-                        deposit: utils.format.parseNearAmount(
-                          (0.108).toString()
-                        ),
+                        // deposit: utils.format.parseNearAmount(
+                        //   (0.108).toString()
+                        // ),
                       },
                     ],
                   });
@@ -1559,7 +1559,7 @@ export default {
             const user = datos.accountId;
             const owners = {};
             owners[datos.accountId] = 9000;
-            owners["vicious2403.testnet"] = 1000;
+            owners[this.$value_user_mint] = 1000;
 
             // Push object to mint store
             this.txs.push({

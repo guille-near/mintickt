@@ -1,5 +1,7 @@
 <template>
   <section id="options" class="divcol gap align">
+    <ModalSuccess ref="modal"></ModalSuccess>
+
     <div class="acenter">
       <v-btn icon to="/events">
         <v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
@@ -43,8 +45,9 @@
           <label>Tickets minted</label>
           <span>{{ listed }} / {{ minted }}</span>
         </div>
-
-        <v-btn @click="modalMintMore = true">Mint more</v-btn>
+        <div id="container-actions" class="gap">
+          <v-btn @click="modalMintMore = true">Mint more</v-btn>
+        </div>
       </div>
 
       <div class="space">
@@ -86,11 +89,12 @@
             </v-btn>
           </template>
         </v-text-field>
-        <v-btn style="margin-top: 2em" @click="mint" :loading="loading">Mint More</v-btn>
+        <v-btn style="margin-top: 2em" @click="mint" :loading="loading"
+          >Mint More</v-btn
+        >
       </v-card>
     </v-dialog>
-    
-    
+
     <!-- modal list more -->
     <v-dialog v-model="modalListMore" width="300px">
       <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)">
@@ -105,10 +109,10 @@
             solo
           >
             <template v-slot:append>
-              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
+              <v-btn color=" #C4C4C4" @click="controlListAmount('less')">
                 <v-icon color="black"> mdi-minus </v-icon>
               </v-btn>
-              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+              <v-btn color=" #C4C4C4" @click="controlListAmount('more')">
                 <v-icon color="black"> mdi-plus </v-icon>
               </v-btn>
             </template>
@@ -121,22 +125,23 @@
             id="amount"
             v-model="price_list"
             type="number"
+            v-debounce:300ms="priceNEAR"
             hide-spin-buttons
             hide-details
             solo
           >
             <template v-slot:append>
-              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
+              <v-btn color=" #C4C4C4" @click="controlPrice('less')">
                 <v-icon color="black"> mdi-minus </v-icon>
               </v-btn>
-              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
+              <v-btn color=" #C4C4C4" @click="controlPrice('more')">
                 <v-icon color="black"> mdi-plus </v-icon>
               </v-btn>
             </template>
           </v-text-field>
           <span class="conversion">~ {{ usd }} USD</span>
         </div>
-        <v-btn>List</v-btn>
+        <v-btn @click="list" :loading="loading" :disabled="disable">List</v-btn>
       </v-card>
     </v-dialog>
   </section>
@@ -144,26 +149,34 @@
 
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
+import ModalSuccess from "./ModalSuccess";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
+import * as nearAPI from "near-api-js";
+const { connect, keyStores, utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-  mb_views_nft_metadata(
-    where: {nft_contract_id: {_eq: $store}
-      , listings: {price: {_is_null: false}
-        , metadata_id: {_eq: $metadata_id}}, nft_contract_owner_id: {_eq: $user}}
-  ) {
-    title
-    reference_blob
-    id
-    listings_aggregate {
-      aggregate {
-        count
+    mb_views_nft_metadata(
+      where: {
+        nft_contract_id: { _eq: $store }
+        listings: {
+          price: { _is_null: false }
+          metadata_id: { _eq: $metadata_id }
+        }
+        nft_contract_owner_id: { _eq: $user }
       }
+    ) {
+      title
+      reference_blob
+      id
+      listings_aggregate {
+        aggregate {
+          count
+        }
+      }
+      nft_contract_owner_id
     }
-    nft_contract_owner_id
   }
-}
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
@@ -189,9 +202,66 @@ const mb_views_nft_tokens_aggregate = gql`
     }
   }
 `;
+const tokens_id = gql`
+  query MyQuery($metadata_id: String) {
+    nft_tokens_aggregate(
+      where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
+    ) {
+      nodes {
+        token_id
+        nft_listings {
+          token_id
+          price
+        }
+      }
+    }
+  }
+`;
+const mb_views_nft_tokens_ticketing = gql`
+  query MyQuery($metadata_id: String!) {
+    mb_views_nft_tokens(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
+        extra: { _eq: "ticketing" }
+      }
+      limit: 1
+    ) {
+      mint_memo
+      metadata_id
+      reference
+      royalties
+      royalties_percent
+      reference_hash
+      base_uri
+      extra
+      owner
+    }
+  }
+`;
+const mb_views_nft_tokens_redeemed = gql`
+  query MyQuery($metadata_id: String!) {
+    mb_views_nft_tokens(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
+        extra: { _eq: "redeemed" }
+      }
+      limit: 1
+    ) {
+      mint_memo
+      metadata_id
+      reference
+      royalties
+      royalties_percent
+      reference_hash
+      base_uri
+      extra
+      owner
+    }
+  }
+`;
 export default {
   name: "options",
-  components: { StreamBarcodeReader },
+  components: { StreamBarcodeReader, ModalSuccess },
   data() {
     return {
       modalMintMore: false,
@@ -205,33 +275,39 @@ export default {
       price_list: 0,
       amount_list: 0,
       disable: true,
-      loading: false
+      loading: false,
+      txs: [],
+      counter: 0,
     };
   },
   mounted() {
     this.getData();
     this.pollData();
+    this.getTotalMinted();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes");
-    this.hash =
-      "https://explorer.mainnet.near.org/transactions/" +
-      urlParams.get("transactionHashes");
+    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+    const user = datos.accountId;
     if (urlParams.get("transactionHashes") !== null) {
       this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url =
-        this.$explorer+"/accounts/"+user
+      this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event="+localStorage.getItem('event_name')+"&thingid="+localStorage.getItem('eventid')
+        "/mintickt/#/events/options?event=" +
+          localStorage.getItem("event_name") +
+          "&thingid=" +
+          localStorage.getItem("eventid")
       );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event="+localStorage.getItem('event_name')+"&thingid="+localStorage.getItem('eventid')
+        "/mintickt/#/events/options?event=" +
+          localStorage.getItem("event_name") +
+          "&thingid=" +
+          localStorage.getItem("eventid")
       );
     }
   },
@@ -281,16 +357,16 @@ export default {
                   },
                 })
                 .then((response) => {
-                  this.name = this.$route.query.event,
-                  this.minted = response.data.nft_tokens_aggregate.aggregate.count,
-                  this.listed = value1.listings_aggregate.aggregate.count
+                  (this.name = this.$route.query.event),
+                    (this.minted =
+                      response.data.nft_tokens_aggregate.aggregate.count),
+                    (this.listed = value1.listings_aggregate.aggregate.count);
                 })
                 .catch((err) => {
                   console.log("Error", err);
                 });
             });
           });
-          
         })
         .catch((err) => {
           console.log("Error", err);
@@ -298,20 +374,220 @@ export default {
         .finally(() => (this.loading = false));
     },
     async mint() {
-        this.loading = true;
-        //Api key an data
-        let API_KEY = this.$dev_key.toString();
-        let networkName = this.$networkName.toString();
-        const { data: walletData } = await new Wallet().init({
-          networkName: networkName,
-          chain: Chain.near,
-          apiKey: API_KEY,
+      this.loading = true;
+      //Api key an data
+      let API_KEY = this.$dev_key.toString();
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      // console.log(this.mint_amount)
+      // console.log(this.$route.query.thingid.toLowerCase())
+      const { wallet } = walletData;
+      await wallet.mintMore(
+        parseFloat(this.mint_amount),
+        this.$route.query.thingid.toLowerCase()
+      );
+    },
+    //Get the tokens id minted
+    async list() {
+      this.loading = true;
+      const mintbase_marketplace = this.$mintbase_marketplace;
+      let store = this.$store_mintbase;
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: tokens_id,
+          variables: {
+            metadata_id: localStorage.getItem("metadata_id").toString(),
+          },
+        })
+        .then((response) => {
+          //Firts call storage deposit
+          this.txs.push({
+            receiverId: mintbase_marketplace,
+            functionCalls: [
+              {
+                methodName: "deposit_storage",
+                receiverId: mintbase_marketplace,
+                gas: "200000000000000",
+                args: {},
+                deposit: utils.format.parseNearAmount(
+                  (0.0108 * this.amount_list).toString()
+                ),
+              },
+            ],
+          });
+          //Map the object value to be listed
+          let counter = 0;
+          Object.entries(response.data).forEach(([key, value]) => {
+            Object.entries(value.nodes).forEach(([i, value1]) => {
+              if (value1.nft_listings.length === 0) {
+                if (counter < this.amount_list) {
+                  //console.log(value1.token_id);
+                  counter++;
+                  // console.log(counter + '-' + this.amount_list)
+                  // console.log(value1.token_id);
+                  this.txs.push({
+                    receiverId: store,
+                    functionCalls: [
+                      {
+                        methodName: "nft_approve",
+                        receiverId: store,
+                        gas: "200000000000000",
+                        args: {
+                          token_id: value1.token_id.toString(),
+                          account_id: mintbase_marketplace,
+                          msg: JSON.stringify({
+                            price: utils.format.parseNearAmount(
+                              this.price_list.toString()
+                            ),
+                            autotransfer: true,
+                          }),
+                        },
+                        deposit: utils.format.parseNearAmount(
+                          (0.01 * this.amount_list).toString()
+                        ),
+                      },
+                    ],
+                  });
+                }
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
         });
-        const { wallet } = walletData;
-        await wallet.mintMore(
-          parseFloat(this.mint_amount),
-          this.$route.query.thingid.toLowerCase(),
-        );
+      //Mint ticketing
+      this.$apollo
+        .query({
+          query: mb_views_nft_tokens_ticketing,
+          variables: {
+            metadata_id: localStorage.getItem("metadata_id").split(":")[1],
+          },
+        })
+        .then((response) => {
+          //Map the object value to be listed
+          Object.entries(response.data).forEach(([key, value]) => {
+            const owners = {};
+            owners[value[0].owner] = 9000;
+            owners[this.$value_user_mint] = 1000;
+            this.txs.push({
+              receiverId: store,
+              functionCalls: [
+                {
+                  methodName: "nft_batch_mint",
+                  receiverId: store,
+                  gas: "200000000000000",
+                  args: {
+                    owner_id: value[0].owner,
+                    metadata : {
+                      reference: value[0].reference,
+                      extra: value[0].mint_memo,
+                    },
+                    num_to_mint: this.amount_list,
+                    royalty_args: null,
+                    split_owners: owners
+                    },
+                    deposit: "1"
+                },
+              ],
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+      //Mint redeemed
+      this.$apollo
+        .query({
+          query: mb_views_nft_tokens_redeemed,
+          variables: {
+            metadata_id: localStorage.getItem("metadata_id").split(":")[1],
+          },
+        })
+        .then((response) => {
+          //Map the object value to be listed
+          Object.entries(response.data).forEach(([key, value]) => {
+            const owners = {};
+            owners[value[0].owner] = 9000;
+            owners[this.$value_user_mint] = 1000;
+            this.txs.push({
+              receiverId: store,
+              functionCalls: [
+                {
+                  methodName: "nft_batch_mint",
+                  receiverId: store,
+                  gas: "200000000000000",
+                  args: {
+                    owner_id: value[0].owner,
+                    metadata : {
+                      reference: value[0].reference,
+                      extra: value[0].mint_memo,
+                    },
+                    num_to_mint: this.amount_list,
+                    royalty_args: null,
+                    split_owners: owners
+                    },
+                    deposit: "1"
+                },
+              ],
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+      this.executeMultipleTransactions();
+    },
+    async getTotalMinted() {
+      this.$apollo
+        .query({
+          query: tokens_id,
+          variables: {
+            metadata_id: localStorage.getItem("metadata_id").toString(),
+          },
+        })
+        .then((response) => {
+          //Map the objectvalue
+          Object.entries(response.data).forEach(([key, value]) => {
+            Object.entries(value.nodes).forEach(([x, value1]) => {
+              if (value1.nft_listings.length === 0) {
+                this.counter++;
+                localStorage.setItem("total_minted", this.counter);
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    },
+    async executeMultipleTransactions() {
+      //Gettintg the tokens ID
+      //this.getTokensId();
+      //Adding metadata for the burn ticket
+      let API_KEY = this.$dev_key.toString();
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      const { wallet } = walletData;
+
+      await wallet.executeMultipleTransactions({
+        transactions: this.txs,
+        options: {
+          meta: "list",
+        },
+      });
     },
     pollData() {
       this.polling = setInterval(() => {
@@ -321,12 +597,53 @@ export default {
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more") {
+      if (item == "more" && this.mint_amount < 20) {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
         this.mint_amount--;
       }
+    },
+    controlListAmount(item) {
+      this.getData();
+      if (
+        item == "more" &&
+        this.amount_list < localStorage.getItem("total_minted")
+      ) {
+        this.amount_list++;
+      }
+      if (item == "less" && this.amount_list > 1) {
+        this.amount_list--;
+      }
+    },
+    controlPrice(item) {
+      this.getData();
+      if (item == "more" && this.mint_amount < 20) {
+        this.price_list++;
+      }
+      if (item == "less" && this.price_list > 1) {
+        this.price_list--;
+      }
+      this.price_list === 0 ? (this.disable = true) : (this.disable = false);
+      this.priceNEAR();
+    },
+    nearToYocto: function (nearToYocto) {
+      const amountInYocto = utils.format.parseNearAmount(nearToYocto);
+      // console.log(amountInYocto);
+      return amountInYocto.toString();
+    },
+    priceNEAR() {
+      //console.log('ededed')
+      const BINANCE_NEAR = this.$binance;
+      var request = new XMLHttpRequest();
+      request.open("GET", BINANCE_NEAR);
+      request.send();
+      request.onload = () => {
+        this.usd = (
+          parseFloat(JSON.parse(request.responseText).lastPrice) *
+          this.price_list
+        ).toFixed(2);
+      };
     },
   },
 };
