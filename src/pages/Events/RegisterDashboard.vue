@@ -75,7 +75,11 @@
               featured guests.
             </p>
 
-            <vue-editor v-model="dataTickets.description" class="editor" :class="{rules: editorRules}"></vue-editor>
+            <vue-editor
+              v-model="dataTickets.description"
+              class="editor"
+              :class="{rules: editorRules}"
+            ></vue-editor>
             <!--<v-textarea
               v-model="dataTickets.description"
               solo
@@ -799,15 +803,13 @@ export default {
       txs: [],
       usd: 0,
       canvas: localStorage.getItem("canvas"),
-      emptyEditor: true,
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
     };
   },
   mounted() {
     const editor = document.querySelector(".editor .ql-editor");
-    const child = editor.querySelector("p")
-    editor.addEventListener("keyup", () => this.listenValidatorEditor(child))
+    editor.addEventListener("keyup", () => this.validator(this.dataTickets.description))
 
     let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
@@ -1195,7 +1197,7 @@ export default {
       this.longitude = addressData.longitude;
     },
     next() {
-      if (this.$refs.form.validate() && !this.emptyEditor) {
+      if (this.$refs.form.validate() && this.dataTickets.description) {
         this.editorRules = false
         this.step++;
         localStorage.setItem("step", 2);
@@ -1219,9 +1221,7 @@ export default {
           // console.log(this.image);
         });
       }
-      if (this.emptyEditor) {
-        this.editorRules = true
-      }
+      if (!this.dataTickets.description) this.editorRules = true
     },
     nextLast() {
       if (this.$refs.form4.validate()) {
@@ -1680,14 +1680,9 @@ export default {
         this.$forceUpdate();
       }, 120000);
     },
-    listenValidatorEditor(child) {
-      if (child.innerHTML === "<br>") {
-        this.emptyEditor = true
-        this.editorRules = true
-      } else {
-        this.emptyEditor = false
-        this.editorRules = false
-      }
+    validator(model) {
+      if (model) return this.editorRules = false
+      this.editorRules = true
     }
   },
 };
