@@ -8,10 +8,7 @@
       :class="{
         events:
           route == 'Landing' ||
-          route == 'Events' ||
-          route == 'LiveData' ||
-          route == 'RegisterDashboard' ||
-          route == 'RegisterDashboard',
+          routePath.includes('events')
       }"
     >
       <v-row
@@ -19,22 +16,13 @@
         :class="{
           limiter:
             route == 'Landing' ||
-            (route !== 'Events' &&
-              route !== 'LiveData' &&
-              route !== 'Options' &&
-              route !== 'RegisterDashboard'),
+            !routePath.includes('events'),
         }"
       >
         <v-col
           class="space"
           :style="
-            route == 'Landing' ||
-            route == 'Events' ||
-            route == 'LiveData' ||
-            route == 'Options' ||
-            route == 'RegisterDashboard'
-              ? 'padding:0'
-              : route == 'Nearcon'
+            routePath.includes('events')
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -57,25 +45,11 @@
           <aside
             class="acenter"
             style="gap: 0.2em"
-            :style="
-              route == 'Landing' ||
-              route == 'Events' ||
-              route == 'LiveData' ||
-              route == 'Options' ||
-              route == 'RegisterDashboard'
-                ? ''
-                : 'display:contents'
-            "
+            :style="routePath.includes('events') ? '' : 'display:contents'"
           >
             <v-btn
               class="createEventBtn h9-em"
-              v-if="
-                route == 'Landing' ||
-                route == 'Events' ||
-                route == 'LiveData' ||
-                route == 'Options' ||
-                route == 'RegisterDashboard'
-              "
+              v-if="routePath.includes('events')"
               @click="$router.push('/events/register')"
             >
               <span>create an event</span>
@@ -165,20 +139,13 @@ export default {
     route() {
       return this.$router.currentRoute.name;
     },
+    routePath() {
+      return this.$router.currentRoute.path;
+    },
   },
   methods: {
     responsive() {
-      if (
-        (window.innerWidth <= 880 &&
-          this.$router.currentRoute.name == "Events") ||
-        (window.innerWidth <= 880 &&
-          this.$router.currentRoute.name == "LiveData") ||
-        (window.innerWidth <= 880 &&
-          this.$router.currentRoute.name == "Options") ||
-        (window.innerWidth <= 880 &&
-          this.$router.currentRoute.name == "RegisterDashboard") ||
-        (window.innerWidth <= 880 && this.$router.currentRoute.path == '/')
-      ) {
+      if (window.innerWidth <= 880 && this.routePath.includes("events") || window.innerWidth <= 880 && this.routePath === '/') {
         this.responsiveActions = true;
       } else {
         this.responsiveActions = false;
