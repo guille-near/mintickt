@@ -1296,7 +1296,7 @@
     // height: 35em;
     position: relative;
     border-radius: 19.2px;
-    background-color: green;
+    background-color: #000;
     .ticket {width: 100% !important; height: 100% !important}
     .v-input {
       position: absolute;
@@ -1316,27 +1316,27 @@
       .v-input__append-inner {display: none}
       &:nth-of-type(1) {
         width: 85%;
-        height: 61%;
-  
-        top: 9%;
+        height: 68.4%;
+        
+        top: 4.5%;
         left: 0;
         right: 0;
       }
       &:nth-of-type(2) {
-        width: 33.5%;
-        height: 10.5%;
-
-        bottom: 9.8%;
-        left: 7.6%;
+        width: 33.4%;
+        height: 11.7%;
+        
+        bottom: 4.6%;
+        left: 7.5%;
         right: auto;
       }
       &:nth-of-type(3) {
-        width: 33.5%;
-        height: 10.5%;
-
-        bottom: 9.8%;
+        width: 33.4%;
+        height: 11.7%;
+        
+        bottom: 4.6%;
         left: auto;
-        right: 7.6%;
+        right: 7.5%;
       }
     }
   }
