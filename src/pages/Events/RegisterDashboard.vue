@@ -78,7 +78,7 @@
             <vue-editor
               v-model="dataTickets.description"
               class="editor"
-              :class="{rules: editorRules}"
+              :class="{ rules: editorRules }"
             ></vue-editor>
             <!--<v-textarea
               v-model="dataTickets.description"
@@ -808,12 +808,10 @@ export default {
     };
   },
   mounted() {
-    const editor = document.querySelector(".editor .ql-editor");
-    editor.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+    // const editor = document.querySelector(".editor .ql-editor");
+    // editor.addEventListener("keyup", () => this.validator(this.dataTickets.description))
 
-    let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
+    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     this.getData().then(() => {
       //Valitade the indexer completed de data
@@ -1061,7 +1059,6 @@ export default {
 
         //LocalStora Mint amount
         localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
-
         await wallet.mint(
           parseFloat(this.dataTickets.mint_amount),
           store.toString(),
@@ -1198,7 +1195,7 @@ export default {
     },
     next() {
       if (this.$refs.form.validate() && this.dataTickets.description) {
-        this.editorRules = false
+        this.editorRules = false;
         this.step++;
         localStorage.setItem("step", 2);
 
@@ -1206,7 +1203,7 @@ export default {
         html2canvas(container, {
           backgroundColor: "#000000",
           y: (container / 2, container / 2, 30),
-          height: 580,
+          height: 570,
         }).then((canvas) => {
           let link = document.createElement("a");
           link.download = "image_name.png";
@@ -1221,7 +1218,7 @@ export default {
           // console.log(this.image);
         });
       }
-      if (!this.dataTickets.description) this.editorRules = true
+      if (!this.dataTickets.description) this.editorRules = true;
     },
     nextLast() {
       if (this.$refs.form4.validate()) {
@@ -1414,18 +1411,21 @@ export default {
           variables: {
             store: this.$store_mintbase.toString(),
             user: user,
-            tittle: localStorage.getItem("mint_tittle"),
-            _iregex: localStorage.getItem("tempid"),
+            tittle: localStorage.getItem("mint_tittle") === null ? 'no tittle' : localStorage.getItem("mint_tittle"),
+            _iregex: localStorage.getItem("tempid") === null ? '123' : localStorage.getItem("tempid"),
           },
         })
         .then((response) => {
           //Map the objectvalue
-          Object.entries(response.data).forEach(([key, value]) => {
-            // inner object entries
-            console.log(value);
-            localStorage.setItem("metadata_id", value[0].id);
-          });
-          this.getMinted();
+          // console.log(response.data.nft_metadata.length)
+          if (response.data.nft_metadata.length > 0) {
+            Object.entries(response.data).forEach(([key, value]) => {
+              // inner object entries
+              console.log(value);
+              localStorage.setItem("metadata_id", value[0].id);
+            });
+            this.getMinted();
+          }
         })
         .catch((err) => {
           console.log("Error", err);
@@ -1681,9 +1681,9 @@ export default {
       }, 120000);
     },
     validator(model) {
-      if (model) return this.editorRules = false
-      this.editorRules = true
-    }
+      if (model) return (this.editorRules = false);
+      this.editorRules = true;
+    },
   },
 };
 </script>
