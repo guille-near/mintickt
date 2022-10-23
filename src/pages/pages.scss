@@ -1291,12 +1291,12 @@
     // border-radius: 16%;
     // .ticket {width: 100%}
     width: min(var(--margin), 20em);
+    height: 590px;
+    margin-block: auto;
     // height: 35em;
     position: relative;
     border-radius: 19.2px;
     background-color: green;
-    // clip-path: polygon(0 5%, 100% 5%, 100% 94%, 0 94%);
-    // border-radius: 16%;
     .ticket {width: 100% !important; height: 100% !important}
     .v-input {
       position: absolute;
