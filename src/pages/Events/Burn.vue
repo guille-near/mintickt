@@ -1,6 +1,6 @@
 <template>
   <div id="burn" class="center" style="margin-block: 140px 80px">
-    <v-sheet color="transparent" class="tcenter divcol center" style="gap: 1em" max-width="min-content">
+    <v-sheet color="transparent" class="tcenter divcol center" style="gap: 1em" max-width="max-content">
       <img src="@/assets/img/burn-ticket.jpg" alt="burn ticket">
       <div class="divcol" style="gap: .5em">
         <h3 class="p">Terminator (Let me in)</h3>
@@ -27,7 +27,7 @@ img {
   background: linear-gradient(338.88deg, #EFE1D4 28.41%, #FFFFFF 101.9%), linear-gradient(180deg, #000000 0%, #272727 100%);
 }
 h3 {
-  font-family: 'Proxima Nova', sans-serif;
+  font-family: sans-serif;
   font-weight: 600;
   font-size: 25px;
   line-height: 25px;
