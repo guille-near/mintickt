@@ -57,6 +57,11 @@ export default new Router({
           name: 'RegisterDashboard',
           component: () => import('@/pages/Events/RegisterDashboard'),
         },
+        {
+          path: '/events/burn',
+          name: 'Burn',
+          component: () => import('@/pages/Events/Burn'),
+        },
       ],
     },
     {
