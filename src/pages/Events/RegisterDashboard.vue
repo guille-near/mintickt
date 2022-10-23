@@ -2,7 +2,7 @@
   <section id="createTickets" class="registerDashboard divcol gap align">
     <ModalSuccess ref="modal"></ModalSuccess>
 
-    <v-window v-model="step">
+    <v-window v-model="step" to>
       <v-window-item :value="1">
         <h2 class="align" style="text-align: center">
           Let's create your NFT for your event!
@@ -12,7 +12,7 @@
           <div class="ticket-wrapper" id="my-node">
             <img
               class="ticket"
-              src="@/assets/img/ticket-register.svg"
+              src="@/assets/img/ticket-test.png"
               alt="Ticket image"
             />
 
@@ -185,7 +185,7 @@
           <div class="ticket-wrapper">
             <img
               class="ticket"
-              src="@/assets/img/ticket-register.svg"
+              src="@/assets/img/ticket-test.png"
               alt="Ticket image"
             />
 
@@ -297,7 +297,7 @@
           <div class="ticket-wrapper">
             <img
               class="ticket"
-              src="@/assets/img/ticket-register.svg"
+              src="@/assets/img/ticket-test.png"
               alt="Ticket image"
             />
 
@@ -539,7 +539,7 @@
           <div class="ticket-wrapper" id="my-node">
             <img
               class="ticket"
-              src="@/assets/img/ticket-register.svg"
+              src="@/assets/img/ticket-test.png"
               alt="Ticket image"
             />
 
