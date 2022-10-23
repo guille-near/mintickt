@@ -1201,15 +1201,15 @@ export default {
 
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
-          backgroundColor: "#000000",
-          y: (container / 2, container / 2, 30),
-          height: 570,
+          backgroundColor: null,
+          //y: (container / 2, container / 2, 30),
+          //height: 570,
         }).then((canvas) => {
-          let link = document.createElement("a");
-          link.download = "image_name.png";
-          link.href = canvas.toDataURL("image/png", 1.0);
-          document.body.appendChild(link);
-          link.click();
+          // let link = document.createElement("a");
+          // link.download = "image_name.png";
+          // link.href = canvas.toDataURL("image/png", 1.0);
+          // document.body.appendChild(link);
+          // link.click();
 
           var image = new Image();
           image.src = canvas.toDataURL("image/png", 1.0);
@@ -1224,9 +1224,9 @@ export default {
       if (this.$refs.form4.validate()) {
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
-          backgroundColor: "#000000",
-          y: (container / 2, container / 2, 30),
-          height: 580,
+          backgroundColor: null,
+          //y: (container / 2, container / 2, 30),
+          //height: 580,
         }).then((canvas) => {
           // let link = document.createElement("a");
           // link.download = "image_name.png";

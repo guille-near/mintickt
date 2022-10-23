@@ -19,16 +19,16 @@ import VueAxios from "vue-axios";
 
 //Global Variables
 Vue.config.productionTip = false
-Vue.prototype.$networkName= (Vue.config.productionTip) ? 'testnet' : 'testnet';
-Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'mintickt2.mintspace2.testnet' : 'mintickt2.mintspace2.testnet';
-Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
-Vue.prototype.$dev_key= '63b2aa55-8acd-4b7c-85b4-397cea9bcae9';
+Vue.prototype.$networkName= (Vue.config.productionTip) ? 'mainnet' : 'mainnet';
+Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'globaldv.mintbase1.near' : 'globaldv.mintbase1.near';
+Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'mintbase.near' : 'mintbase.near';
+Vue.prototype.$dev_key= '2077ba62-21fd-4457-b3f5-13e6d376d026';
 Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.near.org/' : 'https://explorer.testnet.near.org/';
-Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://www.mintickt.com:3070/api/ipfs/' : 'http://localhost:3070/api/ipfs/';
+Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://www.mintickt.com:3070/api/ipfs/' : 'https://www.mintickt.com:3070/api/ipfs/';
 Vue.prototype.$binance= 'https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT';
 Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://www.mintickt.com:3090/api/v1/mintickt' : 'http://localhost:3090/api/v1/mintickt'
 Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
-Vue.prototype.$value_user_mint = "vicious2403.testnet"
+Vue.prototype.$value_user_mint = "kamargo1.near"
 
 Vue.use(PerfectScrollbar);
 Vue.use(VueAxios,axios);
