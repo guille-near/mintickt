@@ -16,19 +16,27 @@ import moment from "moment-timezone";
 import vueDebounce from 'vue-debounce';
 import axios from 'axios';
 import VueAxios from "vue-axios";
+import VueClipboard from 'vue-clipboard2'
+import VueQRCodeComponent from 'vue-qr-generator'
 
 //Global Variables
 Vue.config.productionTip = false
 Vue.prototype.$networkName= (Vue.config.productionTip) ? 'mainnet' : 'mainnet';
 Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'globaldv.mintbase1.near' : 'globaldv.mintbase1.near';
-Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'mintbase.near' : 'mintbase.near';
+Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'simple.market.mintbase1.near' : 'simple.market.mintbase1.near';
 Vue.prototype.$dev_key= '2077ba62-21fd-4457-b3f5-13e6d376d026';
-Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.near.org/' : 'https://explorer.testnet.near.org/';
-Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://www.mintickt.com:3070/api/ipfs/' : 'https://www.mintickt.com:3070/api/ipfs/';
+Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.near.org/' : 'https://explorer.near.org/';
+Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://mintickt.com:3070/api/ipfs/' : 'https://mintickt.com:3070/api/ipfs/';
 Vue.prototype.$binance= 'https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT';
-Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://www.mintickt.com:3090/api/v1/mintickt' : 'http://localhost:3090/api/v1/mintickt'
+Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:3090/api/v1/mintickt' : 'https://mintickt.com:3090/api/v1/mintickt'
 Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
 Vue.prototype.$value_user_mint = "kamargo1.near"
+Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "http://localhost:8080/mintick/#/events/burn" : "http://localhost:8080/mintick/#/events/burn"
+Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "http://localhost:8080/mintick/#/events/burn" : "http://localhost:8080/mintick/#/events/burn"
+
+VueClipboard.config.autoSetContainer = true // add this line
+Vue.use(VueClipboard)
+Vue.component('qr-code', VueQRCodeComponent)
 
 Vue.use(PerfectScrollbar);
 Vue.use(VueAxios,axios);
@@ -76,7 +84,7 @@ import ApolloClient from "apollo-boost";
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://interop-testnet.hasura.app/v1/graphql" : "https://interop-testnet.hasura.app/v1/graphql",
+  uri: (Vue.config.productionTip) ? "https://interop-mainnet.hasura.app/v1/graphql" : "https://interop-mainnet.hasura.app/v1/graphql",
 });
 const mintickClient = new ApolloClient({
   // You should use an absolute URL here

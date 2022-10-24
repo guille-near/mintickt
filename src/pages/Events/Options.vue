@@ -13,13 +13,13 @@
       <span>Burn a ticket</span>
       <label>(Access Control)</label>
       <div class="space">
-        <v-btn @click="ModalQR('ticket')">
+        <v-btn @click="modalTicket = true">
           <img src="@/assets/icons/qr.svg" alt="qr icon" />
           Show QR
         </v-btn>
-        <v-btn>
+        <v-btn @click="copyTicket" :loading="loading_tickets">
           <img src="@/assets/icons/copy.svg" alt="copy icon" />
-          Copy url
+          {{ message_ticket }}
         </v-btn>
       </div>
     </aside>
@@ -28,13 +28,13 @@
       <span>Burn a goodie</span>
       <label>(Goodies)</label>
       <div class="space">
-        <v-btn @click="ModalQR('goodie')">
+        <v-btn @click="modalGoodie = true">
           <img src="@/assets/icons/qr.svg" alt="qr icon" />
           Show QR
         </v-btn>
-        <v-btn>
+        <v-btn @click="copyGoodies" :loading="loading_goodies">
           <img src="@/assets/icons/copy.svg" alt="copy icon" />
-          Copy url
+          {{ message_goodies }}
         </v-btn>
       </div>
     </aside>
@@ -144,6 +144,48 @@
         <v-btn @click="list" :loading="loading" :disabled="disable">List</v-btn>
       </v-card>
     </v-dialog>
+
+    <!--Modal ticket Url -->
+    <v-dialog v-model="modalTicket" width="420">
+        <v-card id="modalUrl">
+          <div class="divcol center">
+            <h3 class="p">Url Code</h3>
+          </div>
+          <center>
+            <div id="my-node-ticket">
+              <qr-code
+                text="https://www.mintickt.com/"
+                error-level="L"
+              >
+              </qr-code>
+            </div>
+          </center>
+          <div class="divcol center">
+            <v-btn :loading="loading_tickets_qr" @click="downloadQrTicket">Download QR</v-btn>
+          </div>
+        </v-card>
+      </v-dialog>
+
+      <!--Modal goodie Url -->
+    <v-dialog v-model="modalGoodie" width="420">
+        <v-card id="modalUrl">
+          <div class="divcol center">
+            <h3 class="p">Url Code</h3>
+          </div>
+          <center>
+            <div id="my-node-goodies">
+              <qr-code
+                text="https://www.mintickt.com/"
+                error-level="L"
+              >
+              </qr-code>
+            </div>
+          </center>
+          <div class="divcol center">
+            <v-btn :loading="loading_goodies_qr" @click="downloadQrGoodies">Download QR</v-btn>
+          </div>
+        </v-card>
+      </v-dialog>
   </section>
 </template>
 
@@ -152,6 +194,7 @@ import { StreamBarcodeReader } from "vue-barcode-reader";
 import ModalSuccess from "./ModalSuccess";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
+import html2canvas from "html2canvas";
 import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 const your_events = gql`
@@ -276,40 +319,48 @@ export default {
       amount_list: 0,
       disable: true,
       loading: false,
+      loading_tickets: false,
+      loading_goodies: false,
+      loading_tickets_qr: false,
+      loading_goodies_qr: false,
       txs: [],
       counter: 0,
+      message_ticket: "Copy url",
+      message_goodies: "Copy url",
+      modalTicket: false,
+      modalGoodie: false,
     };
   },
   mounted() {
-    this.getData();
-    this.pollData();
-    this.getTotalMinted();
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-    const user = datos.accountId;
-    if (urlParams.get("transactionHashes") !== null) {
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
-          localStorage.getItem("event_name") +
-          "&thingid=" +
-          localStorage.getItem("eventid")
-      );
-    }
-    if (urlParams.get("errorCode") !== null) {
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
-          localStorage.getItem("event_name") +
-          "&thingid=" +
-          localStorage.getItem("eventid")
-      );
-    }
+    // this.getData();
+    // this.pollData();
+    // this.getTotalMinted();
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+    // const user = datos.accountId;
+    // if (urlParams.get("transactionHashes") !== null) {
+    //   this.$refs.modal.modalSuccess = true;
+    //   this.$refs.modal.url = this.$explorer + "/accounts/" + user;
+    //   history.replaceState(
+    //     null,
+    //     location.href.split("?")[0],
+    //     "/mintickt/#/events/options?event=" +
+    //       localStorage.getItem("event_name") +
+    //       "&thingid=" +
+    //       localStorage.getItem("eventid")
+    //   );
+    // }
+    // if (urlParams.get("errorCode") !== null) {
+    //   history.replaceState(
+    //     null,
+    //     location.href.split("?")[0],
+    //     "/mintickt/#/events/options?event=" +
+    //       localStorage.getItem("event_name") +
+    //       "&thingid=" +
+    //       localStorage.getItem("eventid")
+    //   );
+    // }
   },
   methods: {
     onDecode(text) {
@@ -487,15 +538,15 @@ export default {
                   gas: "200000000000000",
                   args: {
                     owner_id: value[0].owner,
-                    metadata : {
+                    metadata: {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
                     num_to_mint: this.amount_list,
                     royalty_args: null,
-                    split_owners: owners
-                    },
-                    deposit: "1"
+                    split_owners: owners,
+                  },
+                  deposit: "1",
                 },
               ],
             });
@@ -527,15 +578,15 @@ export default {
                   gas: "200000000000000",
                   args: {
                     owner_id: value[0].owner,
-                    metadata : {
+                    metadata: {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
                     num_to_mint: this.amount_list,
                     royalty_args: null,
-                    split_owners: owners
-                    },
-                    deposit: "1"
+                    split_owners: owners,
+                  },
+                  deposit: "1",
                 },
               ],
             });
@@ -644,6 +695,65 @@ export default {
           this.price_list
         ).toFixed(2);
       };
+    },
+    copyTicket() {
+      this.loading = true;
+      this.$copyText(this.$burn_page_ticket).then(
+        function (e) {
+          console.log(e);
+        },
+        function (e) {
+          console.log(e);
+        }
+      );
+      this.message_ticket = "Copied!";
+      this.loading_tickets = false;
+      this.$forceUpdate();
+    },
+    copyGoodies() {
+      this.loading = true;
+      this.$copyText(this.$burn_page_goodies).then(
+        function (e) {
+          console.log(e);
+        },
+        function (e) {
+          console.log(e);
+        }
+      );
+      this.message_goodies = "Copied!";
+      this.loading_goodies = false;
+      this.$forceUpdate();
+    },
+    downloadQrTicket() {
+      this.modalSuccess = true;
+      this.loading_tickets_qr = true;
+      var container = document.getElementById("my-node-ticket"); /* full page */
+      html2canvas(container, {
+        height: 450,
+        y: -80
+      }).then((canvas) => {
+        let link = document.createElement("a");
+        link.download = "url_ticket.png";
+        link.href = canvas.toDataURL("image/png", 1.0);
+        document.body.appendChild(link);
+        link.click();
+        this.loading_tickets_qr = false;
+      });
+    },
+    downloadQrGoodies() {
+      this.loading_goodies_qr = true;
+      var container = document.getElementById("my-node-goodies"); /* full page */
+      html2canvas(container, {
+        height: 450,
+        y: -80
+      }).then((canvas) => {
+        let link = document.createElement("a");
+        link.download = "url_goodies.png";
+        link.href = canvas.toDataURL("image/png", 1.0);
+        document.body.appendChild(link);
+        link.click();
+        this.loading_goodies_qr = false;
+      });
     },
   },
 };

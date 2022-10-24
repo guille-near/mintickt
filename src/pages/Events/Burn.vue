@@ -43,7 +43,7 @@ p {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 .v-btn {
-  margin-top: 3em;
+  margin-top: 1.5em;
   min-height: 39px !important;
   color: #FFFFFF !important;
   background: linear-gradient(0deg, #000000 -42.31%, rgba(0, 0, 0, 0) 50%), #CC00B7 !important;

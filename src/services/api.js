@@ -3,7 +3,7 @@
 //const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API_BASE_URL : API_PROXY_PREFIX
 // const BASE_URL = process.env.VUE_APP_API_BASE_URL
 const enviroment = false
-const NETWORK = (enviroment) ? 'testnet' : 'testnet';
+const NETWORK = (enviroment) ? 'mainnet' : 'mainnet';
 
 function CONFIG(keyStores) {
   switch (NETWORK) {
