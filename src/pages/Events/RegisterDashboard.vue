@@ -808,9 +808,15 @@ export default {
       total_minted: parseInt(localStorage.getItem("total_minted")),
     };
   },
+  watch: {
+    step(newValue, oldValue) {
+      const editor = document.querySelector(".editor .ql-editor");
+      if (newValue != oldValue) {
+        editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+      }
+    }
+  },
   mounted() {
-    // const editor = document.querySelector(".editor .ql-editor");
-    // editor.addEventListener("keyup", () => this.validator(this.dataTickets.description))
     console.log(this.total_minted)
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
