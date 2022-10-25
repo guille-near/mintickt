@@ -45,11 +45,11 @@
           <aside
             class="acenter"
             style="gap: 0.2em"
-            :style="routePath.includes('events') ? '' : 'display:contents'"
+            :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
             <v-btn
               class="createEventBtn h9-em"
-              v-if="routePath.includes('events')"
+              v-show="routePath !== '/events/register'"
               @click="$router.push('/events/register')"
             >
               <span>create an event</span>
@@ -126,6 +126,7 @@ export default {
       nearid: false,
       user: "Login with NEAR",
       responsiveActions: false,
+      routePath: this.$router.currentRoute.path,
     };
   },
   mounted() {
@@ -139,9 +140,9 @@ export default {
     route() {
       return this.$router.currentRoute.name;
     },
-    routePath() {
-      return this.$router.currentRoute.path;
-    },
+  },
+  watch: {
+    $route(current) { this.routePath = current.path }
   },
   methods: {
     responsive() {
