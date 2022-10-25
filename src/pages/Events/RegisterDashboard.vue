@@ -811,13 +811,13 @@ export default {
   mounted() {
     // const editor = document.querySelector(".editor .ql-editor");
     // editor.addEventListener("keyup", () => this.validator(this.dataTickets.description))
-    console.log(this.total_minted)
+
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     this.getData().then(() => {
       //Valitade the indexer completed de data
       if (localStorage.getItem("metadata_id") != null) {
-        this.completeIpfs();
+         this.completeIpfs();
       }
     });
     const queryString = window.location.search;
@@ -1413,8 +1413,14 @@ export default {
           variables: {
             store: this.$store_mintbase.toString(),
             user: user,
-            tittle: localStorage.getItem("mint_tittle") === null ? 'no tittle' : localStorage.getItem("mint_tittle"),
-            _iregex: localStorage.getItem("tempid") === null ? '123' : localStorage.getItem("tempid"),
+            tittle:
+              localStorage.getItem("mint_tittle") === null
+                ? "no tittle"
+                : localStorage.getItem("mint_tittle"),
+            _iregex:
+              localStorage.getItem("tempid") === null
+                ? "123"
+                : localStorage.getItem("tempid"),
           },
         })
         .then((response) => {
@@ -1423,7 +1429,7 @@ export default {
           if (response.data.nft_metadata.length > 0) {
             Object.entries(response.data).forEach(([key, value]) => {
               // inner object entries
-              console.log(value);
+              // console.log(value);
               localStorage.setItem("metadata_id", value[0].id);
             });
             this.getMinted();
@@ -1499,7 +1505,7 @@ export default {
 
         const { data: metadataId, error } = await wallet.minter.getMetadataId();
         localStorage.setItem("metadata_reference", metadataId);
-        console.log("metadata_reference", metadataId);
+        //console.log("metadata_reference", metadataId);
 
         this.$apollo
           .query({
@@ -1544,9 +1550,9 @@ export default {
                             autotransfer: true,
                           }),
                         },
-                        // deposit: utils.format.parseNearAmount(
-                        //   (0.108).toString()
-                        // ),
+                        deposit: utils.format.parseNearAmount(
+                          (0.0008).toString()
+                        ),
                       },
                     ],
                   });
@@ -1625,8 +1631,9 @@ export default {
       request.open("GET", BINANCE_NEAR);
       request.send();
       request.onload = () => {
-        this.usd =
-          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price;
+        this.usd = (
+          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
+        ).toFixed(4);
       };
     },
     async ipfs() {
@@ -1652,7 +1659,7 @@ export default {
           //console.log(res.data.ipfs.length);
           const url = this.$node_url + "/ipfs";
           if (res.data.ipfs.length == 0) {
-            console.log(url);
+            //console.log(url);
             let item = {
               thingid: localStorage.getItem("metadata_id"),
               tokenid: localStorage.getItem("IpfsHash"),

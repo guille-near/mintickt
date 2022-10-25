@@ -332,35 +332,35 @@ export default {
     };
   },
   mounted() {
-    // this.getData();
-    // this.pollData();
-    // this.getTotalMinted();
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-    // const user = datos.accountId;
-    // if (urlParams.get("transactionHashes") !== null) {
-    //   this.$refs.modal.modalSuccess = true;
-    //   this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-    //   history.replaceState(
-    //     null,
-    //     location.href.split("?")[0],
-    //     "/mintickt/#/events/options?event=" +
-    //       localStorage.getItem("event_name") +
-    //       "&thingid=" +
-    //       localStorage.getItem("eventid")
-    //   );
-    // }
-    // if (urlParams.get("errorCode") !== null) {
-    //   history.replaceState(
-    //     null,
-    //     location.href.split("?")[0],
-    //     "/mintickt/#/events/options?event=" +
-    //       localStorage.getItem("event_name") +
-    //       "&thingid=" +
-    //       localStorage.getItem("eventid")
-    //   );
-    // }
+    this.getData();
+    this.pollData();
+    this.getTotalMinted();
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+    const user = datos.accountId;
+    if (urlParams.get("transactionHashes") !== null) {
+      this.$refs.modal.modalSuccess = true;
+      this.$refs.modal.url = this.$explorer + "/accounts/" + user;
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintickt/#/events/options?event=" +
+          localStorage.getItem("event_name") +
+          "&thingid=" +
+          localStorage.getItem("eventid")
+      );
+    }
+    if (urlParams.get("errorCode") !== null) {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintickt/#/events/options?event=" +
+          localStorage.getItem("event_name") +
+          "&thingid=" +
+          localStorage.getItem("eventid")
+      );
+    }
   },
   methods: {
     onDecode(text) {

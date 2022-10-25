@@ -94,7 +94,7 @@
           <aside class="space">
             <div class="divrow acenter">
               <img src="@/assets/logo/logonear.svg" alt="Logo near" />
-              <span class="h8-em number ml-3">{{ price_near }}</span>
+              <span class="h8-em number ml-3">{{ price_near.toFixed(4) }}</span>
             </div>
             <span class="tend">~ {{ price_token_usd.toFixed(2) }} $USD</span>
           </aside>
@@ -142,6 +142,7 @@ import gql from "graphql-tag";
 import ModalSuccess from "./ModalSuccess";
 import { Wallet, Chain, Network } from "mintbase";
 import * as nearAPI from "near-api-js";
+const { connect, keyStores, utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
     mb_views_nft_metadata(
@@ -470,6 +471,7 @@ export default {
       this.loading = true;
       const mintbase_marketplace = this.$mintbase_marketplace;
       let store = this.$store_mintbase;
+      console.log(this.padWithZero(this.price_near.toFixed(4), String(this.price_near.toFixed(4)).length + 24))
       this.tokens_buy.forEach((element) => {
         //console.log(element)
         // Pushh array for each element of the tokens selected
@@ -484,7 +486,7 @@ export default {
                         nft_contract_id: store,
                         token_id: element,
                       },
-                      deposit: this.padWithZero(this.price_near, String(this.price_near).length + 24),
+                      deposit: utils.format.parseNearAmount(this.price_near.toFixed(4)),
                     },
                   ],
                 });
@@ -559,7 +561,7 @@ export default {
         .query({
           query: get_ticket_to_send,
           variables: {
-            _iregex: localStorage.getItem('eventid').split(":")[1],
+            _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
             owner: localStorage.getItem('minter')
           },
         })
