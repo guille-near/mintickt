@@ -121,21 +121,18 @@
 import moment from "moment";
 import gql from "graphql-tag";
 const mb_views_nft_tokens_aggregate = gql`
-  query MyQuery($user: String!, $metadata_id: String!) {
-    nft_earnings_aggregate(
-      where: {
-        receiver_id: { _eq: $user }
-        offer: { token: { metadata_id: { _eq: $metadata_id } } }
-      }
-    ) {
-      aggregate {
-        count
-        sum {
-          amount
-        }
+ query MyQuery($user: String!, $metadata_id: String!) {
+  nft_earnings_aggregate(
+    where: {receiver_id: {_eq: $user}, nft_token: {metadata_id: {_eq: $metadata_id}}}
+  ) {
+    aggregate {
+      count
+      sum {
+        amount
       }
     }
   }
+}
 `;
 const redeemed_tokens_aggregate = gql`
   query MyQuery($_iregex: String!) {
@@ -339,7 +336,7 @@ export default {
               var startTime =
                 value.last_transfer_receipt_id === null
                   ? moment.utc(value.minted_timestamp)
-                  : moment.utc(last_transfer_timestamp);
+                  : moment.utc(value.last_transfer_timestamp);
               var endTime = moment.utc(new Date());
               var minutesDiff = endTime.diff(startTime, "minutes");
               var hoursDiff = endTime.diff(startTime, "hours");
@@ -472,7 +469,7 @@ export default {
                   var startTime =
                     value.last_transfer_receipt_id === null
                       ? moment.utc(value.minted_timestamp)
-                      : moment.utc(last_transfer_timestamp);
+                      : moment.utc(value.last_transfer_timestamp);
                   var endTime = moment.utc(new Date());
                   var minutesDiff = endTime.diff(startTime, "minutes");
                   var hoursDiff = endTime.diff(startTime, "hours");
@@ -510,7 +507,7 @@ export default {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
-      }, 120000);
+      }, 60000);
     },
     fetch() {
       const BINANCE_NEAR =

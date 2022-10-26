@@ -252,7 +252,7 @@
                 id="amount_list"
                 solo
                 :rules="rules.required"
-                :disabled="dataTickets.mint_amount == 20"
+                v-debounce:800ms="checkMintAmount"
                 type="number"
                 hide-spin-buttons
               >
@@ -476,6 +476,7 @@
                     id="amount_list"
                     solo
                     :rules="rules.required"
+                    v-debounce:800ms="checkListAmount"
                     type="number"
                     hide-spin-buttons
                   >
@@ -607,6 +608,7 @@
                     id="goodies"
                     solo
                     :rules="rules.required"
+                    v-debounce:800ms="checkGoodiesAmount"
                     type="number"
                     hide-spin-buttons
                   >
@@ -1693,12 +1695,23 @@ export default {
           }
         });
         this.$forceUpdate();
-      }, 120000);
+      }, 60000);
     },
     validator(model) {
       if (model) return (this.editorRules = false);
       this.editorRules = true;
     },
+    checkMintAmount(){
+      this.dataTickets.mint_amount > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+    },
+    checkListAmount(){
+      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+    },
+    checkGoodiesAmount(){
+      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      this.dataTickets.goodies > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
+    }
   },
 };
 </script>

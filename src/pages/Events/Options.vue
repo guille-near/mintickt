@@ -77,6 +77,7 @@
           v-model="mint_amount"
           type="number"
           hide-spin-buttons
+          v-debounce:800ms="checkMintAmount"
           hide-details
           solo
         >
@@ -104,6 +105,7 @@
             id="amount"
             v-model="amount_list"
             type="number"
+            v-debounce:800ms="checkListAmount"
             hide-spin-buttons
             hide-details
             solo
@@ -154,7 +156,7 @@
           <center>
             <div id="my-node-ticket">
               <qr-code
-                text="https://www.mintickt.com/"
+                :text="urltickets"
                 error-level="L"
               >
               </qr-code>
@@ -175,7 +177,7 @@
           <center>
             <div id="my-node-goodies">
               <qr-code
-                text="https://www.mintickt.com/"
+                :text="urlgoodies"
                 error-level="L"
               >
               </qr-code>
@@ -223,27 +225,22 @@ const your_events = gql`
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-    nft_tokens_aggregate(
-      where: {
-        nft_contract_id: { _eq: $store }
-        metadata_id: { _eq: $metadata_id }
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-    nft_earnings_aggregate(
-      where: {
-        receiver_id: { _eq: $user }
-        offer: { token: { metadata_id: { _eq: $metadata_id } } }
-      }
-    ) {
-      aggregate {
-        count
-      }
+  nft_tokens_aggregate(
+    where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}}
+  ) {
+    aggregate {
+      count
     }
   }
+  nft_earnings_aggregate(
+    where: {receiver_id: {_eq: $user}, nft_token: {metadata_id: {_eq: metadata_id}}}
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
+
 `;
 const tokens_id = gql`
   query MyQuery($metadata_id: String) {
@@ -329,6 +326,8 @@ export default {
       message_goodies: "Copy url",
       modalTicket: false,
       modalGoodie: false,
+      urlgoodies: this.$burn_page_ticket+"?extra=redeemed&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
+      urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1]
     };
   },
   mounted() {
@@ -644,7 +643,7 @@ export default {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
-      }, 120000);
+      }, 60000);
     },
     controlAmount(item) {
       this.getData();
@@ -698,7 +697,7 @@ export default {
     },
     copyTicket() {
       this.loading = true;
-      this.$copyText(this.$burn_page_ticket).then(
+      this.$copyText(this.urltickets).then(
         function (e) {
           console.log(e);
         },
@@ -712,7 +711,7 @@ export default {
     },
     copyGoodies() {
       this.loading = true;
-      this.$copyText(this.$burn_page_goodies).then(
+      this.$copyText(this.urlgoodies).then(
         function (e) {
           console.log(e);
         },
@@ -755,6 +754,13 @@ export default {
         this.loading_goodies_qr = false;
       });
     },
+    checkMintAmount(){
+      this.mint_amount > 20 ? this.mint_amount = 20 : this.mint_amount = this.mint_amount;
+    },
+    checkListAmount(){
+      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+    }
   },
 };
 </script>

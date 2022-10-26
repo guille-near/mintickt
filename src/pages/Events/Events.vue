@@ -136,18 +136,15 @@ const your_events = gql`
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-   nft_tokens_aggregate(
-      where: {
-        nft_contract_id: { _eq: $store }
-        metadata_id: { _eq: $metadata_id }
-      }
-    ) {
-      aggregate {
-        count
-      }
+  nft_tokens_aggregate(
+    where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}}
+  ) {
+    aggregate {
+      count
     }
+  }
   nft_earnings_aggregate(
-    where: {receiver_id: {_eq: $user}, offer: {token: {metadata_id: {_eq: $metadata_id}}}}
+    where: {receiver_id: {_eq: $user}, nft_token: {metadata_id: {_eq: $metadata_id}}}
   ) {
     aggregate {
       count
@@ -265,7 +262,7 @@ export default {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
-      }, 120000);
+      }, 60000);
     },
     goLiveData(pevent, pthingid) {
       this.$router.push({

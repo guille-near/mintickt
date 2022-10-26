@@ -266,6 +266,7 @@ export default {
     });
     this.fetch();
     this.mainImg();
+    localStorage.setItem('eventid', this.$route.query.thingid.toLowerCase())
     //this.sendTicket()
     // 
     this.quantity == 0 ? (this.disable = true) : (this.disable = false);
@@ -401,7 +402,7 @@ export default {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
-      }, 120000);
+      }, 60000);
     },
     fetch() {
       const BINANCE_NEAR = this.$binance;
