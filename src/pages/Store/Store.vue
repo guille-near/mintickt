@@ -142,7 +142,7 @@ import gql from "graphql-tag";
 import ModalSuccess from "./ModalSuccess";
 import { Wallet, Chain, Network } from "mintbase";
 import * as nearAPI from "near-api-js";
-const { connect, keyStores, utils } = nearAPI;
+const { utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
     mb_views_nft_metadata(
@@ -170,7 +170,7 @@ const your_events = gql`
   }
 `;
 const mb_views_nft_tokens_aggregate = gql`
-  query MyQuery($store: String!,  $metadata_id: String!) {
+  query MyQuery($store: String!, $metadata_id: String!) {
   nft_tokens_aggregate(
     where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}}
   ) {
@@ -178,9 +178,7 @@ const mb_views_nft_tokens_aggregate = gql`
       count
     }
   }
-  nft_earnings_aggregate(
-    where: {offer: {token: {metadata_id: {_eq: $metadata_id}}}}
-  ) {
+  nft_earnings_aggregate(where: {nft_token: {metadata_id: {_eq: $metadata_id}}}) {
     aggregate {
       count
     }

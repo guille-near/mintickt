@@ -186,7 +186,18 @@ export default {
       // console.info(isConnected)
       if (!isConnected) {
         //console.info("user")
-        wallet.connect();
+        if (this.nearid === false) {
+          wallet.connect({ requestSignIn: true }).then;
+          this.nearid = true;
+          const { data: details } = await wallet.details();
+          this.user = details.accountId;
+        } else if (this.nearid === true) {
+          wallet.disconnect();
+          localStorage.clear();
+          this.$router.go();
+          this.nearid = false;
+          this.user = "Login with NEAR";
+        }
       }
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
@@ -194,19 +205,8 @@ export default {
           localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         this.user = datos.accountId;
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        if (urlParams.get("account_id") !== null) {
-          history.replaceState(
-            null,
-            location.href.split("?")[0],
-            "/events/ZJdegansubNv80mSfHKGYbabAYZdkQ3vd7lzQ-Sb27U:mintickt.mintbase1.near/#/"
-          );
-        }
-      } else {
-        this.nearid = false;
-        // console.info("aqui");
-      }
+        
+      } 
     },
   },
 };

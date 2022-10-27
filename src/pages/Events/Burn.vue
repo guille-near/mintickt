@@ -158,7 +158,6 @@ export default {
             receiver_id: user,
             token_id: response.data.mb_views_nft_tokens[0].token_id,
           };
-          console.log(item)
           this.axios
             .post(url, item)
             .then(() => {
@@ -167,11 +166,10 @@ export default {
             .catch((error) => {
               console.log(error);
             });
-              console.log(this.token_goodie)
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
     },
     async burn() {
         // console.log(this.dataTickets.attendees);
