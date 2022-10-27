@@ -1725,12 +1725,6 @@ export default {
         this.$forceUpdate();
       }, 60000);
     },
-    rulesListener() {
-      console.log("ejecutando")
-      const editor = document.querySelector(".editor .ql-editor");
-      editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
-      console.log("ejecutando")
-    },
     listenerEditor() {
       setTimeout(() => {
         const editor = document.querySelector(".editor .ql-editor");
