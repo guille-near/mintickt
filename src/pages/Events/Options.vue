@@ -331,6 +331,7 @@ export default {
     };
   },
   mounted() {
+    localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.pollData();
     this.getTotalMinted();
@@ -611,6 +612,8 @@ export default {
               if (value1.nft_listings.length === 0) {
                 this.counter++;
                 localStorage.setItem("total_minted", this.counter);
+              } else {
+                localStorage.setItem("total_minted", 0);
               }
             });
           });
@@ -688,6 +691,7 @@ export default {
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();
+      this.disable = false;
       request.onload = () => {
         this.usd = (
           parseFloat(JSON.parse(request.responseText).lastPrice) *
