@@ -79,7 +79,7 @@
 							v-model="dataTickets.description"
 							class="editor"
 							:class="{ rules: editorRules }"
-						></vue-editor>
+            />
 						<!--<v-textarea
               v-model="dataTickets.description"
               solo
@@ -821,12 +821,15 @@ export default {
   watch: {
     step(newValue, oldValue) {
       const editor = document.querySelector(".editor .ql-editor");
-      if (newValue != oldValue) {
+      if (oldValue != newValue && editor) {
         editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
       }
     }
   },
   mounted() {
+    const editor = document.querySelector(".editor .ql-editor");
+    editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
@@ -1722,8 +1725,14 @@ export default {
         this.$forceUpdate();
       }, 60000);
     },
+    rulesListener() {
+      console.log("ejecutando")
+      const editor = document.querySelector(".editor .ql-editor");
+      editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+      console.log("ejecutando")
+    },
     validator(model) {
-      if (model) return (this.editorRules = false);
+      if (model) return this.editorRules = false;
       this.editorRules = true;
     },
     checkMintAmount(){
