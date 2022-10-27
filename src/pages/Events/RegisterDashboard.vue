@@ -819,16 +819,16 @@ export default {
     };
   },
   watch: {
-    step(newValue, oldValue) {
-      const editor = document.querySelector(".editor .ql-editor");
-      if (oldValue != newValue) {
-        editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+    step(newValue) {
+      if (newValue === 1) {
+        this.listenerEditor()
       }
     }
   },
   mounted() {
-    const editor = document.querySelector(".editor .ql-editor");
-    editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+    if (this.step === 1) {
+      this.listenerEditor()
+    }
 
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
@@ -1730,6 +1730,12 @@ export default {
       const editor = document.querySelector(".editor .ql-editor");
       editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
       console.log("ejecutando")
+    },
+    listenerEditor() {
+      setTimeout(() => {
+        const editor = document.querySelector(".editor .ql-editor");
+        editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+      }, 400);
     },
     validator(model) {
       if (model) return this.editorRules = false;
