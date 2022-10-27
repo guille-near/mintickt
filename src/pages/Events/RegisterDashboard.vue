@@ -821,7 +821,7 @@ export default {
   watch: {
     step(newValue, oldValue) {
       const editor = document.querySelector(".editor .ql-editor");
-      if (oldValue != newValue && editor) {
+      if (oldValue != newValue) {
         editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
       }
     }
