@@ -38,7 +38,7 @@
   //   }
   // }
 
-  h1 {
+  h1:not(#landing h1) {
     font-size: $h1-font-size;
     font-weight: 400;
     margin-bottom: 16px;
@@ -50,7 +50,7 @@
     margin-bottom: 16px;
     line-height: 1;
   }
-  h3 {
+  h3:not(#landing h3) {
     font-size: $h3-font-size;
     font-weight: 400;
     margin-bottom: 16px;

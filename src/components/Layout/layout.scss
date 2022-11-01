@@ -15,7 +15,7 @@
 .layout{
   position: relative;
   height: 100vh !important;
-  .v-main__wrap {
+  .v-main__wrap:not(:has(#landing)) {
     padding-inline: 0;
     max-width: 1440px;
     margin-inline: auto;
