@@ -835,6 +835,8 @@ export default {
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
+    this.getMinted();
+    this.pollData();
     this.getData().then(() => {
       //Valitade the indexer completed de data
       if (localStorage.getItem("metadata_id") != null) {
@@ -1470,7 +1472,6 @@ export default {
               // console.log(value);
               localStorage.setItem("metadata_id", value[0].id);
             });
-            this.getMinted();
           }
         })
         .catch((err) => {
@@ -1718,14 +1719,9 @@ export default {
     },
     pollData() {
       this.polling = setInterval(() => {
-        this.getData().then(() => {
-          //Valitade the indexer completed de data
-          if (localStorage.getItem("metadata_id") != null) {
-            this.completeIpfs();
-          }
-        });
-        this.$forceUpdate();
-      }, 60000);
+        //this.getData();
+        this.getMinted();
+      }, 10000);
     },
     listenerEditor() {
       setTimeout(() => {
