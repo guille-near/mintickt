@@ -94,10 +94,10 @@ export default {
   })
    const { wallet, isConnected } = walletData
    // console.info(isConnected)
-   if(!isConnected){
-      //console.info("user")
-      wallet.connect()
-   }
+   //  if(!isConnected){
+   //     //console.info("user")
+   //     wallet.connect()
+   //  }
    
    if (localStorage.getItem('Mintbase.js_wallet_auth_key') !== null){
      this.nearid = true

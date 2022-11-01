@@ -184,21 +184,21 @@ export default {
       });
       const { wallet, isConnected } = walletData;
       // console.info(isConnected)
-      if (!isConnected) {
-        //console.info("user")
-        if (this.nearid === false) {
-          wallet.connect({ requestSignIn: true }).then;
-          this.nearid = true;
-          const { data: details } = await wallet.details();
-          this.user = details.accountId;
-        } else if (this.nearid === true) {
-          wallet.disconnect();
-          localStorage.clear();
-          this.$router.go();
-          this.nearid = false;
-          this.user = "Login with NEAR";
-        }
-      }
+      // if (!isConnected) {
+      //   //console.info("user")
+      //   if (this.nearid === false) {
+      //     wallet.connect({ requestSignIn: true }).then;
+      //     this.nearid = true;
+      //     const { data: details } = await wallet.details();
+      //     this.user = details.accountId;
+      //   } else if (this.nearid === true) {
+      //     wallet.disconnect();
+      //     localStorage.clear();
+      //     this.$router.go();
+      //     this.nearid = false;
+      //     this.user = "Login with NEAR";
+      //   }
+      // }
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
         let datos = JSON.parse(

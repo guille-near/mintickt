@@ -114,6 +114,7 @@
 
 <script>
 import gql from "graphql-tag";
+import { Wallet, Chain } from "mintbase";
 const your_events = gql`
   query MyQuery($store: String!, $user: String!) {
   mb_views_nft_metadata(
@@ -171,9 +172,11 @@ export default {
       loading: true,
       page: 3,
       dataTableMobile: [],
+      nearid: false,
     };
   },
   mounted() {
+    this.revisar();
     localStorage.setItem("step", 1);
     this.getData();
     this.pollData();
@@ -289,6 +292,40 @@ export default {
       request.onload = () => {
         this.lastPrice = JSON.parse(request.responseText);
       };
+    },
+    async revisar() {
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      const { wallet, isConnected } = walletData;
+      console.info(isConnected)
+      if (!isConnected) {
+        //console.info("user")
+        if (this.nearid === false) {
+          wallet.connect({ requestSignIn: true }).then;
+          this.nearid = true;
+          const { data: details } = await wallet.details();
+          this.user = details.accountId;
+        } else if (this.nearid === true) {
+          wallet.disconnect();
+          localStorage.clear();
+          this.$router.go();
+          this.nearid = false;
+          this.user = "Login with NEAR";
+        }
+      }
+      if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
+        this.nearid = true;
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+        this.user = datos.accountId;
+        
+      } 
     },
   },
 };

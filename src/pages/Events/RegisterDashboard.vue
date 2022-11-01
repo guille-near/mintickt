@@ -816,6 +816,7 @@ export default {
       canvas: localStorage.getItem("canvas"),
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
+      nearid: false,
     };
   },
   watch: {
@@ -826,6 +827,7 @@ export default {
     }
   },
   mounted() {
+    this.revisar();
     if (this.step === 1) {
       this.listenerEditor()
     }
@@ -1745,7 +1747,41 @@ export default {
     checkGoodiesAmount(){
       var total_minted = parseInt(localStorage.getItem("total_minted"));
       this.dataTickets.goodies > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
-    }
+    },
+    async revisar() {
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      const { wallet, isConnected } = walletData;
+      console.info(isConnected)
+      if (!isConnected) {
+        //console.info("user")
+        if (this.nearid === false) {
+          wallet.connect({ requestSignIn: true }).then;
+          this.nearid = true;
+          const { data: details } = await wallet.details();
+          this.user = details.accountId;
+        } else if (this.nearid === true) {
+          wallet.disconnect();
+          localStorage.clear();
+          this.$router.go();
+          this.nearid = false;
+          this.user = "Login with NEAR";
+        }
+      }
+      if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
+        this.nearid = true;
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+        this.user = datos.accountId;
+        
+      } 
+    },
   },
 };
 </script>
