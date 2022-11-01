@@ -63,17 +63,30 @@
             >
               <img src="@/assets/logo/near-black.svg" alt="near logo" />
             </v-btn>
-            <v-btn
-              v-else
-              text
-              color="white"
-              rounded
-              class="h9-em"
-              @click="connect"
-            >
-              <img src="@/assets/logo/near.svg" alt="near" />
-              <span>{{ user }}</span>
-            </v-btn>
+            
+            <v-menu v-else bottom offset-y>
+              <template>
+                <v-btn
+                  text
+                  color="white"
+                  rounded
+                  class="h9-em"
+                  @click="connect"
+                >
+                  <img src="@/assets/logo/near.svg" alt="near" />
+                  <span>{{ user }}</span>
+                </v-btn>
+              </template>
+
+              <v-list color="rgb(0 0 0 / .6)" max-width="max-content">
+                <v-list-item to="/events">
+                  <v-list-item-title>Events</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="logOut">
+                  <v-list-item-title>Log out</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </aside>
         </v-col>
       </v-row>
@@ -207,6 +220,16 @@ export default {
         this.user = datos.accountId;
         
       } 
+    },
+    async logOut() {
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      walletData.wallet.disconnect();
     },
   },
 };
