@@ -120,8 +120,7 @@ const your_events = gql`
   mb_views_nft_metadata(
     where: {nft_contract_id: {_eq: $store}
       , listings: {price: {_is_null: false}}
-      , nft_contract_owner_id: {_eq: $user}}
-  order_by: {reference_blob: desc}    
+      , nft_contract_owner_id: {_eq: $user}}  
   ) {
     title
     reference_blob
@@ -245,9 +244,12 @@ export default {
                     listed: value1.listings_aggregate.aggregate.count,
                     thingid: value1.id,
                     show: false,
+                    key: i
                   };
                   this.data.push(rows);
+                  this.data.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobile.push(rows);
+                  this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
                 })
                 .catch((err) => {
                   console.log("Error", err);

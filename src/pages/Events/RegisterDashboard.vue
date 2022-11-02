@@ -1651,7 +1651,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
-        //this.executeMultipleTransactions();
+        this.executeMultipleTransactions();
       }
     },
     async executeMultipleTransactions() {
