@@ -47,6 +47,7 @@
             style="gap: 0.2em"
             :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
+
             <v-btn
               class="createEventBtn h9-em"
               v-show="routePath !== '/events/register'"
@@ -76,6 +77,7 @@
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
+                  <span><v-icon class="mr-2" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span>
                 </v-btn>
               </template>
 
