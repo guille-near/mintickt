@@ -8,7 +8,7 @@
 			max-width="max-content"
 		>
 			<h3 class="p">Token # {{ token }}</h3>
-			<img src="@/assets/img/burn-ticket.jpg" alt="burn ticket" />
+			<img :src="media" alt="burn ticket" style="background: rgba(0, 0, 0, 0.87);" />
 			<div class="divcol" style="gap: 0.5em">
 				<h3 class="p">{{ title }} ({{ extra }})</h3>
 				<p>Burn this NFT so event staff let you in at the venue.</p>
@@ -39,6 +39,7 @@ const mb_views_nft_tokens = gql`
     token_id
     title
     extra
+    media
   }
 }
 `;
@@ -53,6 +54,7 @@ const goodies = gql`
     token_id
     title
     extra
+    media
   }
 }
 `;
@@ -69,7 +71,8 @@ export default {
       extra: "", 
       disable: true,
       loading: false,
-      meta: ""
+      meta: "",
+      media: ""
     };
   },
   mounted() {
@@ -126,6 +129,7 @@ export default {
           const str2 = extra.charAt(0).toUpperCase() + extra.slice(1);
           this.token = response.data.mb_views_nft_tokens[0].token_id;
           this.title = response.data.mb_views_nft_tokens[0].title;
+          this.media = response.data.mb_views_nft_tokens[0].media;
           this.extra = str2;
         })
         .catch((err) => {

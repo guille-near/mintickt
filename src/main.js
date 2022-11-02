@@ -31,8 +31,9 @@ Vue.prototype.$binance= 'https://api.binance.com/api/v3/ticker/24hr?symbol=NEARU
 Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:3090/api/v1/mintickt' : 'https://mintickt.com:3090/api/v1/mintickt'
 Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
 Vue.prototype.$value_user_mint = "kamargo1.near"
-Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "http://localhost:8080/mintick/#/events/burn" : "http://localhost:8080/mintick/#/events/burn"
-Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "http://localhost:8080/mintick/#/events/burn" : "http://localhost:8080/mintick/#/events/burn"
+Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "https://mintickt.com/mintick/#/events/burn" : "https://mintickt.com/mintick/#/events/burn"
+Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://mintickt.com/mintick/#/store/?thingid=" : "https://mintickt.com/mintick/#/store/?thingid="
+Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "https://mintickt.com/mintick/#/events/burn" : "https://mintickt.com/mintick/#/events/burn"
 
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)

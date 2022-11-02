@@ -39,8 +39,12 @@
           <v-btn @click="goOptions(item.name, item.thingid)" v-on="on" v-bind="attrs"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
+          <v-btn @click="copySiteLink(item.thingid)" title="Copy site link" v-on="on" v-bind="attrs"
+            ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
+          >
         </div>
       </template>
+      
     </v-data-table>
 
     <section class="vermobile">
@@ -172,6 +176,7 @@ export default {
       page: 3,
       dataTableMobile: [],
       nearid: false,
+      message_ticket: "Copy link"
     };
   },
   mounted() {
@@ -328,6 +333,20 @@ export default {
         this.user = datos.accountId;
         
       } 
+    },
+    copySiteLink(id) {
+      this.loading = true;
+      this.$copyText(this.$store_site+id).then(
+        function (e) {
+          console.log(e);
+        },
+        function (e) {
+          console.log(e);
+        }
+      );
+      this.message_ticket = "Copied!";
+      this.loading = false;
+      this.$forceUpdate();
     },
   },
 };

@@ -607,20 +607,17 @@
 										id="goodies"
 										solo
 										:rules="rules.required"
-										v-debounce:800ms="checkGoodiesAmount"
 										type="number"
 										hide-spin-buttons
 									>
 										<template v-slot:append>
 											<v-btn
 												class="btn-control"
-												:disabled="dataTickets.goodies == 0"
 												@click="dataTickets.goodies--"
 												>-</v-btn
 											>
 											<v-btn
 												class="btn-control"
-												:disabled="dataTickets.goodies == total_minted"
 												@click="dataTickets.goodies++"
 												>+</v-btn
 											>
@@ -694,6 +691,7 @@ const tokens_id = gql`
   query MyQuery($metadata_id: String) {
     nft_tokens_aggregate(
       where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
+      order_by: {token_id: asc}
     ) {
       nodes {
         token_id
@@ -1212,7 +1210,7 @@ export default {
         const splits = {};
 
         await wallet.mint(
-          parseFloat(this.dataTickets.goodies),
+          parseFloat(this.dataTickets.goodies) * parseInt(localStorage.getItem("total_minted")),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
