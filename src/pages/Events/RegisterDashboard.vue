@@ -1,7 +1,6 @@
 <template>
 	<section id="createTickets" class="registerDashboard divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
-
 		<v-window v-model="step" to>
 			<v-window-item :value="1">
 				<h2 class="align" style="text-align: center">
@@ -79,7 +78,7 @@
 							v-model="dataTickets.description"
 							class="editor"
 							:class="{ rules: editorRules }"
-            />
+						/>
 						<!--<v-textarea
               v-model="dataTickets.description"
               solo
@@ -814,9 +813,11 @@ export default {
       txs: [],
       usd: 0,
       canvas: localStorage.getItem("canvas"),
+      canvas_burn: localStorage.getItem("canvas_burn"),
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
+      burn_ticket_image: this.$pinata_gateway+"QmYK5cKUukGRhiuZfdG7mM9aTtZvj9SK3zRHn3xyb1g53h"
     };
   },
   watch: {
@@ -1257,10 +1258,24 @@ export default {
           image.src = canvas.toDataURL("image/png", 1.0);
           localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
           this.image = image;
+          this.getBase64FromUrl(this.burn_ticket_image)
           // console.log(this.image);
         });
       }
       if (!this.dataTickets.description) this.editorRules = true;
+    },
+    async getBase64FromUrl(url)  {
+      const data = await fetch(url);
+      const blob = await data.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        reader.onloadend = () => {
+          const base64data = reader.result;   
+          resolve(base64data);
+          localStorage.setItem("canvas_burn", base64data);
+        }
+      });
     },
     nextLast() {
       if (this.$refs.form4.validate()) {
@@ -1517,8 +1532,8 @@ export default {
         //Loading image
         try {
           var image = new Image();
-          image.src = localStorage.getItem("canvas");
-          this.image = image;
+          image.src = localStorage.getItem("canvas_burn");
+          this.image =  image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
@@ -1636,7 +1651,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
-        this.executeMultipleTransactions();
+        //this.executeMultipleTransactions();
       }
     },
     async executeMultipleTransactions() {
