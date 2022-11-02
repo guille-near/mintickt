@@ -56,24 +56,26 @@
               <span>create an event</span>
             </v-btn>
 
-            <v-btn
-              v-if="responsiveActions"
-              color="white"
-              class="btnNearMobile h7-em"
-              @click="connect"
-            >
-              <img src="@/assets/logo/near-black.svg" alt="near logo" />
-            </v-btn>
-            
-            <v-menu v-else bottom offset-y>
+            <v-menu bottom offset-y>
               <template #activator="{on, attrs}">
                 <v-btn
-                  text
+                  v-if="responsiveActions"
+                  color="white"
+                  class="btnNearMobile h7-em"
+                  v-on="nearid ? on : undefined"
+                  v-bind="nearid ? attrs : undefined"
+                  @click="nearid ? connect : undefined"
+                >
+                  <img src="@/assets/logo/near-black.svg" alt="near logo" />
+                </v-btn>
+                <v-btn
+                  v-else text
                   color="white"
                   rounded
                   class="h9-em"
-                  v-on="on"
-                  v-bind="attrs"
+                  v-on="nearid ? on : undefined"
+                  v-bind="nearid ? attrs : undefined"
+                  @click="nearid ? connect : undefined"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
@@ -82,8 +84,8 @@
               </template>
 
               <v-list color="rgb(0 0 0 / .6)">
-                <v-list-item @click="connect">
-                  <v-list-item-title style="color: #fff">Log in</v-list-item-title>
+                <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
+                  <v-list-item-title style="color: #000">{{user}}</v-list-item-title>
                 </v-list-item>
                 <v-list-item :to="'/events'">
                   <v-list-item-title style="color: #fff">Events</v-list-item-title>
