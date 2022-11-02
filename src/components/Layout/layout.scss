@@ -83,6 +83,8 @@
   transition: 0.4s ease-in-out;
   max-width: 1440px;
   margin-inline: auto;
+  pointer-events: none;
+  div.space.col * {pointer-events: all !important}
   &.events {
     & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
   }

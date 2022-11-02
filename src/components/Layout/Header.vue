@@ -65,25 +65,26 @@
             </v-btn>
             
             <v-menu v-else bottom offset-y>
-              <template>
+              <template #activator="{on, attrs}">
                 <v-btn
                   text
                   color="white"
                   rounded
                   class="h9-em"
-                  @click="connect"
+                  v-on="on"
+                  v-bind="attrs"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
                 </v-btn>
               </template>
 
-              <v-list color="rgb(0 0 0 / .6)" max-width="max-content">
-                <v-list-item to="/events">
-                  <v-list-item-title>Events</v-list-item-title>
+              <v-list color="rgb(0 0 0 / .6)">
+                <v-list-item :to="'/events'">
+                  <v-list-item-title style="color: #fff">Events</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="logOut">
-                  <v-list-item-title>Log out</v-list-item-title>
+                  <v-list-item-title style="color: #fff">Log out</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -230,6 +231,10 @@ export default {
         apiKey: API_KEY,
       });
       walletData.wallet.disconnect();
+      localStorage.clear();
+      this.$router.go();
+      this.nearid = false;
+      this.user = "Login with NEAR";
     },
   },
 };
