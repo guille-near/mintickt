@@ -27,7 +27,7 @@
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
         >
-          <a class="center" href="/mintick/#/">
+          <a class="center" href="/#/">
             <img
               v-if="responsiveActions"
               class="logoHeaderEvents"
@@ -80,6 +80,9 @@
               </template>
 
               <v-list color="rgb(0 0 0 / .6)">
+                <v-list-item @click="connect">
+                  <v-list-item-title style="color: #fff">Log in</v-list-item-title>
+                </v-list-item>
                 <v-list-item :to="'/events'">
                   <v-list-item-title style="color: #fff">Events</v-list-item-title>
                 </v-list-item>

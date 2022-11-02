@@ -13,6 +13,5 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
-  //  publicPath: '/events/dfnswq0LaXwNgGzqdW0-YPJLtTxc-fhQlLk8k1UCcJw:nearcon2.mintbase1.near'
-  publicPath: '/mintick'
+  publicPath: '/'
 }
