@@ -75,7 +75,7 @@
                   class="h9-em"
                   v-on="nearid ? on : undefined"
                   v-bind="nearid ? attrs : undefined"
-                  @click="nearid ? connect : undefined"
+                  @click="nearid ? undefined : connect()"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
