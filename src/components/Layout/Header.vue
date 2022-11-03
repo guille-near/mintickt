@@ -79,7 +79,7 @@
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
-                  <span><v-icon class="mr-2" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span>
+                  <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span>
                 </v-btn>
               </template>
 

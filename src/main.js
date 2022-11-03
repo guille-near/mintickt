@@ -32,8 +32,11 @@ Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:309
 Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
 Vue.prototype.$value_user_mint = "kamargo1.near"
 Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "https://mintickt.com/#/events/burn" : "https://mintickt.com/#/events/burn"
-Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://mintickt.com/#/store/?thingid=" : "https://mintickt.com/#/store/?thingid="
+Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/store/?thingid=" : "https://testnet.mintickt.com/#/store/?thingid="
 Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "https://mintickt.com/#/events/burn" : "https://mintickt.com/#/events/burn"
+Vue.prototype.$owner = "andresdom.near"
+Vue.prototype.$owner_split = "3"
+
 
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)

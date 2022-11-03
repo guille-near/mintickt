@@ -123,8 +123,7 @@ const your_events = gql`
   query MyQuery($store: String!, $user: String!) {
   mb_views_nft_metadata(
     where: {nft_contract_id: {_eq: $store}
-      , listings: {price: {_is_null: false}}
-      , nft_contract_owner_id: {_eq: $user}}  
+      , listings: {price: {_is_null: false}, minter: {_eq: $user}}}
   ) {
     title
     reference_blob

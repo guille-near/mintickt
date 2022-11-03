@@ -201,27 +201,22 @@ import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-    mb_views_nft_metadata(
-      where: {
-        nft_contract_id: { _eq: $store }
-        listings: {
-          price: { _is_null: false }
-          metadata_id: { _eq: $metadata_id }
-        }
-        nft_contract_owner_id: { _eq: $user }
+  mb_views_nft_metadata(
+    where: {nft_contract_id: {_eq: $store}
+      , listings: {price: {_is_null: false}
+        , metadata_id: {_eq: $metadata_id}, minter: {_eq: $user}}}
+  ) {
+    title
+    reference_blob
+    id
+    listings_aggregate {
+      aggregate {
+        count
       }
-    ) {
-      title
-      reference_blob
-      id
-      listings_aggregate {
-        aggregate {
-          count
-        }
-      }
-      nft_contract_owner_id
     }
+    nft_contract_owner_id
   }
+}
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {

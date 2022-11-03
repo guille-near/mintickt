@@ -670,7 +670,6 @@ import gql from "graphql-tag";
 const nft_tokens_aggregate = gql`
   query MyQuery(
     $store: String!
-    $user: String!
     $tittle: String!
     $_iregex: String!
   ) {
@@ -678,7 +677,6 @@ const nft_tokens_aggregate = gql`
       where: {
         title: { _eq: $tittle }
         nft_contract_id: { _eq: $store }
-        nft_contracts: { owner_id: { _eq: $user } }
         reference_blob: { _cast: { String: { _iregex: $_iregex } } }
       }
       order_by: { nft_contracts: { created_at: desc } }
@@ -800,7 +798,7 @@ export default {
       successAccount: [],
       successAccount1: [],
       available: 50,
-      available1: 97,
+      available1:  parseInt(100-this.$owner_split),
       errorPercentaje: [],
       errorPercentaje1: [],
       counter: 0,
@@ -963,6 +961,10 @@ export default {
       if (this.$refs.form2.validate()) {
         this.loading = true;
         this.disable = true;
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+        const user = datos.accountId;
         //Api key an data
         let API_KEY = this.$dev_key.toString();
         let networkName = this.$networkName.toString();
@@ -1072,7 +1074,7 @@ export default {
             element.percentage * multiplier
           );
         });
-
+        //console.log(royalties)
         //LocalStora Royalties
         localStorage.setItem(
           "dataRoyalties",
@@ -1082,23 +1084,39 @@ export default {
         //handle splits
         const splits = {};
         var counter1 = this.counter1;
+        var royaltie_for_owner = 0;
+        // console.log(counter1)
         // const multiplier1 = Math.round(multiplied1 / counter1);
         this.dataSplit.forEach((element) => {
-          splits[element.account] = parseInt(element.percentage * 100);
+          //Validate not to add your own
+            splits[element.account] = parseInt(element.percentage * 100);
+            //If the user adds royaltie to the owner needs to sum more
+            if(element.account === this.$owner){
+              royaltie_for_owner = parseInt(element.percentage * 100);
+            }
         });
-
-        //LocalStora Splits
-        localStorage.setItem("splits", JSON.stringify(this.dataSplit));
-
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
+        //Add split for owner
+        if(user != this.$owner){
+            splits[this.$owner] = parseInt(parseInt(this.$owner_split)* 100 + (royaltie_for_owner));
+            counter1 = counter1  + parseInt(this.$owner_split);
+        }
+        //Add to the counter the split for owner
+        
+        //console.log(counter1)
+       
         //Add the rest for minter
-        splits[user] = parseInt(10000 - counter1 * 100);
+        if(user === this.$owner && this.dataSplit.length === 0){
+          splits[user] = parseInt(10000);
+        } else {
+          splits[user] = parseInt(10000 - (counter1* 100));
+        }
+        //console.log(parseInt(10000 - (counter1* 100)));
+        console.log(splits)
+        localStorage.setItem("splits", JSON.stringify(this.dataSplit));
 
         //LocalStora Mint amount
         localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
+        localStorage.setItem("total_minted", this.dataTickets.mint_amount);
         await wallet.mint(
           parseFloat(this.dataTickets.mint_amount),
           store.toString(),
@@ -1382,7 +1400,7 @@ export default {
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
       for (const prop in this.dataRoyalties) {
-        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
+        this.arr.push(parseFloat(this.dataRoyalties[prop].percentage));
       }
       this.counter = this.arr.reduce(function (a, b) {
         return a + b;
@@ -1396,25 +1414,42 @@ export default {
         this.disable = false;
         this.errorPercentaje[pos] = null;
       }
+      if (Number.isInteger(parseFloat(this.dataRoyalties[pos].percentage))===false){
+        this.disable = true;
+        this.available = 0;
+        this.errorPercentaje[pos] = "Only int";
+      }
     },
     chkPercentage1(val, e) {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
+      let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+      const user = datos.accountId;
       for (const prop in this.dataSplit) {
-        this.arr.push(parseInt(this.dataSplit[prop].percentage));
+        if(user != this.dataSplit[prop].account){
+          this.arr.push(parseFloat(this.dataSplit[prop].percentage));
+        }
       }
       this.counter1 = this.arr.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.available1 = 97 - this.counter1;
-      if (this.counter1 > 100) {
+      this.available1 = parseInt(100-this.$owner_split) - this.counter1;
+      //console.log(this.counter1)
+      if (this.counter1 > parseInt(100-this.$owner_split)) {
         this.disable = true;
         this.available1 = 0;
-        this.errorPercentaje1[pos] = "≤ 100%";
+        this.errorPercentaje1[pos] = "≤" + parseInt(97-this.$owner_split) + "%";
       } else {
         this.disable = false;
         this.errorPercentaje1[pos] = null;
+      }
+      if (Number.isInteger(parseFloat(this.dataSplit[pos].percentage))===false){
+        this.disable = true;
+        this.available1 = 0;
+        this.errorPercentaje1[pos] = "Only int";
       }
     },
     // Remove data from de object
@@ -1442,7 +1477,7 @@ export default {
       this.counter1 = this.arr.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.available1 = 100 - this.counter1;
+      this.available1 = parseInt(100-this.$$owner_split) - this.counter1;
       this.successAccount1[pos] = null;
       this.errorAccount1[pos] = null;
       this.errorPercentaje1[pos] = null;
@@ -1465,7 +1500,6 @@ export default {
           query: nft_tokens_aggregate,
           variables: {
             store: this.$store_mintbase.toString(),
-            user: user,
             tittle:
               localStorage.getItem("mint_tittle") === null
                 ? "no tittle"
@@ -1496,11 +1530,10 @@ export default {
         .query({
           query: minted,
           variables: {
-            metadata_id: localStorage.getItem("metadata_id"),
+            metadata_id: localStorage.getItem("metadata_id") === null ? "123455" : localStorage.getItem("metadata_id"),
           },
         })
         .then((response) => {
-          //console.log(response.data.nft_tokens_aggregate.aggregate.count)
           localStorage.setItem(
             "total_minted",
             response.data.nft_tokens_aggregate.aggregate.count
@@ -1791,6 +1824,14 @@ export default {
         
       } 
     },
+    onlyNumberKey(evt) {
+          
+        // Only ASCII character in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
   },
 };
 </script>
