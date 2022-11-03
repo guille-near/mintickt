@@ -69,7 +69,7 @@
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
                 </v-btn>
                 <v-btn
-                  v-else text
+                  v-else text 
                   color="white"
                   rounded
                   class="h9-em"
