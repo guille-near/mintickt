@@ -8,7 +8,10 @@
 				</h2>
 
 				<section class="center divwrap">
-					<div class="ticket-wrapper" id="my-node">
+          <div class="ticket-wrapper" v-if="imagecanvas">
+						<img class="ticket"  :src="canvas" alt="Ticket image" />
+					</div>
+					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
 							class="ticket"
 							src="@/assets/img/ticket-test.png"
@@ -181,7 +184,10 @@
 				</h2>
 
 				<section class="jcenter divwrap">
-					<div class="ticket-wrapper">
+					<div class="ticket-wrapper" v-if="imagecanvas">
+						<img class="ticket"  :src="canvas" alt="Ticket image" />
+					</div>
+					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
 							class="ticket"
 							src="@/assets/img/ticket-test.png"
@@ -294,7 +300,10 @@
 				</h2>
 
 				<section class="jcenter divwrap">
-					<div class="ticket-wrapper">
+					<div class="ticket-wrapper" v-if="imagecanvas">
+						<img class="ticket"  :src="canvas" alt="Ticket image" />
+					</div>
+					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
 							class="ticket"
 							src="@/assets/img/ticket-test.png"
@@ -738,11 +747,11 @@ export default {
           ? 1
           : parseInt(localStorage.getItem("step")),
       dataTickets: {
-        name: null,
-        promoter: null,
-        img: null,
-        description: null,
-        mint_amount: null,
+        name: localStorage.getItem("dataFormName") === null  ? "" : localStorage.getItem("dataFormName"),
+        promoter: localStorage.getItem("dataFormPromoter") === null  ? "" : localStorage.getItem("dataFormPromoter"),
+        img: localStorage.getItem("canvas") === null  ? "" : localStorage.getItem("canvas"),
+        description: localStorage.getItem("dataFormDescription") === null  ? "" : localStorage.getItem("dataFormDescription"),
+        mint_amount: localStorage.getItem("dataFormMintAmount") === null  ? "" : localStorage.getItem("dataFormMintAmount"),
         attendees: null,
         goodies: null,
       },
@@ -757,11 +766,11 @@ export default {
       model: null,
       search: null,
       address: "",
-      place_id: "",
-      latitude: "",
-      longitude: "",
-      location: "",
-      address: "",
+      place_id: localStorage.getItem("dataFormPlaceId") === null  ? "" : localStorage.getItem("dataFormPlaceId"),
+      latitude: localStorage.getItem("dataFormLatitud") === null  ? "" : localStorage.getItem("dataFormLatitud"),
+      longitude: localStorage.getItem("dataFormLongitud") === null  ? "" : localStorage.getItem("dataFormLongitud"),
+      location: localStorage.getItem("dataFormLocation") === null ? "Search your location" : localStorage.getItem("dataFormLocation"),
+      address: "1234",
       amount_list: 0,
       price: 0,
       menu: "",
@@ -779,7 +788,7 @@ export default {
           img: undefined,
         },
       ],
-      dates: [],
+      dates: localStorage.getItem("dataFormDate") === undefined ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
       rules: {
         required: [(v) => !!v || "Field required"],
         percentage_split: [
@@ -813,7 +822,9 @@ export default {
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
-      burn_ticket_image: this.$pinata_gateway+"QmYK5cKUukGRhiuZfdG7mM9aTtZvj9SK3zRHn3xyb1g53h"
+      burn_ticket_image: this.$pinata_gateway+"QmYK5cKUukGRhiuZfdG7mM9aTtZvj9SK3zRHn3xyb1g53h",
+      imagecanvas: localStorage.getItem("canvas") === null  ? false : true,
+      imagecanvas1: localStorage.getItem("canvas") === null  ? true : false,
     };
   },
   watch: {
@@ -883,6 +894,15 @@ export default {
       localStorage.setItem("step", this.step);
       this.$router.push("/events");
       localStorage.removeItem("canvas");
+      localStorage.removeItem("dataFormDate");
+      localStorage.removeItem("dataFormDescription");
+      localStorage.removeItem("dataFormLocation");
+      localStorage.removeItem("dataFormLongitude");
+      localStorage.removeItem("dataFormLatitude");
+      localStorage.removeItem("dataFormPlaceId");
+      localStorage.removeItem("dataFormName");
+      localStorage.removeItem("dataFormPromoter");
+      localStorage.removeItem("dataFormMintAmount");
     }
     //
     if (urlParams.get("errorCode") !== null) {
@@ -917,7 +937,7 @@ export default {
       }
     },
     onFileChange(file) {
-      console.log(file);
+      //console.log(file);
       if (!file) {
         return;
       }
@@ -1251,12 +1271,22 @@ export default {
       this.location = placeResultData.formatted_address;
       this.latitude = addressData.latitude;
       this.longitude = addressData.longitude;
+      localStorage.setItem("dataFormPlaceId", addressData.place_id);
+      localStorage.setItem("dataFormLocation", placeResultData.formatted_address);
+      localStorage.setItem("dataFormLatitude", addressData.latitude);
+      localStorage.setItem("dataFormLongitude", addressData.longitude);
     },
     next() {
       if (this.$refs.form.validate() && this.dataTickets.description) {
         this.editorRules = false;
         this.step++;
         localStorage.setItem("step", 2);
+        //Store all form data
+        localStorage.setItem("dataFormName", this.dataTickets.name);
+        localStorage.setItem("dataFormPromoter", this.dataTickets.promoter);
+        localStorage.setItem("dataFormDescription", this.dataTickets.description);
+        localStorage.setItem("dataFormDate", this.dates);
+        
 
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
@@ -1290,6 +1320,19 @@ export default {
           const base64data = reader.result;   
           resolve(base64data);
           localStorage.setItem("canvas_burn", base64data);
+        }
+      });
+    },
+    async getBase64FromUrlMainImage(url)  {
+      const data = await fetch(url);
+      const blob = await data.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        reader.onloadend = () => {
+          const base64data = reader.result;   
+          resolve(base64data);
+          localStorage.setItem("canvas_main_image", base64data);
         }
       });
     },
@@ -1331,6 +1374,7 @@ export default {
         this.step++;
         localStorage.setItem("step", 3);
         this.ipfs();
+        localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount);
       }
     },
     next2() {

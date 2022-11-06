@@ -271,26 +271,26 @@ export default {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes");
-    let datos = JSON.parse(
+    if (urlParams.get("transactionHashes") !== null) {
+      let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
-    const user = datos.accountId;
-    if (urlParams.get("transactionHashes") !== null) {
+      const user = datos.accountId;
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
         this.$explorer+"/accounts/"+user
       this.sendTicket();
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/mintickt/#/store/?thingid="+localStorage.getItem('eventid')
-      );
+      // history.replaceState(
+      //   null,
+      //   location.href.split("?")[0],
+      //   "/#/store/?thingid="+localStorage.getItem('eventid')
+      // );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/store/?thingid="+localStorage.getItem('eventid')
+        "/#/store/?thingid="+localStorage.getItem('eventid')
       );
     }
   },
@@ -470,7 +470,7 @@ export default {
       this.loading = true;
       const mintbase_marketplace = this.$mintbase_marketplace;
       let store = this.$store_mintbase;
-      console.log(this.padWithZero(this.price_near.toFixed(4), String(this.price_near.toFixed(4)).length + 24))
+      //console.log(this.padWithZero(this.price_near.toFixed(4), String(this.price_near.toFixed(4)).length + 24))
       this.tokens_buy.forEach((element) => {
         //console.log(element)
         // Pushh array for each element of the tokens selected
@@ -545,7 +545,7 @@ export default {
         receiver_id: user,
         token_id: localStorage.getItem('ticket_to_send').toString(),
       };
-      console.log(item)
+      //console.log(item)
       this.axios
         .post(url, item)
         .then(() => {
