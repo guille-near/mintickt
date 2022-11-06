@@ -226,7 +226,7 @@
 							</p>
 
 							<v-file-input
-								v-model="dataTickets.img"
+								v-model="dataTickets.img_main"
 								solo
 								prepend-icon
 								name="uploaded_file"
@@ -240,7 +240,7 @@
 								</template>
 
 								<template v-slot:label>
-									<img src="@/assets/icons/drag-img.svg" alt="drag icon" />
+									<img src="@/assets/icons/link.svg" alt="drag icon" />
 									<p class="p">
 										Drag and drop or click here to upload your main event image
 									</p>
@@ -750,12 +750,13 @@ export default {
         name: localStorage.getItem("dataFormName") === null  ? "" : localStorage.getItem("dataFormName"),
         promoter: localStorage.getItem("dataFormPromoter") === null  ? "" : localStorage.getItem("dataFormPromoter"),
         img: localStorage.getItem("canvas") === null  ? "" : localStorage.getItem("canvas"),
+        img_main: localStorage.getItem("canvas_main_image") === null  ? "" : localStorage.getItem("canvas_main_image"),
         description: localStorage.getItem("dataFormDescription") === null  ? "" : localStorage.getItem("dataFormDescription"),
         mint_amount: localStorage.getItem("dataFormMintAmount") === null  ? "" : localStorage.getItem("dataFormMintAmount"),
         attendees: null,
         goodies: null,
       },
-      url: null,
+      url: localStorage.getItem("canvas_main_image") === null  ? "" : localStorage.getItem("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -788,7 +789,7 @@ export default {
           img: undefined,
         },
       ],
-      dates: localStorage.getItem("dataFormDate") === undefined ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
       rules: {
         required: [(v) => !!v || "Field required"],
         percentage_split: [
@@ -798,9 +799,9 @@ export default {
         ],
       },
       valid: false,
-      dataRoyalties: [],
+      dataRoyalties: localStorage.getItem("dataRoyalties") === null ? [] : JSON.parse(localStorage.getItem("dataRoyalties")),
       currentPercentage_royalties: 0,
-      dataSplit: [],
+      dataSplit: localStorage.getItem("splits") === null ? [] : JSON.parse(localStorage.getItem("splits")),
       currentPercentage_split: 0,
       errorAccount: [],
       errorAccount1: [],
@@ -817,8 +818,8 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas: localStorage.getItem("canvas"),
-      canvas_burn: localStorage.getItem("canvas_burn"),
+      canvas: localStorage.getItem("canvas") === null ? "" : localStorage.getItem("canvas"),
+      canvas_burn: localStorage.getItem("canvas_burn") === null ? "" : localStorage.getItem("canvas_burn"),
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
@@ -894,6 +895,8 @@ export default {
       localStorage.setItem("step", this.step);
       this.$router.push("/events");
       localStorage.removeItem("canvas");
+      localStorage.removeItem("canvas_burn");
+      localStorage.removeItem("canvas_main_image");
       localStorage.removeItem("dataFormDate");
       localStorage.removeItem("dataFormDescription");
       localStorage.removeItem("dataFormLocation");
@@ -930,7 +933,8 @@ export default {
     },
     ImagePreview(e) {
       if (e) {
-        this.url = URL.createObjectURL(this.dataTickets.img);
+        this.url = URL.createObjectURL(this.dataTickets.img_main);
+        this.getBase64FromUrlMainImage(this.url);
         const file = e;
         // this.image = file;
         //console.log(e);
@@ -1499,6 +1503,7 @@ export default {
     // Remove data from de object
     remove(pos) {
       this.dataRoyalties.splice(pos, 1);
+      var item_to_be_remeved = localStorage.getItem("dataRoyalties");
       this.arr = [];
       for (const prop in this.dataRoyalties) {
         this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
