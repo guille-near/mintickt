@@ -545,15 +545,15 @@ export default {
         receiver_id: user,
         token_id: localStorage.getItem('ticket_to_send').toString(),
       };
-      //console.log(item)
-      this.axios
-        .post(url, item)
-        .then(() => {
-          console.log('Hash up')
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      console.log(item)
+      // this.axios
+      //   .post(url, item)
+      //   .then(() => {
+      //     console.log('Hash up')
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     },
     async getTickettoSend(){
       this.$apollo

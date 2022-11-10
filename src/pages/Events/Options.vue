@@ -1,6 +1,7 @@
 <template>
   <section id="options" class="divcol gap align">
     <ModalSuccess ref="modal"></ModalSuccess>
+    <ModalApprove ref="modal"></ModalApprove>
 
     <div class="acenter">
       <v-btn icon to="/events">
@@ -194,6 +195,7 @@
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import ModalSuccess from "./ModalSuccess";
+import ModalApprove from "./ModalApprove";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
 import html2canvas from "html2canvas";
@@ -328,8 +330,8 @@ export default {
   mounted() {
     localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
-    this.pollData();
     this.getTotalMinted();
+    this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
@@ -340,17 +342,22 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
+        "/#/events/options?event=" +
           localStorage.getItem("event_name") +
           "&thingid=" +
           localStorage.getItem("eventid")
       );
     }
+    //List
+    if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
+      this.$refs.modal.modalApprove = true;
+    }
+
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
+        "/#/events/options?event=" +
           localStorage.getItem("event_name") +
           "&thingid=" +
           localStorage.getItem("eventid")
@@ -599,6 +606,8 @@ export default {
           variables: {
             metadata_id: localStorage.getItem("metadata_id").toString(),
           },
+          // Don't prefetch
+          prefetch: false,
         })
         .then((response) => {
           //Map the objectvalue
@@ -640,8 +649,9 @@ export default {
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
+        this.getTotalMinted();
         this.$forceUpdate();
-      }, 60000);
+      }, 10000);
     },
     controlAmount(item) {
       this.getData();

@@ -180,7 +180,6 @@ export default {
   },
   mounted() {
     this.revisar();
-    localStorage.setItem("step", 1);
     this.getData();
     this.pollData();
     const queryString = window.location.search;
@@ -197,7 +196,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/events"
+        "/#/events"
       );
     }
   },

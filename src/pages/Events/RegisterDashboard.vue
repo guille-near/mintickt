@@ -1,6 +1,7 @@
 <template>
 	<section id="createTickets" class="registerDashboard divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
+    <ModalApprove ref="modal"></ModalApprove>
 		<v-window v-model="step" to>
 			<v-window-item :value="1">
 				<h2 class="align" style="text-align: center">
@@ -8,8 +9,8 @@
 				</h2>
 
 				<section class="center divwrap">
-          <div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket"  :src="canvas" alt="Ticket image" />
+					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
+						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
 					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
@@ -185,7 +186,7 @@
 
 				<section class="jcenter divwrap">
 					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket"  :src="canvas" alt="Ticket image" />
+						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
 					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
@@ -301,7 +302,7 @@
 
 				<section class="jcenter divwrap">
 					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket"  :src="canvas" alt="Ticket image" />
+						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
 					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
@@ -460,8 +461,30 @@
 				</h2>
 
 				<section class="jcenter divwrap">
-					<div class="ticket-wrapper">
+					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
+					</div>
+					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+						<img
+							class="ticket"
+							src="@/assets/img/ticket-test.png"
+							alt="Ticket image"
+						/>
+
+						<v-file-input
+							v-for="(ticket, i) in dataTicket"
+							:key="i"
+							v-model="ticket.img"
+							hide-details
+							solo
+							prepend-icon=""
+							@change="uploadImg(ticket)"
+							:class="{ active: ticket.img }"
+						>
+							<template v-slot:selection>
+								<img v-if="ticket.url" :src="ticket.url" />
+							</template>
+						</v-file-input>
 					</div>
 
 					<v-form
@@ -476,7 +499,8 @@
 
 							<div class="divcol" style="margin-top: 4em">
 								<label for="amount_list"
-									>Amount to list <span style="color: red">*</span></label
+									>Amount to list Max ( {{ show_total_minted }} )
+									<span style="color: red">*</span></label
 								>
 								<div class="divcol">
 									<v-text-field
@@ -492,13 +516,13 @@
 											<v-btn
 												class="btn-control"
 												:disabled="amount_list == 0"
-												@click="amount_list--"
+												@click="substract"
 												>-</v-btn
 											>
 											<v-btn
 												class="btn-control"
 												:disabled="amount_list == total_minted"
-												@click="amount_list++"
+												@click="add"
 												>+</v-btn
 											>
 										</template>
@@ -546,7 +570,10 @@
 				</h2>
 
 				<section class="jcenter divwrap">
-					<div class="ticket-wrapper" id="my-node">
+					<div class="ticket-wrapper" v-if="imagegoodie">
+						<img class="ticket" :src="canvas_goodie" alt="Ticket image" />
+					</div>
+					<div class="ticket-wrapper" v-if="imagegoodie1" id="my-node-goodie">
 						<img
 							class="ticket"
 							src="@/assets/img/ticket-test.png"
@@ -589,7 +616,7 @@
 
 								<div id="container-actions" class="gap">
 									<v-btn @click="goodie = true">Yes</v-btn>
-									<v-btn :disabled="goodie">No</v-btn>
+									<v-btn @click="showModal" :disabled="goodie">No</v-btn>
 								</div>
 							</div>
 
@@ -620,14 +647,10 @@
 										hide-spin-buttons
 									>
 										<template v-slot:append>
-											<v-btn
-												class="btn-control"
-												@click="dataTickets.goodies--"
+											<v-btn class="btn-control" @click="dataTickets.goodies--"
 												>-</v-btn
 											>
-											<v-btn
-												class="btn-control"
-												@click="dataTickets.goodies++"
+											<v-btn class="btn-control" @click="dataTickets.goodies++"
 												>+</v-btn
 											>
 										</template>
@@ -646,7 +669,6 @@
 									type="submit"
 									:loading="loading"
 									:disabled="disable"
-									@click="nextLast"
 									style="
 										background: linear-gradient(
 											183.61deg,
@@ -663,11 +685,19 @@
 				</section>
 			</v-window-item>
 		</v-window>
+		<div class="text-center">
+			<v-overlay :value="overlay">
+				<v-progress-circular indeterminate size="64"></v-progress-circular>
+        <h3 class="mt-3">Minting in progress...</h3>
+        <h3 ref="tminted">{{ show_total_minted }}</h3>
+			</v-overlay>
+		</div>
 	</section>
 </template>
 
 <script>
 import ModalSuccess from "./ModalSuccess";
+import ModalApprove from "./ModalApprove";
 import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { CONFIG } from "@/services/api";
@@ -739,6 +769,7 @@ export default {
   components: {
     VueEditor,
     ModalSuccess,
+    ModalApprove
   },
   data() {
     return {
@@ -750,13 +781,13 @@ export default {
         name: localStorage.getItem("dataFormName") === null  ? "" : localStorage.getItem("dataFormName"),
         promoter: localStorage.getItem("dataFormPromoter") === null  ? "" : localStorage.getItem("dataFormPromoter"),
         img: localStorage.getItem("canvas") === null  ? "" : localStorage.getItem("canvas"),
-        img_main: localStorage.getItem("canvas_main_image") === null  ? "" : localStorage.getItem("canvas_main_image"),
+        img_main: localStorage.getItem("canvas_main_image") === null  ? null : localStorage.getItem("canvas_main_image"),
         description: localStorage.getItem("dataFormDescription") === null  ? "" : localStorage.getItem("dataFormDescription"),
         mint_amount: localStorage.getItem("dataFormMintAmount") === null  ? "" : localStorage.getItem("dataFormMintAmount"),
-        attendees: null,
-        goodies: null,
+        attendees: localStorage.getItem("dataFormAttendees") === null  ? "" : localStorage.getItem("dataFormAttendees"),
+        goodies: localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
-      url: localStorage.getItem("canvas_main_image") === null  ? "" : localStorage.getItem("canvas_main_image"),
+      url: localStorage.getItem("canvas_main_image") === null  ? null : localStorage.getItem("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -772,8 +803,8 @@ export default {
       longitude: localStorage.getItem("dataFormLongitud") === null  ? "" : localStorage.getItem("dataFormLongitud"),
       location: localStorage.getItem("dataFormLocation") === null ? "Search your location" : localStorage.getItem("dataFormLocation"),
       address: "1234",
-      amount_list: 0,
-      price: 0,
+      amount_list: localStorage.getItem("amount_list") === null ? 0 : localStorage.getItem("amount_list"),
+      price: localStorage.getItem("price") === null ? 0 : localStorage.getItem("price"),
       menu: "",
       dataTicket: [
         {
@@ -799,9 +830,9 @@ export default {
         ],
       },
       valid: false,
-      dataRoyalties: localStorage.getItem("dataRoyalties") === null ? [] : JSON.parse(localStorage.getItem("dataRoyalties")),
+      dataRoyalties: [],
       currentPercentage_royalties: 0,
-      dataSplit: localStorage.getItem("splits") === null ? [] : JSON.parse(localStorage.getItem("splits")),
+      dataSplit: [],
       currentPercentage_split: 0,
       errorAccount: [],
       errorAccount1: [],
@@ -820,12 +851,18 @@ export default {
       usd: 0,
       canvas: localStorage.getItem("canvas") === null ? "" : localStorage.getItem("canvas"),
       canvas_burn: localStorage.getItem("canvas_burn") === null ? "" : localStorage.getItem("canvas_burn"),
+      canvas_goodie: localStorage.getItem("canvas_goodie") === null ? "" : localStorage.getItem("canvas_goodie"),
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
       burn_ticket_image: this.$pinata_gateway+"QmYK5cKUukGRhiuZfdG7mM9aTtZvj9SK3zRHn3xyb1g53h",
       imagecanvas: localStorage.getItem("canvas") === null  ? false : true,
       imagecanvas1: localStorage.getItem("canvas") === null  ? true : false,
+      imagegoodie: localStorage.getItem("canvas_goodie") === null  ? false : true,
+      imagegoodie1: localStorage.getItem("canvas_goodie") === null  ? true : false,
+      show_total_minted: localStorage.getItem("total_minted") === null ? "0" : localStorage.getItem("total_minted"),
+      overlay: false,
+      mint_amount: localStorage.getItem("mint_amount") === null ? 0 : parseInt(localStorage.getItem("mint_amount")),
     };
   },
   watch: {
@@ -836,6 +873,7 @@ export default {
     }
   },
   mounted() {
+    
     this.revisar();
     if (this.step === 1) {
       this.listenerEditor()
@@ -844,14 +882,9 @@ export default {
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
-    this.getMinted();
+    this.getData();
+    parseInt(localStorage.getItem("step")) === 4 ? this.overlay = true : this.overlay = false;
     this.pollData();
-    this.getData().then(() => {
-      //Valitade the indexer completed de data
-      if (localStorage.getItem("metadata_id") != null) {
-         this.completeIpfs();
-      }
-    });
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
@@ -866,7 +899,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintick/#/events/register"
+        "/#/events/register"
       );
     }
     //List option
@@ -881,7 +914,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/register"
+        "/#/events/register"
       );
     }
     //goodies option
@@ -889,23 +922,7 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "goodies"
     ) {
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      this.step = 1;
-      localStorage.setItem("step", this.step);
-      this.$router.push("/events");
-      localStorage.removeItem("canvas");
-      localStorage.removeItem("canvas_burn");
-      localStorage.removeItem("canvas_main_image");
-      localStorage.removeItem("dataFormDate");
-      localStorage.removeItem("dataFormDescription");
-      localStorage.removeItem("dataFormLocation");
-      localStorage.removeItem("dataFormLongitude");
-      localStorage.removeItem("dataFormLatitude");
-      localStorage.removeItem("dataFormPlaceId");
-      localStorage.removeItem("dataFormName");
-      localStorage.removeItem("dataFormPromoter");
-      localStorage.removeItem("dataFormMintAmount");
+      this.$refs.modal.modalApprove = true;
     }
     //
     if (urlParams.get("errorCode") !== null) {
@@ -916,7 +933,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "mintickt/#/events/register"
+        "/#/events/register"
       );
     }
   },
@@ -931,11 +948,20 @@ export default {
         item.url = URL.createObjectURL(item.img);
       }
     },
-    ImagePreview(e) {
+    async ImagePreview(e) {
       if (e) {
         this.url = URL.createObjectURL(this.dataTickets.img_main);
         this.getBase64FromUrlMainImage(this.url);
         const file = e;
+        const formData = new FormData();
+        formData.append("uploaded_file", this.dataTickets.img_main);
+        formData.append("name", this.dataTickets.name);
+        // console.log('formData', formData)
+        // console.log(this.$ipfs)
+        await this.axios.post(this.$ipfs, formData).then((res) => {
+          //console.log('res', res.data)
+          localStorage.setItem("IpfsHash", res.data.IpfsHash);
+        });
         // this.image = file;
         //console.log(e);
       }
@@ -1082,7 +1108,7 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
-        console.log(metadata);
+        // console.log(metadata);
 
         localStorage.setItem("mint_tittle", this.dataTickets.name);
         //LocalStorage Metadata
@@ -1100,10 +1126,10 @@ export default {
         });
         //console.log(royalties)
         //LocalStora Royalties
-        localStorage.setItem(
-          "dataRoyalties",
-          JSON.stringify(this.dataRoyalties)
-        );
+        // localStorage.setItem(
+        //   "dataRoyalties",
+        //   JSON.stringify(this.dataRoyalties)
+        // );
 
         //handle splits
         const splits = {};
@@ -1135,12 +1161,12 @@ export default {
           splits[user] = parseInt(10000 - (counter1* 100));
         }
         //console.log(parseInt(10000 - (counter1* 100)));
-        console.log(splits)
-        localStorage.setItem("splits", JSON.stringify(this.dataSplit));
+        // console.log(splits)
+        // localStorage.setItem("splits", JSON.stringify(this.dataSplit));
 
         //LocalStora Mint amount
         localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
-        localStorage.setItem("total_minted", this.dataTickets.mint_amount);
+        //localStorage.setItem("total_minted", this.dataTickets.mint_amount);
         await wallet.mint(
           parseFloat(this.dataTickets.mint_amount),
           store.toString(),
@@ -1158,6 +1184,7 @@ export default {
     async mintGoodie() {
       if (this.$refs.form4.validate()) {
         // console.log(this.dataTickets.attendees);
+        this.nextLast();
         this.loading = true;
         this.disable = true;
         //Api key an data
@@ -1172,7 +1199,8 @@ export default {
         //Loading image
         try {
           var image = new Image();
-          image.src = localStorage.getItem("canvas");
+          image.src = localStorage.getItem("canvas_goodie");
+          //image.src = localStorage.getItem("canvas");
           this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
@@ -1243,7 +1271,10 @@ export default {
           category,
         };
         await wallet.minter.setMetadata(metadata, true);
-        console.log(metadata);
+        // console.log(metadata);
+
+        localStorage.setItem('dataFormAttendees', this.dataTickets.attendees)
+        localStorage.setItem('dataFormGoodies', this.dataTickets.goodies)
 
         //handle royalties
         const royalties = {};
@@ -1342,7 +1373,7 @@ export default {
     },
     nextLast() {
       if (this.$refs.form4.validate()) {
-        var container = document.getElementById("my-node"); /* full page */
+        var container = document.getElementById("my-node-goodie"); /* full page */
         html2canvas(container, {
           backgroundColor: null,
           //y: (container / 2, container / 2, 30),
@@ -1356,9 +1387,9 @@ export default {
 
           var image = new Image();
           image.src = canvas.toDataURL("image/png", 1.0);
-          localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
+          localStorage.setItem("canvas_goodie", canvas.toDataURL("image/png", 1.0));
           this.image = image;
-          console.log(this.image);
+          // console.log(this.image);
         });
       }
     },
@@ -1377,7 +1408,7 @@ export default {
       if (this.$refs.form1.validate()) {
         this.step++;
         localStorage.setItem("step", 3);
-        this.ipfs();
+        //this.ipfs();
         localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount);
       }
     },
@@ -1503,7 +1534,6 @@ export default {
     // Remove data from de object
     remove(pos) {
       this.dataRoyalties.splice(pos, 1);
-      var item_to_be_remeved = localStorage.getItem("dataRoyalties");
       this.arr = [];
       for (const prop in this.dataRoyalties) {
         this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
@@ -1519,6 +1549,7 @@ export default {
     // Remove data from de object
     remove1(pos) {
       this.dataSplit.splice(pos, 1);
+      localStorage.setItem("splits", this.dataSplit)
       this.arr = [];
       for (const prop in this.dataRoyalties) {
         this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
@@ -1536,37 +1567,46 @@ export default {
     //Need to ask mintbase team 13/0*/2023
     //Meanwhile getting las mint created filter by name
     async getData() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      // console.log(this.$store_mintbase.toString())
-      // console.log(user)
-      // console.log(localStorage.getItem("mint_tittle"))
-      // console.log(localStorage.getItem("tempid"))
       this.$apollo
-        .query({
-          query: nft_tokens_aggregate,
+        .mutate({
+          mutation: nft_tokens_aggregate,
           variables: {
-            store: this.$store_mintbase.toString(),
-            tittle:
-              localStorage.getItem("mint_tittle") === null
-                ? "no tittle"
-                : localStorage.getItem("mint_tittle"),
-            _iregex:
-              localStorage.getItem("tempid") === null
-                ? "123"
-                : localStorage.getItem("tempid"),
+            store: this.$store_mintbase,
+            tittle: localStorage.getItem("mint_tittle") === null ? "" : localStorage.getItem("mint_tittle"),
+            _iregex: localStorage.getItem("tempid") === null ? "" : localStorage.getItem("tempid")
           },
         })
         .then((response) => {
           //Map the objectvalue
-          // console.log(response.data.nft_metadata.length)
+          //  console.log(this.$store_mintbase.toString())
+          //  console.log(localStorage.getItem("mint_tittle") === null ? "" : localStorage.getItem("mint_tittle"))
+          //  console.log(localStorage.getItem("tempid") === null ? "" : localStorage.getItem("tempid"))
+          //  console.log(response.data.nft_metadata.length)
           if (response.data.nft_metadata.length > 0) {
+            //console.log('no pada')
             Object.entries(response.data).forEach(([key, value]) => {
               // inner object entries
-              // console.log(value);
-              localStorage.setItem("metadata_id", value[0].id);
+              //console.log(value[0].id);
+              //Set total minted
+              localStorage.setItem('metadata_id', value[0].id);
+              this.$apollo
+              .mutate({
+                mutation: minted,
+                variables: {
+                  metadata_id: value[0].id,
+                },
+              })
+              .then((response) => {
+                  //console.log(response.data.nft_tokens_aggregate.aggregate.count);
+                  localStorage.setItem(
+                    "total_minted",
+                    response.data.nft_tokens_aggregate.aggregate.count
+                  );
+                  this.show_total_minted = localStorage.getItem("total_minted");
+              })
+              .catch((err) => {
+                console.log("Error", err);
+              });
             });
           }
         })
@@ -1574,27 +1614,31 @@ export default {
           console.log("Error", err);
         });
     },
-    async getMinted() {
-      this.$apollo
-        .query({
-          query: minted,
-          variables: {
-            metadata_id: localStorage.getItem("metadata_id") === null ? "123455" : localStorage.getItem("metadata_id"),
-          },
-        })
-        .then((response) => {
-          localStorage.setItem(
-            "total_minted",
-            response.data.nft_tokens_aggregate.aggregate.count
-          );
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    },
+    // async getMinted() {
+    //   this.$apollo
+    //     .query({
+    //       query: minted,
+    //       variables: {
+    //         metadata_id: localStorage.getItem("metadata_id"),
+    //       },
+    //     })
+    //     .then((response) => {
+    //       localStorage.setItem(
+    //         "total_minted",
+    //         response.data.nft_tokens_aggregate.aggregate.count
+    //       );
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
     //Get the tokens id minted
     async list() {
       if (this.$refs.form3.validate()) {
+        //Upload ipfs
+        if (localStorage.getItem("metadata_id") != null) {
+            this.completeIpfs();
+        }
         this.getData();
         this.loading = true;
         this.disable = true;
@@ -1769,17 +1813,21 @@ export default {
           parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
+      localStorage.setItem("price", this.price)
     },
     async ipfs() {
       const formData = new FormData();
-      formData.append("uploaded_file", this.dataTickets.img);
+      formData.append("uploaded_file", this.dataTickets.img_main);
       formData.append("name", this.dataTickets.name);
+      //console.log('formData', formData)
+      //console.log(this.$ipfs)
       await this.axios.post(this.$ipfs, formData).then((res) => {
-        // console.log(res.data.IpfsHash)
+        //console.log('res', res.data)
         localStorage.setItem("IpfsHash", res.data.IpfsHash);
       });
     },
     async completeIpfs() {
+      this.ipfs();
       this.$apollo
         .query({
           query: ipfs,
@@ -1798,6 +1846,7 @@ export default {
               thingid: localStorage.getItem("metadata_id"),
               tokenid: localStorage.getItem("IpfsHash"),
             };
+            //console.log(item)
             this.axios
               .post(url, item)
               .then(() => {
@@ -1814,9 +1863,21 @@ export default {
     },
     pollData() {
       this.polling = setInterval(() => {
-        //this.getData();
-        this.getMinted();
-      }, 10000);
+      //check until mintin is done
+      //Fecth until the total minted is ok
+      this.overlay = true;
+      if (parseInt(this.show_total_minted) < this.mint_amount){
+        //setTimeout(this.getData(), 10000);
+        // console.log(this.show_total_minted, this.mint_amount)
+        // console.log('polling', this.show_total_minted); 
+        this.getData();
+      } else {
+        this.overlay = false;
+      }
+       //When the amount is equal close the overlay
+       // this.overlay = !this.overlay;
+       this.$forceUpdate();
+      }, 5000);
     },
     listenerEditor() {
       setTimeout(() => {
@@ -1829,15 +1890,17 @@ export default {
       this.editorRules = true;
     },
     checkMintAmount(){
-      this.dataTickets.mint_amount > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){
+      //this.getData();
       var total_minted = parseInt(localStorage.getItem("total_minted"));
-      this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+      localStorage.setItem("amount_list",this.amount_list);
     },
     checkGoodiesAmount(){
       var total_minted = parseInt(localStorage.getItem("total_minted"));
-      this.dataTickets.goodies > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
+      parseInt(this.dataTickets.goodies) > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
     },
     async revisar() {
       let API_KEY = this.$dev_key;
@@ -1848,7 +1911,7 @@ export default {
         apiKey: API_KEY,
       });
       const { wallet, isConnected } = walletData;
-      console.info(isConnected)
+      //console.info(isConnected)
       if (!isConnected) {
         //console.info("user")
         if (this.nearid === false) {
@@ -1880,7 +1943,27 @@ export default {
         if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
             return false;
         return true;
-    }
+    },
+    loadAgain(){
+      this.imagecanvas = false;
+      this.imagecanvas1 = true;
+      this.$forceUpdate();
+    },
+    showModal(){
+      this.$refs.modal.modalApprove = true;
+    },
+    async add(){
+      this.amount_list++;
+      //this.getData();
+      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+    },
+    async substract(){
+      this.amount_list--;
+      //this.getData();
+      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+    },
   },
 };
 </script>
