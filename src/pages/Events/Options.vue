@@ -189,6 +189,13 @@
           </div>
         </v-card>
       </v-dialog>
+      <div class="text-center">
+			<v-overlay :value="overlay">
+				<v-progress-circular indeterminate size="64"></v-progress-circular>
+        <h3 class="mt-3">Minting in progress...</h3>
+        <h3 ref="tminted">{{ show_total_minted }}</h3>
+			</v-overlay>
+		</div>
   </section>
 </template>
 
@@ -324,7 +331,9 @@ export default {
       modalTicket: false,
       modalGoodie: false,
       urlgoodies: this.$burn_page_ticket+"?extra=redeemed&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
-      urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1]
+      urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
+      show_total_minted: localStorage.getItem("total_minted") === null ? "0" : localStorage.getItem("total_minted"),
+      overlay: false,
     };
   },
   mounted() {
@@ -332,12 +341,14 @@ export default {
     this.getData();
     this.getTotalMinted();
     this.pollData();
+    //this.overlay = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     if (urlParams.get("transactionHashes") !== null) {
       this.$refs.modal.modalSuccess = true;
+      this.overlay = true
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       history.replaceState(
         null,
@@ -430,19 +441,23 @@ export default {
       this.loading = true;
       //Api key an data
       let API_KEY = this.$dev_key.toString();
-      let networkName = this.$networkName.toString();
-      const { data: walletData } = await new Wallet().init({
-        networkName: networkName,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
-      console.log(this.mint_amount)
-      console.log(this.$route.query.thingid.toLowerCase())
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+      // console.log(this.mint_amount)
+      // console.log(this.$route.query.thingid.toLowerCase())
       const { wallet } = walletData;
-      await wallet.mintMore(
-        parseFloat(this.mint_amount),
+      //console.log(wallet)
+      localStorage.setItem('total_minted', this.mint_amount);
+      const { data, error} =   await wallet.mintMore(
+        parseInt(this.mint_amount),
         this.$route.query.thingid.toLowerCase()
       );
+      console.log('error', error)
+      console.log('data', data)
     },
     //Get the tokens id minted
     async list() {
@@ -769,7 +784,25 @@ export default {
     checkListAmount(){
       var total_minted = parseInt(localStorage.getItem("total_minted"));
       this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
-    }
+    },
+    pollData1() {
+      this.polling = setInterval(() => {
+      //check until mintin is done
+      //Fecth until the total minted is ok
+      this.overlay = true;
+      if (parseInt(this.show_total_minted) < this.minted){
+        //setTimeout(this.getData(), 10000);
+        // console.log(this.show_total_minted, this.mint_amount)
+        // console.log('polling', this.show_total_minted); 
+        this.getData();
+      } else {
+        this.overlay = false;
+      }
+       //When the amount is equal close the overlay
+       // this.overlay = !this.overlay;
+       this.$forceUpdate();
+      }, 5000);
+    },
   },
 };
 </script>
