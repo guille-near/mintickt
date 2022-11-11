@@ -199,6 +199,16 @@ export default {
         "/#/events"
       );
     }
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "approve"
+    ) {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events"
+      );
+    }
   },
   methods: {
     async getData() {

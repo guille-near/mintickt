@@ -142,6 +142,7 @@ import gql from "graphql-tag";
 import ModalSuccess from "./ModalSuccess";
 import { Wallet, Chain, Network } from "mintbase";
 import * as nearAPI from "near-api-js";
+import { CONFIG } from "@/services/api";
 const { utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
@@ -254,7 +255,8 @@ export default {
       date_start: "",
       date_end: "",
       googlemap: "",
-      store: ""
+      store: "",
+      approval_id: ""
     };
   },
   mounted() {
@@ -280,11 +282,11 @@ export default {
       this.$refs.modal.url =
         this.$explorer+"/accounts/"+user
       this.sendTicket();
-      // history.replaceState(
-      //   null,
-      //   location.href.split("?")[0],
-      //   "/#/store/?thingid="+localStorage.getItem('eventid')
-      // );
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/store/?thingid="+localStorage.getItem('eventid')
+      );
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
@@ -540,20 +542,21 @@ export default {
       );
       const user = datos.accountId;
       this.getTickettoSend()
-      //console.log(url)
       let item = {
         receiver_id: user,
         token_id: localStorage.getItem('ticket_to_send').toString(),
+        msg: "",
+        account_id: this.$owner
       };
-      console.log(item)
-      // this.axios
-      //   .post(url, item)
-      //   .then(() => {
-      //     console.log('Hash up')
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+      //console.log(item)
+      this.axios
+        .post(url, item)
+        .then(() => {
+          console.log('Hash up')
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async getTickettoSend(){
       this.$apollo
@@ -570,7 +573,7 @@ export default {
         .catch((err) => {
           console.log("Error", err);
         });
-    }
+    },
   },
 };
 </script>

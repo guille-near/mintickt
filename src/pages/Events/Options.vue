@@ -436,8 +436,8 @@ export default {
         chain: Chain.near,
         apiKey: API_KEY,
       });
-      // console.log(this.mint_amount)
-      // console.log(this.$route.query.thingid.toLowerCase())
+      console.log(this.mint_amount)
+      console.log(this.$route.query.thingid.toLowerCase())
       const { wallet } = walletData;
       await wallet.mintMore(
         parseFloat(this.mint_amount),

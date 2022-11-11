@@ -89,11 +89,11 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.sendTicket();
-      // history.replaceState(
-      //   null,
-      //   location.href.split("?")[0],
-      //   "/mintickt/#/events/register"
-      // );
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintickt/#/events/register"
+      );
     }
     if (
       urlParams.get("transactionHashes") !== null &&
@@ -101,11 +101,11 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      // history.replaceState(
-      //   null,
-      //   location.href.split("?")[0],
-      //   "/mintickt/#/events/register"
-      // );
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/mintickt/#/events/register"
+      );
     }
   },
   methods: {
@@ -161,6 +161,8 @@ export default {
           let item = {
             receiver_id: user,
             token_id: response.data.mb_views_nft_tokens[0].token_id,
+            msg: "",
+            account_id: this.$owner
           };
           this.axios
             .post(url, item)

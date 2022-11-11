@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="modalApprove" max-width="430px" persistent>
+	<v-dialog v-model="modalApprove" max-width="450px" persistent>
 		<v-card id="modalSucess">
 			<div class="divcol center">
 				<h3 class="p">One final Step!</h3>
@@ -16,6 +16,8 @@
 <script>
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
+import * as nearAPI from "near-api-js";
+const { utils } = nearAPI;
 const mb_views_nft_tokens = gql`
   query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
@@ -34,6 +36,7 @@ export default {
       tokens_id: [],
       txs: [],
       arr: [],
+      length: 0,
       loading: false
     };
   },
@@ -60,6 +63,7 @@ export default {
         })
         .then((response) => {
           this.tokens_id = response.data.mb_views_nft_tokens;
+          this.length = response.data.mb_views_nft_tokens.length * 0.0008;
           for (const prop in this.tokens_id) {
             this.arr.push(this.tokens_id[prop].token_id);
           }
@@ -73,20 +77,18 @@ export default {
         //Upload ipfs
         this.getData();
         this.loading = true;
-        const mintbase_marketplace = this.$mintbase_marketplace;
         this.txs.push({
-              receiverId: mintbase_marketplace,
+              receiverId: this.$store_mintbase,
               functionCalls: [
                 {
                   methodName: "nft_batch_approve",
-                  receiverId: mintbase_marketplace,
+                  receiverId: this.$store_mintbase,
                   gas: "300000000000000",
                   args: {
                     token_ids : this.arr,
                     account_id: this.$owner,
-                    msg: ""
                   },
-                  deposit: "800000000000000000000"
+                  deposit: utils.format.parseNearAmount(this.length.toString())
                 },
               ],
             });
