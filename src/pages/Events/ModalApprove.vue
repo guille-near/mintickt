@@ -21,7 +21,9 @@ const { utils } = nearAPI;
 const mb_views_nft_tokens = gql`
   query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
-    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}}
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , burned_receipt_id: {_is_null: true}}
+    order_by: {token_id: asc}
   ) {
     token_id
   }
@@ -37,7 +39,7 @@ export default {
       txs: [],
       arr: [],
       length: 0,
-      loading: false
+      loading: false,
     };
   },
   mounted() {
@@ -49,6 +51,11 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "approve"
     ) {
+      localStorage.removeItem('to_approve')
+      this.gotToEvents();
+    }
+     if (urlParams.get("errorCode") !== null) {
+      localStorage.removeItem('to_approve')
       this.gotToEvents();
     }
   },
@@ -58,16 +65,37 @@ export default {
         .mutate({
           mutation: mb_views_nft_tokens,
           variables: {
-            _iregex: localStorage.getItem("metadata_id") === null ? "" : localStorage.getItem("metadata_id").split(":")[1]
+            _iregex: localStorage.getItem("metadata_id").split(":")[1]
           },
         })
         .then((response) => {
+          //get all the tokens to be approve
           this.tokens_id = response.data.mb_views_nft_tokens;
-          this.length = response.data.mb_views_nft_tokens.length * 0.0008;
+          //this.length = response.data.mb_views_nft_tokens.length * 0.0008;
+          //then loop it and filter using a node service, this service
+          //return null if don't have approval id
+          //if it's null then we build the array with the number's needed
+          //all this to avoid pay extra fee's
           for (const prop in this.tokens_id) {
-            this.arr.push(this.tokens_id[prop].token_id);
-          }
-          //console.log(this.arr)
+            //console.log(this.tokens_id[prop].token_id)
+            const url =  this.$node_url + "/nft-get-tokens";
+            let item = {
+                token_id: this.tokens_id[prop].token_id,
+                account_id: "andresdom.near"
+            };
+            this.axios
+                .post(url, item)
+                .then((res) => {
+                  //console.log(res.data)
+                  if(res.data === null){
+                    this.arr.push(this.tokens_id[prop].token_id);
+                    localStorage.setItem('to_approve', this.tokens_id[prop].token_id)
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
         })
         .catch((err) => {
           console.log("Error", err);
@@ -77,21 +105,22 @@ export default {
         //Upload ipfs
         this.getData();
         this.loading = true;
+        this.length = this.arr.length *  0.0008;
         this.txs.push({
-              receiverId: this.$store_mintbase,
-              functionCalls: [
-                {
-                  methodName: "nft_batch_approve",
-                  receiverId: this.$store_mintbase,
-                  gas: "300000000000000",
-                  args: {
-                    token_ids : this.arr,
-                    account_id: this.$owner,
-                  },
-                  deposit: utils.format.parseNearAmount(this.length.toString())
-                },
-              ],
-            });
+            receiverId: this.$store_mintbase,
+             functionCalls: [
+              {
+               methodName: "nft_batch_approve",
+               receiverId: this.$store_mintbase,
+               gas: "300000000000000",
+               args: {
+                 token_ids : this.arr,
+                 account_id: this.$owner,
+               },
+              deposit: utils.format.parseNearAmount(this.length.toString())
+              },
+            ],
+         });
         this.executeMultipleTransactions();
     },
     async executeMultipleTransactions() {
@@ -142,7 +171,6 @@ export default {
       localStorage.removeItem("canvas_main_image");
       localStorage.removeItem("total_minted");
       localStorage.removeItem("metadata");
-      localStorage.removeItem("total_minted");
       localStorage.removeItem("metadata");
       localStorage.removeItem("IpfsHash");
       localStorage.removeItem("metadata_reference");

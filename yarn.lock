@@ -6626,10 +6626,10 @@
   dependencies:
     "yallist" "^4.0.0"
 
-"mintbase@^0.8.2":
-  "integrity" "sha512-7x2EbDUi9xZd+X+07UpsTIzj+FDJ3M8tnK39Dv/QM6lFYRL3WGi5TccffQahWZA1R1vuHomPjsRTnzMsg8npvg=="
-  "resolved" "https://registry.npmjs.org/mintbase/-/mintbase-0.8.2.tgz"
-  "version" "0.8.2"
+"mintbase@^0.8.3-rc":
+  "integrity" "sha512-YznZLnQgohCmlZGuu9bg6Q1O/wQ25Nk2BmkQbdPWK1IQUETGWIQH2vc23wDdGGGnMrN7yR1T7ELgAfMwf3p3QQ=="
+  "resolved" "https://registry.npmjs.org/mintbase/-/mintbase-0.8.3-rc.tgz"
+  "version" "0.8.3-rc"
   dependencies:
     "@types/retry" "^0.12.1"
     "bn.js" "^5.2.0"
