@@ -1,6 +1,7 @@
 <template>
   <section id="options" class="divcol gap align">
     <ModalSuccess ref="modal"></ModalSuccess>
+    <ModalApprove ref="modala"></ModalApprove>
 
     <div class="acenter">
       <v-btn icon to="/events">
@@ -188,12 +189,20 @@
           </div>
         </v-card>
       </v-dialog>
+      <div class="text-center">
+			<v-overlay :value="overlay">
+				<v-progress-circular indeterminate size="64"></v-progress-circular>
+        <h3 class="mt-3">Minting in progress...</h3>
+        <h3 ref="tminted">{{ show_total_minted }}</h3>
+			</v-overlay>
+		</div>
   </section>
 </template>
 
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import ModalSuccess from "./ModalSuccess";
+import ModalApprove from "./ModalApprove";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
 import html2canvas from "html2canvas";
@@ -219,9 +228,9 @@ const your_events = gql`
 }
 `;
 const mb_views_nft_tokens_aggregate = gql`
-  query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
+ query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
   nft_tokens_aggregate(
-    where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}}
+    where: {nft_contract_id: {_eq: $store}, metadata_id: {_eq: $metadata_id}, burned_receipt_id: {_is_null: true}, owner: {_eq: $user}}
   ) {
     aggregate {
       count
@@ -235,7 +244,6 @@ const mb_views_nft_tokens_aggregate = gql`
     }
   }
 }
-
 `;
 const tokens_id = gql`
   query MyQuery($metadata_id: String) {
@@ -251,6 +259,17 @@ const tokens_id = gql`
       }
     }
   }
+`;
+const nft_tokens_aggregate = gql`
+  query MyQuery($metadata_id: String!, $owner: String!) {
+  nft_tokens_aggregate(
+    where: {metadata_id: {_eq: $metadata_id}, burned_receipt_id: {_is_null: true}, owner: {_eq: $owner}}
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
 `;
 const mb_views_nft_tokens_ticketing = gql`
   query MyQuery($metadata_id: String!) {
@@ -296,7 +315,7 @@ const mb_views_nft_tokens_redeemed = gql`
 `;
 export default {
   name: "options",
-  components: { StreamBarcodeReader, ModalSuccess },
+  components: { StreamBarcodeReader, ModalSuccess, ModalApprove },
   data() {
     return {
       modalMintMore: false,
@@ -322,35 +341,47 @@ export default {
       modalTicket: false,
       modalGoodie: false,
       urlgoodies: this.$burn_page_ticket+"?extra=redeemed&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
-      urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1]
+      urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
+      show_total_minted:  localStorage.getItem("total_minted"),
+      available_to_list: 0,
+      overlay: false,
+      new_minted: 0,
     };
   },
   mounted() {
+    localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false;
     localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
-    this.pollData();
     this.getTotalMinted();
+    this.pollData();
+    this.pollData1();
+    //this.overlay = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-    const user = datos.accountId;
     if (urlParams.get("transactionHashes") !== null) {
       this.$refs.modal.modalSuccess = true;
+      let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+      const user = datos.accountId;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
+      this.pollData1();
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
+        "/#/events/options?event=" +
           localStorage.getItem("event_name") +
           "&thingid=" +
           localStorage.getItem("eventid")
       );
     }
+    //List
+    if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
+      this.$refs.modala.modalApprove = true;
+    }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/mintickt/#/events/options?event=" +
+        "/#/events/options?event=" +
           localStorage.getItem("event_name") +
           "&thingid=" +
           localStorage.getItem("eventid")
@@ -378,8 +409,8 @@ export default {
       );
       const user = datos.accountId;
       this.$apollo
-        .query({
-          query: your_events,
+        .mutate({
+          mutation: your_events,
           variables: {
             store: this.$store_mintbase,
             user: user,
@@ -394,8 +425,8 @@ export default {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
               this.$apollo
-                .query({
-                  query: mb_views_nft_tokens_aggregate,
+                .mutate({
+                  mutation: mb_views_nft_tokens_aggregate,
                   variables: {
                     store: this.$store_mintbase,
                     user: user,
@@ -407,6 +438,7 @@ export default {
                     (this.minted =
                       response.data.nft_tokens_aggregate.aggregate.count),
                     (this.listed = value1.listings_aggregate.aggregate.count);
+                    this.available_to_list = this.minted - this.listed;
                 })
                 .catch((err) => {
                   console.log("Error", err);
@@ -423,19 +455,25 @@ export default {
       this.loading = true;
       //Api key an data
       let API_KEY = this.$dev_key.toString();
-      let networkName = this.$networkName.toString();
-      const { data: walletData } = await new Wallet().init({
-        networkName: networkName,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
       // console.log(this.mint_amount)
       // console.log(this.$route.query.thingid.toLowerCase())
       const { wallet } = walletData;
-      await wallet.mintMore(
-        parseFloat(this.mint_amount),
-        this.$route.query.thingid.toLowerCase()
+      //console.log(wallet)
+      //localStorage.setItem('total_minted', this.mint_amount);
+      this.new_minted = parseInt(localStorage.getItem("total_minted")) + parseInt(this.mint_amount);
+      localStorage.setItem('new_minted', this.new_minted);
+      const { data, error} =   await wallet.mintMore(
+        parseInt(this.mint_amount),
+        this.$route.query.thingid.toLowerCase(),
       );
+      console.log('error', error)
+      console.log('data', data)
     },
     //Get the tokens id minted
     async list() {
@@ -497,7 +535,7 @@ export default {
                           }),
                         },
                         deposit: utils.format.parseNearAmount(
-                          (0.01 * this.amount_list).toString()
+                          (0.0008 * this.amount_list).toString()
                         ),
                       },
                     ],
@@ -593,25 +631,23 @@ export default {
       this.executeMultipleTransactions();
     },
     async getTotalMinted() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
       this.$apollo
-        .query({
-          query: tokens_id,
+        .mutate({
+          mutation: nft_tokens_aggregate,
           variables: {
             metadata_id: localStorage.getItem("metadata_id").toString(),
+            owner: user
           },
+          // Don't prefetch
+          prefetch: false,
         })
         .then((response) => {
           //Map the objectvalue
-          Object.entries(response.data).forEach(([key, value]) => {
-            Object.entries(value.nodes).forEach(([x, value1]) => {
-              if (value1.nft_listings.length === 0) {
-                this.counter++;
-                localStorage.setItem("total_minted", this.counter);
-              } else {
-                localStorage.setItem("total_minted", 0);
-              }
-            });
-          });
+          localStorage.setItem("total_minted", response.data.nft_tokens_aggregate.aggregate.count);
         })
         .catch((err) => {
           console.log("Error", err);
@@ -640,8 +676,9 @@ export default {
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
+        this.getTotalMinted();
         this.$forceUpdate();
-      }, 60000);
+      }, 5000);
     },
     controlAmount(item) {
       this.getData();
@@ -656,7 +693,7 @@ export default {
       this.getData();
       if (
         item == "more" &&
-        this.amount_list < localStorage.getItem("total_minted")
+        this.amount_list < this.available_to_list
       ) {
         this.amount_list++;
       }
@@ -757,9 +794,28 @@ export default {
       this.mint_amount > 20 ? this.mint_amount = 20 : this.mint_amount = this.mint_amount;
     },
     checkListAmount(){
-      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      var total_minted = this.available_to_list;
       this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
-    }
+    },
+    pollData1() {
+      this.polling = setInterval(() => {
+      //check until mintin is done
+      //Fecth until the total minted is ok
+      this.new_minted = localStorage.getItem("new_minted");   
+      if (parseInt(this.new_minted) > parseInt(this.minted)){
+        this.overlay = true;
+        //setTimeout(this.getData(), 10000);
+        // console.log(this.show_total_minted, this.mint_amount)
+        // console.log('polling', this.show_total_minted); 
+        this.getData();
+      } else {
+        this.overlay = false;
+      }
+       //When the amount is equal close the overlay
+       // this.overlay = !this.overlay;
+       this.$forceUpdate();
+      }, 5000);
+    },
   },
 };
 </script>

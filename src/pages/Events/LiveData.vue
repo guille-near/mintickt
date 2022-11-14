@@ -336,9 +336,9 @@ export default {
           Object.entries(response.data.mb_views_nft_tokens).forEach(
             ([key, value]) => {
               var startTime =
-                value.last_transfer_receipt_id === null
-                  ? moment.utc(value.burned_timestamp)
-                  : moment.utc(value.minted_timestamp);
+                 value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
               var endTime = moment.utc(new Date());
               var minutesDiff = endTime.diff(startTime, "minutes");
               var hoursDiff = endTime.diff(startTime, "hours");
@@ -473,7 +473,7 @@ export default {
                   var startTime =
                     value.last_transfer_receipt_id === null
                       ? moment.utc(value.burned_timestamp)
-                      : moment.utc(value.minted_timestamp);
+                      : moment.utc(value.last_transfer_timestamp);
                   var endTime = moment.utc(new Date());
                   var minutesDiff = endTime.diff(startTime, "minutes");
                   var hoursDiff = endTime.diff(startTime, "hours");

@@ -51,7 +51,7 @@
             <v-btn
               class="createEventBtn h9-em"
               v-show="routePath !== '/events/register'"
-              @click="$router.push('/events/register')"
+              @click="goToEvent"
             >
               <span>create an event</span>
             </v-btn>
@@ -244,6 +244,38 @@ export default {
       this.nearid = false;
       this.user = "Login with NEAR";
     },
+    goToEvent(){
+      localStorage.removeItem("canvas");
+      localStorage.removeItem("canvas_burn");
+      localStorage.removeItem("canvas_goodie");
+      //localStorage.removeItem("canvas_main_image");
+      localStorage.removeItem("dataFormDate");
+      localStorage.removeItem("dataFormDescription");
+      localStorage.removeItem("dataFormLocation");
+      localStorage.removeItem("dataFormLongitude");
+      localStorage.removeItem("dataFormLatitude");
+      localStorage.removeItem("dataFormPlaceId");
+      localStorage.removeItem("dataFormName");
+      localStorage.removeItem("dataFormPromoter");
+      localStorage.removeItem("dataFormMintAmount");
+      localStorage.removeItem("amount_list");
+      localStorage.removeItem("price");
+      localStorage.removeItem("dataFormAttendees");
+      localStorage.removeItem("dataFormGoodies");
+      localStorage.removeItem("tempid");
+      localStorage.removeItem("mint_amount");
+      localStorage.removeItem("mint_tittle");
+      localStorage.removeItem("canvas_main_image");
+      localStorage.removeItem("total_minted");
+      localStorage.removeItem("metadata");
+      localStorage.removeItem("IpfsHash");
+      localStorage.removeItem("metadata_reference");
+      localStorage.removeItem("eventid");
+      localStorage.removeItem("event_name");
+      //localStorage.removeItem("metadata_id");
+      localStorage.setItem('step', 1);
+      this.$router.push('/events/register')
+    }
   },
 };
 </script>
