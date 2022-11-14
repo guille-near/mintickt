@@ -64,10 +64,11 @@
                   class="btnNearMobile h7-em"
                   v-on="nearid ? on : undefined"
                   v-bind="nearid ? attrs : undefined"
-                  @click="nearid ? connect : undefined"
+                  @click="nearid ? undefined : connect()"
                 >
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
                 </v-btn>
+
                 <v-btn
                   v-else text 
                   color="white"
