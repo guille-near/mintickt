@@ -59,12 +59,16 @@
           <span>{{ item.date }}</span>
 
           <aside class="acenter" style="gap: 0.5em">
-            <v-btn class="icon" to="/events/liveData">
+            <v-btn class="icon" @click="goLiveData(item.name, item.thingid)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
             </v-btn>
 
-            <v-btn class="icon" to="/events/options">
+            <v-btn class="icon" @click="goOptions(item.name, item.thingid)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
+            </v-btn>
+
+            <v-btn class="icon" @click="copySiteLink(item.thingid)">
+              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
             </v-btn>
 
             <v-icon

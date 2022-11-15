@@ -801,7 +801,9 @@ export default {
       this.polling = setInterval(() => {
       //check until mintin is done
       //Fecth until the total minted is ok
+      localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", 1) : "";
       this.new_minted = localStorage.getItem("new_minted");   
+      //console.log(this.new_minted)
       if (parseInt(this.new_minted) > parseInt(this.minted)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);

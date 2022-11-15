@@ -1865,8 +1865,8 @@ export default {
       this.polling = setInterval(() => {
       //check until mintin is done
       //Fecth until the total minted is ok
-      this.overlay = true;
       if (parseInt(this.show_total_minted) < this.mint_amount){
+        this.overlay = true;
         //setTimeout(this.getData(), 10000);
         // console.log(this.show_total_minted, this.mint_amount)
         // console.log('polling', this.show_total_minted); 
