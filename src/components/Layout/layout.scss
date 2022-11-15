@@ -121,10 +121,14 @@
     span {color:#FFFFFF !important}
   }
   .btnNearMobile {
-    min-width: max-content;
-    padding: 12.2px;
+    min-width: 35px;
+    min-height: 35px;
+    padding: 0;
     border-radius: 7px;
-    img {margin: 0}
+    img {
+      margin: 0;
+      width: 100%;
+    }
   }
 }
 
