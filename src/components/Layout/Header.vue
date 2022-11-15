@@ -7,7 +7,7 @@
       absolute
       :class="{
         events:
-          route == 'Landing' ||
+          routeName == 'Landing' ||
           routePath.includes('events')
       }"
     >
@@ -15,7 +15,7 @@
         class="align"
         :class="{
           limiter:
-            route == 'Landing' ||
+            routeName == 'Landing' ||
             !routePath.includes('events'),
         }"
       >
@@ -43,14 +43,14 @@
           </a>
 
           <aside
-            class="acenter"
-            style="gap: 0.2em"
+            class="center"
+            style="gap: 20px"
             :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
 
             <v-btn
               class="createEventBtn h9-em"
-              v-show="routePath !== '/events/register'"
+              v-show="routePath !== '/events/register' && routeName !== 'Store'"
               @click="goToEvent"
             >
               <span>create an event</span>
@@ -64,10 +64,11 @@
                   class="btnNearMobile h7-em"
                   v-on="nearid ? on : undefined"
                   v-bind="nearid ? attrs : undefined"
-                  @click="nearid ? connect : undefined"
+                  @click="nearid ? undefined : connect()"
                 >
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
                 </v-btn>
+
                 <v-btn
                   v-else text 
                   color="white"
@@ -148,6 +149,7 @@ export default {
       user: "Login with NEAR",
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,
+      routeName: this.$router.currentRoute.name,
     };
   },
   mounted() {
@@ -157,17 +159,15 @@ export default {
       this.responsive();
     };
   },
-  computed: {
-    route() {
-      return this.$router.currentRoute.name;
-    },
-  },
   watch: {
-    $route(current) { this.routePath = current.path }
+    $route(current) {
+      this.routePath = current.path,
+      this.routeName = current.name
+    }
   },
   methods: {
     responsive() {
-      if (window.innerWidth <= 880 && this.routePath.includes("events") || window.innerWidth <= 880 && this.routePath === '/') {
+      if (window.innerWidth <= 880) {
         this.responsiveActions = true;
       } else {
         this.responsiveActions = false;
