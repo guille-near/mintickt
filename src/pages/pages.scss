@@ -1242,7 +1242,7 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {
     padding-inline: clamp(1em, 4vw, 4em) !important;
-    padding-bottom: 0 !important;
+    padding-bottom: calc(42px + 40px) !important;
   }
   position: relative;
   &::before {
