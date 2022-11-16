@@ -70,9 +70,12 @@
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
             </v-btn>
 
-            <v-btn class="icon" @click="copySiteLink(item.thingid)">
+            <a class="center bold" style="color: #cc00b7; font-size: 12px" :href="$store_site+item.thingid">
+              {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
+            </a>
+            <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
-            </v-btn>
+            </v-btn> -->
 
             <v-icon
               color="white"
