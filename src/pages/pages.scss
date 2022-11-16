@@ -1166,6 +1166,10 @@
   }
   .container-info {
     gap: 1em;
+    .v-btn {
+      width: 100px;
+      min-width: 100px;
+    }
     span {
       font-family: 'SF Pro', sans-serif !important;
       font-weight: 510;
@@ -1193,6 +1197,7 @@
   padding: 1em;
   display: grid;
   place-content: center;
+  background-color: hsl(0 0% 7% / .95) !important;
   .conversion {
     font-size: 0.75em;
     position: relative;

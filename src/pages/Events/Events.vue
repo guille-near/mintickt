@@ -36,12 +36,15 @@
           <v-btn @click="goLiveData(item.name, item.thingid)"
             >Go to live data</v-btn
           >
-          <v-btn @click="goOptions(item.name, item.thingid)" v-on="on" v-bind="attrs"
+          <v-btn @click="goOptions(item.name, item.thingid)"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
-          <v-btn @click="copySiteLink(item.thingid)" title="Copy site link" v-on="on" v-bind="attrs"
+          <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
+            {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
+          </a>
+          <!-- <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
             ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
-          >
+          > -->
         </div>
       </template>
       

@@ -71,7 +71,7 @@
 
     <!-- modal mint more -->
     <v-dialog v-model="modalMintMore" width="300px">
-      <v-card class="modalMore" color="hsl(0 0% 7% / .98)">
+      <v-card class="modalMore">
         <label for="amount">Amount</label>
         <v-text-field
           id="amount"
@@ -99,7 +99,7 @@
 
     <!-- modal list more -->
     <v-dialog v-model="modalListMore" width="300px">
-      <v-card class="modalMore divcol" color="rgb(225 225 225 / .1)">
+      <v-card class="modalMore divcol">
         <div class="divcol">
           <label for="amount">Amount</label>
           <v-text-field
