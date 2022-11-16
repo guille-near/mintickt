@@ -189,14 +189,8 @@ export default {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "goodies"
+      urlParams.get("transactionHashes") !== null
     ) {
-      this.step = 4;
-      localStorage.setItem("step", 4);
-      this.getData().then(()=>{
-          this.completeIpfs()
-      })
       history.replaceState(
         null,
         location.href.split("?")[0],

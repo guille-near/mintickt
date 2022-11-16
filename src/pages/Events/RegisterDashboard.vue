@@ -445,7 +445,7 @@
                   >mdi-arrow-left</v-icon
                 >Back
               </v-btn>
-              <v-btn type="submit" :loading="loading" :disabled="disable"
+              <v-btn type="submit" @click="mint" :loading="loading" :disabled="disable"
                 class="mint">
                 Mint<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
@@ -922,11 +922,25 @@ export default {
       this.$refs.modal.modalApprove = true;
     }
     //
-    if (urlParams.get("errorCode") !== null) {
-      this.modal = false;
-      this.step = 1;
-      localStorage.setItem("step", this.step);
-      history.replaceState(null, location.href.split("?")[0], "/trade/p2p");
+    if (urlParams.get("errorCode") !== null &&
+      urlParams.get("signMeta") === "mint") {
+      this.$refs.modal.modalSuccess = false;
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events/register"
+      );
+    }
+    if (urlParams.get("errorCode") !== null &&
+      urlParams.get("signMeta") === "list") {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events/register"
+      );
+    }
+    if (urlParams.get("errorCode") !== null &&
+      urlParams.get("signMeta") === "goodies") {
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -1115,18 +1129,13 @@ export default {
         const royalties = {};
         const multiplied = 10000;
         var counter = this.counter;
-        const multiplier = Math.round(multiplied / counter);
+        const multiplier = multiplied / counter;
+        console.log(multiplier)
         this.dataRoyalties.forEach((element) => {
           royalties[element.account] = parseInt(
             element.percentage * multiplier
           );
         });
-        //console.log(royalties)
-        //LocalStora Royalties
-        // localStorage.setItem(
-        //   "dataRoyalties",
-        //   JSON.stringify(this.dataRoyalties)
-        // );
 
         //handle splits
         const splits = {};
@@ -1147,19 +1156,13 @@ export default {
             splits[this.$owner] = parseInt(parseInt(this.$owner_split)* 100 + (royaltie_for_owner));
             counter1 = counter1  + parseInt(this.$owner_split);
         }
-        //Add to the counter the split for owner
-        
-        //console.log(counter1)
-       
         //Add the rest for minter
         if(user === this.$owner && this.dataSplit.length === 0){
           splits[user] = parseInt(10000);
         } else {
           splits[user] = parseInt(10000 - (counter1* 100));
         }
-        //console.log(parseInt(10000 - (counter1* 100)));
-        // console.log(splits)
-        // localStorage.setItem("splits", JSON.stringify(this.dataSplit));
+        //end split
 
         //LocalStora Mint amount
         localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
@@ -1862,7 +1865,7 @@ export default {
       this.polling = setInterval(() => {
       //check until mintin is done
       //Fecth until the total minted is ok
-      if (parseInt(this.show_total_minted) < this.mint_amount){
+      if (parseInt(this.show_total_minted) < this.mint_amount && parseInt(localStorage.getItem('step'))>=4){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
         // console.log(this.show_total_minted, this.mint_amount)

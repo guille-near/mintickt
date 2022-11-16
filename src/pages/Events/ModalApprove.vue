@@ -54,10 +54,10 @@ export default {
       localStorage.removeItem('to_approve')
       this.gotToEvents();
     }
-     if (urlParams.get("errorCode") !== null) {
-      localStorage.removeItem('to_approve')
-      this.gotToEvents();
-    }
+    //  if (urlParams.get("errorCode") !== null) {
+    //   localStorage.removeItem('to_approve')
+    //   this.gotToEvents();
+    // }
   },
   methods: {
     async getData() {
