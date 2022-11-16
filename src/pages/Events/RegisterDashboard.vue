@@ -118,50 +118,92 @@
               >
               </vuetify-google-autocomplete>
 
-              <h3>Date <span style="color: red">*</span></h3>
+              <h3>Date and time <span style="color: red">*</span></h3>
               <p>
                 Inform attendees when the event starts and ends so they can get
                 organized
               </p>
 
               <div id="container-datatime" class="gap">
-                <div class="divcol">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="dates"
-                    :rules="rules.required"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="dateRangeText"
-                        label="Date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        solo
-                        v-bind="attrs"
-                        v-on="on"
-                        :rules="rules.required"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="dates"
-                      range
-                      no-title
-                      scrollable
-                      color="hsl(306, 100%, 50%)"
-                      dark
+                <div class="space" style="gap: 20px">
+                  <div class="divcol" style="gap: 6px">
+                    <label for="date">
+                      Date
+                    </label>
+                    <v-menu
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="dates"
+                      :rules="rules.required"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
                     >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="$refs.menu.save(dates)">
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="dateRangeText"
+                          id="date"
+                          readonly
+                          solo
+                          v-bind="attrs"
+                          v-on="on"
+                          :rules="rules.required"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="dates"
+                        range
+                        no-title
+                        scrollable
+                        color="hsl(306, 100%, 50%)"
+                        dark
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="$refs.menu.save(dates)">
+                          OK
+                        </v-btn>
+                      </v-date-picker>
+                    </v-menu>
+                  </div>
+                  
+                  <div class="divcol" style="gap: 6px">
+                    <label for="time">
+                      Time
+                    </label>
+                    <v-menu
+                      ref="menu2"
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="time"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="time"
+                          id="time"
+                          solo
+                          :rules="rules.required"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="menu2"
+                        v-model="time"
+                        full-width
+                        color="hsl(306, 100%, 50%)"
+                        header-color="#1e1e1e"
+                        dark
+                        @click:minute="$refs.menu2.save(time)"
+                      ></v-time-picker>
+                    </v-menu>
+                  </div>
                 </div>
               </div>
             </v-form>
@@ -803,6 +845,8 @@ export default {
       amount_list: localStorage.getItem("amount_list") === null ? 0 : localStorage.getItem("amount_list"),
       price: localStorage.getItem("price") === null ? 0 : localStorage.getItem("price"),
       menu: "",
+      time: null,
+      menu2: false,
       dataTicket: [
         {
           url: "",
