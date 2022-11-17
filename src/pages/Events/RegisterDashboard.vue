@@ -595,7 +595,7 @@
                   >mdi-arrow-left</v-icon
                 >Back
               </v-btn>
-              <v-btn type="submit" :loading="loading" :disabled="disable">
+              <v-btn type="submit" @click="list" :loading="loading" :disabled="disable">
                 List<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
@@ -707,6 +707,7 @@
               <v-btn
                 v-show="goodie"
                 type="submit"
+                @click="mintGoodie"
                 :loading="loading"
                 :disabled="disable"
                 style="
@@ -1149,6 +1150,10 @@ export default {
             trait_type: localStorage.getItem("tempid"),
             value: "NFT",
           },
+          {
+            trait_type: "time",
+            value: this.time,
+          },
         ];
         let store = this.$store_mintbase;
         let category = "ticketing";
@@ -1211,17 +1216,17 @@ export default {
         //LocalStora Mint amount
         localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
         //localStorage.setItem("total_minted", this.dataTickets.mint_amount);
-        await wallet.mint(
-          parseFloat(this.dataTickets.mint_amount),
-          store.toString(),
-          JSON.stringify(royalties) === "{}" ? null : royalties,
-          JSON.stringify(splits) === "{}" ? null : splits,
-          category,
-          {
-            meta: "mint",
-            royaltyPercentage: this.counter * 100,
-          }
-        );
+        // await wallet.mint(
+        //   parseFloat(this.dataTickets.mint_amount),
+        //   store.toString(),
+        //   JSON.stringify(royalties) === "{}" ? null : royalties,
+        //   JSON.stringify(splits) === "{}" ? null : splits,
+        //   category,
+        //   {
+        //     meta: "mint",
+        //     royaltyPercentage: this.counter * 100,
+        //   }
+        // );
         localStorage.setItem("step", 4);
       }
     },
@@ -1300,6 +1305,10 @@ export default {
           {
             trait_type: localStorage.getItem("metadata_id").split(":")[1],
             value: this.dataTickets.attendees,
+          },
+          {
+            trait_type: "time",
+            value: this.time,
           },
         ];
         let store = this.$store_mintbase;

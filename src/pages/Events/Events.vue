@@ -27,7 +27,7 @@
             src="@/assets/img/bg-ticket_events.png"
             alt="ticket image"
           />
-          <span class="eventName">{{ item.name }}</span>
+          <a class="eventName" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
         </center>
       </template>
 
@@ -39,10 +39,11 @@
           <v-btn @click="goOptions(item.name, item.thingid)"
             ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
           >
+          <!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
             {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
           </a>
-          <!-- <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
+           <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
             ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
           > -->
         </div>
