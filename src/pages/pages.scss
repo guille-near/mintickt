@@ -796,7 +796,11 @@
   .search {
     max-width: 20em;
     margin-left: auto;
-    @media (max-width: 880px) {margin-bottom: 2em}
+    @media (max-width: 880px) {
+      margin-bottom: 2em;
+      max-width: 100%;
+      width: 100%;
+    }
     .v-input__slot {
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
       border-radius: .5vmax;

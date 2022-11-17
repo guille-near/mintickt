@@ -59,7 +59,9 @@
         style="display: flex"
       >
         <section class="acenter">
-          <span class="eventName">{{ item.name }}</span>
+          <span class="eventName">
+            <a style="color: #fff !important" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
+          </span>
           <span>{{ item.date }}</span>
 
           <aside class="acenter" style="gap: 0.5em">
@@ -71,9 +73,6 @@
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
             </v-btn>
 
-            <a class="center bold" style="color: #cc00b7; font-size: 12px" :href="$store_site+item.thingid">
-              {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
-            </a>
             <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
             </v-btn> -->

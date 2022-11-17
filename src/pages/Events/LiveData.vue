@@ -218,7 +218,7 @@
                 :style="item.show ? 'transform:rotate(180deg)' : ''"
                 size="2em"
                 @click="
-                  dataTableMobile.forEach((e) => {
+                  dataTableExtraMobile.forEach((e) => {
                     e !== item ? (e.show = false) : null;
                   });
                   item.show = !item.show;
