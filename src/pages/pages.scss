@@ -1020,7 +1020,7 @@
       display: grid !important;
       place-content: center;
       text-align: center;
-      width: 12.0625em;
+      width: clamp(8em, calc(30vw + 1em), 12.0625em);
       height: 5.3125em;
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
       border-radius: 4px;
@@ -1039,7 +1039,11 @@
   .search {
     max-width: 20em;
     margin-left: auto;
-    @media (max-width: 880px) {margin-bottom: 2em}
+    @media (max-width: 880px) {
+      margin-bottom: 2em;
+      max-width: 100%;
+      width: 100%;
+    }
     .v-input__slot {
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
       border-radius: .5vmax;
@@ -1115,6 +1119,50 @@
           }
         }
         &:hover {background-color: transparent}
+      }
+    }
+  }
+
+
+  section.vermobile {@include mq(max, x-small) {font-size: 12px}}
+  .v-card.up {margin-bottom: 2em}
+  .v-card.up {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
+    border-radius: 9px;
+    padding: 1em;
+    span {flex: 1 1}
+    aside {
+      .v-btn.icon {
+        min-width: max-content;
+        height: max-content;
+        padding: 5px 6px;
+        margin-inline: auto;
+        background: #FFFFFF;
+        border-radius: 6px;
+        * {color: #000000 !important}
+        span {
+          font-family: 'Montserrat', sans-serif !important;
+          font-size: clamp(.9em, 1.5vw, 1.5em);
+          font-weight: 700;
+        }
+      }
+    }
+    aside.down {
+      margin-top: 1em;
+      h3 {
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 600;
+        font-size: .875em;
+        letter-spacing: -0.03em;
+        font-variant: small-caps;
+        color: #CC00B7;
+        margin-bottom: 0;
+      }
+      span {
+        font-family: 'SF Pro', sans-serif !important;
+        font-weight: 400;
+        font-size: .875em;
+        color: #FFFFFF;
       }
     }
   }
