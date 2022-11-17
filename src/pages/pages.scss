@@ -619,11 +619,12 @@
   flex-direction: column;
   // overflow: hidden !important;
   section {
-    gap: clamp(6em, 8vw, 8em); z-index: 2; margin-top: 2em;
+    gap: clamp(6em, 8vw, 8em); z-index: 2;
     @media (max-width: 880px) {
-      height: calc(100vh - (160px + 12em + 80px + 2em));
+      height: calc(100vh - (120px + 12em + 80px));
       overflow: auto;
     }
+    @media (max-width: 300px) {height: calc(100vh - (120px + 12em + 80px + 20px))}
   }
   h2 {
     max-width: min(var(--margin), 18ch);
@@ -1254,7 +1255,7 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {
     padding-inline: clamp(1em, 4vw, 4em) !important;
-    padding-bottom: calc(42px + 40px) !important;
+    padding-block: 120px calc(42px + 40px) !important;
   }
   position: relative;
   &::before {
