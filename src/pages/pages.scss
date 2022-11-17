@@ -621,10 +621,10 @@
   section {
     gap: clamp(6em, 8vw, 8em); z-index: 2;
     @media (max-width: 880px) {
-      height: calc(100vh - (120px + 12em + 80px));
+      height: calc(100vh - (120px + 12em + 80px + 20px));
       overflow: auto;
     }
-    @media (max-width: 300px) {height: calc(100vh - (120px + 12em + 80px + 20px))}
+    // @media (max-width: 300px) {height: calc(100vh - (120px + 12em + 80px + 20px))}
   }
   h2 {
     max-width: min(var(--margin), 18ch);
