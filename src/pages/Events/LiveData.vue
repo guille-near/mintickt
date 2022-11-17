@@ -56,6 +56,7 @@
 
       <v-data-table
         id="dataTable"
+        class="eliminarmobile"
         v-show="
           dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
           true
@@ -81,9 +82,85 @@
           >
         </template>
       </v-data-table>
+      
+      <section
+        class="vermobile"
+        v-show="
+          dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
+          true
+        ">
+        <v-card
+          v-for="(item, i) in dataTableMobile"
+          :key="i"
+          class="up divcol"
+          style="display: flex"
+        >
+          <section class="acenter" style="gap: 10px">
+            <span class="eventName">{{ item.nft }}</span>
+            <span>{{ item.signer }}</span>
+
+            <aside class="acenter" style="gap: 0.5em">
+              <v-btn class="icon" @click="completeOrderFans(item)" :loading="item.loadingBtn">
+                <!-- Complete order -->
+                <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
+              </v-btn>
+
+              <v-icon
+                color="white"
+                :style="item.show ? 'transform:rotate(180deg)' : ''"
+                size="2em"
+                @click="
+                  dataTableMobile.forEach((e) => {
+                    e !== item ? (e.show = false) : null;
+                  });
+                  item.show = !item.show;
+                "
+              >
+                mdi-chevron-down
+              </v-icon>
+            </aside>
+          </section>
+
+          <aside v-show="item.show" class="down space">
+            <div class="divcol">
+              <h3>QUANITTY</h3>
+              <span>{{ item.quantity }}</span>
+            </div>
+
+            <div class="divcol">
+              <h3>CREATED</h3>
+              <span>{{ item.created }}</span>
+            </div>
+
+            <div class="divcol">
+              <h3>TRANSACTION</h3>
+              <v-btn :href="item.transaction" target="_blank" icon>
+                <img
+                  class="copyImg"
+                  src="@/assets/icons/link.svg"
+                  alt="external link"
+                />
+              </v-btn>
+            </div>
+          </aside>
+        </v-card>
+
+        <!-- <section id="footer-pagination" class="end gap">
+          <span style="color:#FFFFFF">1</span>
+          <div class="center">
+            <v-btn icon>
+              <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
+            </v-btn>
+          </div>
+        </section> -->
+      </section>
 
       <v-data-table
         id="dataTable"
+        class="eliminarmobile"
         :loading="loading"
         :search="search"
         v-show="
@@ -113,6 +190,81 @@
           >
         </template>
       </v-data-table>
+
+      <section
+        class="vermobile"
+        v-show="
+          dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
+            .active == true
+        ">
+        <v-card
+          v-for="(item, i) in dataTableExtraMobile"
+          :key="i"
+          class="up divcol"
+          style="display: flex"
+        >
+          <section class="acenter" style="gap: 10px">
+            <span class="eventName">{{ item.ticket }}</span>
+            <span>{{ item.signer }}</span>
+
+            <aside class="acenter" style="gap: 0.5em">
+              <v-btn class="icon" @click="completeOrderReedemer(item)" :loading="item.loadingBtn">
+                <!-- Complete order -->
+                <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
+              </v-btn>
+
+              <v-icon
+                color="white"
+                :style="item.show ? 'transform:rotate(180deg)' : ''"
+                size="2em"
+                @click="
+                  dataTableMobile.forEach((e) => {
+                    e !== item ? (e.show = false) : null;
+                  });
+                  item.show = !item.show;
+                "
+              >
+                mdi-chevron-down
+              </v-icon>
+            </aside>
+          </section>
+
+          <aside v-show="item.show" class="down space">
+            <div class="divcol">
+              <h3>QUANITTY</h3>
+              <span>{{ item.quantity }}</span>
+            </div>
+
+            <div class="divcol">
+              <h3>CREATED</h3>
+              <span>{{ item.created }}</span>
+            </div>
+
+            <div class="divcol">
+              <h3>TRANSACTION</h3>
+              <v-btn :href="item.transaction" target="_blank" icon>
+                <img
+                  class="copyImg"
+                  src="@/assets/icons/link.svg"
+                  alt="external link"
+                />
+              </v-btn>
+            </div>
+          </aside>
+        </v-card>
+
+        <!-- <section id="footer-pagination" class="end gap">
+          <span style="color:#FFFFFF">1</span>
+          <div class="center">
+            <v-btn icon>
+              <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
+            </v-btn>
+          </div>
+        </section> -->
+      </section>
     </section>
   </section>
 </template>
@@ -251,6 +403,7 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       dataTable: [],
+      dataTableMobile: [],
       headersTableExtra: [
         { value: "ticket", text: "TICKET" },
         { value: "signer", text: "SIGNER" },
@@ -260,6 +413,7 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       dataTableExtra: [],
+      dataTableExtraMobile: [],
       ticketsSold: 0,
       incomes: 0,
       lastPrice: [],
@@ -295,7 +449,9 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       this.dataTable = [];
+      this.dataTableMobile = [];
       this.dataTableExtra = [];
+      this.dataTableExtraMobile = [];
       const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
       this.$apollo
@@ -357,10 +513,13 @@ export default {
                   "https://explorer.testnet.near.org/?query=" + receipe,
                 tokenid: value.token_id,
                 loadingBtn: false,
+                show: false,
                 key: key
               };
               this.dataTableExtra.push(rows);
+              this.dataTableExtraMobile.push(rows);
               this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
+              this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
             }
           );
         })
@@ -493,10 +652,13 @@ export default {
                       "https://explorer.testnet.near.org/?query=" + receipe,
                     tokenid: value.token_id,
                     loadingBtn: false,
+                    show: false,
                     key: key
                   };
                   this.dataTable.push(rows);
+                  this.dataTableMobile.push(rows);
                   this.dataTable.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
                 }
               );
             }) //mintickt query
