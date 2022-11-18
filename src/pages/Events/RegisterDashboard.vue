@@ -171,25 +171,27 @@
                     <label for="time">
                       Time
                     </label>
-                    <!-- <v-menu
+                    <v-menu
                       ref="menu2"
                       v-model="menu2"
                       :close-on-content-click="false"
-                      :nudge-right="40"
                       :return-value.sync="time"
                       transition="scale-transition"
-                      offset-y
                       max-width="290px"
                       min-width="290px"
+                      nudge-left="150%"
                     >
-                      <template v-slot:activator="{ on, attrs }"> -->
+                      <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="time"
                           id="time"
-                          type="time" solo
+                          readonly
+                          solo
+                          v-bind="attrs"
+                          v-on="on"
                           :rules="rules.required"
                         ></v-text-field>
-                      <!-- </template>
+                      </template>
                       <v-time-picker
                         v-if="menu2"
                         v-model="time"
@@ -199,7 +201,7 @@
                         dark
                         @click:minute="$refs.menu2.save(time)"
                       ></v-time-picker>
-                    </v-menu> -->
+                    </v-menu>
                   </div>
                 </div>
               </div>
