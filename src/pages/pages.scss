@@ -661,6 +661,10 @@
     text-align: center;
     letter-spacing: -0.03em;
     color: #FFFFFF;
+    @media (max-width: 880px) {
+      max-width: min(var(--margin), 320px) !important;
+      font-size: clamp(1.5em, 2.5vw, 2.5em) !important;
+    }
   }
   .ticket {
     width: min(var(--margin), 20em);
@@ -1384,6 +1388,9 @@
   }
   .quillWrapper {
     margin-bottom: 155px;
+    @media (max-width: 880px) {
+      margin-bottom: 45px;
+    }
     &.rules {
       &::after {
         content: "Field required";
@@ -1422,7 +1429,7 @@
           height: 1px;
           background-color: #fff;
         }
-        * {color: #fff;fill: #fff;stroke: #fff;}
+        * {color: #fff;stroke: #fff;}
       }
       &-container.ql-snow {
         border-radius: 0 0 .5vmax .5vmax;
@@ -1518,6 +1525,9 @@
     display: flex;
     flex-wrap: wrap;
     & > div {flex: 1 1}
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(100%);
+    }
   }
   #container-actions {
     display: flex;
@@ -1581,6 +1591,7 @@
 
 .container-inputs {
   margin: 0 !important;
+  height: max-content !important;
   .v-sheet {
     background-color: transparent !important;
     display: flex;
