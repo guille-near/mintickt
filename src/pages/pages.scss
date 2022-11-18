@@ -1283,21 +1283,21 @@
     }
   }
   .v-btn:not(.v-btn--icon, .v-btn:has(i)) {
-    width: min(100%, 7em);
-    margin-inline: auto;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: min(100%, 7em) !important;
+    margin-inline: auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     // background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, .6) 382.27%);
     background-color: #fff !important;
-    filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
-    border-radius: 8px;
+    filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1)) !important;
+    border-radius: 8px !important;
     text-transform: capitalize !important;
     span {
       font-family: 'Montserrat', sans-serif !important;
-      font-weight: 700;
-      font-size: 0.9375em;
-      text-align: center;
-      letter-spacing: -0.03em;
-      color: #000;
+      font-weight: 700 !important;
+      font-size: 0.9375em !important;
+      text-align: center !important;
+      letter-spacing: -0.03em !important;
+      color: #000 !important;
     }
   }
 }
