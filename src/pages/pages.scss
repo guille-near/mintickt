@@ -811,11 +811,14 @@
     input, .v-label {font-size: 1em !important}
   }
   .eventName {
-    @media (min-width: 880px) {color: #000000 !important}
+    @media (min-width: 880px) {
+      color: #000000 !important;
+      margin-inline: 5%;
+    }
     font-weight: 700 !important;
     font-size: clamp(1em, 1.5vw, 1.5em);
-    margin-inline: 5%;
     float: left;
+    text-decoration: underline;
   }
   #tableEvents {
     background-color: transparent !important;

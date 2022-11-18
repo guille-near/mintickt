@@ -60,7 +60,7 @@
       >
         <section class="acenter">
           <span class="eventName">
-            <a style="color: #fff !important" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
+            <a style="color: #cc00b7 !important" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
           </span>
           <span>{{ item.date }}</span>
 
