@@ -7,7 +7,10 @@
       <!-- new -->
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)"
-          >{{ date }} {{ date_start }}-{{ this.date_end }} Start At: {{ time }}</v-chip
+          >{{ date }} {{ date_start }}-{{ this.date_end }}</v-chip
+        ></br>
+        <v-chip color="rgba(0, 0, 0, 0.3)"
+          >Starting At: {{ time }}</v-chip
         >
         <h2></h2>
         <span>{{ tittle }}</span>

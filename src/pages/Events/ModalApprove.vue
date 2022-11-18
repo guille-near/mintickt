@@ -73,7 +73,7 @@ export default {
           this.tokens_id = response.data.mb_views_nft_tokens;
           //this.length = response.data.mb_views_nft_tokens.length * 0.0008;
           //then loop it and filter using a node service, this service
-          //return null if don't have approval id
+          //return null if it does not have approval id
           //if it's null then we build the array with the number's needed
           //all this to avoid pay extra fee's
           for (const prop in this.tokens_id) {
@@ -90,6 +90,8 @@ export default {
                   if(res.data === null){
                     this.arr.push(this.tokens_id[prop].token_id);
                     localStorage.setItem('to_approve', this.tokens_id[prop].token_id)
+                  } else {
+                    localStorage.removeItem('to_approve');
                   }
                 })
                 .catch((error) => {
