@@ -349,7 +349,7 @@ export default {
     };
   },
   mounted() {
-    localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false;
+    // localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false;
     localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.getTotalMinted();
@@ -803,7 +803,8 @@ export default {
       //Fecth until the total minted is ok
       localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", 1) : "";
       this.new_minted = localStorage.getItem("new_minted");   
-      //console.log(this.new_minted)
+      // console.log(this.minted)
+      // console.log(this.new_minted)
       if (parseInt(this.new_minted) > parseInt(this.minted)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
