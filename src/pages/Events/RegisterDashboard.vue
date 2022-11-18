@@ -208,7 +208,7 @@
               </div>
             </v-form>
 
-            <div class="container-content--actions center gap">
+            <div class="container-content--actions center gap eliminarmobile">
               <v-btn disabled>
                 <!-- <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon> -->
@@ -223,6 +223,20 @@
             </div>
           </div>
 				</section>
+        
+        <div class="container-content--actions center gap vermobile">
+          <v-btn disabled>
+            <!-- <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon> -->
+            Back
+          </v-btn>
+          <v-btn @click="next">
+            Next
+            <!-- <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
+            > -->
+          </v-btn>
+        </div>
 			</v-window-item>
 
 			<v-window-item :value="2">
@@ -323,7 +337,7 @@
               </div>
             </v-form>
 
-            <div class="container-content--actions center gap">
+            <div class="container-content--actions center gap eliminarmobile">
               <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
@@ -337,6 +351,19 @@
             </div>
           </div>
 				</section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn @click="next1">
+            Next<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
+            >
+          </v-btn>
+        </div>
 			</v-window-item>
 
 			<v-window-item :value="3">
@@ -481,7 +508,7 @@
               </v-form>
             </aside>
             
-            <div class="container-content--actions center gap">
+            <div class="container-content--actions center gap eliminarmobile">
               <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
@@ -496,6 +523,20 @@
             </div>
           </div>
 				</section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn type="submit" @click="mint" :loading="loading" :disabled="disable"
+            class="mint">
+            Mint<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
+            >
+          </v-btn>
+        </div>
 			</v-window-item>
 
 			<v-window-item :value="4">
@@ -589,7 +630,7 @@
               </div>
             </v-form>
 
-            <div class="container-content--actions center gap">
+            <div class="container-content--actions center gap eliminarmobile">
               <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
@@ -603,6 +644,19 @@
             </div>
           </div>
 				</section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn type="submit" @click="list" :loading="loading" :disabled="disable">
+            List<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
+            >
+          </v-btn>
+        </div>
 			</v-window-item>
 
 			<v-window-item :value="5">
@@ -698,7 +752,7 @@
               </aside>
             </v-form>
 
-            <div class="container-content--actions center gap">
+            <div class="container-content--actions center gap eliminarmobile">
               <v-btn @click="back">
                 <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon
@@ -723,6 +777,30 @@
             </div>
           </div>
 				</section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn
+            v-show="goodie"
+            type="submit"
+            @click="mintGoodie"
+            :loading="loading"
+            :disabled="disable"
+            style="
+              background: linear-gradient(
+                183.61deg,
+                #cc00b7 49.78%,
+                rgba(0, 0, 0, 0) 225.35%
+              )
+            "
+          >
+            Mint
+          </v-btn>
+        </div>
 			</v-window-item>
 		</v-window>
 		<div class="text-center">

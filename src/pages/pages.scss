@@ -618,11 +618,34 @@
   justify-content: flex-start;
   flex-direction: column;
   // overflow: hidden !important;
+  .v-window {
+    @media (max-width: 880px) {
+      width: min(var(--margin), 20em);
+      margin-inline: auto;
+      &-item {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      section > * {
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      .ticket-wrapper {
+        height: initial !important;
+        aspect-ratio: 1 / 2 !important;
+      }
+      .v-form {padding-right: 0 !important}
+    }
+  }
   section {
     gap: clamp(6em, 8vw, 8em); z-index: 2;
     @media (max-width: 880px) {
-      height: calc(100vh - (100px + 12em + 80px + 20px));
-      overflow: auto;
+      height: calc(100vh - (100px + 12em + 42px));
+      padding-right: 5px;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     // @media (max-width: 300px) {height: calc(100vh - (120px + 12em + 80px + 20px))}
   }
@@ -644,20 +667,23 @@
     min-width: min(var(--margin), 24.4375em) !important;
     max-width: min(var(--margin), 24.4375em) !important;
     @media (max-width: 880px) {
-      min-width: min(var(--margin), 20em) !important;
-      max-width: min(var(--margin), 20em) !important;
+      display: contents !important;
+      // min-width: min(var(--margin), 20em) !important;
+      // max-width: min(var(--margin), 20em) !important;
     }
     
     &--actions {
       @media (max-width: 880px) {
-        width: min(var(--margin), 20em);
-        position: fixed !important;
-        bottom: 40px !important;
-        left: 0;
-        right: 0;
+        width: 100%;
+        // width: min(var(--margin), 20em);
+        // position: fixed !important;
+        // bottom: 40px !important;
+        // left: 0;
+        // right: 0;
         margin: auto;
+        padding-right: 15px;
       }
-      display: flex !important;
+      display: flex;
       flex-wrap: wrap;
       .v-btn {
         position: relative;
@@ -1309,8 +1335,8 @@
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {
-    padding-inline: clamp(1em, 4vw, 4em) !important;
-    padding-block: 100px calc(42px + 40px) !important;
+    padding-inline: clamp(1em, 4vw, 4em) 0 !important;
+    padding-block: 100px 0 !important;
   }
   position: relative;
   &::before {
@@ -1650,5 +1676,16 @@
     
     border-radius: 8px;
     span {color: #fff}
+  }
+}
+
+
+
+
+
+
+body:has(#createTickets) {
+  @media (max-width: 880px) {
+    overflow: hidden;
   }
 }
