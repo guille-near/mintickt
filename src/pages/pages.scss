@@ -635,6 +635,10 @@
       .ticket-wrapper {
         height: initial !important;
         aspect-ratio: 1 / 2 !important;
+        .v-input {
+          &:nth-of-type(2) {bottom: 5.6% !important}
+          &:nth-of-type(3) {bottom: 5.6% !important}
+        }
       }
       .v-form {padding-right: 0 !important}
     }
