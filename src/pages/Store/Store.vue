@@ -8,6 +8,9 @@
       <div class="fill-w limiter align">
         <v-chip color="rgba(0, 0, 0, 0.3)"
           >{{ date }} {{ date_start }}-{{ this.date_end }}</v-chip
+        ></br>
+        <v-chip color="rgba(0, 0, 0, 0.3)"
+          >Starting At: {{ time }}</v-chip
         >
         <h2></h2>
         <span>{{ tittle }}</span>
@@ -256,7 +259,8 @@ export default {
       date_end: "",
       googlemap: "",
       store: "",
-      approval_id: ""
+      approval_id: "",
+      time: ""
     };
   },
   mounted() {
@@ -333,6 +337,7 @@ export default {
             this.date_end = new Date(
               value[0].reference_blob.extra[7].value * 1000
             ).toLocaleDateString("en-US", options_end);
+            this.time = value[0].reference_blob.extra[9].value
             //Tittle
             this.tittle = value[0].title;
             //Ticket image

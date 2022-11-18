@@ -213,6 +213,15 @@ export default {
         "/#/events"
       );
     }
+     if (
+      urlParams.get("errorCode") !== null
+    ) {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events"
+      );
+    }
   },
   methods: {
     async getData() {
