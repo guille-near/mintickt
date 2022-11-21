@@ -608,7 +608,7 @@
 }
 
 #createTickets {
-  --margin: calc(100% - 2em);
+  --margin: calc(100% - 2rem);
   font-size: 16px;
   // min-height: 100vh;
   // padding-block: 6em;
@@ -620,7 +620,7 @@
   // overflow: hidden !important;
   .v-window {
     @media (max-width: 880px) {
-      width: min(var(--margin), 20em);
+      width: min(var(--margin), 20rem);
       margin-inline: auto;
       &-item {
         display: flex;
@@ -667,7 +667,7 @@
     }
   }
   .ticket {
-    width: min(var(--margin), 20em);
+    width: min(var(--margin), 20rem);
     // height: 35em;
     aspect-ratio: 1 / 2;
   }
@@ -684,7 +684,7 @@
       padding-right: 21px;
       @media (max-width: 880px) {
         width: 100% !important;
-        // width: min(var(--margin), 20em);
+        // width: min(var(--margin), 20rem);
         // position: fixed !important;
         // bottom: 40px !important;
         // left: 0;
@@ -891,8 +891,8 @@
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%);
       border: 2px solid #FFFFFF;
       border-radius: 9px;
-      isolation: isolate;
-      position: relative;
+      isolation: isolate !important;
+      position: relative !important;
       @media (max-width: 1194px) and (min-width: 880px) {font-size: 12px}
       @media (max-width: 880px) {
         background: no-repeat center url(../assets/img/bg-ticket_events.png);
@@ -906,12 +906,12 @@
         }
       }
       .bgTicket {
-        position: absolute;
-        left: -7%;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
+        position: absolute !important;
+        left: -7% !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: -1 !important;
         // @media (max-width: 1184px) {left: -30px;
         //   @media (max-width: 1162px) {left: -65px;
         //     @media (max-width: 880px) {display: none}
@@ -1342,9 +1342,12 @@
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {
-    padding-inline: clamp(1em, 4vw, 4em) 0 !important;
     padding-block: 100px 0 !important;
+    padding-inline: clamp(1rem, 4vw, 4rem) 0 !important;
   }
+  // @media (max-width: 375px) {
+  //   padding-inline: clamp(1rem, 4vw, 4rem) 0 !important;
+  // }
   position: relative;
   &::before {
     content: "";
@@ -1448,7 +1451,7 @@
   .v-input i {color: #fff}
   //--- ticket ---//
   .ticket-wrapper {
-    // width: min(var(--margin), 20em);
+    // width: min(var(--margin), 20rem);
     // // height: 35em;
     // aspect-ratio: 1 / 2;
     // position: relative;
@@ -1457,7 +1460,7 @@
     // clip-path: polygon(0 5%, 100% 5%, 100% 94%, 0 94%);
     // border-radius: 16%;
     // .ticket {width: 100%}
-    width: min(var(--margin), 20em);
+    width: min(var(--margin), 20rem);
     height: 590px;
     margin-block: auto;
     // height: 35em;

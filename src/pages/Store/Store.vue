@@ -6,14 +6,11 @@
       <img class="vermobile" :src="src" alt="Background Image" />
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)"
-          >{{ date }} {{ date_start }}-{{ this.date_end }}</v-chip
-        ></br>
-        <v-chip color="rgba(0, 0, 0, 0.3)"
-          >Starting At: {{ time }}</v-chip
-        >
-        <h2></h2>
-        <span>{{ tittle }}</span>
+        <v-chip color="rgba(0, 0, 0, 0.3)">
+          {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
+        </v-chip>
+        <h2>{{ tittle }}</h2>
+        <!-- <span>{{ tittle }}</span> -->
       </div>
     </aside>
     <aside class="jspace divcolmobile gapmobile acentermobile limiter">

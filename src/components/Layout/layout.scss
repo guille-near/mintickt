@@ -80,10 +80,25 @@
   #headerApp{font-size: 12px !important}
 }
 #headerApp {
-  transition: 0.4s ease-in-out;
   max-width: 1440px;
   margin-inline: auto;
   pointer-events: none;
+
+  &.register {
+    @media (max-width: 880px) {
+      --margin: calc(100% - 2rem);
+      transform: translateX(15px) !important;
+      // left: 1rem, 4vw, 4rem !important;
+      // right: auto !important;
+      width: min(var(--margin), 20rem);
+      .v-toolbar__content {padding-inline: 0 !important}
+    }
+    @media (max-width: 375px) {
+      padding-left: clamp(1rem, 4vw, 4rem) !important;
+      transform: translateX(0) !important;
+    }
+  }
+
   div.space.col * {pointer-events: all !important}
   &.events {
     & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
@@ -95,7 +110,10 @@
   .logoHeaderEvents {
     width: clamp(1.5625em, 10vw, 1.875em) !important;
     // height: clamp(2.5em, 3vw,3.125em);
-    @include mq(max, small) {width: 35px !important}
+    @include mq(max, small) {
+      min-width: 30px !important;
+      width: 2.5em !important
+    }
   }
   .v-btn {
     padding: clamp(1em,1.5vw, 1.5em);
@@ -115,7 +133,7 @@
     }
   }
   .createEventBtn {
-    padding: 12px 20px;
+    padding: 12px clamp(1em, 1.25vw, 1.25em);
     background: linear-gradient(0deg, #000000 -42.31%, rgba(0, 0, 0, 0) 50%), #CC00B7 !important;
     border-radius: 10px;
     span {color:#FFFFFF !important}

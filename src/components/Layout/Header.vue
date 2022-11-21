@@ -8,7 +8,8 @@
       :class="{
         events:
           routeName == 'Landing' ||
-          routePath.includes('events')
+          routePath.includes('events'),
+        register: routePath === '/events/register'
       }"
     >
       <v-row
@@ -16,7 +17,7 @@
         :class="{
           limiter:
             routeName == 'Landing' ||
-            !routePath.includes('events'),
+            !routePath.includes('events')
         }"
       >
         <v-col
@@ -58,7 +59,7 @@
 
             <v-menu bottom offset-y>
               <template #activator="{on, attrs}">
-                <v-btn
+                <!-- <v-btn
                   v-if="responsiveActions"
                   color="white"
                   class="btnNearMobile h7-em"
@@ -67,10 +68,10 @@
                   @click="nearid ? undefined : connect()"
                 >
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
-                </v-btn>
+                </v-btn> -->
 
                 <v-btn
-                  v-else text 
+                  text 
                   color="white"
                   rounded
                   class="h9-em"
@@ -85,9 +86,9 @@
               </template>
 
               <v-list color="rgb(0 0 0 / .6)">
-                <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
+                <!-- <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
                   <v-list-item-title style="color: #000">{{user}}</v-list-item-title>
-                </v-list-item>
+                </v-list-item> -->
                 <v-list-item :to="'/events'">
                   <v-list-item-title style="color: #fff">Events</v-list-item-title>
                 </v-list-item>
