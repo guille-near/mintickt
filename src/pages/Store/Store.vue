@@ -6,8 +6,11 @@
       <img class="vermobile" :src="src" alt="Background Image" />
       <!-- new -->
       <div class="fill-w limiter align">
-        <v-chip color="rgba(0, 0, 0, 0.3)">
+        <!-- <v-chip color="rgba(0, 0, 0, 0.3)">
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
+        </v-chip> -->
+        <v-chip color="rgba(0, 0, 0, 0.3)">
+          {{ date }}. {{ date_start }}, {{ time }}h
         </v-chip>
         <h2>{{ tittle }}</h2>
         <!-- <span>{{ tittle }}</span> -->
@@ -318,7 +321,7 @@ export default {
           },
         })
         .then((response) => {
-          var options = { year: "numeric", month: "short" }; //Format data
+          var options = { month: "short" }; //Format data
           var options_start = { day: "numeric" }; //Format data
           var options_end = { day: "numeric" }; //Format data
           //Map the objectvalue
