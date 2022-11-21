@@ -681,6 +681,7 @@
     }
     
     &--actions {
+      padding-right: 21px;
       @media (max-width: 880px) {
         width: 100%;
         // width: min(var(--margin), 20em);
