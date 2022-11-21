@@ -1696,20 +1696,20 @@
 
 .v-picker--time {
   --size: 200px;
-  width: var(--size);
-  aspect-ratio: 1 / 1.3;
+  width: var(--size) !important;
+  aspect-ratio: 1 / 1.3 !important;
   
-  .v-picker__title__btn, span {font-size: 0.875em}
+  .v-picker__title__btn, span {font-size: 0.875em !important}
   
   .v-time-picker-title .v-time-picker-title__time {
     .v-picker__title__btn, span {
-      font-size: 3em;
-      height: 30px;
+      font-size: 3em !important;
+      height: 30px !important;
     }
   }
 
-  .v-time-picker-clock {padding: 0}
-  .v-picker__body {height: var(--size)}
+  .v-time-picker-clock {padding: 0 !important}
+  .v-picker__body {height: var(--size) !important}
 }
 
 
