@@ -683,24 +683,22 @@
     &--actions {
       padding-right: 21px;
       @media (max-width: 880px) {
-        width: 100%;
+        width: 100% !important;
         // width: min(var(--margin), 20em);
         // position: fixed !important;
         // bottom: 40px !important;
         // left: 0;
         // right: 0;
-        margin: auto;
-        padding-right: 15px;
+        margin: auto !important;
+        padding-right: 15px !important;
       }
       display: flex;
       flex-wrap: wrap;
       .v-btn {
         position: relative;
-        flex: 1 1 145px;
-        @media (max-width: 880px) {
-          flex: 1 1 100px;
-        }
-        width: 100%;
+        flex: 1 1 145px !important;
+        @media (max-width: 880px) {flex: 1 1 100px !important}
+        width: 100% !important;
         height: 42px;
         // background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
         background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, .6) 382.27%);
