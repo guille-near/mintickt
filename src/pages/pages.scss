@@ -1696,6 +1696,23 @@
 }
 
 
+.v-picker--time {
+  --size: 200px;
+  width: var(--size);
+  aspect-ratio: 1 / 1.3;
+  
+  .v-picker__title__btn, span {font-size: 0.875em}
+  
+  .v-time-picker-title .v-time-picker-title__time {
+    .v-picker__title__btn, span {
+      font-size: 3em;
+      height: 30px;
+    }
+  }
+
+  .v-time-picker-clock {padding: 0}
+  .v-picker__body {height: var(--size)}
+}
 
 
 

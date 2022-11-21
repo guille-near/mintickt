@@ -177,9 +177,7 @@
                       :close-on-content-click="false"
                       :return-value.sync="time"
                       transition="scale-transition"
-                      max-width="290px"
-                      min-width="290px"
-                      nudge-left="150%"
+                      nudge-left="100%"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
