@@ -24,7 +24,7 @@
         <center class="center">
           <img
             class="bgTicket"
-            src="@/assets/img/bg-ticket_events.png"
+            src="@/assets/img/ticket-events.svg"
             alt="ticket image"
           />
           <a class="eventName" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
