@@ -7,7 +7,7 @@
       Let's create your NFT for your event!
     </h2>
     
-		<v-window v-model="step" to touchless>
+		<v-window v-model="step" to >
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
@@ -31,7 +31,8 @@
 							:class="{ active: ticket.img }"
 						>
 							<template v-slot:selection>
-								<img v-if="ticket.url" :src="ticket.url" />
+								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
 							</template>
 						</v-file-input>
 					</div>
@@ -259,7 +260,8 @@
 							:class="{ active: ticket.img }"
 						>
 							<template v-slot:selection>
-								<img v-if="ticket.url" :src="ticket.url" />
+								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
 							</template>
 						</v-file-input>
 					</div>
@@ -386,7 +388,8 @@
 							:class="{ active: ticket.img }"
 						>
 							<template v-slot:selection>
-								<img v-if="ticket.url" :src="ticket.url" />
+								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
 							</template>
 						</v-file-input>
 					</div>
@@ -559,7 +562,8 @@
 							:class="{ active: ticket.img }"
 						>
 							<template v-slot:selection>
-								<img v-if="ticket.url" :src="ticket.url" />
+								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
 							</template>
 						</v-file-input>
 					</div>
@@ -679,7 +683,8 @@
 							:class="{ active: ticket.img }"
 						>
 							<template v-slot:selection>
-								<img v-if="ticket.url" :src="ticket.url" />
+								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
 							</template>
 						</v-file-input>
 					</div>
