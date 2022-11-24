@@ -22,7 +22,7 @@ const mb_views_nft_tokens = gql`
   query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , burned_receipt_id: {_is_null: true}}
+      , burned_receipt_id: {_is_null: true} , last_transfer_timestamp: {_is_null: true}}
     order_by: {token_id: asc}
   ) {
     token_id
@@ -51,7 +51,6 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "approve"
     ) {
-      localStorage.removeItem('to_approve')
       this.gotToEvents();
     }
     //  if (urlParams.get("errorCode") !== null) {
@@ -61,47 +60,52 @@ export default {
   },
   methods: {
     async getData() {
-      this.$apollo
-        .mutate({
-          mutation: mb_views_nft_tokens,
-          variables: {
-            _iregex: localStorage.getItem("metadata_id").split(":")[1]
-          },
-        })
-        .then((response) => {
-          //get all the tokens to be approve
-          this.tokens_id = response.data.mb_views_nft_tokens;
-          //this.length = response.data.mb_views_nft_tokens.length * 0.0008;
-          //then loop it and filter using a node service, this service
-          //return null if it does not have approval id
-          //if it's null then we build the array with the number's needed
-          //all this to avoid pay extra fee's
-          for (const prop in this.tokens_id) {
-            //console.log(this.tokens_id[prop].token_id)
-            const url =  this.$node_url + "/nft-get-tokens";
-            let item = {
-                token_id: this.tokens_id[prop].token_id,
-                account_id: "andresdom.near"
-            };
-            this.axios
-                .post(url, item)
-                .then((res) => {
-                  //console.log(res.data)
-                  if(res.data === null){
-                    this.arr.push(this.tokens_id[prop].token_id);
-                    localStorage.setItem('to_approve', this.tokens_id[prop].token_id)
-                  } else {
-                    localStorage.removeItem('to_approve');
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+      if(localStorage.getItem("metadata_id") != null){
+        this.$apollo
+          .mutate({
+            mutation: mb_views_nft_tokens,
+            variables: {
+              _iregex: localStorage.getItem("metadata_id").split(":")[1]
+            },
+          })
+          .then((response) => {
+            //get all the tokens to be approve
+            this.tokens_id = response.data.mb_views_nft_tokens;
+            //console.log(this.tokens_id)
+            //this.length = response.data.mb_views_nft_tokens.length * 0.0008;
+            //then loop it and filter using a node service, this service
+            //return null if it does not have approval id
+            //if it's null then we build the array with the number's needed
+            //all this to avoid pay extra fee's
+            for (const prop in this.tokens_id) {
+              
+              const url =  this.$node_url + "/nft-get-tokens";
+              let item = {
+                  token_id: this.tokens_id[prop].token_id,
+                  account_id: "andresdom.near"
+              };
+              this.axios
+                  .post(url, item)
+                  .then((res) => {
+                    //console.log(res.data)
+                    if(res.data === null){
+                      this.arr.push(this.tokens_id[prop].token_id);
+                      //console.log(this.arr)
+                      localStorage.setItem('to_approve', this.arr)
+                      setTimeout(this.modalApprove = true, 10000);
+                    } else {
+                      localStorage.removeItem('to_approve');
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
     },
     async approve() {
         //Upload ipfs
@@ -161,6 +165,7 @@ export default {
       localStorage.removeItem("dataFormLatitude");
       localStorage.removeItem("dataFormPlaceId");
       localStorage.removeItem("dataFormName");
+      localStorage.removeItem("dataFormTime");
       localStorage.removeItem("dataFormPromoter");
       localStorage.removeItem("dataFormMintAmount");
       localStorage.removeItem("amount_list");

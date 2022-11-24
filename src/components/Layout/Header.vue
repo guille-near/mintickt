@@ -256,6 +256,7 @@ export default {
       localStorage.removeItem("dataFormLatitude");
       localStorage.removeItem("dataFormPlaceId");
       localStorage.removeItem("dataFormName");
+      localStorage.removeItem("dataFormTime");
       localStorage.removeItem("dataFormPromoter");
       localStorage.removeItem("dataFormMintAmount");
       localStorage.removeItem("amount_list");
