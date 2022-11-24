@@ -349,12 +349,14 @@ export default {
     };
   },
   mounted() {
-    localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false;
+    this.$refs.modala.getData();
+    //setTimeout(localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false, 30000);
+    localStorage.getItem("new_minted") === null || 'undefined' ? localStorage.setItem("new_minted", 1) : "";
     localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.getTotalMinted();
     this.pollData();
-    this.pollData1();
+    //this.pollData1();
     //this.overlay = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -376,6 +378,7 @@ export default {
     //List
     if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
       this.$refs.modala.modalApprove = true;
+      this.$refs.modal.modalSuccess = false;
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
@@ -801,10 +804,9 @@ export default {
       this.polling = setInterval(() => {
       //check until mintin is done
       //Fecth until the total minted is ok
-      localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", 1) : "";
       this.new_minted = localStorage.getItem("new_minted");   
-      // console.log(this.minted)
-      // console.log(this.new_minted)
+      //  console.log(this.minted)
+      //  console.log(this.new_minted)
       if (parseInt(this.new_minted) > parseInt(this.minted)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);

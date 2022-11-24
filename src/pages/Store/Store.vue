@@ -10,7 +10,7 @@
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
         <v-chip color="rgba(0, 0, 0, 0.3)">
-          {{ date }}. {{ date_start }}, {{ time }}h
+          {{ date }}. {{ date_start }}, {{ this.date_end }} {{ time }}h
         </v-chip>
         <h2>{{ tittle }}</h2>
         <!-- <span>{{ tittle }}</span> -->

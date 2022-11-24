@@ -1,7 +1,7 @@
 <template>
 	<section id="createTickets" class="registerDashboard divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
-    <ModalApprove ref="modal"></ModalApprove>
+    <ModalApprove ref="modala"></ModalApprove>
     
     <h2 class="pmobile align" style="text-align: center">
       Let's create your NFT for your event!
@@ -921,7 +921,7 @@ export default {
       amount_list: localStorage.getItem("amount_list") === null ? 0 : localStorage.getItem("amount_list"),
       price: localStorage.getItem("price") === null ? 0 : localStorage.getItem("price"),
       menu: "",
-      time: null,
+      time: localStorage.getItem("dataFormTime") === null  ? "" : localStorage.getItem("dataFormTime"),
       menu2: false,
       dataTicket: [
         {
@@ -1000,7 +1000,8 @@ export default {
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     this.getData();
-    parseInt(localStorage.getItem("step")) === 4 ? this.overlay = true : this.overlay = false;
+    this.completeIpfs();
+    //parseInt(localStorage.getItem("step")) === 4 ? this.overlay = true : this.overlay = false;
     this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -1039,7 +1040,8 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "goodies"
     ) {
-      this.$refs.modal.modalApprove = true;
+      this.$refs.modala.getData();
+      //setTimeout(this.$refs.modal.modalApprove = true, 20000);
     }
     //
     if (urlParams.get("errorCode") !== null &&
@@ -1082,7 +1084,6 @@ export default {
     async ImagePreview(e) {
       if (e) {
         this.url = URL.createObjectURL(this.dataTickets.img_main);
-        this.getBase64FromUrlMainImage(this.url);
         const file = e;
         const formData = new FormData();
         formData.append("uploaded_file", this.dataTickets.img_main);
@@ -1093,6 +1094,7 @@ export default {
           //console.log('res', res.data)
           localStorage.setItem("IpfsHash", res.data.IpfsHash);
         });
+        setTimeout(this.getBase64FromUrlMainImage(this.url),30000);
         // this.image = file;
         //console.log(e);
       }
@@ -1442,13 +1444,14 @@ export default {
     next() {
       if (this.$refs.form.validate() && this.dataTickets.description) {
         this.editorRules = false;
-        this.step++;
         localStorage.setItem("step", 2);
+        this.step = parseInt(localStorage.getItem("step"));
         //Store all form data
         localStorage.setItem("dataFormName", this.dataTickets.name);
         localStorage.setItem("dataFormPromoter", this.dataTickets.promoter);
         localStorage.setItem("dataFormDescription", this.dataTickets.description);
         localStorage.setItem("dataFormDate", this.dates);
+        localStorage.setItem("dataFormTime", this.time);
         
 
         var container = document.getElementById("my-node"); /* full page */
@@ -1496,6 +1499,7 @@ export default {
           const base64data = reader.result;   
           resolve(base64data);
           localStorage.setItem("canvas_main_image", base64data);
+          //console.log(base64data)
         }
       });
     },
@@ -1534,16 +1538,16 @@ export default {
     },
     async next1() {
       if (this.$refs.form1.validate()) {
-        this.step++;
         localStorage.setItem("step", 3);
-        //this.ipfs();
+        this.step = parseInt(localStorage.getItem("step"));
+        this.ipfs();
         localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount);
       }
     },
     next2() {
       if (this.$refs.form2.validate()) {
-        this.step++;
         localStorage.setItem("step", 4);
+        this.step = parseInt(localStorage.getItem("step"));
       }
     },
     back() {
@@ -1764,9 +1768,6 @@ export default {
     async list() {
       if (this.$refs.form3.validate()) {
         //Upload ipfs
-        if (localStorage.getItem("metadata_id") != null) {
-            this.completeIpfs();
-        }
         this.getData();
         this.loading = true;
         this.disable = true;
@@ -1812,7 +1813,6 @@ export default {
         const { data: metadataId, error } = await wallet.minter.getMetadataId();
         localStorage.setItem("metadata_reference", metadataId);
         //console.log("metadata_reference", metadataId);
-
         this.$apollo
           .query({
             query: tokens_id,
@@ -1821,6 +1821,7 @@ export default {
             },
           })
           .then((response) => {
+            //
             //Firts call storage deposit
             this.txs.push({
               receiverId: mintbase_marketplace,
@@ -1955,50 +1956,54 @@ export default {
       });
     },
     async completeIpfs() {
-      this.ipfs();
-      this.$apollo
-        .query({
-          query: ipfs,
-          variables: {
-            _iregex: localStorage.getItem("metadata_id"),
-          },
-          client: "mintickClient",
-        })
-        .then((res) => {
-          //if data is available add ipfs data
-          //console.log(res.data.ipfs.length);
-          const url = this.$node_url + "/ipfs";
-          if (res.data.ipfs.length == 0) {
-            //console.log(url);
-            let item = {
-              thingid: localStorage.getItem("metadata_id"),
-              tokenid: localStorage.getItem("IpfsHash"),
-            };
-            //console.log(item)
-            this.axios
-              .post(url, item)
-              .then(() => {
-                console.log("Hash up");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+      //this.ipfs();
+      if(localStorage.getItem("metadata_id") != null && localStorage.getItem("IpfsHash") != null){
+        this.$apollo
+          .query({
+            query: ipfs,
+            variables: {
+              _iregex: localStorage.getItem("metadata_id"),
+            },
+            client: "mintickClient",
+          })
+          .then((res) => {
+            //if data is available add ipfs data
+            //console.log(res.data.ipfs.length);
+            const url = this.$node_url + "/ipfs";
+            if (res.data.ipfs.length == 0) {
+              //console.log(url);
+              let item = {
+                thingid: localStorage.getItem("metadata_id"),
+                tokenid: localStorage.getItem("IpfsHash"),
+              };
+              //console.log(item)
+              this.axios
+                .post(url, item)
+                .then(() => {
+                  console.log("Hash up");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
     },
     pollData() {
       this.polling = setInterval(() => {
       //check until mintin is done
       //Fecth until the total minted is ok
-      if (parseInt(this.show_total_minted) < this.mint_amount && parseInt(localStorage.getItem('step'))>=4){
+      //console.log(this.show_total_minted, this.mint_amount)
+      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount) && parseInt(localStorage.getItem('step'))>=4){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
         // console.log(this.show_total_minted, this.mint_amount)
         // console.log('polling', this.show_total_minted); 
         this.getData();
+        this.completeIpfs();
       } else {
         this.overlay = false;
       }
@@ -2078,7 +2083,7 @@ export default {
       this.$forceUpdate();
     },
     showModal(){
-      this.$refs.modal.modalApprove = true;
+      this.$router.push("/events");
     },
     async add(){
       this.amount_list++;
