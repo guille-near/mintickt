@@ -636,8 +636,17 @@
         height: initial !important;
         aspect-ratio: 1 / 2 !important;
         .v-input {
-          &:nth-of-type(2) {bottom: 5.6% !important}
-          &:nth-of-type(3) {bottom: 5.6% !important}
+          &:nth-of-type(1) {
+            height: 68.1% !important;
+          }
+          &:nth-of-type(2) {
+            left: 7.4% !important;
+            bottom: 5.4% !important;
+          }
+          &:nth-of-type(3) {
+            right: 7.5% !important;
+            bottom: 5.4% !important;
+          }
         }
       }
       .v-form {padding-right: 0 !important}
@@ -1472,9 +1481,22 @@
     .v-input {
       position: absolute;
       margin: auto;
+      border-radius: 4px !important;
       &.active .v-input__slot {box-shadow: none !important}
-      img {
-        object-fit: cover;
+      .image-ticket-event {
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: center no-repeat var(--bg-image);
+          background-size: cover;
+        }
+      }
+      @layer layout {
+        @media (min-width: 1px) {
+          img {object-fit: cover !important}
+        }
       }
       * {
         cursor: pointer;
