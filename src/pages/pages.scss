@@ -633,17 +633,22 @@
         width: 100% !important;
       }
       .ticket-wrapper {
+        height: 580px !important;
+        aspect-ratio: 1 / 2;
         .v-input {
           &:nth-of-type(1) {
-            height: 68.1% !important;
+            // height: 68.1% !important;
+            height: 68.6% !important;
           }
           &:nth-of-type(2) {
             left: 7.4% !important;
-            bottom: 5.4% !important;
+            // bottom: 5.4% !important;
+            bottom: 4.5% !important;
           }
           &:nth-of-type(3) {
             right: 7.5% !important;
-            bottom: 5.4% !important;
+            // bottom: 5.4% !important;
+            bottom: 4.5% !important;
           }
         }
       }
