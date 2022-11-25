@@ -194,10 +194,11 @@
                       <v-time-picker
                         v-if="menu2"
                         v-model="time"
-                        full-width
+                        width="200px"
                         color="hsl(306, 100%, 50%)"
                         header-color="#1e1e1e"
                         dark
+                        
                         @click:minute="$refs.menu2.save(time)"
                       ></v-time-picker>
                     </v-menu>
