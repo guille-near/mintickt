@@ -620,7 +620,7 @@
   // overflow: hidden !important;
   .v-window {
     @media (max-width: 880px) {
-      width: min(var(--margin), 20rem);
+      width: min(var(--margin), 22rem);
       margin-inline: auto;
       &-item {
         display: flex;
@@ -679,7 +679,7 @@
     }
   }
   .ticket {
-    width: min(var(--margin), 20rem);
+    width: min(var(--margin), 22rem);
     // height: 35em;
     aspect-ratio: 1 / 2;
   }
@@ -696,13 +696,13 @@
       padding-right: 21px;
       @media (max-width: 880px) {
         width: 100% !important;
-        // width: min(var(--margin), 20rem);
+        // width: min(var(--margin), 22rem);
         // position: fixed !important;
         // bottom: 40px !important;
         // left: 0;
         // right: 0;
         margin: auto !important;
-        padding-right: 15px !important;
+        padding-right: 7.5px !important;
       }
       display: flex;
       flex-wrap: wrap;
@@ -1356,7 +1356,7 @@
   padding-inline: 2.5em !important;
   @include mq(max, small) {
     padding-block: 100px 0 !important;
-    padding-inline: clamp(1rem, 4vw, 4rem) 0 !important;
+    padding-inline: 7.5px 0 !important;
   }
   // @media (max-width: 375px) {
   //   padding-inline: clamp(1rem, 4vw, 4rem) 0 !important;
@@ -1366,10 +1366,11 @@
     content: "";
     position: absolute;
     top: -140px;
-    width: 100vw;
+    width: 120vw;
     margin-inline: calc((50% - 50vw) - 35px);
     height: 200%;
     background-color: rgba(0,0,0,.2);
+    pointer-events: none;
   }
   .v-input {
     .v-input__append-inner {
@@ -1464,7 +1465,7 @@
   .v-input i {color: #fff}
   //--- ticket ---//
   .ticket-wrapper {
-    // width: min(var(--margin), 20rem);
+    // width: min(var(--margin), 22rem);
     // // height: 35em;
     // aspect-ratio: 1 / 2;
     // position: relative;
@@ -1473,7 +1474,7 @@
     // clip-path: polygon(0 5%, 100% 5%, 100% 94%, 0 94%);
     // border-radius: 16%;
     // .ticket {width: 100%}
-    width: min(var(--margin), 20rem);
+    width: min(var(--margin), 22rem);
     height: 590px;
     margin-block: auto;
     // height: 35em;

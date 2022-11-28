@@ -17,6 +17,10 @@
   height: 10px;
   background: transparent;
   // &:hover {background: var(--clr-bg-scroll)}
+  @media (max-width: 880px) {
+    width: 2.5px;
+    height: 2.5px;
+  }
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 15px;

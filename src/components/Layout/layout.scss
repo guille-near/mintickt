@@ -76,7 +76,7 @@
 /////////////////////////////////////////////////////////
 
 // header
-@media(max-width:376px){
+@media(max-width:400px){
   #headerApp{font-size: 12px !important}
 }
 #headerApp {
@@ -87,15 +87,15 @@
   &.register {
     @media (max-width: 880px) {
       --margin: calc(100% - 2rem);
-      transform: translateX(15px) !important;
+      transform: translateX(0px) !important;
       // left: 1rem, 4vw, 4rem !important;
       // right: auto !important;
-      width: min(var(--margin), 20rem);
+      width: min(var(--margin), 22rem);
       .v-toolbar__content {padding-inline: 0 !important}
     }
-    @media (max-width: 375px) {
-      padding-left: clamp(1rem, 4vw, 4rem) !important;
-      transform: translateX(0) !important;
+    @media (max-width: 400px) {
+      // padding-left: clamp(1rem, 4vw, 4rem) !important;
+      transform: translateX(7.5px) !important;
     }
   }
 
