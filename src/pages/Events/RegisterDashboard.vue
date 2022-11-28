@@ -7,7 +7,7 @@
       Let's create your NFT for your event!
     </h2>
     
-		<v-window v-model="step" to >
+		<v-window v-model="step" to touchless>
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
