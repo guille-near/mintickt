@@ -1494,12 +1494,16 @@
           position: absolute;
           inset: 0;
           background: center no-repeat var(--bg-image);
+          background-color: #000 !important;
           background-size: cover;
         }
       }
       @layer layout {
         @media (min-width: 1px) {
-          img {object-fit: cover !important}
+          img {
+            object-fit: cover !important;
+            background-color: #000 !important;
+          }
         }
       }
       * {
