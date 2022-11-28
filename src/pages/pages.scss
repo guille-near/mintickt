@@ -1727,25 +1727,40 @@
   width: var(--size) !important;
   min-width: var(--size) !important;
   max-width: var(--size) !important;
+  height: calc(var(--size) + 66px) !important;
+  min-height: calc(var(--size) + 66px) !important;
+  max-height: calc(var(--size) + 66px) !important;
   
   .v-picker__title__btn, span {font-size: 0.875em !important}
   
   .v-time-picker-title .v-time-picker-title__time {
     .v-picker__title__btn, span {
+      --height: 30px;
       font-size: 3em !important;
-      height: 30px !important;
-      max-height: 30px !important;
+      height: var(--height) !important;
+      max-height: var(--height) !important;
+      min-height: var(--height) !important;
     }
   }
 
   .v-time-picker-clock {padding: 0 !important}
-  .v-picker__body {
+  .v-picker__body, .v-time-picker-clock__container {
     width: var(--size) !important;
+    min-width: var(--size) !important;
+    max-width: var(--size) !important;
     height: var(--size) !important;
+    min-height: var(--size) !important;
     max-height: var(--size) !important;
   }
+  .v-time-picker-clock, .v-time-picker-clock__ampm {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+  }
 }
-
 
 
 body:has(#createTickets) {
