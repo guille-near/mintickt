@@ -1027,7 +1027,6 @@ export default {
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     this.getData();
-    this.completeIpfs();
     this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -1758,6 +1757,7 @@ export default {
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
                   this.show_total_minted = localStorage.getItem("total_minted");
+                  this.completeIpfs()
               })
               .catch((err) => {
                 console.log("Error", err);
@@ -2022,7 +2022,6 @@ export default {
       //check until mintin is done
       //Fecth until the total minted is ok
       //console.log(this.show_total_minted, this.mint_amount)
-      this.completeIpfs();
       if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
