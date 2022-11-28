@@ -443,6 +443,7 @@
                         label="1 %"
                         solo
                         :rules="rules.required"
+                        min="0"
                         v-debounce:300ms="chkPercentage"
                         :error-messages="errorPercentaje[i]"
                         type="number"
@@ -494,6 +495,7 @@
                         label="1 %"
                         solo
                         :rules="rules.required"
+                        min="0"
                         v-debounce:300ms="chkPercentage1"
                         :error-messages="errorPercentaje1[i]"
                         type="number"
@@ -590,6 +592,7 @@
                       id="amount_list"
                       solo
                       :rules="rules.required"
+                      min="0"
                       v-debounce:800ms="checkListAmount"
                       type="number"
                       hide-spin-buttons
@@ -622,6 +625,7 @@
                       id="price"
                       solo
                       v-debounce:300ms="priceNEAR"
+                      min="0"
                       :rules="rules.required"
                       type="number"
                     ></v-text-field>
@@ -738,6 +742,7 @@
                       solo
                       :rules="rules.required"
                       type="number"
+                      min="0"
                       hide-spin-buttons
                     >
                       <template v-slot:append>
@@ -994,6 +999,23 @@ export default {
       }
     }
   },
+  beforeMount(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+     //
+    if (urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "mint") {
+      this.back();
+    }
+    if (urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "list") {
+      this.back();
+    }
+    if (urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "goodies") {
+      this.back();
+    }
+  },
   mounted() {
     
     this.revisar();
@@ -1006,7 +1028,6 @@ export default {
     const user = datos.accountId;
     this.getData();
     this.completeIpfs();
-    //parseInt(localStorage.getItem("step")) === 4 ? this.overlay = true : this.overlay = false;
     this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -1049,8 +1070,7 @@ export default {
       //setTimeout(this.$refs.modal.modalApprove = true, 20000);
     }
     //
-    if (urlParams.get("errorCode") !== null &&
-      urlParams.get("signMeta") === "mint") {
+    if (urlParams.get("errorCode") === "userRejected") {
       this.$refs.modal.modalSuccess = false;
       history.replaceState(
         null,
@@ -1058,22 +1078,10 @@ export default {
         "/#/events/register"
       );
     }
-    if (urlParams.get("errorCode") !== null &&
-      urlParams.get("signMeta") === "list") {
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register"
-      );
-    }
-    if (urlParams.get("errorCode") !== null &&
-      urlParams.get("signMeta") === "goodies") {
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register"
-      );
-    }
+    // if(parseInt(localStorage.getItem("step")) < 5){
+    //   //this.$$refs.modala.modalApprove = false;
+    // }
+
   },
   computed: {
     dateRangeText() {
@@ -1147,6 +1155,7 @@ export default {
     },
     async mint() {
       if (this.$refs.form2.validate()) {
+        localStorage.setItem("step", 4);
         this.loading = true;
         this.disable = true;
         let datos = JSON.parse(
@@ -1309,7 +1318,6 @@ export default {
             royaltyPercentage: this.counter * 100,
           }
         );
-        localStorage.setItem("step", 4);
       }
     },
     async mintGoodie() {
@@ -1635,6 +1643,11 @@ export default {
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
       }
+      if (parseFloat(this.dataRoyalties[pos].percentage) < 0){
+        this.disable = true;
+        this.available = 0;
+        this.errorPercentaje[pos] = "Only int";
+      }
     },
     chkPercentage1(val, e) {
       //get the position from target, declaring the input name and poisition split |
@@ -1663,6 +1676,11 @@ export default {
         this.errorPercentaje1[pos] = null;
       }
       if (Number.isInteger(parseFloat(this.dataSplit[pos].percentage))===false){
+        this.disable = true;
+        this.available1 = 0;
+        this.errorPercentaje1[pos] = "Only int";
+      }
+      if (parseFloat(this.dataSplit[pos].percentage) < 0){
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
@@ -1773,6 +1791,7 @@ export default {
     async list() {
       if (this.$refs.form3.validate()) {
         //Upload ipfs
+        localStorage.setItem("step", 5);
         this.getData();
         this.loading = true;
         this.disable = true;
@@ -1942,6 +1961,7 @@ export default {
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();
+      this.price < 0 ? this.price = 0 : this.price;
       request.onload = () => {
         this.usd = (
           parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
@@ -2002,13 +2022,13 @@ export default {
       //check until mintin is done
       //Fecth until the total minted is ok
       //console.log(this.show_total_minted, this.mint_amount)
-      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount) && parseInt(localStorage.getItem('step'))>=4){
+      this.completeIpfs();
+      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
         // console.log(this.show_total_minted, this.mint_amount)
         // console.log('polling', this.show_total_minted); 
         this.getData();
-        this.completeIpfs();
       } else {
         this.overlay = false;
       }
@@ -2029,11 +2049,13 @@ export default {
     },
     checkMintAmount(){
       parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){
       //this.getData();
       var total_minted = parseInt(localStorage.getItem("total_minted"));
       parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+      parseInt(this.amount_list) < 0 ? this.amount_list = 0 : this.amount_list = this.amount_list;
       localStorage.setItem("amount_list",this.amount_list);
     },
     checkGoodiesAmount(){
