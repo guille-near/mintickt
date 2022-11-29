@@ -150,6 +150,10 @@
   }
 }
 
+:has(#tienda) #headerApp {
+  .v-toolbar__content, .row, .col {padding: 0 !important}
+  padding-inline: clamp(1em, 4vw, 4em) !important;
+}
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////

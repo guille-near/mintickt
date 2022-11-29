@@ -213,7 +213,6 @@ export default {
 			linear-gradient(180deg, #000000 0%, #272727 100%);
 	}
 	h3 {
-		font-family: sans-serif;
 		font-weight: 600;
 		font-size: 25px;
 		line-height: 25px;
@@ -221,7 +220,6 @@ export default {
 		color: #ffffff !important;
 	}
 	p {
-		font-family: "SF Pro", sans-serif;
 		font-style: normal;
 		font-weight: 400;
 		font-size: 13px;
@@ -236,7 +234,6 @@ export default {
 			#cc00b7 !important;
 		border-radius: 10px;
 		span {
-			font-family: "Proxima Nova", sans-serif;
 			font-weight: 700;
 			font-size: 15px;
 			line-height: 15px;

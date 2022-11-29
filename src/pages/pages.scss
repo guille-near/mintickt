@@ -84,8 +84,9 @@
       position: absolute;
       width: 100%;
       height: 100%;
+      object-fit: cover;
       box-sizing: border-box;
-      @include mq(max, 1500px) {object-fit: cover};
+      // @include mq(max, 1500px) {object-fit: cover};
       // @media (min-width: 880px) and (max-width: 1500px) {object-fit: cover}
       // @include mq(max, small) {
       //   object-fit: fill;
@@ -203,7 +204,6 @@
             width: 100%;
           }
           h4 {
-            font-family: 'Montserrat', sans-serif !important;
             font-weight: 800;
             font-size: clamp(1.8em, 2.5vw, 2.5625em);
             letter-spacing: -0.03em;
@@ -267,7 +267,6 @@
         border-radius: 13px;
         text-transform: none !important;
         span {
-          font-family: 'Montserrat' sans-serif !important;
           font-weight: 700;
           letter-spacing: -0.03em;
           color: #000000 !important
@@ -285,7 +284,6 @@
     @include mq(max, small) {width: 80%}
     @include mq(max, x-small) {width: 90%}
     h3 {
-      font-family: 'Montserrat', sans-serif !important;
       font-weight: 700;
       font-size: 1.375em;
       letter-spacing: 0.04em;
@@ -457,7 +455,6 @@
   }
   h2 {
     // max-width: 1026px;
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 900 !important;
     font-size: clamp(2.5em, 6vw, 5em) !important;
     line-height: 1.2 !important;
@@ -667,7 +664,6 @@
   }
   h2 {
     max-width: min(var(--margin), 18ch);
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 700;
     font-size: clamp(2em, calc(2.5vw + 1em), 2.5em) !important;
     text-align: center;
@@ -723,7 +719,6 @@
         text-transform: capitalize !important;
         letter-spacing: normal !important;
         span {
-          font-family: 'Montserrat', sans-serif !important;
           font-weight: 700;
           font-size: 0.9375em;
           text-align: center;
@@ -749,21 +744,18 @@
       min-height: var(--h) !important;
       max-height: var(--h) !important;
       h3 {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 700;
         font-size: 1.375em;
         letter-spacing: -0.03em;
         color: #FFFFFF !important;
       }
       h4 {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 700;
         font-size: 0.9375em;
         letter-spacing: -0.03em;
         color: #FFFFFF !important;
       }
       :is(label, input, textarea) {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 500;
         font-size: 0.9375em;
         letter-spacing: -0.03em;
@@ -786,7 +778,6 @@
         aspect-ratio: 1 / 1;
       }
       p {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 400;
         font-size: 0.9375em;
         letter-spacing: -0.03em;
@@ -804,7 +795,6 @@
         text-transform: capitalize !important;
         letter-spacing: normal !important;
         span {
-          font-family: 'Montserrat', sans-serif !important;
           font-weight: 700;
           font-size: 0.9375em;
           text-align: center;
@@ -832,7 +822,6 @@
     background-color: rgba(0,0,0,.2);
   }
   h2 {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 500;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
@@ -878,7 +867,6 @@
     *:not(button span, span, i, h3) {color: #FFFFFF}
     th {
       & :is(span, i) {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 600;
         font-size: 0.875em;
         line-height: 1;
@@ -890,7 +878,6 @@
       &:first-child {display: flex;align-items: center}
     }
     .v-data-table__mobile-row__header {
-      font-family: 'Montserrat', sans-serif !important;
       font-weight: 600;
       font-size: 0.875em;
       line-height: 1;
@@ -946,7 +933,6 @@
       border-radius: 6px;
       * {color: #000000 !important}
       span {
-        font-family: 'Montserrat', sans-serif !important;
         font-size: clamp(.7em, .8vw, .875em);
         font-weight: 700;
       }
@@ -977,7 +963,6 @@
         border-radius: 6px;
         * {color: #000000 !important}
         span {
-          font-family: 'Montserrat', sans-serif !important;
           font-size: clamp(.9em, 1.5vw, 1.5em);
           font-weight: 700;
         }
@@ -986,7 +971,6 @@
     aside.down {
       margin-top: 1em;
       h3 {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 600;
         font-size: .875em;
         letter-spacing: -0.03em;
@@ -995,7 +979,6 @@
         margin-bottom: 0;
       }
       span {
-        font-family: 'SF Pro', sans-serif !important;
         font-weight: 400;
         font-size: .875em;
         color: #FFFFFF;
@@ -1009,7 +992,6 @@
   border-radius: 6px;
   margin-block: 1em;
   .v-btn {
-    font-family: 'Montserrat', sans-serif !important;
     text-transform: none;
     letter-spacing: normal;
     border-radius: 6px;
@@ -1038,13 +1020,11 @@
     background-color: rgba(0,0,0,.2);
   }
   label {
-    font-family: 'SF Pro', sans-serif !important;
     font-weight: 510;
     font-size: .8125em;
     color: rgba(255, 255, 255, 0.5);
   }
   h2 {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 500;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
@@ -1053,7 +1033,6 @@
   .container-info {
     gap: 1em;
     span {
-      font-family: 'SF Pro', sans-serif !important;
       font-weight: 510;
       font-size: 1.75em;
       color: #FFFFFF;
@@ -1082,7 +1061,6 @@
       }
       label,span {pointer-events: none}
       span {
-        font-family: 'SF Pro', sans-serif !important;
         font-weight: 510;
         font-size: 1.375em;
       }
@@ -1130,7 +1108,6 @@
       tr {
         th {
           span {
-            font-family: 'Montserrat', sans-serif !important;
             font-weight: 600;
             font-size: 0.875em;
             letter-spacing: -0.03em;
@@ -1144,7 +1121,6 @@
     tbody {
       tr {
         td {
-          font-family: 'SF Pro', sans-serif !important;
           font-weight: 510;
           font-size: clamp(.8em, 1vw, 1em);
           color: rgba(255, 255, 255, 0.5);
@@ -1163,7 +1139,6 @@
             background: #FFFFFF;
             border-radius: 6px;
             span {
-              font-family: 'Montserrat', sans-serif !important;
               font-weight: 600;
               font-size: 0.875em;
               text-align: center;
@@ -1194,7 +1169,6 @@
         border-radius: 6px;
         * {color: #000000 !important}
         span {
-          font-family: 'Montserrat', sans-serif !important;
           font-size: clamp(.9em, 1.5vw, 1.5em);
           font-weight: 700;
         }
@@ -1203,7 +1177,6 @@
     aside.down {
       margin-top: 1em;
       h3 {
-        font-family: 'Montserrat', sans-serif !important;
         font-weight: 600;
         font-size: .875em;
         letter-spacing: -0.03em;
@@ -1212,7 +1185,6 @@
         margin-bottom: 0;
       }
       span {
-        font-family: 'SF Pro', sans-serif !important;
         font-weight: 400;
         font-size: .875em;
         color: #FFFFFF;
@@ -1238,13 +1210,11 @@
     background-color: rgba(0,0,0,.2);
   }
   label {
-    font-family: 'SF Pro', sans-serif !important;
     font-weight: 510;
     font-size: .8125em;
     color: rgba(255, 255, 255, 0.5);
   }
   h2 {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 500;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
@@ -1253,7 +1223,6 @@
   .container-actions {
     gap: .1em;
     span {
-      font-family: 'Montserrat', sans-serif !important;
       font-weight: 600;
       font-size: 1.4375em;
       letter-spacing: -0.03em;
@@ -1273,7 +1242,6 @@
       min-width: 100px;
     }
     span {
-      font-family: 'SF Pro', sans-serif !important;
       font-weight: 510;
       line-height: 1;
       font-size: 1.75em;
@@ -1285,7 +1253,6 @@
     background: #FFFFFF;
     border-radius: 6px;
     span {
-      font-family: 'Montserrat', sans-serif !important;
       font-weight: 600;
       font-size: 0.875em;
       text-align: center;
@@ -1309,7 +1276,6 @@
   }
   label {text-transform: capitalize}
   :is(label, input, textarea) {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 500;
     font-size: 0.9375em;
     letter-spacing: -0.03em;
@@ -1341,7 +1307,6 @@
     border-radius: 8px !important;
     text-transform: capitalize !important;
     span {
-      font-family: 'Montserrat', sans-serif !important;
       font-weight: 700 !important;
       font-size: 0.9375em !important;
       text-align: center !important;
@@ -1352,6 +1317,7 @@
 }
 
 #createTickets.registerDashboard {
+  * {font-family: 'SF Pro', sans-serif !important}
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {
@@ -1412,7 +1378,6 @@
         content: "Field required";
         color: #ff4081;
         font-size: 12px;
-        font-family: "Roboto", sans-serif;
         padding-left: 12px;
       }
       .ql {
@@ -1658,14 +1623,12 @@
   background-position: 0 0, 0 100%;
   div.divcol.center {gap: .5em}
   h3 {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 700;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
     color: #FFFFFF;
   }
   a, span.p {
-    font-family: 'SF Pro', sans-serif !important;
     font-weight: 400;
     font-size: 0.9375em;
     color: #6D6D6D;
@@ -1707,7 +1670,6 @@
   background-size: 100% 1px;
   background-position: 0 0, 0 100%;
   h3 {
-    font-family: 'Montserrat', sans-serif !important;
     font-weight: 700;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
