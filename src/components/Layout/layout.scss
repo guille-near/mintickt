@@ -86,16 +86,16 @@
 
   &.register {
     @media (max-width: 880px) {
-      --margin: calc(100% - 2rem);
-      transform: translateX(0px) !important;
+      --margin: calc(100% - 1.9rem);
+      transform: translateX(6px) !important;
       // left: 1rem, 4vw, 4rem !important;
       // right: auto !important;
-      width: min(var(--margin), 22rem);
+      width: min(var(--margin), 22.5rem);
       .v-toolbar__content {padding-inline: 0 !important}
     }
     @media (max-width: 400px) {
       // padding-left: clamp(1rem, 4vw, 4rem) !important;
-      transform: translateX(7.5px) !important;
+      transform: translateX(5.5px) !important;
     }
   }
 
@@ -126,7 +126,7 @@
     }
     span{
       font-weight: 700;
-      font-size: var(--step-em--3);
+      font-size: 15px;
       /* identical to box height */
       text-align: center;
       letter-spacing: -0.03em;
@@ -136,7 +136,10 @@
     padding: 12px clamp(1em, 1.25vw, 1.25em);
     background: linear-gradient(0deg, #000000 -42.31%, rgba(0, 0, 0, 0) 50%), #CC00B7 !important;
     border-radius: 10px;
-    span {color:#FFFFFF !important}
+    span {
+      color:#FFFFFF !important;
+      font-size: 15px;
+    }
   }
   .btnNearMobile {
     min-width: 35px;

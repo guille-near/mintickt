@@ -21,15 +21,15 @@
       :mobile-breakpoint="880"
       class="eliminarmobile"
     >
+      <template v-slot:[`item.image`]>
+        <img class="bgTicket"
+          src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZXZlbnR8ZW58MHx8MHx8&w=1000&q=80"
+          alt="event image"
+        >
+      </template>
+
       <template v-slot:[`item.name`]="{ item }">
-        <center class="center">
-          <img
-            class="bgTicket"
-            src="@/assets/img/ticket-events.svg"
-            alt="ticket image"
-          />
-          <a class="eventName" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
-        </center>
+        <a class="eventName" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
@@ -173,9 +173,9 @@ export default {
   data() {
     return {
       headers: [
-        { text: "EVENT NAME", align: "start", value: "name" },
+        { align: "center", value: "image" },
+        { text: "NAME", align: "start", value: "name" },
         { text: "DATE", align: "start", value: "date" },
-        { text: "LOCATION", align: "start", value: "location" },
         { text: "TICKETS MINTED", align: "start", value: "minted" },
         { text: "TICKETS SOLD", align: "start", value: "sold" },
         { text: "TICKETS LISTED", align: "start", value: "listed" },

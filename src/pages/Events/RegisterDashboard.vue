@@ -3,13 +3,17 @@
 		<ModalSuccess ref="modal"></ModalSuccess>
     <ModalApprove ref="modala"></ModalApprove>
     
-    <h2 class="pmobile align" style="text-align: center">
+    <h2 class="eliminarmobile align" style="text-align: center">
       Let's create your NFT for your event!
     </h2>
     
 		<v-window v-model="step" to touchless>
 			<v-window-item :value="1">
 				<section class="center divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -125,84 +129,183 @@
                 organized
               </p>
 
-              <div id="container-datatime" class="gap">
-                <div class="space" style="gap: 20px">
-                  <div class="divcol" style="gap: 6px">
-                    <label for="date">
-                      Date
-                    </label>
-                    <v-menu
-                      ref="menu"
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      :return-value.sync="dates"
-                      :rules="rules.required"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="dateRangeText"
-                          id="date"
-                          readonly
-                          solo
-                          v-bind="attrs"
-                          v-on="on"
-                          :rules="rules.required"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="dates"
-                        range
-                        no-title
-                        scrollable
-                        color="hsl(306, 100%, 50%)"
-                        dark
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="$refs.menu.save(dates)">
-                          OK
-                        </v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </div>
+              <div id="container-datatime" class="divcol">
+                <v-btn class="mb-4" @click="dates.push({
+                  menuStartDate: false,
+                  startDate: undefined,
+                  menuStartTime: false,
+                  startTime: undefined,
                   
-                  <div class="divcol" style="gap: 6px">
-                    <label for="time">
-                      Time
-                    </label>
-                    <v-menu
-                      ref="menu2"
-                      v-model="menu2"
-                      :close-on-content-click="false"
-                      :return-value.sync="time"
-                      transition="scale-transition"
-                      nudge-left="100%"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="time"
-                          id="time"
-                          readonly
-                          solo
-                          v-bind="attrs"
-                          v-on="on"
-                          :rules="rules.required"
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="menu2"
-                        v-model="time"
-                        width="200px"
-                        color="hsl(306, 100%, 50%)"
-                        header-color="#1e1e1e"
-                        dark
-                        @click:minute="$refs.menu2.save(time)"
-                      ></v-time-picker>
-                    </v-menu>
+                  menuEndDate: false,
+                  endDate: undefined,
+                  menuEndTime: false,
+                  endTime: undefined,
+                })"
+                  >Add new Date and Time</v-btn
+                >
+                
+                <!-- start date -->
+                <template v-for="(item, i) in dates">
+                  <div :key="i" class="space">
+                    <div class="divcol" style="gap: 6px; margin-right: 20px">
+                      <label :for="`start-date-${i+1}`">
+                        Start Date
+                      </label>
+                      <v-menu
+                        :ref="`menu-start-date-${i+1}`"
+                        v-model="item.menuStartDate"
+                        :close-on-content-click="false"
+                        :return-value.sync="item.startDate"
+                        :rules="rules.required"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="item.startDate"
+                            :id="`start-date-${i+1}`"
+                            readonly
+                            solo
+                            v-bind="attrs"
+                            v-on="on"
+                            :rules="rules.required"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="item.startDate"
+                          no-title
+                          scrollable
+                          color="hsl(306, 100%, 50%)"
+                          dark
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="$refs[`menu-start-date-${i+1}`][0].save(item.startDate)">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </div>
+                    
+                    <div class="divcol" style="gap: 6px">
+                      <label :for="`start-time-${i+1}`">
+                        Time
+                      </label>
+                      <v-menu
+                        :ref="`menu-start-time-${i+1}`"
+                        v-model="item.menuStartTime"
+                        :close-on-content-click="false"
+                        :return-value.sync="item.startTime"
+                        transition="scale-transition"
+                        nudge-left="100%"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="item.startTime"
+                            :id="`start-time-${i+1}`"
+                            readonly
+                            solo
+                            v-bind="attrs"
+                            v-on="on"
+                            :rules="rules.required"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="item.menuStartTime"
+                          v-model="item.startTime"
+                          width="200px"
+                          color="hsl(306, 100%, 50%)"
+                          header-color="#1e1e1e"
+                          dark
+                          @click:minute="$refs[`menu-start-time-${i+1}`][0].save(item.startTime)"
+                        ></v-time-picker>
+                      </v-menu>
+                    </div>
                   </div>
-                </div>
+
+
+                  <!-- end date -->
+                  <div :key="i" class="space">
+                    <div class="divcol" style="gap: 6px; margin-right: 20px">
+                      <label :for="`endd-date-${i+1}`">
+                        End Date
+                      </label>
+                      <v-menu
+                        :ref="`menu-end-date-${i+1}`"
+                        v-model="item.menuEndDate"
+                        :close-on-content-click="false"
+                        :return-value.sync="item.endDate"
+                        :rules="rules.required"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="item.endDate"
+                            :id="`end-date-${i+1}`"
+                            readonly
+                            solo
+                            v-bind="attrs"
+                            v-on="on"
+                            :rules="rules.required"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="item.endDate"
+                          no-title
+                          scrollable
+                          color="hsl(306, 100%, 50%)"
+                          dark
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="$refs[`menu-end-date-${i+1}`][0].save(item.endDate)">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </div>
+                    
+                    <div class="divcol" style="gap: 6px">
+                      <label :for="`end-time-${i+1}`">
+                        Time
+                      </label>
+                      <v-menu
+                        :ref="`menu-end-time-${i+1}`"
+                        v-model="item.menuEndTime"
+                        :close-on-content-click="false"
+                        :return-value.sync="item.endTime"
+                        transition="scale-transition"
+                        nudge-left="100%"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="item.endTime"
+                            :id="`end-time-${i+1}`"
+                            readonly
+                            solo
+                            v-bind="attrs"
+                            v-on="on"
+                            :rules="rules.required"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="item.menuEndTime"
+                          v-model="item.endTime"
+                          width="200px"
+                          color="hsl(306, 100%, 50%)"
+                          header-color="#1e1e1e"
+                          dark
+                          @click:minute="$refs[`menu-end-time-${i+1}`][0].save(item.endTime)"
+                        ></v-time-picker>
+                      </v-menu>
+                    </div>
+                    
+                    <v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
+                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                    </v-btn>
+                  </div>
+                </template>
               </div>
             </v-form>
 
@@ -239,6 +342,10 @@
 
 			<v-window-item :value="2">
 				<section class="jcenter divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -367,6 +474,10 @@
 
 			<v-window-item :value="3">
 				<section class="jcenter divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -543,6 +654,10 @@
 
 			<v-window-item :value="4">
 				<section class="jcenter divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -666,6 +781,10 @@
 
 			<v-window-item :value="5">
 				<section class="jcenter divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          
 					<div class="ticket-wrapper" v-if="imagegoodie">
 						<img class="ticket" :src="canvas_goodie" alt="Ticket image" />
 					</div>
@@ -720,7 +839,7 @@
 
                 <template v-if="goodie">
                   <div class="divcol" style="margin-top: 1.5em">
-                    <label for="attendees"
+                    <label for="attendees" class="sf-pro"
                       >What are attendees going to receive with the NFT
                       ticket?</label
                     >
@@ -733,7 +852,7 @@
                   </div>
 
                   <div class="divcol">
-                    <label for="goodies"
+                    <label for="goodies" class="sf-pro"
                       >How much goodies for each attendee per ticket?</label
                     >
                     <v-text-field
@@ -947,7 +1066,20 @@ export default {
           img: undefined,
         },
       ],
-      dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      // dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      dates: [
+        {
+          menuStartDate: false,
+          startDate: undefined,
+          menuStartTime: false,
+          startTime: undefined,
+          
+          menuEndDate: false,
+          endDate: undefined,
+          menuEndTime: false,
+          endTime: undefined,
+        },
+      ],
       rules: {
         required: [(v) => !!v || "Field required"],
         percentage_split: [

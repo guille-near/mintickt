@@ -74,14 +74,13 @@
                   text 
                   color="white"
                   rounded
-                  class="h9-em"
                   v-on="nearid ? on : undefined"
                   v-bind="nearid ? attrs : undefined"
                   @click="nearid ? undefined : connect()"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ user }}</span>
-                  <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span>
+                  <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
                 </v-btn>
               </template>
 

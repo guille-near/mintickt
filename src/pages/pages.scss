@@ -653,9 +653,11 @@
     }
   }
   section {
-    gap: clamp(6em, 8vw, 8em); z-index: 2;
+    gap: clamp(6em, 8vw, 8em);
+    z-index: 2;
     @media (max-width: 880px) {
-      height: calc(100vh - (100px + 12em + 42px));
+      gap: 10px;
+      height: calc(100vh - (100px + 42px + 100px));
       padding-right: 5px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -845,10 +847,6 @@
     input, .v-label {font-size: 1em !important}
   }
   .eventName {
-    @media (min-width: 880px) {
-      color: #000000 !important;
-      margin-inline: 5%;
-    }
     font-weight: 700 !important;
     font-size: clamp(1em, 1.5vw, 1.5em);
     float: left;
@@ -893,29 +891,31 @@
       isolation: isolate !important;
       position: relative !important;
       @media (max-width: 1194px) and (min-width: 880px) {font-size: 12px}
-      @media (max-width: 880px) {
-        background: no-repeat center url(../assets/img/bg-ticket_events.png);
-        background-size: contain;
-        &::before {
-          content: "";
+      // @media (max-width: 880px) {
+      //   background: no-repeat center url(../assets/img/bg-ticket_events.png);
+      //   background-size: contain;
+      //   &::before {
+      //     content: "";
+      //     position: absolute;
+      //     inset: 0;
+      //     background-color: rgba(0, 0, 0, .4);
+      //     z-index: -1;
+      //   }
+      // }
+      td:has(.bgTicket) {
+        --width: 200px;
+        width: var(--width) !important;
+        .bgTicket {
           position: absolute;
-          inset: 0;
-          background-color: rgba(0, 0, 0, .4);
-          z-index: -1;
+          left: 2px;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          width: var(--width) !important;
+          height: calc(100% - 4px) !important;
+          object-fit: cover !important;
+          border-radius: .6vmax;
         }
-      }
-      .bgTicket {
-        position: absolute !important;
-        left: -7% !important;
-        top: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: -1 !important;
-        // @media (max-width: 1184px) {left: -30px;
-        //   @media (max-width: 1162px) {left: -65px;
-        //     @media (max-width: 880px) {display: none}
-        //   }
-        // }
       }
       @media (min-width: 880px) {height: 91px}
       td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
@@ -1317,7 +1317,7 @@
 }
 
 #createTickets.registerDashboard {
-  * {font-family: 'SF Pro', sans-serif !important}
+  p, .sf-pro {font-family: 'SF Pro', sans-serif !important}
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {

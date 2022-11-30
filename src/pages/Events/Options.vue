@@ -349,6 +349,7 @@ export default {
     };
   },
   mounted() {
+    console.log("-->", this.urltickets)
     this.$refs.modala.getData();
     //setTimeout(localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false, 30000);
     localStorage.getItem("new_minted") === null || 'undefined' ? localStorage.setItem("new_minted", 1) : "";
@@ -821,6 +822,9 @@ export default {
        this.$forceUpdate();
       }, 5000);
     },
+    prueba(item) {
+      console.log(item)
+    }
   },
 };
 </script>

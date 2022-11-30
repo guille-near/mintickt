@@ -423,6 +423,17 @@ export default {
       search: "",
     };
   },
+  watch: {
+    $route(current) {
+      if (current.fullPath.includes("--user")) {
+        let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+        const user = datos.accountId;
+        this.search = user
+      } else {
+        this.search = ""
+      }
+    }
+  },
   mounted() {
     this.responsive();
     this.fetch();
