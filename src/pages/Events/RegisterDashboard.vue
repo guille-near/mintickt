@@ -131,6 +131,7 @@
 
               <div id="container-datatime" class="divcol">
                 <v-btn class="mb-4" @click="dates.push({
+                  id: i+1,
                   menuStartDate: false,
                   startDate: undefined,
                   menuStartTime: false,
@@ -1069,6 +1070,7 @@ export default {
       // dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
       dates: [
         {
+          id: 1,
           menuStartDate: false,
           startDate: undefined,
           menuStartTime: false,
