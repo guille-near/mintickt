@@ -2,14 +2,40 @@
   <section id="events" class="align divcol">
     <ModalApprove ref="modala"></ModalApprove>
     <h2>Your Events</h2>
-    <v-text-field
-      v-model="search"
-      append-icon="mdi-magnify"
-      label="Search"
-      single-line
-      hide-details
-      class="search"
-    />
+    <div class="center">
+      <!--Modal ticket Url -->
+      <v-dialog width="420px">
+        <template v-slot:activator="{on, attrs}">
+          <v-btn class="scan-button" v-bind="attrs" v-on="on">
+            <img src="@/assets/icons/scan.svg" alt="scan button">
+          </v-btn>
+        </template>
+
+        <v-card id="modalUrl" class="pa-10">
+          <div class="divcol center">
+            <h3 class="p">Url Code</h3>
+          </div>
+          <center>
+            <div id="my-node-ticket">
+              <qr-code
+                :text="$baseUrl+$router.currentRoute.path + ':user-scan'"
+                error-level="L"
+              >
+              </qr-code>
+            </div>
+          </center>
+        </v-card>
+      </v-dialog>
+      
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+        class="search"
+      />
+    </div>
     <v-data-table
       id="tableEvents"
       :headers="headers"
@@ -192,6 +218,7 @@ export default {
     };
   },
   mounted() {
+    this.scanListener()
     this.revisar();
     this.getData();
     this.pollData();
@@ -373,6 +400,15 @@ export default {
       this.loading = false;
       this.$forceUpdate();
     },
+    scanListener() {
+      if (this.$router.currentRoute.path.includes(":user-scan")) {
+        let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+        const user = datos.accountId;
+        this.search = user
+      } else {
+        this.search = ""
+      }
+    }
   },
 };
 </script>

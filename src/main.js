@@ -37,6 +37,7 @@ Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "https://testnet
 Vue.prototype.$event_page = 'https://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "andresdom.near"
 Vue.prototype.$owner_split = "3"
+Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
 
 
 VueClipboard.config.autoSetContainer = true // add this line

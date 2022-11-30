@@ -23,7 +23,7 @@
         <v-col
           class="space"
           :style="
-            routePath.includes('events')
+            routePath.includes('events') || routeName == 'Landing'
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -44,7 +44,7 @@
           </a>
 
           <aside
-            class="center"
+            class="container-buttons-header center"
             style="gap: 20px"
             :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
