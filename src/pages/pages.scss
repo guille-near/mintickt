@@ -889,7 +889,6 @@
       border: 2px solid #FFFFFF;
       border-radius: 9px;
       isolation: isolate !important;
-      position: relative !important;
       @media (max-width: 1194px) and (min-width: 880px) {font-size: 12px}
       // @media (max-width: 880px) {
       //   background: no-repeat center url(../assets/img/bg-ticket_events.png);
@@ -905,19 +904,25 @@
       td:has(.bgTicket) {
         --width: 200px;
         width: var(--width) !important;
+        position: relative !important;
         .bgTicket {
-          position: absolute;
-          left: 2px;
-          top: 0;
-          bottom: 0;
-          margin: auto;
+          --height: calc(100% - 4px);
+          position: absolute !important;
+          left: 2px !important;
+          top: 0 !important;
+          bottom: 0 !important;
+          margin: auto !important;
           width: var(--width) !important;
-          height: calc(100% - 4px) !important;
+          min-width: var(--width) !important;
+          max-width: var(--width) !important;
+          height: var(--height) !important;
+          max-height: var(--height) !important;
+          min-height: var(--height) !important;
           object-fit: cover !important;
-          border-radius: .6vmax;
+          border-radius: .6vmax !important;
         }
       }
-      @media (min-width: 880px) {height: 91px}
+      @media (min-width: 880px) {height: 91px !important}
       td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
       td:nth-of-type(7n) {border-radius: 0 .6vmax .6vmax 0}
       td:first-child {border-radius: .6vmax 0 0 .6vmax; position: relative}
@@ -1317,7 +1322,7 @@
 }
 
 #createTickets.registerDashboard {
-  p, .sf-pro {font-family: 'SF Pro', sans-serif !important}
+  p, .sf-pro {font-family: 'SF Pro', "Proximanova", sans-serif !important}
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {
