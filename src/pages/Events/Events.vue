@@ -3,30 +3,6 @@
 		<ModalApprove ref="modala"></ModalApprove>
 		<h2>Your Events</h2>
 		<div class="center">
-			<!--Modal ticket Url -->
-			<v-dialog width="420px">
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn class="scan-button" v-bind="attrs" v-on="on">
-						<img src="@/assets/icons/scan.svg" alt="scan button" />
-					</v-btn>
-				</template>
-
-				<v-card id="modalUrl" class="pa-10">
-					<div class="divcol center">
-						<h3 class="p">Url Code</h3>
-					</div>
-					<center>
-						<div id="my-node-ticket">
-							<qr-code
-								:text="$baseUrl + $router.currentRoute.path + ':user-scan'"
-								error-level="L"
-							>
-							</qr-code>
-						</div>
-					</center>
-				</v-card>
-			</v-dialog>
-
 			<v-text-field
 				v-model="search"
 				append-icon="mdi-magnify"
@@ -48,11 +24,7 @@
 			class="eliminarmobile"
 		>
 			<template v-slot:[`item.image`]="{ item }">
-				<img
-					id="bgTicket"
-					:src="getIpfs(item.thingid)"
-					alt="event image"
-				/>
+				<img id="bgTicket" :src="getIpfs(item.thingid)" alt="event image" />
 			</template>
 
 			<template v-slot:[`item.name`]="{ item }">
@@ -231,6 +203,7 @@ export default {
       nearid: false,
       message_ticket: "Copy link",
       src: [],
+      modalQR: false,
     };
   },
   mounted() {
@@ -453,6 +426,17 @@ export default {
 					return this.$pinata_gateway + src;
 				}
 			},
+    ModalQR() {
+        this.modalQR=true
+    },  
+    onDecode(result) {
+      this.modalQR = false;
+      console.log(`Decode text from QR code is ${result}`)
+      
+    },
+    onLoaded() {
+      console.log(`Ready to start scanning barcodes`)
+    },
   },
 };
 </script>
