@@ -1,144 +1,151 @@
 <template>
-  <section id="events" class="align divcol">
-    <ModalApprove ref="modala"></ModalApprove>
-    <h2>Your Events</h2>
-    <div class="center">
-      <!--Modal ticket Url -->
-      <v-dialog width="420px">
-        <template v-slot:activator="{on, attrs}">
-          <v-btn class="scan-button" v-bind="attrs" v-on="on">
-            <img src="@/assets/icons/scan.svg" alt="scan button">
-          </v-btn>
-        </template>
+	<section id="events" class="align divcol">
+		<ModalApprove ref="modala"></ModalApprove>
+		<h2>Your Events</h2>
+		<div class="center">
+			<!--Modal ticket Url -->
+			<v-dialog width="420px">
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn class="scan-button" v-bind="attrs" v-on="on">
+						<img src="@/assets/icons/scan.svg" alt="scan button" />
+					</v-btn>
+				</template>
 
-        <v-card id="modalUrl" class="pa-10">
-          <div class="divcol center">
-            <h3 class="p">Url Code</h3>
-          </div>
-          <center>
-            <div id="my-node-ticket">
-              <qr-code
-                :text="$baseUrl+$router.currentRoute.path + ':user-scan'"
-                error-level="L"
-              >
-              </qr-code>
-            </div>
-          </center>
-        </v-card>
-      </v-dialog>
-      
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-        class="search"
-      />
-    </div>
-    <v-data-table
-      id="tableEvents"
-      :headers="headers"
-      :items="data"
-      :loading="loading"
-      :search="search"
-      :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
-      calculate-widths
-      :mobile-breakpoint="880"
-      class="eliminarmobile"
-    >
-      <template v-slot:[`item.image`]>
-        <img id="bgTicket"
-          src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZXZlbnR8ZW58MHx8MHx8&w=1000&q=80"
-          alt="event image"
-        >
-      </template>
+				<v-card id="modalUrl" class="pa-10">
+					<div class="divcol center">
+						<h3 class="p">Url Code</h3>
+					</div>
+					<center>
+						<div id="my-node-ticket">
+							<qr-code
+								:text="$baseUrl + $router.currentRoute.path + ':user-scan'"
+								error-level="L"
+							>
+							</qr-code>
+						</div>
+					</center>
+				</v-card>
+			</v-dialog>
 
-      <template v-slot:[`item.name`]="{ item }">
-        <a class="eventName" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
-      </template>
+			<v-text-field
+				v-model="search"
+				append-icon="mdi-magnify"
+				label="Search"
+				single-line
+				hide-details
+				class="search"
+			/>
+		</div>
+		<v-data-table
+			id="tableEvents"
+			:headers="headers"
+			:items="data"
+			:loading="loading"
+			:search="search"
+			:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+			calculate-widths
+			:mobile-breakpoint="880"
+			class="eliminarmobile"
+		>
+			<template v-slot:[`item.image`]="{ item }">
+				<img
+					id="bgTicket"
+					:src="getIpfs(item.thingid)"
+					alt="event image"
+				/>
+			</template>
 
-      <template v-slot:[`item.actions`]="{ item }">
-        <div class="divwrap_inv" style="gap: 1em">
-          <v-btn @click="goLiveData(item.name, item.thingid)"
-            >Go to live data</v-btn
-          >
-          <v-btn @click="goOptions(item.name, item.thingid)"
-            ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
-          >
-          <!--
+			<template v-slot:[`item.name`]="{ item }">
+				<a class="eventName" :href="$store_site + item.thingid" target="_new">{{
+					item.name
+				}}</a>
+			</template>
+
+			<template v-slot:[`item.actions`]="{ item }">
+				<div class="divwrap_inv" style="gap: 1em">
+					<v-btn @click="goLiveData(item.name, item.thingid)"
+						>Go to live data</v-btn
+					>
+					<v-btn @click="goOptions(item.name, item.thingid)"
+						><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
+					>
+					<!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
             {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
           </a>
            <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
             ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
           > -->
-        </div>
-      </template>
-      
-    </v-data-table>
+				</div>
+			</template>
+		</v-data-table>
 
-    <section class="vermobile">
-      <v-card
-        v-for="(item, i) in dataTableMobile"
-        :key="i"
-        class="up divcol"
-        style="display: flex"
-      >
-        <section class="acenter">
-          <span class="eventName">
-            <a style="color: #cc00b7 !important" :href="$store_site+item.thingid" target="_new">{{ item.name }}</a>
-          </span>
-          <span>{{ item.date }}</span>
+		<section class="vermobile">
+			<v-card
+				v-for="(item, i) in dataTableMobile"
+				:key="i"
+				class="up divcol"
+				style="display: flex"
+			>
+				<section class="acenter">
+					<span class="eventName">
+						<a
+							style="color: #cc00b7 !important"
+							:href="$store_site + item.thingid"
+							target="_new"
+							>{{ item.name }}</a
+						>
+					</span>
+					<span>{{ item.date }}</span>
 
-          <aside class="acenter" style="gap: 0.5em">
-            <v-btn class="icon" @click="goLiveData(item.name, item.thingid)">
-              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
-            </v-btn>
+					<aside class="acenter" style="gap: 0.5em">
+						<v-btn class="icon" @click="goLiveData(item.name, item.thingid)">
+							<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
+						</v-btn>
 
-            <v-btn class="icon" @click="goOptions(item.name, item.thingid)">
-              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
-            </v-btn>
+						<v-btn class="icon" @click="goOptions(item.name, item.thingid)">
+							<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
+						</v-btn>
 
-            <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
+						<!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
             </v-btn> -->
 
-            <v-icon
-              color="white"
-              :style="item.show ? 'transform:rotate(180deg)' : ''"
-              size="2em"
-              @click="
-                dataTableMobile.forEach((e) => {
-                  e !== item ? (e.show = false) : null;
-                });
-                item.show = !item.show;
-              "
-            >
-              mdi-chevron-down
-            </v-icon>
-          </aside>
-        </section>
+						<v-icon
+							color="white"
+							:style="item.show ? 'transform:rotate(180deg)' : ''"
+							size="2em"
+							@click="
+								dataTableMobile.forEach((e) => {
+									e !== item ? (e.show = false) : null;
+								});
+								item.show = !item.show;
+							"
+						>
+							mdi-chevron-down
+						</v-icon>
+					</aside>
+				</section>
 
-        <aside v-show="item.show" class="down space">
-          <div class="divcol">
-            <h3>TICKETS MINTED</h3>
-            <span>{{ item.minted }}</span>
-          </div>
+				<aside v-show="item.show" class="down space">
+					<div class="divcol">
+						<h3>TICKETS MINTED</h3>
+						<span>{{ item.minted }}</span>
+					</div>
 
-          <div class="divcol">
-            <h3>TICKETS SOLD</h3>
-            <span>{{ item.sold }}</span>
-          </div>
+					<div class="divcol">
+						<h3>TICKETS SOLD</h3>
+						<span>{{ item.sold }}</span>
+					</div>
 
-          <div class="divcol">
-            <h3>TICKETS LISTED</h3>
-            <span>{{ item.listed }}</span>
-          </div>
-        </aside>
-      </v-card>
+					<div class="divcol">
+						<h3>TICKETS LISTED</h3>
+						<span>{{ item.listed }}</span>
+					</div>
+				</aside>
+			</v-card>
 
-      <!-- <section id="footer-pagination" class="end gap">
+			<!-- <section id="footer-pagination" class="end gap">
         <span style="color:#FFFFFF">1</span>
         <div class="center">
           <v-btn icon>
@@ -149,8 +156,8 @@
           </v-btn>
         </div>
       </section> -->
-    </section>
-  </section>
+		</section>
+	</section>
 </template>
 
 <script>
@@ -193,6 +200,14 @@ const mb_views_nft_tokens_aggregate = gql`
   }
 }
 `;
+const main_image = gql`
+  query MyQuery($thing_id: String!) {
+  ipfs(where: {thingid_contains: $thing_id}) {
+    thingid
+    tokenid
+  }
+}
+`;
 export default {
   name: "Events",
   components: { ModalApprove },
@@ -214,7 +229,8 @@ export default {
       page: 3,
       dataTableMobile: [],
       nearid: false,
-      message_ticket: "Copy link"
+      message_ticket: "Copy link",
+      src: [],
     };
   },
   mounted() {
@@ -222,6 +238,7 @@ export default {
     this.revisar();
     this.getData();
     this.pollData();
+    this.mainImg();
     this.$refs.modala.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -408,7 +425,34 @@ export default {
       } else {
         this.search = ""
       }
-    }
+    },
+    async mainImg() {
+      //reedemed
+      this.$apollo
+        .query({
+          query: main_image,
+          variables: {
+            thing_id: this.$store_mintbase,
+          },
+          client: "mintickClient",
+        })
+        .then((response) => {
+          Object.entries(response.data.ipfs).forEach(([key, value]) => {
+            this.src.push(value);
+          });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });        
+    },
+    getIpfs(value) {
+				if (this.src.length > 0 || this.src != undefined) {
+					var src = this.src
+						.filter(thingid => thingid.thingid == value)[0]
+						.tokenid;
+					return this.$pinata_gateway + src;
+				}
+			},
   },
 };
 </script>
