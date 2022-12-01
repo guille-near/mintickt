@@ -48,7 +48,7 @@
       class="eliminarmobile"
     >
       <template v-slot:[`item.image`]>
-        <img class="bgTicket"
+        <img id="bgTicket"
           src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZXZlbnR8ZW58MHx8MHx8&w=1000&q=80"
           alt="event image"
         >
