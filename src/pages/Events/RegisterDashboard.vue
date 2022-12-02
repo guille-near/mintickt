@@ -129,185 +129,127 @@
                 organized
               </p>
 
-              <div id="container-datatime" class="divcol">
-                <v-btn class="mb-4" @click="dates.push({
-                  id: i+1,
-                  menuStartDate: false,
-                  startDate: undefined,
-                  menuStartTime: false,
-                  startTime: undefined,
-                  
-                  menuEndDate: false,
-                  endDate: undefined,
-                  menuEndTime: false,
-                  endTime: undefined,
-                })"
-                  >Add new Date and Time</v-btn
+              <!-- full date -->
+              <div class="divcol" style="gap: 6px">
+                <label for="date">
+                  Full Date
+                </label>
+                <v-menu
+                  ref="menu-date"
+                  v-model="MenuDates"
+                  :close-on-content-click="false"
+                  :return-value.sync="dates"
+                  :rules="rules.required"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-                
-                <!-- start date -->
-                <template v-for="(item, i) in dates">
-                  <div :key="i" class="space">
-                    <div class="divcol" style="gap: 6px; margin-right: 20px">
-                      <label :for="`start-date-${i+1}`">
-                        Start Date
-                      </label>
-                      <v-menu
-                        :ref="`menu-start-date-${i+1}`"
-                        v-model="item.menuStartDate"
-                        :close-on-content-click="false"
-                        :return-value.sync="item.startDate"
-                        :rules="rules.required"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="item.startDate"
-                            :id="`start-date-${i+1}`"
-                            readonly
-                            solo
-                            v-bind="attrs"
-                            v-on="on"
-                            :rules="rules.required"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="item.startDate"
-                          no-title
-                          scrollable
-                          color="hsl(306, 100%, 50%)"
-                          dark
-                        >
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="$refs[`menu-start-date-${i+1}`][0].save(item.startDate)">
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                    </div>
-                    
-                    <div class="divcol" style="gap: 6px">
-                      <label :for="`start-time-${i+1}`">
-                        Time
-                      </label>
-                      <v-menu
-                        :ref="`menu-start-time-${i+1}`"
-                        v-model="item.menuStartTime"
-                        :close-on-content-click="false"
-                        :return-value.sync="item.startTime"
-                        transition="scale-transition"
-                        nudge-left="100%"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="item.startTime"
-                            :id="`start-time-${i+1}`"
-                            readonly
-                            solo
-                            v-bind="attrs"
-                            v-on="on"
-                            :rules="rules.required"
-                          ></v-text-field>
-                        </template>
-                        <v-time-picker
-                          v-if="item.menuStartTime"
-                          v-model="item.startTime"
-                          width="200px"
-                          color="hsl(306, 100%, 50%)"
-                          header-color="#1e1e1e"
-                          dark
-                          @click:minute="$refs[`menu-start-time-${i+1}`][0].save(item.startTime)"
-                        ></v-time-picker>
-                      </v-menu>
-                    </div>
-                  </div>
-
-
-                  <!-- end date -->
-                  <div :key="i" class="space">
-                    <div class="divcol" style="gap: 6px; margin-right: 20px">
-                      <label :for="`endd-date-${i+1}`">
-                        End Date
-                      </label>
-                      <v-menu
-                        :ref="`menu-end-date-${i+1}`"
-                        v-model="item.menuEndDate"
-                        :close-on-content-click="false"
-                        :return-value.sync="item.endDate"
-                        :rules="rules.required"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="item.endDate"
-                            :id="`end-date-${i+1}`"
-                            readonly
-                            solo
-                            v-bind="attrs"
-                            v-on="on"
-                            :rules="rules.required"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="item.endDate"
-                          no-title
-                          scrollable
-                          color="hsl(306, 100%, 50%)"
-                          dark
-                        >
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="$refs[`menu-end-date-${i+1}`][0].save(item.endDate)">
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                    </div>
-                    
-                    <div class="divcol" style="gap: 6px">
-                      <label :for="`end-time-${i+1}`">
-                        Time
-                      </label>
-                      <v-menu
-                        :ref="`menu-end-time-${i+1}`"
-                        v-model="item.menuEndTime"
-                        :close-on-content-click="false"
-                        :return-value.sync="item.endTime"
-                        transition="scale-transition"
-                        nudge-left="100%"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="item.endTime"
-                            :id="`end-time-${i+1}`"
-                            readonly
-                            solo
-                            v-bind="attrs"
-                            v-on="on"
-                            :rules="rules.required"
-                          ></v-text-field>
-                        </template>
-                        <v-time-picker
-                          v-if="item.menuEndTime"
-                          v-model="item.endTime"
-                          width="200px"
-                          color="hsl(306, 100%, 50%)"
-                          header-color="#1e1e1e"
-                          dark
-                          @click:minute="$refs[`menu-end-time-${i+1}`][0].save(item.endTime)"
-                        ></v-time-picker>
-                      </v-menu>
-                    </div>
-                    
-                    <v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
-                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="dateRangeText"
+                      id="date"
+                      readonly
+                      solo
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="rules.required"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="dates"
+                    no-title
+                    scrollable
+                    range
+                    color="hsl(306, 100%, 50%)"
+                    dark
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="$refs['menu-date'].save(dates)">
+                      OK
                     </v-btn>
-                  </div>
-                </template>
+                  </v-date-picker>
+                </v-menu>
               </div>
+
+
+              <div class="space" style="gap: 20px">
+                <!-- start time -->
+                <div class="divcol" style="gap: 6px">
+                  <label for="start-time">
+                    Start Time
+                  </label>
+                  <v-menu
+                    ref="menu-start-time"
+                    v-model="menuStartTime"
+                    :close-on-content-click="false"
+                    :return-value.sync="startTime"
+                    transition="scale-transition"
+                    nudge-left="100%"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="startTime"
+                        id="start-time"
+                        readonly
+                        solo
+                        v-bind="attrs"
+                        v-on="on"
+                        :rules="rules.required"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="menuStartTime"
+                      v-model="startTime"
+                      width="200px"
+                      color="hsl(306, 100%, 50%)"
+                      header-color="#1e1e1e"
+                      dark
+                      @click:minute="$refs[`menu-start-time`].save(startTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </div>
+
+
+                <!-- end date -->
+                <div class="divcol" style="gap: 6px">
+                  <label for="end-time">
+                    End Time
+                  </label>
+                  <v-menu
+                    ref="menu-end-time"
+                    v-model="menuEndTime"
+                    :close-on-content-click="false"
+                    :return-value.sync="endTime"
+                    transition="scale-transition"
+                    nudge-left="100%"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="endTime"
+                        id="end-time"
+                        readonly
+                        solo
+                        v-bind="attrs"
+                        v-on="on"
+                        :rules="rules.required"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="menuEndTime"
+                      v-model="endTime"
+                      width="200px"
+                      color="hsl(306, 100%, 50%)"
+                      header-color="#1e1e1e"
+                      dark
+                      @click:minute="$refs[`menu-end-time`].save(endTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </div>
+              </div>
+              
+              <v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
+                <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+              </v-btn>
             </v-form>
 
             <div class="container-content--actions center gap eliminarmobile">
@@ -1067,21 +1009,26 @@ export default {
           img: undefined,
         },
       ],
-      // dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
-      dates: [
-        {
-          id: 1,
-          menuStartDate: false,
-          startDate: undefined,
-          menuStartTime: false,
-          startTime: undefined,
+      MenuDates: false,
+      dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      menuStartTime: false,
+      startTime: undefined,
+      menuEndTime: false,
+      endTime: undefined,
+      // dates: [
+      //   {
+      //     id: 1,
+      //     menuStartDate: false,
+      //     startDate: undefined,
+      //     menuStartTime: false,
+      //     startTime: undefined,
           
-          menuEndDate: false,
-          endDate: undefined,
-          menuEndTime: false,
-          endTime: undefined,
-        },
-      ],
+      //     menuEndDate: false,
+      //     endDate: undefined,
+      //     menuEndTime: false,
+      //     endTime: undefined,
+      //   },
+      // ],
       rules: {
         required: [(v) => !!v || "Field required"],
         percentage_split: [
