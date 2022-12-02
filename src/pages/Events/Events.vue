@@ -48,7 +48,8 @@
       class="eliminarmobile"
     >
       <template v-slot:[`item.image`]>
-        <img id="bgTicket"
+        <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket">
+        <img id="bgTicket-image"
           src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZXZlbnR8ZW58MHx8MHx8&w=1000&q=80"
           alt="event image"
         >
@@ -199,7 +200,7 @@ export default {
   data() {
     return {
       headers: [
-        { align: "center", value: "image" },
+        { align: "start", value: "image" },
         { text: "NAME", align: "start", value: "name" },
         { text: "DATE", align: "start", value: "date" },
         { text: "TICKETS MINTED", align: "start", value: "minted" },

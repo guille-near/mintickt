@@ -905,22 +905,41 @@
       td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
       td:nth-of-type(7n) {border-radius: 0 .6vmax .6vmax 0}
       td:first-child {
-        --width: 200px;
-        width: var(--width) !important;
+        --width: 220px;
         border-radius: .6vmax 0 0 .6vmax;
+        padding: 2px !important;
         position: relative;
         #bgTicket {
-          --height: calc(100% - 4px);
-          position: absolute !important;
-          left: 2px !important;
-          top: 0 !important;
-          bottom: 0 !important;
-          margin: auto !important;
           width: var(--width) !important;
-          height: var(--height) !important;
-          object-fit: cover !important;
-          border-radius: .6vmax !important;
+          aspect-ratio: 2.2 / 1;
         }
+        #bgTicket-image {
+          position: absolute !important;
+          left: 39px !important;
+          top: 3px !important;
+          width: calc(var(--width) - 50px) !important;
+          height: calc(100% - 13px) !important;
+          object-fit: cover !important;
+          clip-path: polygon(
+            19% 0,
+            100% 0,
+            83% 100%,
+            0 100%
+          );
+        }
+        // #bgTicket-image {
+        //   width: 200px !important;
+        //   // height: calc(100% + 40px);
+        //   aspect-ratio: 2.2 / 1;
+        //   object-fit: cover !important;
+        //   border-radius: .6vmax !important;
+        //   clip-path: polygon(
+        //     19% 0,
+        //     100% 0,
+        //     83% 100%,
+        //     0 100%
+        //   );
+        // }
       }
       &:not(:last-child) {margin-bottom: 1em}
       & .v-data-table__mobile-row:last-child {display: flex;justify-content: center}
