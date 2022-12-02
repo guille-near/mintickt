@@ -45,30 +45,32 @@
 				</v-card>
 			</div>
 			<v-row no-gutters>
-				<!--Modal ticket Url -->
-				<v-dialog width="420px" v-model="modalQR">
-					<template v-slot:activator="{ on, attrs }">
-						<v-btn class="scan-button" v-bind="attrs" v-on="on">
-							<img src="@/assets/icons/scan.svg" alt="scan button" />
-						</v-btn>
-					</template>
+        <div class="center">
+          <!--Modal ticket Url -->
+          <v-dialog width="420px" v-model="modalQR">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn class="scan-button" v-bind="attrs" v-on="on">
+                <img src="@/assets/icons/scan.svg" alt="scan button" />
+              </v-btn>
+            </template>
 
-					<v-card id="modalUrl" class="pa-10">
-						<StreamBarcodeReader
-							@decode="onDecode"
-							@loaded="onLoaded"
-						></StreamBarcodeReader>
-					</v-card>
-				</v-dialog>
+            <v-card id="modalUrl" class="pa-10">
+              <StreamBarcodeReader
+                @decode="onDecode"
+                @loaded="onLoaded"
+              ></StreamBarcodeReader>
+            </v-card>
+          </v-dialog>
 
-				<v-text-field
-					v-model="search"
-					append-icon="mdi-magnify"
-					label="Search"
-					single-line
-					hide-details
-					class="search"
-				/>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            class="search"
+          />
+        </div>
 			</v-row>
 			<v-data-table
 				id="dataTable"

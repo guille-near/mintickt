@@ -844,7 +844,7 @@
     }
     input {caret-color: #CC00B7}
     input,.v-label,i {color: #FFFFFF}
-    input, .v-label {font-size: 1em !important}
+    input, .v-label {font-size: 1em !important; font-weight: 400 !important}
   }
   .eventName {
     font-weight: 700 !important;
@@ -1101,7 +1101,7 @@
     }
     input {caret-color: #CC00B7}
     input,.v-label,i {color: #FFFFFF}
-    input, .v-label {font-size: 1em !important}
+    input, .v-label {font-size: 1em !important; font-weight: 400 !important}
   }
   #dataTable {
     @media (max-width:420px) {font-size: 10px}
@@ -1758,6 +1758,7 @@ body:has(#createTickets) {
 
 div.center:has(.scan-button) {
   @media (min-width: 880px) {display: contents}
+  width: 100%;
 }
 .scan-button {
   @media (min-width: 880px) {display: none !important}
