@@ -1,151 +1,172 @@
 <template>
-  <section id="liveData" class="align divcol gap">
-    <div class="acenter">
-      <v-btn icon to="/events">
-        <v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
-      </v-btn>
-      <h2 style="margin: 0">Event / {{ this.$route.query.event }}</h2>
-    </div>
+	<section id="liveData" class="align divcol gap">
+		<div class="acenter">
+			<v-btn icon to="/events">
+				<v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
+			</v-btn>
+			<h2 style="margin: 0">Event / {{ this.$route.query.event }}</h2>
+		</div>
 
-    <aside class="container-info acenter">
-      <div class="divcol">
-        <label>Tickets sold</label>
-        <span>{{ ticketsSold }}</span>
-      </div>
-      <div class="divcol">
-        <label>Your incomes</label>
-        <span>{{ incomes.toFixed(2) }} N</span>
-      </div>
-      <label style="margin-top: auto"
-        >≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(2) }}</label
-      >
-    </aside>
+		<aside class="container-info acenter">
+			<div class="divcol">
+				<label>Tickets sold</label>
+				<span>{{ ticketsSold }}</span>
+			</div>
+			<div class="divcol">
+				<label>Your incomes</label>
+				<span>{{ incomes.toFixed(2) }} N</span>
+			</div>
+			<label style="margin-top: auto"
+				>≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(2) }}</label
+			>
+		</aside>
 
-    <div class="divcol">
-      <h2 style="margin-bottom: 0.3em">Last updates</h2>
-      <label>Filter by</label>
-    </div>
+		<div class="divcol">
+			<h2 style="margin-bottom: 0.3em">Last updates</h2>
+			<label>Filter by</label>
+		</div>
 
-    <section class="container-down">
-      <div class="container-filter acenter gap">
-        <v-card
-          v-for="(item, i) in dataFilters"
-          :key="i"
-          class="divcol"
-          :class="{ active: item.active }"
-          @click="
-            dataFilters.forEach((e) => {
-              e.active = false;
-            });
-            item.active = true;
-          "
-        >
-          <label>{{ item.name }}</label>
-          <span>{{ item.value }}</span>
-        </v-card>
-      </div>
+		<section class="container-down">
+			<div class="container-filter acenter gap">
+				<v-card
+					v-for="(item, i) in dataFilters"
+					:key="i"
+					class="divcol"
+					:class="{ active: item.active }"
+					@click="
+						dataFilters.forEach((e) => {
+							e.active = false;
+						});
+						item.active = true;
+					"
+				>
+					<label>{{ item.name }}</label>
+					<span>{{ item.value }}</span>
+				</v-card>
+			</div>
+			<v-row no-gutters>
+				<!--Modal ticket Url -->
+				<v-dialog width="420px" v-model="modalQR">
+					<template v-slot:activator="{ on, attrs }">
+						<v-btn class="scan-button" v-bind="attrs" v-on="on">
+							<img src="@/assets/icons/scan.svg" alt="scan button" />
+						</v-btn>
+					</template>
 
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-        class="search"
-      />
+					<v-card id="modalUrl" class="pa-10">
+						<StreamBarcodeReader
+							@decode="onDecode"
+							@loaded="onLoaded"
+						></StreamBarcodeReader>
+					</v-card>
+				</v-dialog>
 
-      <v-data-table
-        id="dataTable"
-        class="eliminarmobile"
-        v-show="
-          dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
-          true
-        "
-        :headers="headersTable"
-        :items="dataTable"
-        :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
-        :mobile-breakpoint="-1"
-      >
-        <template v-slot:[`item.transaction`]="{ item }">
-          <v-btn :href="item.transaction" target="_blank" icon>
-            <img
-              class="copyImg"
-              src="@/assets/icons/link.svg"
-              alt="external link"
-            />
-          </v-btn>
-        </template>
+				<v-text-field
+					v-model="search"
+					append-icon="mdi-magnify"
+					label="Search"
+					single-line
+					hide-details
+					class="search"
+				/>
+			</v-row>
+			<v-data-table
+				id="dataTable"
+				class="eliminarmobile"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
+					true
+				"
+				:headers="headersTable"
+				:items="dataTable"
+				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+				:mobile-breakpoint="-1"
+			>
+				<template v-slot:[`item.transaction`]="{ item }">
+					<v-btn :href="item.transaction" target="_blank" icon>
+						<img
+							class="copyImg"
+							src="@/assets/icons/link.svg"
+							alt="external link"
+						/>
+					</v-btn>
+				</template>
 
-        <template v-slot:[`item.action`]="{ item }">
-          <v-btn @click="completeOrderFans(item)" :loading="item.loadingBtn"
-            >Complete order</v-btn
-          >
-        </template>
-      </v-data-table>
-      
-      <section
-        class="vermobile"
-        v-show="
-          dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
-          true
-        ">
-        <v-card
-          v-for="(item, i) in dataTableMobile"
-          :key="i"
-          class="up divcol"
-          style="display: flex"
-        >
-          <section class="acenter" style="gap: 10px">
-            <span class="eventName">{{ item.nft }}</span>
-            <span>{{ item.signer }}</span>
+				<template v-slot:[`item.action`]="{ item }">
+					<v-btn @click="completeOrderFans(item)" :loading="item.loadingBtn"
+						>Complete order</v-btn
+					>
+				</template>
+			</v-data-table>
 
-            <aside class="acenter" style="gap: 0.5em">
-              <v-btn class="icon" @click="completeOrderFans(item)" :loading="item.loadingBtn">
-                <!-- Complete order -->
-                <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
-              </v-btn>
+			<section
+				class="vermobile"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
+					true
+				"
+			>
+				<v-card
+					v-for="(item, i) in dataTableMobile"
+					:key="i"
+					class="up divcol"
+					style="display: flex"
+				>
+					<section class="acenter" style="gap: 10px">
+						<span class="eventName">{{ item.nft }}</span>
+						<span>{{ item.signer }}</span>
 
-              <v-icon
-                color="white"
-                :style="item.show ? 'transform:rotate(180deg)' : ''"
-                size="2em"
-                @click="
-                  dataTableMobile.forEach((e) => {
-                    e !== item ? (e.show = false) : null;
-                  });
-                  item.show = !item.show;
-                "
-              >
-                mdi-chevron-down
-              </v-icon>
-            </aside>
-          </section>
+						<aside class="acenter" style="gap: 0.5em">
+							<v-btn
+								class="icon"
+								@click="completeOrderFans(item)"
+								:loading="item.loadingBtn"
+							>
+								<!-- Complete order -->
+								<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
+							</v-btn>
 
-          <aside v-show="item.show" class="down space">
-            <div class="divcol">
-              <h3>QUANITTY</h3>
-              <span>{{ item.quantity }}</span>
-            </div>
+							<v-icon
+								color="white"
+								:style="item.show ? 'transform:rotate(180deg)' : ''"
+								size="2em"
+								@click="
+									dataTableMobile.forEach((e) => {
+										e !== item ? (e.show = false) : null;
+									});
+									item.show = !item.show;
+								"
+							>
+								mdi-chevron-down
+							</v-icon>
+						</aside>
+					</section>
 
-            <div class="divcol">
-              <h3>CREATED</h3>
-              <span>{{ item.created }}</span>
-            </div>
+					<aside v-show="item.show" class="down space">
+						<div class="divcol">
+							<h3>QUANITTY</h3>
+							<span>{{ item.quantity }}</span>
+						</div>
 
-            <div class="divcol">
-              <h3>TRANSACTION</h3>
-              <v-btn :href="item.transaction" target="_blank" icon>
-                <img
-                  class="copyImg"
-                  src="@/assets/icons/link.svg"
-                  alt="external link"
-                />
-              </v-btn>
-            </div>
-          </aside>
-        </v-card>
+						<div class="divcol">
+							<h3>CREATED</h3>
+							<span>{{ item.created }}</span>
+						</div>
 
-        <!-- <section id="footer-pagination" class="end gap">
+						<div class="divcol">
+							<h3>TRANSACTION</h3>
+							<v-btn :href="item.transaction" target="_blank" icon>
+								<img
+									class="copyImg"
+									src="@/assets/icons/link.svg"
+									alt="external link"
+								/>
+							</v-btn>
+						</div>
+					</aside>
+				</v-card>
+
+				<!-- <section id="footer-pagination" class="end gap">
           <span style="color:#FFFFFF">1</span>
           <div class="center">
             <v-btn icon>
@@ -156,104 +177,107 @@
             </v-btn>
           </div>
         </section> -->
-      </section>
+			</section>
 
-      <v-data-table
-        id="dataTable"
-        class="eliminarmobile"
-        :loading="loading"
-        :search="search"
-        v-show="
-          dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
-            .active == true
-        "
-        :headers="headersTableExtra"
-        :items="dataTableExtra"
-        :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
-        :mobile-breakpoint="-1"
-      >
-        <template v-slot:[`item.transaction`]="{ item }">
-          <v-btn :href="item.transaction" target="_blank" icon>
-            <img
-              class="copyImg"
-              src="@/assets/icons/link.svg"
-              alt="external link"
-            />
-          </v-btn>
-        </template>
+			<v-data-table
+				id="dataTable"
+				class="eliminarmobile"
+				:loading="loading"
+				:search="search"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
+						.active == true
+				"
+				:headers="headersTableExtra"
+				:items="dataTableExtra"
+				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+				:mobile-breakpoint="-1"
+			>
+				<template v-slot:[`item.transaction`]="{ item }">
+					<v-btn :href="item.transaction" target="_blank" icon>
+						<img
+							class="copyImg"
+							src="@/assets/icons/link.svg"
+							alt="external link"
+						/>
+					</v-btn>
+				</template>
 
-        <template v-slot:[`item.action`]="{ item }">
-          <v-btn
-            @click="completeOrderReedemer(item)"
-            :loading="item.loadingBtn"
-            >Complete order</v-btn
-          >
-        </template>
-      </v-data-table>
+				<template v-slot:[`item.action`]="{ item }">
+					<v-btn @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
+						>Complete order</v-btn
+					>
+				</template>
+			</v-data-table>
 
-      <section
-        class="vermobile"
-        v-show="
-          dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
-            .active == true
-        ">
-        <v-card
-          v-for="(item, i) in dataTableExtraMobile"
-          :key="i"
-          class="up divcol"
-          style="display: flex"
-        >
-          <section class="acenter" style="gap: 10px">
-            <span class="eventName">{{ item.ticket }}</span>
-            <span>{{ item.signer }}</span>
+			<section
+				class="vermobile"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
+						.active == true
+				"
+			>
+				<v-card
+					v-for="(item, i) in dataTableExtraMobile"
+					:key="i"
+					class="up divcol"
+					style="display: flex"
+				>
+					<section class="acenter" style="gap: 10px">
+						<span class="eventName">{{ item.ticket }}</span>
+						<span>{{ item.signer }}</span>
 
-            <aside class="acenter" style="gap: 0.5em">
-              <v-btn class="icon" @click="completeOrderReedemer(item)" :loading="item.loadingBtn">
-                <!-- Complete order -->
-                <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
-              </v-btn>
+						<aside class="acenter" style="gap: 0.5em">
+							<v-btn
+								class="icon"
+								@click="completeOrderReedemer(item)"
+								:loading="item.loadingBtn"
+							>
+								<!-- Complete order -->
+								<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
+							</v-btn>
 
-              <v-icon
-                color="white"
-                :style="item.show ? 'transform:rotate(180deg)' : ''"
-                size="2em"
-                @click="
-                  dataTableExtraMobile.forEach((e) => {
-                    e !== item ? (e.show = false) : null;
-                  });
-                  item.show = !item.show;
-                "
-              >
-                mdi-chevron-down
-              </v-icon>
-            </aside>
-          </section>
+							<v-icon
+								color="white"
+								:style="item.show ? 'transform:rotate(180deg)' : ''"
+								size="2em"
+								@click="
+									dataTableExtraMobile.forEach((e) => {
+										e !== item ? (e.show = false) : null;
+									});
+									item.show = !item.show;
+								"
+							>
+								mdi-chevron-down
+							</v-icon>
+						</aside>
+					</section>
 
-          <aside v-show="item.show" class="down space">
-            <div class="divcol">
-              <h3>QUANITTY</h3>
-              <span>{{ item.quantity }}</span>
-            </div>
+					<aside v-show="item.show" class="down space">
+						<div class="divcol">
+							<h3>QUANITTY</h3>
+							<span>{{ item.quantity }}</span>
+						</div>
 
-            <div class="divcol">
-              <h3>CREATED</h3>
-              <span>{{ item.created }}</span>
-            </div>
+						<div class="divcol">
+							<h3>CREATED</h3>
+							<span>{{ item.created }}</span>
+						</div>
 
-            <div class="divcol">
-              <h3>TRANSACTION</h3>
-              <v-btn :href="item.transaction" target="_blank" icon>
-                <img
-                  class="copyImg"
-                  src="@/assets/icons/link.svg"
-                  alt="external link"
-                />
-              </v-btn>
-            </div>
-          </aside>
-        </v-card>
+						<div class="divcol">
+							<h3>TRANSACTION</h3>
+							<v-btn :href="item.transaction" target="_blank" icon>
+								<img
+									class="copyImg"
+									src="@/assets/icons/link.svg"
+									alt="external link"
+								/>
+							</v-btn>
+						</div>
+					</aside>
+				</v-card>
 
-        <!-- <section id="footer-pagination" class="end gap">
+				<!-- <section id="footer-pagination" class="end gap">
           <span style="color:#FFFFFF">1</span>
           <div class="center">
             <v-btn icon>
@@ -264,12 +288,13 @@
             </v-btn>
           </div>
         </section> -->
-      </section>
-    </section>
-  </section>
+			</section>
+		</section>
+	</section>
 </template>
 
 <script>
+import { StreamBarcodeReader } from "vue-barcode-reader";
 import moment from "moment";
 import gql from "graphql-tag";
 const mb_views_nft_tokens_aggregate = gql`
@@ -331,53 +356,50 @@ const burned_reedemed_tokens_aggregate = gql`
   }
 `;
 const tickets = gql`
-  query MyQuery($_iregex: String!, $tokens: [String]!) {
-    mb_views_nft_tokens(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "ticketing" }
-        burned_receipt_id: { _is_null: false }
-        token_id: { _nin: $tokens }
-      }
-    ) {
-      description
-      token_id
-      owner
-      last_transfer_timestamp
-      minted_receipt_id
-      nft_contract_created_at
-      minted_timestamp
-      last_transfer_receipt_id
-      burned_receipt_id
-      title
-      burned_timestamp
-    }
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+  mb_views_nft_tokens(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+  ) {
+    description
+    token_id
+    owner
+    last_transfer_timestamp
+    minted_receipt_id
+    nft_contract_created_at
+    minted_timestamp
+    last_transfer_receipt_id
+    burned_receipt_id
+    title
+    burned_timestamp
   }
+}
+
 `;
 const goods_redeemed = gql`
-  query MyQuery($_iregex: String!) {
-    mb_views_nft_tokens(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "redeemed" }
-        burned_receipt_id: { _is_null: false }
-      }
-    ) {
-      description
-      token_id
-      owner
-      last_transfer_timestamp
-      minted_receipt_id
-      nft_contract_created_at
-      minted_timestamp
-      last_transfer_receipt_id
-      burned_receipt_id
-      burned_timestamp
-    }
+  query MyQuery($_iregex: String!, $owner: String) {
+  mb_views_nft_tokens(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
+      , owner: {_like: $owner}}
+  ) {
+    description
+    token_id
+    owner
+    last_transfer_timestamp
+    minted_receipt_id
+    nft_contract_created_at
+    minted_timestamp
+    last_transfer_receipt_id
+    burned_receipt_id
+    burned_timestamp
   }
+}
 `;
 export default {
   name: "LiveData",
+   components: { StreamBarcodeReader },
   data() {
     return {
       dataFilters: [
@@ -421,6 +443,8 @@ export default {
       fans_inside_tota: 0,
       loading: true,
       search: "",
+      modalQR: false,
+      owner: "%"
     };
   },
   mounted() {
@@ -481,10 +505,11 @@ export default {
       var rows = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       this.$apollo
-        .query({
-          query: goods_redeemed,
+        .mutate({
+          mutation: goods_redeemed,
           variables: {
             _iregex: thingid[1],
+            owner: this.owner
           },
         })
         .then((response) => {
@@ -605,8 +630,8 @@ export default {
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       var arr = [];
       this.$apollo
-        .query({
-          query: burned_fans_tokens_aggregate,
+        .mutate({
+          mutation: burned_fans_tokens_aggregate,
           variables: {
             _iregex: thingid[1],
           },
@@ -616,13 +641,13 @@ export default {
           arr = res.data.fansinsides.map(function (el) {
             return el.tokenid;
           });
-
           this.$apollo
             .query({
               query: tickets,
               variables: {
                 _iregex: thingid[1],
                 tokens: arr,
+                owner: this.owner
               },
             })
             .then((response) => {
@@ -724,6 +749,24 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+     ModalQR() {
+        this.modalQR=true
+    },  
+    onDecode(result) {
+      this.owner = result.split(":")[1];
+      this.dataTableMobile = [];
+      this.dataTableExtraMobile = [];
+      this.dataTable = [];
+      this.dataTableExtra = [];
+      this.getFansInside();
+      this.getExtra();
+      this.$forceUpdate();
+      setTimeout(this.modalQR = false, 15000);
+      // console.log(`Decode text from QR code is ${this.owner}`)
+    },
+    onLoaded() {
+      console.log(`Ready to start scanning barcodes`)
     },
   },
 };

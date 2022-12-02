@@ -44,7 +44,7 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    //this.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
