@@ -2,13 +2,15 @@
 	<section id="events" class="align divcol">
 		<ModalApprove ref="modala"></ModalApprove>
 		<h2>Your Events</h2>
-		<div class="center">
+		<div class="container-search center">
 			<v-text-field
 				v-model="search"
-				append-icon="mdi-magnify"
+				:append-icon="search ? '' : 'mdi-magnify'"
 				label="Search"
 				single-line
 				hide-details
+        clear-icon="mdi-close"
+        clearable
 				class="search"
 			/>
 		</div>
@@ -24,7 +26,7 @@
 			class="eliminarmobile"
 		>
 			<template v-slot:[`item.image`]="{ item }">
-        <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket">
+        <!-- <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket"> -->
         <img id="bgTicket-image" :src="getIpfs(item.thingid)" alt="event image">
 			</template>
 
@@ -55,7 +57,7 @@
 
 		<section class="vermobile">
 			<v-card
-				v-for="(item, i) in dataTableMobile"
+				v-for="(item, i) in filter_dataTableMobile"
 				:key="i"
 				class="up divcol"
 				style="display: flex"
@@ -206,6 +208,15 @@ export default {
       src: [],
       modalQR: false,
     };
+  },
+  computed: {
+    filter_dataTableMobile() {
+      let filter = this.dataTableMobile
+      
+      if (this.search) filter = filter.filter(data => data.name.includes(this.search))
+
+      return filter
+    }
   },
   mounted() {
     this.scanListener()
