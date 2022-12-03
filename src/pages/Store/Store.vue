@@ -33,21 +33,41 @@
           </div>
         </aside>
 
+        <aside v-if="Datos.about" class="aboutSection divcol">
+          <h3 class="h7-em p">When</h3>
+
+          <div class="acenter" style="gap: 10px">
+            <img src="@/assets/icons/calendar.svg" alt="calendar icon" style="width: 20px">
+            
+            <div class="divcol" style="gap: 4px">
+              <p class="p">
+                <strong>Start at: </strong>
+                Wed, Dec 14, 2022 15:00h.
+              </p>
+              
+              <p class="p">
+                <strong>Ends at: </strong>
+                Thu, Dec 15, 2022 1:00h.
+              </p>
+            </div>
+          </div>
+        </aside>
+
         <aside class="contLocation divcol">
-          <h3 class="h7-em">Location</h3>
+          <h3 class="h7-em">Where</h3>
+          <p
+            class="h8-em mb-4"
+            style="display: flex; align-items: flex-end; gap: 0.5em"
+          >
+            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
+            {{ Datos.location }}
+          </p>
           <iframe
             referrerpolicy="no-referrer-when-downgrade"
             :src="googlemap"
             allowfullscreen
           >
           </iframe>
-          <p
-            class="h8-em"
-            style="display: flex; align-items: flex-end; gap: 0.5em"
-          >
-            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
-            {{ Datos.location }}
-          </p>
         </aside>
 
         <aside class="divcol">
