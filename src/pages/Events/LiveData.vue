@@ -45,7 +45,7 @@
 				</v-card>
 			</div>
 			<v-row no-gutters>
-        <div class="center">
+        <div class="container-search center">
           <!--Modal ticket Url -->
           <v-dialog width="420px" v-model="modalQR">
             <template v-slot:activator="{ on, attrs }">
@@ -64,10 +64,12 @@
 
           <v-text-field
             v-model="search"
-            append-icon="mdi-magnify"
+            :append-icon="search ? '' : 'mdi-magnify'"
             label="Search"
             single-line
             hide-details
+            clear-icon="mdi-close"
+            clearable
             class="search"
           />
         </div>
@@ -75,6 +77,8 @@
 			<v-data-table
 				id="dataTable"
 				class="eliminarmobile"
+				:loading="loading"
+				:search="search"
 				v-show="
 					dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
 					true
@@ -109,7 +113,7 @@
 				"
 			>
 				<v-card
-					v-for="(item, i) in dataTableMobile"
+					v-for="(item, i) in filter_dataTableMobile"
 					:key="i"
 					class="up divcol"
 					style="display: flex"
@@ -220,7 +224,7 @@
 				"
 			>
 				<v-card
-					v-for="(item, i) in dataTableExtraMobile"
+					v-for="(item, i) in filter_dataTableExtraMobile"
 					:key="i"
 					class="up divcol"
 					style="display: flex"
@@ -453,6 +457,22 @@ export default {
     this.responsive();
     this.fetch();
     this.getData();
+  },
+  computed: {
+    filter_dataTableExtraMobile() {
+      let filter = this.dataTableExtraMobile
+      
+      if (this.search) filter = filter.filter(data => data.ticket.includes(this.search))
+
+      return filter
+    },
+    filter_dataTableMobile() {
+      let filter = this.dataTableMobile
+      
+      if (this.search) filter = filter.filter(data => data.nft.includes(this.search))
+
+      return filter
+    },
   },
   methods: {
     responsive() {
