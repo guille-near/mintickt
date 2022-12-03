@@ -776,13 +776,15 @@ export default {
         this.modalQR=true
     },  
     onDecode(result) {
-      this.owner = result.split(":")[1];
-      this.dataTableMobile = [];
-      this.dataTableExtraMobile = [];
-      this.dataTable = [];
-      this.dataTableExtra = [];
-      this.getFansInside();
-      this.getExtra();
+      // this.owner = result.split(":")[1];
+      // this.dataTableMobile = [];
+      // this.dataTableExtraMobile = [];
+      // this.dataTable = [];
+      // this.dataTableExtra = [];
+      // this.getFansInside();
+      // this.getExtra();
+      // this.$forceUpdate();
+      this.search = result.includes(":") ? result.split(":")[1] : result;
       this.$forceUpdate();
       setTimeout(this.modalQR = false, 15000);
       // console.log(`Decode text from QR code is ${this.owner}`)

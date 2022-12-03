@@ -725,7 +725,7 @@
 			<v-window-item :value="5">
 				<section class="jcenter divwrap">
           <h2 class="vermobile align" style="text-align: center">
-            Let's create your NFT for your event!
+            Congrats, you just created your NFT tickets!
           </h2>
           
 					<div class="ticket-wrapper" v-if="imagegoodie">
@@ -734,25 +734,9 @@
 					<div class="ticket-wrapper" v-if="imagegoodie1" id="my-node-goodie">
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							src="https://mintickt.mypinata.cloud/ipfs/QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw"
 							alt="Ticket image"
 						/>
-
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
-							</template>
-						</v-file-input>
 					</div>
 
           <div class="container-content divcol" style="gap: 20px">
@@ -1063,7 +1047,8 @@ export default {
       editorRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
-      burn_ticket_image: this.$pinata_gateway+"QmYK5cKUukGRhiuZfdG7mM9aTtZvj9SK3zRHn3xyb1g53h",
+      burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
+      burn_goodie_image: this.$pinata_gateway+"QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
       imagecanvas: localStorage.getItem("canvas") === null  ? false : true,
       imagecanvas1: localStorage.getItem("canvas") === null  ? true : false,
       imagegoodie: localStorage.getItem("canvas_goodie") === null  ? false : true,
@@ -1322,8 +1307,12 @@ export default {
             value: "NFT",
           },
           {
-            trait_type: "time",
-            value: this.time,
+            trait_type: "start_time",
+            value: this.startTime,
+          },
+          {
+            trait_type: "end_time",
+            value: this.endTime,
           },
         ];
         let store = this.$store_mintbase;
@@ -1403,7 +1392,8 @@ export default {
     async mintGoodie() {
       if (this.$refs.form4.validate()) {
         // console.log(this.dataTickets.attendees);
-        this.nextLast();
+        //this.nextLast();
+        this.getBase64FromUrlGoodie(this.burn_goodie_image)
         this.loading = true;
         this.disable = true;
         //Api key an data
@@ -1582,6 +1572,19 @@ export default {
         }
       });
     },
+    async getBase64FromUrlGoodie(url)  {
+      const data = await fetch(url);
+      const blob = await data.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        reader.onloadend = () => {
+          const base64data = reader.result;   
+          resolve(base64data);
+          localStorage.setItem("canvas_goodie", base64data);
+        }
+      });
+    },
     async getBase64FromUrlMainImage(url)  {
       const data = await fetch(url);
       const blob = await data.blob();
@@ -1596,28 +1599,29 @@ export default {
         }
       });
     },
-    nextLast() {
-      if (this.$refs.form4.validate()) {
-        var container = document.getElementById("my-node-goodie"); /* full page */
-        html2canvas(container, {
-          backgroundColor: null,
-          //y: (container / 2, container / 2, 30),
-          //height: 580,
-        }).then((canvas) => {
-          // let link = document.createElement("a");
-          // link.download = "image_name.png";
-          // link.href = canvas.toDataURL("image/png", 1.0);
-          // document.body.appendChild(link);
-          // link.click();
+    // nextLast() {
+    //   if (this.$refs.form4.validate()) {
+    //     var container = document.getElementById("my-node-goodie"); /* full page */
+    //     html2canvas(container, {
+    //       backgroundColor: null,
+    //       //y: (container / 2, container / 2, 30),
+    //       //height: 580,
+    //     }).then((canvas) => {
+    //       // let link = document.createElement("a");
+    //       // link.download = "image_name.png";
+    //       // link.href = canvas.toDataURL("image/png", 1.0);
+    //       // document.body.appendChild(link);
+    //       // link.click();
 
-          var image = new Image();
-          image.src = canvas.toDataURL("image/png", 1.0);
-          localStorage.setItem("canvas_goodie", canvas.toDataURL("image/png", 1.0));
-          this.image = image;
-          // console.log(this.image);
-        });
-      }
-    },
+    //       // var image = new Image();
+    //       // image.src = canvas.toDataURL("image/png", 1.0);
+    //       // localStorage.setItem("canvas_goodie", canvas.toDataURL("image/png", 1.0));
+    //       // this.image = image;
+    //       this.getBase64FromUrlGoodie(this.burn_goodie_image)
+    //       // console.log(this.image);
+    //     });
+    //   }
+    // },
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.src.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
