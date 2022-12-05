@@ -272,6 +272,7 @@ export default {
       localStorage.removeItem("metadata_reference");
       localStorage.removeItem("eventid");
       localStorage.removeItem("event_name");
+      localStorage.removeItem("control_mint_appoval");
       //localStorage.removeItem("metadata_id");
       localStorage.setItem('step', 1);
       this.$router.push('/events/register')

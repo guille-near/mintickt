@@ -54,15 +54,11 @@ export default {
     ) {
       this.gotToEvents();
     }
-    //  if (urlParams.get("errorCode") !== null) {
-    //   localStorage.removeItem('to_approve')
-    //   this.gotToEvents();
-    // }
   },
   methods: {
     async getData() {
-      let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-      const user = datos.accountId;
+      // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+      // const user = datos.accountId;
       if(localStorage.getItem("metadata_id") != null){
         this.$apollo
           .mutate({
@@ -72,6 +68,7 @@ export default {
             },
           })
           .then((response) => {
+            this.arr = [];
             //get all the tokens to be approve
             this.tokens_id = response.data.mb_views_nft_tokens;
             //console.log(this.tokens_id)
@@ -93,11 +90,8 @@ export default {
                     //console.log(res.data)
                     if(res.data === null){
                       this.arr.push(this.tokens_id[prop].token_id);
-                      //console.log(this.arr)
-                      localStorage.setItem('to_approve', this.arr)
-                      setTimeout(this.modalApprove = true, 10000);
-                    } else {
-                      localStorage.removeItem('to_approve');
+                      //console.log(this.arr)          
+                      setTimeout(this.modalApprove = true, 3000);
                     }
                   })
                   .catch((error) => {
@@ -186,6 +180,7 @@ export default {
       localStorage.removeItem("metadata_reference");
       localStorage.removeItem("eventid");
       localStorage.removeItem("event_name");
+      localStorage.removeItem("control_mint_appoval");
       //localStorage.removeItem("metadata_id");
     },
   }

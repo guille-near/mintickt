@@ -1,202 +1,202 @@
 <template>
-  <section id="options" class="divcol gap align">
-    <ModalSuccess ref="modal"></ModalSuccess>
-    <ModalApprove ref="modala"></ModalApprove>
+	<section id="options" class="divcol gap align">
+		<ModalSuccess ref="modal"></ModalSuccess>
+		<ModalApprove ref="modala"></ModalApprove>
 
-    <div class="acenter">
-      <v-btn icon to="/events">
-        <v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
-      </v-btn>
-      <h2 class="p" style="margin: 0">{{ name }} / Settings</h2>
-    </div>
+		<div class="acenter">
+			<v-btn icon to="/events">
+				<v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
+			</v-btn>
+			<h2 class="p" style="margin: 0">{{ name }} / Settings</h2>
+		</div>
 
-    <aside class="container-actions divcol">
-      <span>Burn a ticket</span>
-      <label>(Access Control)</label>
-      <div class="space">
-        <v-btn @click="modalTicket = true">
-          <img src="@/assets/icons/qr.svg" alt="qr icon" />
-          Show QR
-        </v-btn>
-        <v-btn @click="copyTicket" :loading="loading_tickets">
-          <img src="@/assets/icons/copy.svg" alt="copy icon" />
-          {{ message_ticket }}
-        </v-btn>
-      </div>
-    </aside>
+		<aside class="container-actions divcol">
+			<span>Burn a ticket</span>
+			<label>(Access Control)</label>
+			<div class="space">
+				<v-btn @click="modalTicket = true">
+					<img src="@/assets/icons/qr.svg" alt="qr icon" />
+					Show QR
+				</v-btn>
+				<v-btn @click="copyTicket" :loading="loading_tickets">
+					<img src="@/assets/icons/copy.svg" alt="copy icon" />
+					{{ message_ticket }}
+				</v-btn>
+			</div>
+		</aside>
 
-    <aside class="container-actions divcol">
-      <span>Burn a goodie</span>
-      <label>(Goodies)</label>
-      <div class="space">
-        <v-btn @click="modalGoodie = true">
-          <img src="@/assets/icons/qr.svg" alt="qr icon" />
-          Show QR
-        </v-btn>
-        <v-btn @click="copyGoodies" :loading="loading_goodies">
-          <img src="@/assets/icons/copy.svg" alt="copy icon" />
-          {{ message_goodies }}
-        </v-btn>
-      </div>
-    </aside>
+		<aside class="container-actions divcol">
+			<span>Burn a goodie</span>
+			<label>(Goodies)</label>
+			<div class="space">
+				<v-btn @click="modalGoodie = true">
+					<img src="@/assets/icons/qr.svg" alt="qr icon" />
+					Show QR
+				</v-btn>
+				<v-btn @click="copyGoodies" :loading="loading_goodies">
+					<img src="@/assets/icons/copy.svg" alt="copy icon" />
+					{{ message_goodies }}
+				</v-btn>
+			</div>
+		</aside>
 
-    <aside class="container-info divcol">
-      <div class="space">
-        <div class="divcol">
-          <label>Tickets minted</label>
-          <span>{{ listed }} / {{ minted }}</span>
-        </div>
-        <div id="container-actions" class="gap">
-          <v-btn @click="modalMintMore = true">Mint more</v-btn>
-        </div>
-      </div>
+		<aside class="container-info divcol">
+			<div class="space">
+				<div class="divcol">
+					<label>Tickets minted</label>
+					<span>{{ listed }} / {{ minted }}</span>
+				</div>
+				<div id="container-actions" class="gap">
+					<v-btn @click="modalMintMore = true">Mint more</v-btn>
+				</div>
+			</div>
 
-      <div class="space">
-        <div class="divcol">
-          <label>Tickets listed</label>
-          <span>{{ listed }}</span>
-        </div>
+			<div class="space">
+				<div class="divcol">
+					<label>Tickets listed</label>
+					<span>{{ listed }}</span>
+				</div>
 
-        <v-btn @click="modalListMore = true">List more</v-btn>
-      </div>
-    </aside>
+				<v-btn @click="modalListMore = true">List more</v-btn>
+			</div>
+		</aside>
 
-    <!-- modalQr -->
-    <v-dialog v-model="modalQR" width="300px">
-      <StreamBarcodeReader
-        @decode="onDecode('hola')"
-        @loaded="onLoaded"
-      ></StreamBarcodeReader>
-    </v-dialog>
+		<!-- modalQr -->
+		<v-dialog v-model="modalQR" width="300px">
+			<StreamBarcodeReader
+				@decode="onDecode('hola')"
+				@loaded="onLoaded"
+			></StreamBarcodeReader>
+		</v-dialog>
 
-    <!-- modal mint more -->
-    <v-dialog v-model="modalMintMore" width="300px">
-      <v-card class="modalMore">
-        <label for="amount">Amount</label>
-        <v-text-field
-          id="amount"
-          v-model="mint_amount"
-          type="number"
-          hide-spin-buttons
-          v-debounce:800ms="checkMintAmount"
-          hide-details
-          solo
-        >
-          <template v-slot:append>
-            <v-btn color=" #C4C4C4" @click="controlAmount('less')">
-              <v-icon color="black"> mdi-minus </v-icon>
-            </v-btn>
-            <v-btn color=" #C4C4C4" @click="controlAmount('more')">
-              <v-icon color="black"> mdi-plus </v-icon>
-            </v-btn>
-          </template>
-        </v-text-field>
-        <v-btn style="margin-top: 2em" @click="mint" :loading="loading"
-          >Mint More</v-btn
-        >
-      </v-card>
-    </v-dialog>
+		<!-- modal mint more -->
+		<v-dialog v-model="modalMintMore" width="300px">
+			<v-card class="modalMore">
+				<label for="amount">Amount</label>
+				<v-text-field
+					id="amount"
+					v-model="mint_amount"
+					type="number"
+					hide-spin-buttons
+					v-debounce:800ms="checkMintAmount"
+					hide-details
+					solo
+				>
+					<template v-slot:append>
+						<v-btn color=" #C4C4C4" @click="controlAmount('less')">
+							<v-icon color="black"> mdi-minus </v-icon>
+						</v-btn>
+						<v-btn color=" #C4C4C4" @click="controlAmount('more')">
+							<v-icon color="black"> mdi-plus </v-icon>
+						</v-btn>
+					</template>
+				</v-text-field>
+				<v-btn style="margin-top: 2em" @click="mint" :loading="loading"
+					>Mint More</v-btn
+				>
+			</v-card>
+		</v-dialog>
 
-    <!-- modal list more -->
-    <v-dialog v-model="modalListMore" width="300px">
-      <v-card class="modalMore divcol">
-        <div class="divcol">
-          <label for="amount">Amount</label>
-          <v-text-field
-            id="amount"
-            v-model="amount_list"
-            type="number"
-            v-debounce:800ms="checkListAmount"
-            hide-spin-buttons
-            hide-details
-            solo
-          >
-            <template v-slot:append>
-              <v-btn color=" #C4C4C4" @click="controlListAmount('less')">
-                <v-icon color="black"> mdi-minus </v-icon>
-              </v-btn>
-              <v-btn color=" #C4C4C4" @click="controlListAmount('more')">
-                <v-icon color="black"> mdi-plus </v-icon>
-              </v-btn>
-            </template>
-          </v-text-field>
-        </div>
+		<!-- modal list more -->
+		<v-dialog v-model="modalListMore" width="300px">
+			<v-card class="modalMore divcol">
+				<div class="divcol">
+					<label for="amount">Amount</label>
+					<v-text-field
+						id="amount"
+						v-model="amount_list"
+						type="number"
+						v-debounce:800ms="checkListAmount"
+						hide-spin-buttons
+						hide-details
+						solo
+					>
+						<template v-slot:append>
+							<v-btn color=" #C4C4C4" @click="controlListAmount('less')">
+								<v-icon color="black"> mdi-minus </v-icon>
+							</v-btn>
+							<v-btn color=" #C4C4C4" @click="controlListAmount('more')">
+								<v-icon color="black"> mdi-plus </v-icon>
+							</v-btn>
+						</template>
+					</v-text-field>
+				</div>
 
-        <div class="divcol" style="margin-top: 2em">
-          <label for="amount">Price (NEAR)</label>
-          <v-text-field
-            id="amount"
-            v-model="price_list"
-            type="number"
-            v-debounce:300ms="priceNEAR"
-            hide-spin-buttons
-            hide-details
-            solo
-          >
-            <template v-slot:append>
-              <v-btn color=" #C4C4C4" @click="controlPrice('less')">
-                <v-icon color="black"> mdi-minus </v-icon>
-              </v-btn>
-              <v-btn color=" #C4C4C4" @click="controlPrice('more')">
-                <v-icon color="black"> mdi-plus </v-icon>
-              </v-btn>
-            </template>
-          </v-text-field>
-          <span class="conversion">~ {{ usd }} USD</span>
-        </div>
-        <v-btn @click="list" :loading="loading" :disabled="disable">List</v-btn>
-      </v-card>
-    </v-dialog>
+				<div class="divcol" style="margin-top: 2em">
+					<label for="amount">Price (NEAR)</label>
+					<v-text-field
+						id="amount"
+						v-model="price_list"
+						type="number"
+						v-debounce:300ms="priceNEAR"
+						hide-spin-buttons
+						hide-details
+						solo
+					>
+						<template v-slot:append>
+							<v-btn color=" #C4C4C4" @click="controlPrice('less')">
+								<v-icon color="black"> mdi-minus </v-icon>
+							</v-btn>
+							<v-btn color=" #C4C4C4" @click="controlPrice('more')">
+								<v-icon color="black"> mdi-plus </v-icon>
+							</v-btn>
+						</template>
+					</v-text-field>
+					<span class="conversion">~ {{ usd }} USD</span>
+				</div>
+				<v-btn @click="list" :loading="loading" :disabled="disable">List</v-btn>
+			</v-card>
+		</v-dialog>
 
-    <!--Modal ticket Url -->
-    <v-dialog v-model="modalTicket" width="420">
-        <v-card id="modalUrl">
-          <div class="divcol center">
-            <h3 class="p">Url Code</h3>
-          </div>
-          <center>
-            <div id="my-node-ticket">
-              <qr-code
-                :text="urltickets"
-                error-level="L"
-              >
-              </qr-code>
-            </div>
-          </center>
-          <div class="divcol center">
-            <v-btn :loading="loading_tickets_qr" @click="downloadQrTicket">Download QR</v-btn>
-          </div>
-        </v-card>
-      </v-dialog>
+		<!--Modal ticket Url -->
+		<v-dialog v-model="modalTicket" width="420">
+			<v-card id="modalUrl">
+				<div class="divcol center">
+					<h3 class="p">Url Code</h3>
+				</div>
+				<center>
+					<div id="my-node-ticket">
+						<qr-code :text="urltickets" error-level="L"> </qr-code>
+					</div>
+				</center>
+				<div class="divcol center">
+					<v-btn :loading="loading_tickets_qr" @click="downloadQrTicket"
+						>Download QR</v-btn
+					>
+				</div>
+			</v-card>
+		</v-dialog>
 
-      <!--Modal goodie Url -->
-    <v-dialog v-model="modalGoodie" width="420">
-        <v-card id="modalUrl">
-          <div class="divcol center">
-            <h3 class="p">Url Code</h3>
-          </div>
-          <center>
-            <div id="my-node-goodies">
-              <qr-code
-                :text="urlgoodies"
-                error-level="L"
-              >
-              </qr-code>
-            </div>
-          </center>
-          <div class="divcol center">
-            <v-btn :loading="loading_goodies_qr" @click="downloadQrGoodies">Download QR</v-btn>
-          </div>
-        </v-card>
-      </v-dialog>
-      <div class="text-center">
+		<!--Modal goodie Url -->
+		<v-dialog v-model="modalGoodie" width="420">
+			<v-card id="modalUrl">
+				<div class="divcol center">
+					<h3 class="p">Url Code</h3>
+				</div>
+				<center>
+					<div id="my-node-goodies">
+						<qr-code :text="urlgoodies" error-level="L"> </qr-code>
+					</div>
+				</center>
+				<div class="divcol center">
+					<v-btn :loading="loading_goodies_qr" @click="downloadQrGoodies"
+						>Download QR</v-btn
+					>
+				</div>
+			</v-card>
+		</v-dialog>
+		<div class="text-center">
 			<v-overlay :value="overlay">
 				<v-progress-circular indeterminate size="64"></v-progress-circular>
-        <h3 class="mt-3">Minting in progress...</h3>
-        <h3 ref="tminted">{{ show_total_minted }}</h3>
+				<h3 class="mt-3">Minting in progress...</h3>
+				<h3 ref="tminted">{{ show_total_minted }}</h3>
 			</v-overlay>
 		</div>
-  </section>
+		<v-overlay :value="overlay_building">
+			<v-progress-circular indeterminate size="64"></v-progress-circular>
+			<h3 class="mt-3">Building event be pacient...</h3>
+		</v-overlay>
+	</section>
 </template>
 
 <script>
@@ -313,6 +313,17 @@ const mb_views_nft_tokens_redeemed = gql`
     }
   }
 `;
+const mb_views_nft_tokens = gql`
+  query MyQuery($_iregex: String!) {
+  mb_views_nft_tokens_aggregate(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}, burned_receipt_id: {_is_null: true}, last_transfer_timestamp: {_is_null: true}}
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
+`;
 export default {
   name: "options",
   components: { StreamBarcodeReader, ModalSuccess, ModalApprove },
@@ -346,10 +357,12 @@ export default {
       available_to_list: 0,
       overlay: false,
       new_minted: 0,
+      overlay_building: false
     };
   },
   mounted() {
-    console.log("-->", this.urltickets)
+    //console.log("-->", this.urltickets)
+    this.getMintedLoad();
     this.$refs.modala.getData();
     //setTimeout(localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false, 30000);
     localStorage.getItem("new_minted") === null || 'undefined' ? localStorage.setItem("new_minted", 1) : "";
@@ -378,8 +391,13 @@ export default {
     }
     //List
     if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
-      this.$refs.modala.modalApprove = true;
       this.$refs.modal.modalSuccess = false;
+      this.polling = setInterval(() => {
+      this.getMinted();
+       //When the amount is equal close the overlay
+       // this.overlay = !this.overlay;
+       this.$forceUpdate();
+      }, 5000);
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
@@ -511,6 +529,8 @@ export default {
               },
             ],
           });
+          var actual_counter = parseInt(localStorage.getItem("control_mint_appoval"));
+          localStorage.setItem("control_mint_appoval", (this.amount_list * 2) + actual_counter)
           //Map the object value to be listed
           let counter = 0;
           Object.entries(response.data).forEach(([key, value]) => {
@@ -824,7 +844,46 @@ export default {
     },
     prueba(item) {
       console.log(item)
-    }
+    },
+    async getMinted() {
+      this.$apollo
+        .mutate({
+          mutation: mb_views_nft_tokens,
+          variables: {
+            _iregex: localStorage.getItem("metadata_id").split(":")[1],
+          },
+        })
+        .then((response) => {
+          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          // console.log(counter)
+          if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){            
+             this.overlay_building = false;
+             this.$refs.modala.getData();
+          } else {
+             this.$refs.modala.modalApprove = false;
+             this.overlay_building = true;
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    },
+    async getMintedLoad() {
+      this.$apollo
+        .mutate({
+          mutation: mb_views_nft_tokens,
+          variables: {
+            _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
+          },
+        })
+        .then((response) => {
+          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          localStorage.setItem("control_mint_appoval", counter);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    },
   },
 };
 </script>
