@@ -10,7 +10,7 @@
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
         <v-chip color="rgba(0, 0, 0, 0.3)">
-          {{ date }}. {{ date_start }}
+          {{ date }}. {{ date_start }}, {{ time_start }}h
         </v-chip>
         <h2>{{ tittle }}</h2>
         <!-- <span>{{ tittle }}</span> -->
@@ -42,12 +42,12 @@
             <div class="divcol" style="gap: 4px">
               <p class="p">
                 <strong>Start at: </strong>
-                Wed, Dec 14, 2022 15:00h.
+                {{ tsformart}}.
               </p>
               
               <p class="p">
                 <strong>Ends at: </strong>
-                Thu, Dec 15, 2022 1:00h.
+                {{ tsendformat }}.
               </p>
             </div>
           </div>
@@ -280,7 +280,10 @@ export default {
       googlemap: "",
       store: "",
       approval_id: "",
-      time: ""
+      time_start: "",
+      time_end: "",
+      tsformart: "",
+      tsendformat: ""
     };
   },
   mounted() {
@@ -344,6 +347,7 @@ export default {
           var options = { month: "short" }; //Format data
           var options_start = { day: "numeric" }; //Format data
           var options_end = { day: "numeric" }; //Format data
+          var year = { year: "numeric" }; //Format data
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
             // inner object entries
@@ -357,7 +361,15 @@ export default {
             this.date_end = new Date(
               value[0].reference_blob.extra[7].value * 1000
             ).toLocaleDateString("en-US", options_end);
-            this.time = value[0].reference_blob.extra[9].value
+            this.time_start = value[0].reference_blob.extra[9].value;
+            this.time_end = value[0].reference_blob.extra[10].value;
+            //
+            this.tsformart = new Date(
+              value[0].reference_blob.extra[6].value * 1000
+            ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_start + ' h';
+            this.tsendformat = new Date(
+              value[0].reference_blob.extra[7].value * 1000
+            ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_end + ' h';
             //Tittle
             this.tittle = value[0].title;
             //Ticket image
