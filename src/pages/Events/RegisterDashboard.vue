@@ -376,7 +376,7 @@
 										>
 										<v-btn
 											class="btn-control"
-											:disabled="dataTickets.mint_amount == 20"
+											:disabled="dataTickets.mint_amount == 10"
 											@click="dataTickets.mint_amount++"
 											>+</v-btn
 										>
@@ -1398,7 +1398,7 @@ export default {
         const multiplied = 10000;
         var counter = this.counter;
         const multiplier = multiplied / counter;
-        console.log(multiplier)
+        //console.log(multiplier)
         this.dataRoyalties.forEach((element) => {
           royalties[element.account] = parseInt(
             element.percentage * multiplier
@@ -1438,7 +1438,7 @@ export default {
         //Control goodies and let me in for approval
         localStorage.setItem("control_mint_appoval", this.dataTickets.mint_amount);
         await wallet.mint(
-          parseFloat(this.dataTickets.mint_amount),
+          parseInt(this.dataTickets.mint_amount),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
@@ -1779,7 +1779,7 @@ export default {
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
       for (const prop in this.dataRoyalties) {
-        this.arr.push(parseFloat(this.dataRoyalties[prop].percentage));
+        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
       }
       this.counter = this.arr.reduce(function (a, b) {
         return a + b;
@@ -1793,12 +1793,12 @@ export default {
         this.disable = false;
         this.errorPercentaje[pos] = null;
       }
-      if (Number.isInteger(parseFloat(this.dataRoyalties[pos].percentage))===false){
+      if (Number.isInteger(parseInt(this.dataRoyalties[pos].percentage))===false){
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
       }
-      if (parseFloat(this.dataRoyalties[pos].percentage) < 0){
+      if (parseInt(this.dataRoyalties[pos].percentage) < 0){
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
@@ -1814,7 +1814,7 @@ export default {
       const user = datos.accountId;
       for (const prop in this.dataSplit) {
         if(user != this.dataSplit[prop].account){
-          this.arr.push(parseFloat(this.dataSplit[prop].percentage));
+          this.arr.push(parseInt(this.dataSplit[prop].percentage));
         }
       }
       this.counter1 = this.arr.reduce(function (a, b) {
@@ -1830,12 +1830,12 @@ export default {
         this.disable = false;
         this.errorPercentaje1[pos] = null;
       }
-      if (Number.isInteger(parseFloat(this.dataSplit[pos].percentage))===false){
+      if (Number.isInteger(parseInt(this.dataSplit[pos].percentage))===false){
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
       }
-      if (parseFloat(this.dataSplit[pos].percentage) < 0){
+      if (parseInt(this.dataSplit[pos].percentage) < 0){
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
@@ -1913,7 +1913,6 @@ export default {
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
                   this.show_total_minted = localStorage.getItem("total_minted");
-                  this.completeIpfs()
               })
               .catch((err) => {
                 console.log("Error", err);
@@ -1935,7 +1934,7 @@ export default {
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          console.log(counter)
+          //console.log(counter)
           if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){
              this.overlay_building = false;
              this.$refs.modala.getData();
@@ -2074,7 +2073,7 @@ export default {
                       reference: localStorage.getItem("metadata_reference"),
                       extra: "ticketing",
                     },
-                    num_to_mint: parseFloat(
+                    num_to_mint: parseInt(
                       localStorage.getItem("mint_amount")
                     ),
                     royalty_args: null,
@@ -2088,6 +2087,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
+        this.completeIpfs();  
         this.executeMultipleTransactions();
       }
     },
@@ -2124,7 +2124,7 @@ export default {
       this.price < 0 ? this.price = 0 : this.price;
       request.onload = () => {
         this.usd = (
-          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
+          parseInt(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
       localStorage.setItem("price", this.price)
@@ -2155,7 +2155,7 @@ export default {
             //if data is available add ipfs data
             //console.log(res.data.ipfs.length);
             const url = this.$node_url + "/ipfs";
-            if (res.data.ipfs.length == 0) {
+            if (res.data.ipfs.length === 0) {
               //console.log(url);
               let item = {
                 thingid: localStorage.getItem("metadata_id"),
@@ -2207,7 +2207,7 @@ export default {
       this.editorRules = true;
     },
     checkMintAmount(){
-      parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) > 10 ? this.dataTickets.mint_amount = 10 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
       parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){

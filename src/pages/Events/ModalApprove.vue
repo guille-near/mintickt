@@ -109,7 +109,7 @@ export default {
         //Upload ipfs
         this.getData();
         this.loading = true;
-        this.length = this.arr.length *  0.0008;
+        this.length = this.arr.length *  0.0009;
         this.txs.push({
             receiverId: this.$store_mintbase,
              functionCalls: [

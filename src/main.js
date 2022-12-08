@@ -38,6 +38,7 @@ Vue.prototype.$event_page = 'https://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
+Vue.prototype.$topmint = "10"
 
 
 VueClipboard.config.autoSetContainer = true // add this line

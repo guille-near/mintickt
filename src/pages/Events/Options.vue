@@ -594,7 +594,7 @@ export default {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
-                    num_to_mint: this.amount_list,
+                    num_to_mint: parseInt(this.amount_list),
                     royalty_args: null,
                     split_owners: owners,
                   },
@@ -634,7 +634,7 @@ export default {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
-                    num_to_mint: this.amount_list,
+                    num_to_mint: parseInt(this.amount_list),
                     royalty_args: null,
                     split_owners: owners,
                   },
@@ -682,7 +682,7 @@ export default {
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more" && this.mint_amount < 10) {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
@@ -703,7 +703,7 @@ export default {
     },
     controlPrice(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more" && this.mint_amount < 10) {
         this.price_list++;
       }
       if (item == "less" && this.price_list > 1) {
@@ -726,7 +726,7 @@ export default {
       this.disable = false;
       request.onload = () => {
         this.usd = (
-          parseFloat(JSON.parse(request.responseText).lastPrice) *
+          parseInt(JSON.parse(request.responseText).lastPrice) *
           this.price_list
         ).toFixed(2);
       };
@@ -791,7 +791,7 @@ export default {
       });
     },
     checkMintAmount(){
-      this.mint_amount > 20 ? this.mint_amount = 20 : this.mint_amount = this.mint_amount;
+      this.mint_amount > 10 ? this.mint_amount = 10 : this.mint_amount = this.mint_amount;
     },
     checkListAmount(){
       var total_minted = this.available_to_list;
