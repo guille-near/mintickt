@@ -303,6 +303,7 @@
     }
     .ticket {
       width: 100%;
+      // border-radius: 10px; <-----
       // @include mq(max, small) {
       //   width: 100% !important;
       // }
@@ -933,6 +934,10 @@
           aspect-ratio: 2.2 / 1;
           object-fit: cover !important;
           border-radius: .6vmax !important;
+          -webkit-mask-image: url(../assets/img/bg-ticket_events.png);
+          -webkit-mask-size: cover;
+          mask-image: url(../assets/img/bg-ticket_events.png);
+          mask-size: cover;
         }
       }
       &:not(:last-child) {margin-bottom: 1em}
