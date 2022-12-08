@@ -22,7 +22,7 @@ import VueQRCodeComponent from 'vue-qr-generator'
 //Global Variables
 Vue.config.productionTip = false
 Vue.prototype.$networkName= (Vue.config.productionTip) ? 'testnet' : 'testnet';
-Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'testingmintickt.mintspace2.testnet' : 'testingmintickt.mintspace2.testnet';
+Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'testingmintickt.mintspace2.testnet' : 'mintickt.mintspace2.testnet';
 Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
 Vue.prototype.$dev_key= 'mintickt.key'; // '2077ba62-21fd-4457-b3f5-13e6d376d026';
 Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.testnet.near.org/' : 'https://explorer.testnet.near.org/';
@@ -94,7 +94,7 @@ const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://interop-testnet.hasura.app/v1/graphql" : "https://interop-testnet.hasura.app/v1/graphql",
+  uri: (Vue.config.productionTip) ? "https://interop-mainnet.hasura.app/v1/graphql" : "https://interop-mainnet.hasura.app/v1/graphql",
   cache,
 });
 const mintickClient = new ApolloClient({
