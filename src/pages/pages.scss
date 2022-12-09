@@ -1218,6 +1218,7 @@
     .v-data-table {
       @media (max-width: 880px) {
         background: transparent !important;
+        tbody ::after {display: none !important} // <--------
         th {
           padding: 0 !important;
           width: max-content !important;
