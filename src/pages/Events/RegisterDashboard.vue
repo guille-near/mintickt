@@ -146,21 +146,27 @@
 									min-width="auto"
 								>
 									<template v-slot:activator="{ on, attrs }">
-										<v-text-field
-											v-model="dateRangeText"
-											id="date"
-											readonly
-											solo
-											v-bind="attrs"
-											v-on="on"
-											:rules="rules.required"
-										></v-text-field>
+                    <v-combobox
+                      v-model="dates"
+                      id="date"
+                      solo
+                      multiple
+                      deletable-chips
+                      chips
+                      readonly
+                      clearable
+                      hide-details
+                      :class="{ rules: comboboxRules }"
+                      v-bind="attrs" v-on="on"
+                      :rules="rules.required"
+                      class="mb-5"
+                    ></v-combobox>
 									</template>
 									<v-date-picker
 										v-model="dates"
 										no-title
 										scrollable
-										range
+                    multiple
 										color="hsl(306, 100%, 50%)"
 										dark
 									>
@@ -180,7 +186,19 @@
 								<!-- start time -->
 								<div class="divcol" style="gap: 6px">
 									<label for="start-time"> Start Time </label>
-									<v-menu
+                  <time-picker v-model="startTime" dialog>
+										<template v-slot:activator="{ on }">
+											<v-text-field
+												v-model="startTime"
+												id="start-time"
+												readonly
+												solo
+												v-on="on"
+												:rules="rules.required"
+											></v-text-field>
+										</template>
+                  </time-picker>
+									<!-- <v-menu
 										ref="menu-start-time"
 										v-model="menuStartTime"
 										:close-on-content-click="false"
@@ -208,13 +226,25 @@
 											dark
 											@click:minute="$refs[`menu-start-time`].save(startTime)"
 										></v-time-picker>
-									</v-menu>
+									</v-menu> -->
 								</div>
 
 								<!-- end date -->
 								<div class="divcol" style="gap: 6px">
 									<label for="end-time"> End Time </label>
-									<v-menu
+                  <time-picker v-model="endTime" dialog>
+										<template v-slot:activator="{ on }">
+											<v-text-field
+												v-model="endTime"
+												id="start-time"
+												readonly
+												solo
+												v-on="on"
+												:rules="rules.required"
+											></v-text-field>
+										</template>
+                  </time-picker>
+									<!-- <v-menu
 										ref="menu-end-time"
 										v-model="menuEndTime"
 										:close-on-content-click="false"
@@ -242,7 +272,7 @@
 											dark
 											@click:minute="$refs[`menu-end-time`].save(endTime)"
 										></v-time-picker>
-									</v-menu>
+									</v-menu> -->
 								</div>
 							</div>
 
@@ -658,7 +688,7 @@
 							<div class="divcol">
 								<h3>List NFT For Sale <span style="color: red">*</span></h3>
 
-								<div class="divcol" style="margin-top: 4em">
+								<div class="divcol">
 									<label for="amount_list"
 										>Amount to list Max ( {{ show_total_minted }} )
 										<span style="color: red">*</span></label
@@ -1061,7 +1091,7 @@ export default {
         },
       ],
       MenuDates: false,
-      dates: localStorage.getItem("dataFormDate") === null ? [] : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      dates: localStorage.getItem("dataFormDate") === null ? undefined : Array.from(localStorage.getItem("dataFormDate").split(',')),
       menuStartTime: false,
       startTime: undefined,
       menuEndTime: false,
@@ -1112,6 +1142,7 @@ export default {
       canvas_burn: localStorage.getItem("canvas_burn") === null ? "" : localStorage.getItem("canvas_burn"),
       canvas_goodie: localStorage.getItem("canvas_goodie") === null ? "" : localStorage.getItem("canvas_goodie"),
       editorRules: false,
+      comboboxRules: false,
       total_minted: parseInt(localStorage.getItem("total_minted")),
       nearid: false,
       burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
@@ -1131,6 +1162,9 @@ export default {
       if (newValue === 1) {
         this.listenerEditor()
       }
+    },
+    dates(curr) {
+      this.validatorCombobox(curr)
     }
   },
   beforeMount(){
@@ -1607,8 +1641,9 @@ export default {
       localStorage.setItem("dataFormLongitude", addressData.longitude);
     },
     next() {
-      if (this.$refs.form.validate() && this.dataTickets.description) {
+      if (this.$refs.form.validate() && this.dataTickets.description && this.dates) {
         this.editorRules = false;
+        this.comboboxRules = false;
         localStorage.setItem("step", 2);
         this.step = parseInt(localStorage.getItem("step"));
         //Store all form data
@@ -1640,6 +1675,7 @@ export default {
         });
       }
       if (!this.dataTickets.description) this.editorRules = true;
+      if (!this.dates || this.dates.length === 0) this.comboboxRules = true;
     },
     async getBase64FromUrl(url)  {
       const data = await fetch(url);
@@ -2216,6 +2252,10 @@ export default {
     validator(model) {
       if (model) return this.editorRules = false;
       this.editorRules = true;
+    },
+    validatorCombobox(model) {
+      if (model && model.length > 0) return this.comboboxRules = false;
+      this.comboboxRules = true;
     },
     checkMintAmount(){
       parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;

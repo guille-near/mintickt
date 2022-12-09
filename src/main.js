@@ -18,6 +18,9 @@ import axios from 'axios';
 import VueAxios from "vue-axios";
 import VueClipboard from 'vue-clipboard2'
 import VueQRCodeComponent from 'vue-qr-generator'
+import { TimePicker } from 'vue-drumroll-datetime-picker'
+import 'vue-drumroll-datetime-picker/dist/style.css'
+
 
 //Global Variables
 Vue.config.productionTip = false
@@ -39,6 +42,8 @@ Vue.prototype.$owner = "andresdom.near"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
 
+// time picker
+Vue.component('TimePicker', TimePicker)
 
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)

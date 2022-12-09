@@ -631,6 +631,7 @@
         width: 100% !important;
       }
       .ticket-wrapper {
+        margin-bottom: 30px !important;
         height: 580px !important;
         aspect-ratio: 1 / 2;
         .v-input {
@@ -1776,3 +1777,33 @@ body:has(#createTickets) {
 
 
 .v-data-table th i {color: #CC00B7 !important}
+.v-chip--select {
+  background-color: #6d6d6d !important;
+  @layer layout {
+    :is(span, span.v-chip__content, *)  {color: #fff !important}
+  }
+}
+.v-input.rules {
+  flex-direction: column;
+  div[role="combobox"].v-input__slot {border: 1px solid red !important}
+  &::after {
+    content: "Field required" !important;
+    color: #ff4081 !important;
+    font-size: 12px !important;
+    padding-left: 12px !important;
+    padding-top: 5px !important;
+  }
+}
+
+.v-drumroll-picker__container {
+  $color: hsl(0, 0%, 16%, .9);
+  border-radius: 15px;
+  width: 150px;
+  background-color: $color !important;
+  div.top, div.bottom {
+    background: linear-gradient(180deg, $color 10%, rgba($color, 0.7));
+  }
+  * {border-color: $color !important}
+  .vue-scroll-picker-item {color: #fff !important}
+  .vue-scroll-picker-item.-selected {color: #CC00B7 !important}
+}

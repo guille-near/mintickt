@@ -43,6 +43,7 @@
     "vue-browser-geolocation": "^1.8.0",
     "vue-clipboard2": "^0.3.3",
     "vue-debounce": "^4.0.0",
+    "vue-drumroll-datetime-picker": "^1.0.5",
     "vue-i18n": "^8.27.0",
     "vue-moment": "^4.1.0",
     "vue-qr-generator": "^3.0.1",
