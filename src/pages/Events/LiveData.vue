@@ -196,8 +196,14 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
+					<v-btn class="eliminarmobile" @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
 						>Complete order</v-btn
+					>
+					<v-btn
+            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
+            style="padding: 1px !important" @click="completeOrderReedemer(item)" :loading="item.loadingBtn">
+            <v-icon>mdi-check</v-icon>
+          </v-btn
 					>
 				</template>
 			</v-data-table>
@@ -405,8 +411,8 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       headersTableMobile: [
-        { value: "signer", text: "SIGNER" },
-        { value: "created", text: "CREATED" },
+        { value: "signer", text: "USER" },
+        { value: "created", text: "DATE" },
         { value: "action", text: "ACTION", sortable: false },
       ],
       dataTable: [],
@@ -420,9 +426,9 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       headersTableExtraMobile: [
-        { value: "signer", text: "SIGNER" },
-        { value: "created", text: "CREATED" },
-        { value: "action", text: "ACTION", sortable: false },
+        { value: "signer", text: "USER" },
+        { value: "created", text: "DATE" },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
       ],
       dataTableExtra: [],
       dataTableExtraMobile: [],
