@@ -303,7 +303,7 @@
     }
     .ticket {
       width: 100%;
-      // border-radius: 10px; <-----
+      border-radius: 15px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
       // }
@@ -1034,10 +1034,11 @@
     content: "";
     position: absolute;
     top: -140px;
-    width: 100vw;
+    width: 120vw;
     margin-inline: calc((50% - 50vw) - 35px);
     inset: 0;
     background-color: rgba(0,0,0,.2);
+    pointer-events: none;
   }
   label {
     font-weight: 510;
@@ -1100,8 +1101,9 @@
       padding: .5em 1em;
     }
     input {caret-color: #CC00B7}
-    input,.v-label,i {color: #FFFFFF}
+    input,.v-label,.v-icon,i {color: #FFFFFF}
     input, .v-label {font-size: 1em !important; font-weight: 400 !important}
+    ::placeholder {color: #5a5a5a !important; font-weight: 700 !important}
   }
   #dataTable {
     @media (max-width:420px) {font-size: 10px}
@@ -1211,8 +1213,19 @@
       }
     }
   }
+  
+  @layer layout {
+    .v-data-table {
+      @media (max-width: 880px) {
+        background: transparent !important;
+        th {
+          padding: 0 !important;
+          width: max-content !important;
+        }
+      }
+    }
+  }
 }
-
 
 #options {
   &>*{width: min(100%,22.5em)}
@@ -1756,24 +1769,24 @@ body:has(#createTickets) {
   }
 }
 
-.container-search {
-  @media (min-width: 880px) {display: contents}
-  width: 100%;
-}
-.scan-button {
-  @media (min-width: 880px) {display: none !important}
-  padding: 6px !important;
-  width: 48px !important;
-  min-width: 48px !important;
-  max-width: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
-  height: 48px !important;
-  margin-bottom: 1.1em;
-  margin-right: 20px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%) !important;
-  border-radius: 6px !important;
-}
+// .container-search {
+//   @media (min-width: 880px) {display: contents}
+//   width: 100%;
+// }
+// .scan-button {
+//   @media (min-width: 880px) {display: none !important}
+//   padding: 6px !important;
+//   width: 48px !important;
+//   min-width: 48px !important;
+//   max-width: 48px !important;
+//   min-height: 48px !important;
+//   max-height: 48px !important;
+//   height: 48px !important;
+//   margin-bottom: 1.1em;
+//   margin-right: 20px;
+//   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #292929 23.08%, rgba(41, 41, 41, 0) 122.53%) !important;
+//   border-radius: 6px !important;
+// }
 
 
 .v-data-table th i {color: #CC00B7 !important}
