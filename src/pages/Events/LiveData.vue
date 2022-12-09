@@ -411,8 +411,8 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       headersTableMobile: [
-        { value: "signer", text: "USER" },
-        { value: "created", text: "DATE" },
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
         { value: "action", text: "ACTION", sortable: false },
       ],
       dataTable: [],
@@ -426,8 +426,8 @@ export default {
         { value: "action", text: "ACTION", sortable: false },
       ],
       headersTableExtraMobile: [
-        { value: "signer", text: "USER" },
-        { value: "created", text: "DATE" },
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
         { value: "action", text: "ACTION", align: "end", sortable: false },
       ],
       dataTableExtra: [],
