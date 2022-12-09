@@ -52,6 +52,7 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "approve"
     ) {
+      localStorage.setItem("new_minted", 0)
       this.gotToEvents();
     }
   },
@@ -108,7 +109,7 @@ export default {
         //Upload ipfs
         this.getData();
         this.loading = true;
-        this.length = this.arr.length *  0.0008;
+        this.length = this.arr.length *  0.0009;
         this.txs.push({
             receiverId: this.$store_mintbase,
              functionCalls: [
@@ -162,7 +163,8 @@ export default {
       localStorage.removeItem("dataFormLatitude");
       localStorage.removeItem("dataFormPlaceId");
       localStorage.removeItem("dataFormName");
-      localStorage.removeItem("dataFormTime");
+      localStorage.removeItem("dataFormTimeStart");
+      localStorage.removeItem("dataFormTimeEnd");
       localStorage.removeItem("dataFormPromoter");
       localStorage.removeItem("dataFormMintAmount");
       localStorage.removeItem("amount_list");

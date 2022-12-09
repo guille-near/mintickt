@@ -786,7 +786,7 @@ export default {
       // this.$forceUpdate();
       this.search = result.includes(":") ? result.split(":")[1] : result;
       this.$forceUpdate();
-      setTimeout(this.modalQR = false, 15000);
+      setTimeout(this.modalQR = false, 5000);
       // console.log(`Decode text from QR code is ${this.owner}`)
     },
     onLoaded() {

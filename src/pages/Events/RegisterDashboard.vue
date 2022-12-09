@@ -3,7 +3,7 @@
 		<ModalSuccess ref="modal"></ModalSuccess>
 		<ModalApprove ref="modala"></ModalApprove>
 
-		<h2 class="eliminarmobile align" style="text-align: center">
+		<h2 class="eliminarmobile align" v-if="step==1" style="text-align: center">
 			Let's create your NFT for your event!
 		</h2>
 
@@ -314,10 +314,6 @@
 
 			<v-window-item :value="2">
 				<section class="jcenter divwrap">
-					<h2 class="vermobile align" style="text-align: center">
-						Let's create your NFT for your event!
-					</h2>
-
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -410,7 +406,7 @@
 										>
 										<v-btn
 											class="btn-control"
-											:disabled="dataTickets.mint_amount == 20"
+											:disabled="dataTickets.mint_amount == 10"
 											@click="dataTickets.mint_amount++"
 											>+</v-btn
 										>
@@ -450,10 +446,6 @@
 
 			<v-window-item :value="3">
 				<section class="jcenter divwrap">
-					<h2 class="vermobile align" style="text-align: center">
-						Let's create your NFT for your event!
-					</h2>
-
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -643,10 +635,6 @@
 
 			<v-window-item :value="4">
 				<section class="jcenter divwrap">
-					<h2 class="vermobile align" style="text-align: center">
-						Let's create your NFT for your event!
-					</h2>
-
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -783,10 +771,6 @@
 
 			<v-window-item :value="5">
 				<section class="jcenter divwrap">
-					<h2 class="vermobile align" style="text-align: center">
-						Congrats, you just created your NFT tickets!
-					</h2>
-
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -856,7 +840,7 @@
 										></v-text-field>
 									</div>
 
-									<div class="divcol">
+									<div class="divcol" style="display:none">
 										<label for="goodies" class="sf-pro"
 											>How much goodies for each attendee per ticket?</label
 										>
@@ -1053,7 +1037,7 @@ export default {
         description: localStorage.getItem("dataFormDescription") === null  ? "" : localStorage.getItem("dataFormDescription"),
         mint_amount: localStorage.getItem("dataFormMintAmount") === null  ? "" : localStorage.getItem("dataFormMintAmount"),
         attendees: localStorage.getItem("dataFormAttendees") === null  ? "" : localStorage.getItem("dataFormAttendees"),
-        goodies: localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
+        goodies: "1" // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
       url: localStorage.getItem("canvas_main_image") === null  ? null : localStorage.getItem("canvas_main_image"),
       url2: null,
@@ -1448,7 +1432,7 @@ export default {
         const multiplied = 10000;
         var counter = this.counter;
         const multiplier = multiplied / counter;
-        console.log(multiplier)
+        //console.log(multiplier)
         this.dataRoyalties.forEach((element) => {
           royalties[element.account] = parseInt(
             element.percentage * multiplier
@@ -1488,7 +1472,7 @@ export default {
         //Control goodies and let me in for approval
         localStorage.setItem("control_mint_appoval", this.dataTickets.mint_amount);
         await wallet.mint(
-          parseFloat(this.dataTickets.mint_amount),
+          parseInt(this.dataTickets.mint_amount),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
@@ -1578,8 +1562,12 @@ export default {
             value: this.dataTickets.attendees,
           },
           {
-            trait_type: "time",
-            value: this.time,
+            trait_type: "start_time",
+            value: this.startTime,
+          },
+          {
+            trait_type: "end_time",
+            value: this.endTime,
           },
         ];
         let store = this.$store_mintbase;
@@ -1651,7 +1639,8 @@ export default {
         localStorage.setItem("dataFormPromoter", this.dataTickets.promoter);
         localStorage.setItem("dataFormDescription", this.dataTickets.description);
         localStorage.setItem("dataFormDate", this.dates);
-        localStorage.setItem("dataFormTime", this.time);
+        localStorage.setItem("dataFormTimeStart", this.startTime);
+        localStorage.setItem("dataFormTimeEnd", this.endTime);
         
 
         var container = document.getElementById("my-node"); /* full page */
@@ -1826,7 +1815,7 @@ export default {
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
       for (const prop in this.dataRoyalties) {
-        this.arr.push(parseFloat(this.dataRoyalties[prop].percentage));
+        this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
       }
       this.counter = this.arr.reduce(function (a, b) {
         return a + b;
@@ -1840,12 +1829,12 @@ export default {
         this.disable = false;
         this.errorPercentaje[pos] = null;
       }
-      if (Number.isInteger(parseFloat(this.dataRoyalties[pos].percentage))===false){
+      if (Number.isInteger(parseInt(this.dataRoyalties[pos].percentage))===false){
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
       }
-      if (parseFloat(this.dataRoyalties[pos].percentage) < 0){
+      if (parseInt(this.dataRoyalties[pos].percentage) < 0){
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
@@ -1861,7 +1850,7 @@ export default {
       const user = datos.accountId;
       for (const prop in this.dataSplit) {
         if(user != this.dataSplit[prop].account){
-          this.arr.push(parseFloat(this.dataSplit[prop].percentage));
+          this.arr.push(parseInt(this.dataSplit[prop].percentage));
         }
       }
       this.counter1 = this.arr.reduce(function (a, b) {
@@ -1877,12 +1866,12 @@ export default {
         this.disable = false;
         this.errorPercentaje1[pos] = null;
       }
-      if (Number.isInteger(parseFloat(this.dataSplit[pos].percentage))===false){
+      if (Number.isInteger(parseInt(this.dataSplit[pos].percentage))===false){
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
       }
-      if (parseFloat(this.dataSplit[pos].percentage) < 0){
+      if (parseInt(this.dataSplit[pos].percentage) < 0){
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
@@ -1960,7 +1949,6 @@ export default {
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
                   this.show_total_minted = localStorage.getItem("total_minted");
-                  this.completeIpfs()
               })
               .catch((err) => {
                 console.log("Error", err);
@@ -1982,7 +1970,7 @@ export default {
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          console.log(counter)
+          //console.log(counter)
           if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){
              this.overlay_building = false;
              this.$refs.modala.getData();
@@ -2121,7 +2109,7 @@ export default {
                       reference: localStorage.getItem("metadata_reference"),
                       extra: "ticketing",
                     },
-                    num_to_mint: parseFloat(
+                    num_to_mint: parseInt(
                       localStorage.getItem("mint_amount")
                     ),
                     royalty_args: null,
@@ -2135,6 +2123,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
+        this.completeIpfs();  
         this.executeMultipleTransactions();
       }
     },
@@ -2171,7 +2160,7 @@ export default {
       this.price < 0 ? this.price = 0 : this.price;
       request.onload = () => {
         this.usd = (
-          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
+          parseInt(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
       localStorage.setItem("price", this.price)
@@ -2202,7 +2191,7 @@ export default {
             //if data is available add ipfs data
             //console.log(res.data.ipfs.length);
             const url = this.$node_url + "/ipfs";
-            if (res.data.ipfs.length == 0) {
+            if (res.data.ipfs.length === 0) {
               //console.log(url);
               let item = {
                 thingid: localStorage.getItem("metadata_id"),
@@ -2258,7 +2247,7 @@ export default {
       this.comboboxRules = true;
     },
     checkMintAmount(){
-      parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) > 10 ? this.dataTickets.mint_amount = 10 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
       parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){

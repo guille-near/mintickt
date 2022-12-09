@@ -191,11 +191,12 @@
 				<h3 class="mt-3">Minting in progress...</h3>
 				<h3 ref="tminted">{{ show_total_minted }}</h3>
 			</v-overlay>
+
+			<v-overlay :value="overlay_building">
+				<v-progress-circular indeterminate size="64"></v-progress-circular>
+				<h3 class="mt-3">Building event be pacient...</h3>
+			</v-overlay>
 		</div>
-		<v-overlay :value="overlay_building">
-			<v-progress-circular indeterminate size="64"></v-progress-circular>
-			<h3 class="mt-3">Building event be pacient...</h3>
-		</v-overlay>
 	</section>
 </template>
 
@@ -362,24 +363,24 @@ export default {
   },
   mounted() {
     //console.log("-->", this.urltickets)
-    this.getMintedLoad();
     this.$refs.modala.getData();
     //setTimeout(localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false, 30000);
-    localStorage.getItem("new_minted") === null || 'undefined' ? localStorage.setItem("new_minted", 1) : "";
+    localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", localStorage.getItem("total_minted")) : "";
     localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.getTotalMinted();
     this.pollData();
-    //this.pollData1();
+    this.pollData1();
+    // this.pollData1();
     //this.overlay = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get("transactionHashes") !== null) {
-      this.$refs.modal.modalSuccess = true;
       let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
       const user = datos.accountId;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      this.pollData1();
+      this.$refs.modal.modalSuccess = true;
+      //this.pollData1();
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -392,12 +393,7 @@ export default {
     //List
     if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
       this.$refs.modal.modalSuccess = false;
-      this.polling = setInterval(() => {
-      this.getMinted();
-       //When the amount is equal close the overlay
-       // this.overlay = !this.overlay;
-       this.$forceUpdate();
-      }, 5000);
+      this.$refs.modala.modalApprove = false;
     }
     if (urlParams.get("errorCode") !== null) {
       history.replaceState(
@@ -408,6 +404,7 @@ export default {
           "&thingid=" +
           localStorage.getItem("eventid")
       );
+      localStorage.removeItem("new_minted");
     }
   },
   methods: {
@@ -488,8 +485,6 @@ export default {
       const { wallet } = walletData;
       //console.log(wallet)
       //localStorage.setItem('total_minted', this.mint_amount);
-      this.new_minted = parseInt(localStorage.getItem("total_minted")) + parseInt(this.mint_amount);
-      localStorage.setItem('new_minted', this.new_minted);
       const { data, error} =   await wallet.mintMore(
         parseInt(this.mint_amount),
         this.$route.query.thingid.toLowerCase(),
@@ -599,7 +594,7 @@ export default {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
-                    num_to_mint: this.amount_list,
+                    num_to_mint: parseInt(this.amount_list),
                     royalty_args: null,
                     split_owners: owners,
                   },
@@ -639,7 +634,7 @@ export default {
                       reference: value[0].reference,
                       extra: value[0].mint_memo,
                     },
-                    num_to_mint: this.amount_list,
+                    num_to_mint: parseInt(this.amount_list),
                     royalty_args: null,
                     split_owners: owners,
                   },
@@ -652,30 +647,9 @@ export default {
         .catch((err) => {
           console.log("Error", err);
         });
+      this.new_minted = parseInt(localStorage.getItem("total_minted")) + parseInt(this.amount_list);
+      localStorage.setItem('new_minted', this.new_minted);
       this.executeMultipleTransactions();
-    },
-    async getTotalMinted() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      this.$apollo
-        .mutate({
-          mutation: nft_tokens_aggregate,
-          variables: {
-            metadata_id: localStorage.getItem("metadata_id").toString(),
-            owner: user
-          },
-          // Don't prefetch
-          prefetch: false,
-        })
-        .then((response) => {
-          //Map the objectvalue
-          localStorage.setItem("total_minted", response.data.nft_tokens_aggregate.aggregate.count);
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
     },
     async executeMultipleTransactions() {
       //Gettintg the tokens ID
@@ -700,13 +674,15 @@ export default {
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
+        //this.$refs.modala.getData();
         this.getTotalMinted();
+        this.$refs.modala.getData();
         this.$forceUpdate();
       }, 5000);
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more" && this.mint_amount < 10) {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
@@ -727,7 +703,7 @@ export default {
     },
     controlPrice(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more" && this.mint_amount < 10) {
         this.price_list++;
       }
       if (item == "less" && this.price_list > 1) {
@@ -750,7 +726,7 @@ export default {
       this.disable = false;
       request.onload = () => {
         this.usd = (
-          parseFloat(JSON.parse(request.responseText).lastPrice) *
+          parseInt(JSON.parse(request.responseText).lastPrice) *
           this.price_list
         ).toFixed(2);
       };
@@ -815,7 +791,7 @@ export default {
       });
     },
     checkMintAmount(){
-      this.mint_amount > 20 ? this.mint_amount = 20 : this.mint_amount = this.mint_amount;
+      this.mint_amount > 10 ? this.mint_amount = 10 : this.mint_amount = this.mint_amount;
     },
     checkListAmount(){
       var total_minted = this.available_to_list;
@@ -826,16 +802,20 @@ export default {
       //check until mintin is done
       //Fecth until the total minted is ok
       this.new_minted = localStorage.getItem("new_minted");   
-      //  console.log(this.minted)
-      //  console.log(this.new_minted)
-      if (parseInt(this.new_minted) > parseInt(this.minted)){
-        this.overlay = true;
+      // console.log(this.minted)
+      // console.log(this.new_minted)
+      if (parseInt(this.new_minted) > parseInt(localStorage.getItem("total_minted"))){
+        this.overlay_building = true;
+        this.$refs.modal.modalSuccess = false;
+        this.$refs.modala.modalApprove = false;
         //setTimeout(this.getData(), 10000);
         // console.log(this.show_total_minted, this.mint_amount)
         // console.log('polling', this.show_total_minted); 
         this.getData();
       } else {
-        this.overlay = false;
+        this.overlay_building = false;
+        // this.$refs.modala.modalApprove = true;
+        // localStorage.setItem("new_minted", localStorage.getItem("total_minted"))
       }
        //When the amount is equal close the overlay
        // this.overlay = !this.overlay;
@@ -845,30 +825,30 @@ export default {
     prueba(item) {
       console.log(item)
     },
-    async getMinted() {
-      this.$apollo
-        .mutate({
-          mutation: mb_views_nft_tokens,
-          variables: {
-            _iregex: localStorage.getItem("metadata_id").split(":")[1],
-          },
-        })
-        .then((response) => {
-          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          // console.log(counter)
-          if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){            
-             this.overlay_building = false;
-             this.$refs.modala.getData();
-          } else {
-             this.$refs.modala.modalApprove = false;
-             this.overlay_building = true;
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    },
-    async getMintedLoad() {
+    // async getMinted() {
+    //   this.$apollo
+    //     .mutate({
+    //       mutation: mb_views_nft_tokens,
+    //       variables: {
+    //         _iregex: localStorage.getItem("metadata_id").split(":")[1],
+    //       },
+    //     })
+    //     .then((response) => {
+    //       var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+    //       // console.log(counter)
+    //       if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){            
+    //          this.overlay_building = false;
+    //          this.$refs.modala.getData();
+    //       } else {
+    //          this.$refs.modala.modalApprove = false;
+    //          this.overlay_building = true;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
+    async getTotalMinted() {
       this.$apollo
         .mutate({
           mutation: mb_views_nft_tokens,
@@ -878,7 +858,7 @@ export default {
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          localStorage.setItem("control_mint_appoval", counter);
+          localStorage.setItem("total_minted", counter/2);
         })
         .catch((err) => {
           console.log("Error", err);

@@ -533,7 +533,7 @@ export default {
     },
     async mainImg() {
       var thingid = this.$route.query.thingid.toLowerCase();
-      //console.log(Object.values(this.dataFilters)[0].value)
+      console.log(thingid)
       //reedemed
       this.$apollo
         .query({
@@ -544,7 +544,7 @@ export default {
           client: "mintickClient",
         })
         .then((response) => {
-          // console.log(response.data)
+          console.log(response.data)
           this.src = this.$pinata_gateway + response.data.ipfs[0].tokenid;
         })
         .catch((err) => {
