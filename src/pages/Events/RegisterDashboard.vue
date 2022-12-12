@@ -1451,10 +1451,16 @@ export default {
       }
     },
     async mintGoodie() {
+       if (this.$refs.form4.validate()) {
+          this.getBase64FromUrlGoodie(this.burn_goodie_image);
+          setTimeout(this.mintGoodieProccess, 5000);
+       } 
+    },
+    async mintGoodieProccess() {
       if (this.$refs.form4.validate()) {
         // console.log(this.dataTickets.attendees);
         //this.nextLast();
-        this.getBase64FromUrlGoodie(this.burn_goodie_image)
+        
         this.loading = true;
         this.disable = true;
         //Api key an data
