@@ -99,8 +99,14 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn @click="completeOrderFans(item)" :loading="item.loadingBtn"
+					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
 						>Complete order</v-btn
+					>
+					<v-btn
+            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
+            style="padding: 1px !important" @click="completeOrderFans(item)" :loading="item.loadingBtn">
+            <v-icon>mdi-check</v-icon>
+          </v-btn
 					>
 				</template>
 			</v-data-table>
@@ -413,7 +419,7 @@ export default {
       headersTableMobile: [
         { value: "signer", text: "SIGNER" },
         { value: "created", text: "CREATED" },
-        { value: "action", text: "ACTION", sortable: false },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
       ],
       dataTable: [],
       dataTableMobile: [],
