@@ -45,45 +45,45 @@
 				</v-card>
 			</div>
 			<v-row no-gutters>
-        <div class="container-search center">
+        <h3 class="p vermobile mt-10" style="font-size: 23px">Orders to deliver</h3>
+        <!-- <div class="container-search center"> -->
           <!--Modal ticket Url -->
-          <v-dialog width="420px" v-model="modalQR">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn class="scan-button" v-bind="attrs" v-on="on">
-                <img src="@/assets/icons/scan.svg" alt="scan button" />
-              </v-btn>
-            </template>
-
-            <v-card id="modalUrl" class="pa-10">
-              <StreamBarcodeReader
-                @decode="onDecode"
-                @loaded="onLoaded"
-              ></StreamBarcodeReader>
-            </v-card>
-          </v-dialog>
-
           <v-text-field
             v-model="search"
             :append-icon="search ? '' : 'mdi-magnify'"
-            label="Search"
+            placeholder="Search a nickname or scan it"
             single-line
             hide-details
             clear-icon="mdi-close"
             clearable
-            class="search"
-          />
-        </div>
+            class="search scan"
+          >
+            <template v-slot:append>
+              <v-dialog width="420px" v-model="modalQR">
+                <template v-slot:activator="{ on, attrs }">
+                  <img src="@/assets/icons/scan.svg" alt="scan button" v-bind="attrs" v-on="on" />
+                </template>
+
+                <v-card id="modalUrl" class="pa-10">
+                  <StreamBarcodeReader
+                    @decode="onDecode"
+                    @loaded="onLoaded"
+                  ></StreamBarcodeReader>
+                </v-card>
+              </v-dialog>
+            </template>
+          </v-text-field>
+        <!-- </div> -->
 			</v-row>
 			<v-data-table
 				id="dataTable"
-				class="eliminarmobile"
 				:loading="loading"
 				:search="search"
 				v-show="
 					dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
 					true
 				"
-				:headers="headersTable"
+				:headers="isMobile ? headersTableMobile : headersTable"
 				:items="dataTable"
 				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
 				:mobile-breakpoint="-1"
@@ -105,7 +105,7 @@
 				</template>
 			</v-data-table>
 
-			<section
+			<!-- <section
 				class="vermobile"
 				v-show="
 					dataFilters[dataFilters.findIndex((e) => e.key == 'fans')].active ==
@@ -128,7 +128,6 @@
 								@click="completeOrderFans(item)"
 								:loading="item.loadingBtn"
 							>
-								<!-- Complete order -->
 								<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
 							</v-btn>
 
@@ -171,30 +170,17 @@
 						</div>
 					</aside>
 				</v-card>
-
-				<!-- <section id="footer-pagination" class="end gap">
-          <span style="color:#FFFFFF">1</span>
-          <div class="center">
-            <v-btn icon>
-              <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
-            </v-btn>
-          </div>
-        </section> -->
-			</section>
+			</section> -->
 
 			<v-data-table
 				id="dataTable"
-				class="eliminarmobile"
 				:loading="loading"
 				:search="search"
 				v-show="
 					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
 						.active == true
 				"
-				:headers="headersTableExtra"
+				:headers="isMobile ? headersTableExtraMobile : headersTableExtra"
 				:items="dataTableExtra"
 				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
 				:mobile-breakpoint="-1"
@@ -210,13 +196,19 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
+					<v-btn class="eliminarmobile" @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
 						>Complete order</v-btn
+					>
+					<v-btn
+            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
+            style="padding: 1px !important" @click="completeOrderReedemer(item)" :loading="item.loadingBtn">
+            <v-icon>mdi-check</v-icon>
+          </v-btn
 					>
 				</template>
 			</v-data-table>
 
-			<section
+			<!-- <section
 				class="vermobile"
 				v-show="
 					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
@@ -239,7 +231,6 @@
 								@click="completeOrderReedemer(item)"
 								:loading="item.loadingBtn"
 							>
-								<!-- Complete order -->
 								<v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-check</v-icon>
 							</v-btn>
 
@@ -282,19 +273,7 @@
 						</div>
 					</aside>
 				</v-card>
-
-				<!-- <section id="footer-pagination" class="end gap">
-          <span style="color:#FFFFFF">1</span>
-          <div class="center">
-            <v-btn icon>
-              <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
-            </v-btn>
-          </div>
-        </section> -->
-			</section>
+			</section> -->
 		</section>
 	</section>
 </template>
@@ -408,6 +387,7 @@ export default {
    components: { StreamBarcodeReader },
   data() {
     return {
+      isMobile: false,
       dataFilters: [
         {
           key: "fans",
@@ -430,6 +410,11 @@ export default {
         { value: "transaction", text: "TRANSACTION", sortable: false },
         { value: "action", text: "ACTION", sortable: false },
       ],
+      headersTableMobile: [
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
+        { value: "action", text: "ACTION", sortable: false },
+      ],
       dataTable: [],
       dataTableMobile: [],
       headersTableExtra: [
@@ -439,6 +424,11 @@ export default {
         { value: "created", text: "CREATED" },
         { value: "transaction", text: "TRANSACTION", sortable: false },
         { value: "action", text: "ACTION", sortable: false },
+      ],
+      headersTableExtraMobile: [
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
       ],
       dataTableExtra: [],
       dataTableExtraMobile: [],
@@ -454,9 +444,14 @@ export default {
     };
   },
   mounted() {
+    this.IsMobile()
+    window.addEventListener("resize", this.IsMobile)
     this.responsive();
     this.fetch();
     this.getData();
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.IsMobile)
   },
   computed: {
     filter_dataTableExtraMobile() {
@@ -475,6 +470,13 @@ export default {
     },
   },
   methods: {
+    IsMobile() {
+      if (window.innerWidth <= 880) {
+        this.isMobile = true
+      } else {
+        this.isMobile = false
+      }
+    },
     responsive() {
       if (window.innerWidth <= 880) {
         this.headersTable.splice(

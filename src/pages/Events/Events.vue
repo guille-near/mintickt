@@ -2,7 +2,7 @@
 	<section id="events" class="align divcol">
 		<ModalApprove ref="modala"></ModalApprove>
 		<h2>Your Events</h2>
-		<div class="container-search center">
+		<!-- <div class="container-search center"> -->
 			<v-text-field
 				v-model="search"
 				:append-icon="search ? '' : 'mdi-magnify'"
@@ -13,7 +13,7 @@
         clearable
 				class="search"
 			/>
-		</div>
+		<!-- </div> -->
 		<v-data-table
 			id="tableEvents"
 			:headers="headers"
