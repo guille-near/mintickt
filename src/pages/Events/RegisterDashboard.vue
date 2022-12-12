@@ -1487,7 +1487,7 @@ export default {
     async mintGoodie() {
        if (this.$refs.form4.validate()) {
           this.getBase64FromUrlGoodie(this.burn_goodie_image);
-          setTimeout(this.mintGoodieProccess, 5000);
+          setTimeout(this.mintGoodieProccess, 1500);
        } 
     },
     async mintGoodieProccess() {
