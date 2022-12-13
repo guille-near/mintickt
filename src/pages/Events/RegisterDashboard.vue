@@ -188,14 +188,17 @@
 									<label for="start-time"> Start Time </label>
                   <time-picker v-model="startTime" dialog>
 										<template v-slot:activator="{ on }">
-											<v-text-field
-												v-model="startTime"
-												id="start-time"
-												readonly
-												solo
-												v-on="on"
-												:rules="rules.required"
-											></v-text-field>
+                      <label for="start-time">
+                        <v-text-field
+                          v-model="startTime"
+                          id="start-time"
+                          readonly
+                          solo
+                          v-on="on"
+                          :rules="rules.required"
+                          style="pointer-events: none"
+                        ></v-text-field>
+                      </label>
 										</template>
                   </time-picker>
 									<!-- <v-menu
@@ -234,14 +237,17 @@
 									<label for="end-time"> End Time </label>
                   <time-picker v-model="endTime" dialog>
 										<template v-slot:activator="{ on }">
-											<v-text-field
-												v-model="endTime"
-												id="start-time"
-												readonly
-												solo
-												v-on="on"
-												:rules="rules.required"
-											></v-text-field>
+                      <label for="end-time">
+                        <v-text-field
+                          v-model="endTime"
+                          id="end-time"
+                          readonly
+                          solo
+                          v-on="on"
+                          :rules="rules.required"
+                          style="pointer-events: none"
+                        ></v-text-field>
+                      </label>
 										</template>
                   </time-picker>
 									<!-- <v-menu

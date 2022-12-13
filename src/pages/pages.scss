@@ -1828,3 +1828,5 @@ body:has(#createTickets) {
   .vue-scroll-picker-item {color: #fff !important}
   .vue-scroll-picker-item.-selected {color: #CC00B7 !important}
 }
+
+#start-time input {pointer-events: none !important}
