@@ -146,21 +146,22 @@
 									min-width="auto"
 								>
 									<template v-slot:activator="{ on, attrs }">
-                    <v-combobox
-                      v-model="dates"
-                      id="date"
-                      solo
-                      multiple
-                      deletable-chips
-                      chips
-                      readonly
-                      clearable
-                      hide-details
-                      :class="{ rules: comboboxRules }"
-                      v-bind="attrs" v-on="on"
-                      :rules="rules.required"
-                      class="mb-5"
-                    ></v-combobox>
+                    <label for="date" class="mb-5">
+                      <v-combobox
+                        v-model="dates"
+                        id="date"
+                        solo
+                        multiple
+                        deletable-chips
+                        chips
+                        readonly
+                        clearable
+                        hide-details
+                        :class="{ rules: comboboxRules }"
+                        v-bind="attrs" v-on="on"
+                        :rules="rules.required"
+                      ></v-combobox>
+                    </label>
 									</template>
 									<v-date-picker
 										v-model="dates"

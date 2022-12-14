@@ -1816,6 +1816,9 @@ body:has(#createTickets) {
 .v-drumroll-picker__divider.-selected {
   color: #CC00B7 !important;
 }
+.v-drumroll-picker__button {
+  background-color: #CC00B7 !important;
+}
 .v-drumroll-picker__container {
   $color: hsl(0, 0%, 16%, .9);
   border-radius: 15px;
