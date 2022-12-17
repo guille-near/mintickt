@@ -19,16 +19,18 @@ import { Wallet, Chain } from "mintbase";
 import * as nearAPI from "near-api-js";
 const { utils } = nearAPI;
 const mb_views_nft_tokens = gql`
-  query MyQuery($_iregex: String!) {
+ query MyQuery($_iregex: String!, $user: String!) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , burned_receipt_id: {_is_null: true}
-      , last_transfer_timestamp: {_is_null: true}}
+      , last_transfer_timestamp: {_is_null: true}
+      , owner: {_eq: $user}}
     order_by: {token_id: asc}
   ) {
     token_id
   }
 }
+
 `;
 export default {
   name: "ModalApprove",
@@ -58,14 +60,15 @@ export default {
   },
   methods: {
     async getData() {
-      // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-      // const user = datos.accountId;
+      let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+      const user = datos.accountId;
       if(localStorage.getItem("metadata_id") != null){
         this.$apollo
           .mutate({
             mutation: mb_views_nft_tokens,
             variables: {
               _iregex: localStorage.getItem("metadata_id").split(":")[1],
+              user: user
             },
           })
           .then((response) => {

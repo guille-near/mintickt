@@ -126,7 +126,7 @@
           <v-btn
             @click="buy"
             :loading="loading"
-            :disabled="disable"
+            :disabled="disable || tokens_listed == 1"
             class="paywallet h8-em"
           >
             Pay with NEAR
