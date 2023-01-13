@@ -1272,7 +1272,7 @@ export default {
           //console.log('res', res.data)
           localStorage.setItem("IpfsHash", res.data.IpfsHash);
         });
-        setTimeout(this.getBase64FromUrlMainImage(this.url),30000);
+        setTimeout(this.getBase64FromUrlMainImage(this.url),1500);
         // this.image = file;
         //console.log(e);
       }
@@ -1494,7 +1494,7 @@ export default {
     async mintGoodie() {
        if (this.$refs.form4.validate()) {
           this.getBase64FromUrlGoodie(this.burn_goodie_image);
-          setTimeout(this.mintGoodieProccess, 1500);
+          setTimeout(this.mintGoodieProccess, 500);
        } 
     },
     async mintGoodieProccess() {
@@ -2003,6 +2003,7 @@ export default {
         this.getData();
         this.loading = true;
         this.disable = true;
+        // this.completeIpfs();
         const mintbase_marketplace = this.$mintbase_marketplace;
         let store = this.$store_mintbase;
         let API_KEY = this.$dev_key.toString();
@@ -2033,6 +2034,40 @@ export default {
           console.error(error);
           // TODO: handle error
         }
+
+        //Complete IPFS, adding to the smart contract the data to match the ipfs image of the store
+        this.$apollo
+          .query({
+            query: ipfs,
+            variables: {
+              _iregex: localStorage.getItem("metadata_id"),
+            },
+            client: "mintickClient",
+          })
+          .then((res) => {
+            //if data is available add ipfs data
+            //console.log(res.data.ipfs.length);
+            const url = this.$node_url + "/ipfs";
+            if (res.data.ipfs.length === 0) {
+              //console.log(url);
+              let item = {
+                thingid: localStorage.getItem("metadata_id"),
+                tokenid: localStorage.getItem("IpfsHash"),
+              };
+              //console.log(item)
+              this.axios
+                .post(url, item)
+                .then(() => {
+                  console.log("Hash up");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
 
         //Metadata Object
         const metadata = JSON.parse(localStorage.getItem("metadata"));
@@ -2136,7 +2171,6 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
-        this.completeIpfs();  
         this.executeMultipleTransactions();
       }
     },

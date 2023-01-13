@@ -704,7 +704,7 @@ export default {
                     quantity: 1,
                     created: time2 + " " + timedesc2,
                     transaction:
-                      "https://explorer.testnet.near.org/?query=" + receipe,
+                      this.$explorer + receipe,
                     tokenid: value.token_id,
                     loadingBtn: false,
                     show: false,

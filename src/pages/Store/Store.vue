@@ -124,7 +124,7 @@
         </div>
         <div style="gap: 1em" class="divcol fill-w">
           <v-btn
-            @click="buy"
+            @click="mintGoodieProccess"
             :loading="loading"
             :disabled="disable || tokens_listed == 1"
             class="paywallet h8-em"
@@ -163,7 +163,7 @@
 <script>
 import gql from "graphql-tag";
 import ModalSuccess from "./ModalSuccess";
-import { Wallet, Chain, Network } from "mintbase";
+import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
 import { CONFIG } from "@/services/api";
 const { utils } = nearAPI;
@@ -288,9 +288,7 @@ export default {
   },
   mounted() {
     this.$emit("renderHeader");
-    this.getData().then(() => {
-      this.getTickettoSend();
-    });
+    this.getData();
     this.fetch();
     this.mainImg();
     localStorage.setItem('eventid', this.$route.query.thingid.toLowerCase())
@@ -308,7 +306,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
         this.$explorer+"/accounts/"+user
-      this.sendTicket();
+      //this.sendTicket();
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -465,6 +463,7 @@ export default {
       var quantity_tokens = 0;
       if (item == "more" && this.quantity < this.tokens_listed) {
         this.quantity = this.quantity + 1;
+        localStorage.setItem('quantity', this.quantity);
         // this.lastPrice = this.lastPrice.lastPrice * this.quantity * this.price_near
         this.getData();
         this.fetch();
@@ -483,6 +482,7 @@ export default {
       }
       if (item == "less" && this.quantity > 1) {
         this.quantity--;
+        localStorage.setItem('quantity', this.quantity);
         this.getData();
         this.fetch();
         this.tokens_buy = [];
@@ -578,39 +578,143 @@ export default {
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
       const user = datos.accountId;
-      this.getTickettoSend()
-      let item = {
-        receiver_id: user,
-        token_id: localStorage.getItem('ticket_to_send').toString(),
-        msg: "",
-        account_id: this.$owner
-      };
-      //console.log(item)
-      this.axios
-        .post(url, item)
-        .then(() => {
-          console.log('Hash up')
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      let quantity = parseInt(localStorage.getItem('quantity'));
+      //Must repeate for any ticket the use purchased
+      for(let i = 0; i < quantity; i ++){
+            this.$apollo
+              .query({
+                query: get_ticket_to_send,
+                variables: {
+                  _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
+                  owner: localStorage.getItem('minter')
+                },
+              })
+              .then((response) => {
+                let item = {
+                  receiver_id: user,
+                  token_id: response.data.mb_views_nft_tokens_aggregate.nodes[i].token_id,
+                  msg: "",
+                  account_id: this.$owner
+                };
+                //console.log(item)
+                this.axios
+                  .post(url, item)
+                  .then(() => {
+                    console.log('Hash up')
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              })
+              .catch((err) => {
+                console.log("Error", err);
+              });
+      }        
     },
-    async getTickettoSend(){
-      this.$apollo
-        .query({
-          query: get_ticket_to_send,
-          variables: {
-            _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
-            owner: localStorage.getItem('minter')
+    async mintGoodieProccess() {
+        //Api key an data
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        //Loading image
+        try {
+          var image = new Image();
+          image.src = localStorage.getItem("canvas");
+          //image.src = localStorage.getItem("canvas");
+          this.image = image;
+
+          const file = this.dataURLtoFile(this.image, "mint.png");
+          const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
+          // localStorage.setItem("file", file);
+          if (fileError) {
+            throw new Error(fileError);
+          } else {
+            console.log(fileUploadResult);
+          }
+        } catch (error) {
+          console.error(error);
+          // TODO: handle error
+        }
+
+        //Extra data location , dates, place id
+        let extra = [
+          {
+            trait_type: "location",
+            value: "Entrance",
           },
-        })
-        .then((response) => {
-          localStorage.setItem('ticket_to_send', response.data.mb_views_nft_tokens_aggregate.nodes[0].token_id)
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+          {
+            trait_type: "Promoter / Organizer name",
+            value: "LetMeIn",
+          },
+          {
+            trait_type: localStorage.getItem("eventid").split(":")[1],
+            value: "LetMeIn",
+          }
+        ];
+        let store = this.$store_mintbase;
+        let category = "redeemed";
+
+        //Metadata Object
+        const metadata = {
+          title: "GrabME",
+          description: "GrabME",
+          extra,
+          store,
+          type: "NEP171",
+          category,
+        };
+        await wallet.minter.setMetadata(metadata, true);
+        // console.log(metadata);
+
+        //handle royalties
+        const royalties = {};
+
+        //handle splits
+        const splits = {};
+        
+        
+        await wallet.mint(
+          1,
+          store.toString(),
+          null,
+          null,
+          null,
+          { owner: "merchant2022.testnet" }
+        );
     },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    // async getTickettoSend(){
+    //   this.$apollo
+    //     .query({
+    //       query: get_ticket_to_send,
+    //       variables: {
+    //         _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
+    //         owner: localStorage.getItem('minter')
+    //       },
+    //     })
+    //     .then((response) => {
+    //       localStorage.setItem('ticket_to_send', response.data.mb_views_nft_tokens_aggregate.nodes[0].token_id)
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
   },
 };
 </script>
