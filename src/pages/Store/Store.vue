@@ -215,10 +215,10 @@ const mb_views_nft_tokens_aggregate = gql`
 `;
 const main_image = gql`
   query MyQuery($_iregex: String!) {
-    ipfs(where: { thingid: $_iregex }) {
-      tokenid
-    }
+  ipfs(where: {thingid: $_iregex}, first: 1) {
+    tokenid
   }
+}
 `;
 const mb_views_nft_tokens_ticketing = gql`
   query MyQuery($metadata_id: String!) {

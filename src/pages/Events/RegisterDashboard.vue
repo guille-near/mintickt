@@ -1206,6 +1206,7 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "list"
     ) {
+      this.completeIpfs();
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 5;
@@ -2065,38 +2066,36 @@ export default {
         }
 
         //Complete IPFS, adding to the smart contract the data to match the ipfs image of the store
-        this.$apollo
-          .query({
-            query: ipfs,
-            variables: {
-              _iregex: localStorage.getItem("metadata_id"),
-            },
-            client: "mintickClient",
-          })
-          .then((res) => {
-            //if data is available add ipfs data
-            //console.log(res.data.ipfs.length);
-            const url = this.$node_url + "/ipfs";
-            if (res.data.ipfs.length === 0) {
-              //console.log(url);
-              let item = {
-                thingid: localStorage.getItem("metadata_id"),
-                tokenid: localStorage.getItem("IpfsHash"),
-              };
-              //console.log(item)
-              this.axios
-                .post(url, item)
-                .then(() => {
-                  console.log("Hash up");
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
+        // this.$apollo
+        //   .query({
+        //     query: ipfs,
+        //     variables: {
+        //       _iregex: localStorage.getItem("metadata_id").toString(),
+        //     },
+        //     client: "mintickClient",
+        //   })
+        //   .then((res) => {
+        //     //if data is available add ipfs data
+        //     //console.log(res.data.ipfs.length);
+        //     const url = this.$node_url + "/ipfs";
+        //       //console.log(url);
+        //       let item = {
+        //         thingid: localStorage.getItem("metadata_id").toString(),
+        //         tokenid: localStorage.getItem("IpfsHash"),
+        //       };
+        //       //console.log(item)
+        //       this.axios
+        //         .post(url, item)
+        //         .then(() => {
+        //           console.log("Hash up");
+        //         })
+        //         .catch((error) => {
+        //           console.log(error);
+        //         });
+        //   })
+        //   .catch((err) => {
+        //     console.log("Error", err);
+        //   });
 
         //Metadata Object
         const metadata = JSON.parse(localStorage.getItem("metadata"));
@@ -2198,7 +2197,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
-        this.executeMultipleTransactions();
+         this.executeMultipleTransactions();
       }
     },
     async executeMultipleTransactions() {
@@ -2220,6 +2219,43 @@ export default {
           meta: "list",
         },
       });
+    },
+    async completeIpfs() {
+      //this.ipfs();
+      if(localStorage.getItem("metadata_id") != null && localStorage.getItem("IpfsHash") != null){
+        this.$apollo
+          .query({
+            query: ipfs,
+            variables: {
+              _iregex: localStorage.getItem("metadata_id"),
+            },
+            client: "mintickClient",
+          })
+          .then((res) => {
+            //if data is available add ipfs data
+            //console.log(res.data.ipfs.length);
+            const url = this.$node_url + "/ipfs";
+            if (res.data.ipfs.length === 0) {
+              //console.log(url);
+              let item = {
+                thingid: localStorage.getItem("metadata_id"),
+                tokenid: localStorage.getItem("IpfsHash"),
+              };
+              //console.log(item)
+              this.axios
+                .post(url, item)
+                .then(() => {
+                  console.log("Hash up");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
     },
     nearToYocto: function (nearToYocto) {
       const amountInYocto = utils.format.parseNearAmount(nearToYocto);

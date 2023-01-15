@@ -190,7 +190,7 @@ export default {
         //Adding metadatada for the burned ticket
         //Loading image
         //Since te counter mint each one
-        if(parseInt(localStorage.getItem("counter")) > 0 && this.$route.query.extra != "redeemed"){
+        if(parseInt(localStorage.getItem("counter")) > 0 && this.$route.query.extra === "ticketing"){
           try {
             var image = new Image();
             image.src = localStorage.getItem("canvas_goodie");

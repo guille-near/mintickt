@@ -385,6 +385,7 @@ const goods_redeemed = gql`
     last_transfer_receipt_id
     burned_receipt_id
     burned_timestamp
+    title
   }
 }
 `;
@@ -424,7 +425,7 @@ export default {
       dataTable: [],
       dataTableMobile: [],
       headersTableExtra: [
-        { value: "ticket", text: "TICKET" },
+        { value: "nft", text: "NFT" },
         { value: "signer", text: "SIGNER" },
         { value: "quantity", text: "QUANTITY" },
         { value: "created", text: "CREATED" },
@@ -560,7 +561,8 @@ export default {
               var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
               var receipe = value.burned_receipt_id;
               rows = {
-                ticket: value.description,
+                nft: value.title,
+                //ticket: value.description,
                 signer: value.owner,
                 quantity: 1,
                 created: time2 + " " + timedesc2,
