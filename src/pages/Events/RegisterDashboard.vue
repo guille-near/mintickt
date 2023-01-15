@@ -412,7 +412,7 @@
 										>
 										<v-btn
 											class="btn-control"
-											:disabled="dataTickets.mint_amount == 10"
+											:disabled="dataTickets.mint_amount == 19"
 											@click="dataTickets.mint_amount++"
 											>+</v-btn
 										>
@@ -707,7 +707,7 @@
 												>
 												<v-btn
 													class="btn-control"
-													:disabled="amount_list == total_minted"
+													:disabled="amount_list == total_minted -1"
 													@click="add"
 													>+</v-btn
 												>
@@ -1139,7 +1139,7 @@ export default {
       imagecanvas1: localStorage.getItem("canvas") === null  ? true : false,
       imagegoodie: localStorage.getItem("canvas_goodie") === null  ? false : true,
       imagegoodie1: localStorage.getItem("canvas_goodie") === null  ? true : false,
-      show_total_minted: localStorage.getItem("total_minted") === null ? "0" : localStorage.getItem("total_minted"),
+      show_total_minted: localStorage.getItem("total_minted") === null ? "0" : localStorage.getItem("total_minted")-1,
       overlay: false,
       overlay_building: false,
       mint_amount: localStorage.getItem("mint_amount") === null ? 0 : parseInt(localStorage.getItem("mint_amount")),
@@ -1473,12 +1473,12 @@ export default {
         //end split
 
         //LocalStora Mint amount
-        localStorage.setItem("mint_amount", this.dataTickets.mint_amount);
-        localStorage.setItem("total_minted", this.dataTickets.mint_amount);
+        localStorage.setItem("mint_amount", this.dataTickets.mint_amount+1);
+        localStorage.setItem("total_minted", this.dataTickets.mint_amount+1);
         //Control goodies and let me in for approval
-        localStorage.setItem("control_mint_appoval", this.dataTickets.mint_amount);
+        localStorage.setItem("control_mint_appoval", this.dataTickets.mint_amount+1);
         await wallet.mint(
-          parseInt(this.dataTickets.mint_amount),
+          parseInt(this.dataTickets.mint_amount+1),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
@@ -1752,7 +1752,7 @@ export default {
         localStorage.setItem("step", 3);
         this.step = parseInt(localStorage.getItem("step"));
         this.ipfs();
-        localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount);
+        localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount+1);
       }
     },
     next2() {
@@ -1955,7 +1955,7 @@ export default {
                     "total_minted",
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
-                  this.show_total_minted = localStorage.getItem("total_minted");
+                  this.show_total_minted = localStorage.getItem("total_minted")-1;
               })
               .catch((err) => {
                 console.log("Error", err);
@@ -2328,11 +2328,11 @@ export default {
       //check until mintin is done
       //Fecth until the total minted is ok
       //console.log(this.show_total_minted, this.mint_amount)
-      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
+      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount-1)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
-        // console.log(this.show_total_minted, this.mint_amount)
-        // console.log('polling', this.show_total_minted); 
+         console.log(this.show_total_minted, this.mint_amount)
+         console.log('polling', this.show_total_minted); 
         this.getData();
       } else {
         this.overlay = false;
@@ -2357,7 +2357,7 @@ export default {
       this.comboboxRules = true;
     },
     checkMintAmount(){
-      parseInt(this.dataTickets.mint_amount) > 10 ? this.dataTickets.mint_amount = 10 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) > 19 ? this.dataTickets.mint_amount = 19 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
       parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){

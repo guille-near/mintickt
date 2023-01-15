@@ -304,7 +304,7 @@ export default {
                       value1.reference_blob.extra[6].value * 1000
                     ).toLocaleDateString("en-US", options),
                     location: value1.reference_blob.extra[0].value,
-                    minted: response.data.nft_tokens_aggregate.aggregate.count,
+                    minted: response.data.nft_tokens_aggregate.aggregate.count-1,
                     sold: response.data.nft_earnings_aggregate.aggregate.count,
                     listed: value1.listings_aggregate.aggregate.count,
                     thingid: value1.id,

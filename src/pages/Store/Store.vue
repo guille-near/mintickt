@@ -130,7 +130,7 @@
 					<v-btn
 						@click="buy"
 						:loading="loading"
-						:disabled="disable || tokens_listed == 1"
+						:disabled="disable"
 						class="paywallet h8-em"
 					>
 						Pay with NEAR
@@ -242,6 +242,15 @@ const mb_views_nft_tokens_ticketing = gql`
       media
     }
   }
+`;
+
+const minter = gql`
+  query MyQuery($store: String!, $user: String!) {
+  mb_store_minters(where: {nft_contract_id: {_eq: $store}
+    , minter_id: {_eq: $user}}) {
+    minter_id
+  }
+}
 `;
 
 export default {
@@ -425,7 +434,7 @@ export default {
                 })
                 .then((response) => {
                   this.tokens_minted =
-                    response.data.nft_tokens_aggregate.aggregate.count;
+                    response.data.nft_tokens_aggregate.aggregate.count - 1;
                   this.tokens_listed =
                     value1.listings_aggregate.aggregate.count;
                 })
@@ -513,6 +522,8 @@ export default {
     },
     async buy() {
       //Generate the reference for the burned image let me in
+      //Grant the minter if does not exist
+      this.grantMinter();
       await this.getBase64FromUrl(this.burn_ticket_image)
       //
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
@@ -701,6 +712,40 @@ export default {
         u8arr[n] = bstr.charCodeAt(n);
       }
       return new File([u8arr], filename, { type: mime });
+    },
+    async grantMinter() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: minter,
+          variables: {
+            store: this.$store_mintbase,
+            user: user
+          },
+        })
+        .then((response) => {
+         //console.log(response.data.mb_store_minters.length)
+         //If the user is not minter just give grant to him/her
+         if(response.data.mb_store_minters.length == 0){
+            const url =  this.$node_url + "/minter";
+            let item = {
+            account_id: user,
+            };
+            this.axios
+            .post(url, item)
+            .then(() => {
+              console.log('Hash up')
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+         }
+        }).catch((err) => {
+            console.log("Error", err);
+        });
     },
     // async getTickettoSend(){
     //   this.$apollo

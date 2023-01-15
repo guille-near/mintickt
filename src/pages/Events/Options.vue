@@ -456,7 +456,7 @@ export default {
                 .then((response) => {
                   (this.name = this.$route.query.event),
                     (this.minted =
-                      response.data.nft_tokens_aggregate.aggregate.count),
+                      response.data.nft_tokens_aggregate.aggregate.count - 1),
                     (this.listed = value1.listings_aggregate.aggregate.count);
                     this.available_to_list = this.minted - this.listed;
                 })
@@ -681,7 +681,7 @@ export default {
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 10) {
+      if (item == "more" && this.mint_amount < 19) {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
@@ -702,7 +702,7 @@ export default {
     },
     controlPrice(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 10) {
+      if (item == "more" && this.mint_amount < 19) {
         this.price_list++;
       }
       if (item == "less" && this.price_list > 1) {
@@ -790,7 +790,7 @@ export default {
       });
     },
     checkMintAmount(){
-      this.mint_amount > 10 ? this.mint_amount = 10 : this.mint_amount = this.mint_amount;
+      this.mint_amount > 19 ? this.mint_amount = 19 : this.mint_amount = this.mint_amount;
     },
     checkListAmount(){
       var total_minted = this.available_to_list;
