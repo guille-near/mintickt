@@ -6,7 +6,7 @@
 			Let's create your NFT for your event!
 		</h2>
 
-		<v-window v-model="step" to touchless>
+		<v-window v-model="step" to>
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<h2 class="vermobile align" style="text-align: center">
@@ -186,7 +186,7 @@
 								<!-- start time -->
 								<div class="divcol" style="gap: 6px">
 									<label for="start-time"> Start Time </label>
-                  <time-picker v-model="startTime" dialog>
+                  <time-picker v-model="startTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="start-time">
                         <v-text-field
@@ -235,7 +235,7 @@
 								<!-- end date -->
 								<div class="divcol" style="gap: 6px">
 									<label for="end-time"> End Time </label>
-                  <time-picker v-model="endTime" dialog>
+                  <time-picker v-model="endTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="end-time">
                         <v-text-field
@@ -377,7 +377,7 @@
 									class="input-unique"
 								>
 									<template v-slot:selection>
-										<img class="imagePreview" :src="url" alt="Image preview" />
+										<img class="imagePreview" :src="url" alt="Image preview" style="object-fit: cover" />
 									</template>
 
 									<template v-slot:label>
