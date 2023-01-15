@@ -75,6 +75,25 @@ export default {
     return {
     };
   },
+  mounted() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    urlParams.get("transactionHashes");
+    if (urlParams.get("transactionHashes") !== null) {
+     history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/"
+      );
+    }
+    if (urlParams.get("errorCode") !== null) {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/"
+      );
+    }
+  },
   methods: {
   }
 };

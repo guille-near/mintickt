@@ -1,6 +1,5 @@
 <template>
 	<section id="events" class="align divcol">
-		<ModalApprove ref="modala"></ModalApprove>
 		<h2>Your Events</h2>
 		<!-- <div class="container-search center"> -->
 			<v-text-field
@@ -138,7 +137,6 @@
 <script>
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
-import ModalApprove from "./ModalApprove";
 const your_events = gql`
   query MyQuery($store: String!, $user: String!) {
   mb_views_nft_metadata(
@@ -185,7 +183,6 @@ const main_image = gql`
 `;
 export default {
   name: "Events",
-  components: { ModalApprove },
   data() {
     return {
       headers: [
@@ -224,7 +221,6 @@ export default {
     this.getData();
     this.pollData();
     this.mainImg();
-    this.$refs.modala.getData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if (
@@ -239,6 +235,16 @@ export default {
     if (
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "approve"
+    ) {
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events"
+      );
+    }
+    if (
+      urlParams.get("transactionHashes") !== null &&
+      urlParams.get("signMeta") === "goodies"
     ) {
       history.replaceState(
         null,

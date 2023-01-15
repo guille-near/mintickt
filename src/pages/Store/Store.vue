@@ -1,163 +1,167 @@
 <template>
-  <section id="tienda" class="center align divcol">
-    <aside>
-      <!-- new -->
-      <img class="eliminarmobile" :src="src" alt="Background Image" />
-      <img class="vermobile" :src="src" alt="Background Image" />
-      <!-- new -->
-      <div class="fill-w limiter align">
-        <!-- <v-chip color="rgba(0, 0, 0, 0.3)">
+	<section id="tienda" class="center align divcol">
+		<aside>
+			<!-- new -->
+			<img class="eliminarmobile" :src="src" alt="Background Image" />
+			<img class="vermobile" :src="src" alt="Background Image" />
+			<!-- new -->
+			<div class="fill-w limiter align">
+				<!-- <v-chip color="rgba(0, 0, 0, 0.3)">
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
-        <v-chip color="rgba(0, 0, 0, 0.3)">
-          {{ date }}. {{ date_start }}, {{ time_start }}h
-        </v-chip>
-        <h2>{{ tittle }}</h2>
-        <!-- <span>{{ tittle }}</span> -->
-      </div>
-    </aside>
-    <aside class="jspace divcolmobile gapmobile acentermobile limiter">
-      <div v-if="!isIntersecting" class="floatButton vermobile">
-        <div class="fill-w">
-          <v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
-        </div>
-      </div>
+				<v-chip color="rgba(0, 0, 0, 0.3)">
+					{{ date }}. {{ date_start }}, {{ time_start }}h
+				</v-chip>
+				<h2>{{ tittle }}</h2>
+				<!-- <span>{{ tittle }}</span> -->
+			</div>
+		</aside>
+		<aside class="jspace divcolmobile gapmobile acentermobile limiter">
+			<div v-if="!isIntersecting" class="floatButton vermobile">
+				<div class="fill-w">
+					<v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
+				</div>
+			</div>
 
-      <div class="contleft divcol fill-wmobile">
-        <aside v-if="Datos.about" class="aboutSection divcol">
-          <h3 class="h7-em p">About</h3>
+			<div class="contleft divcol fill-wmobile">
+				<aside v-if="Datos.about" class="aboutSection divcol">
+					<h3 class="h7-em p">About</h3>
 
-          <div v-if="Datos.about.event" class="divcol h8-em">
-            <p class="p"><strong>Event Information:</strong></p>
-            <p class="mt-3" v-html="Datos.about.event.text" />
-          </div>
-        </aside>
+					<div v-if="Datos.about.event" class="divcol h8-em">
+						<p class="p"><strong>Event Information:</strong></p>
+						<p class="mt-3" v-html="Datos.about.event.text" />
+					</div>
+				</aside>
 
-        <aside v-if="Datos.about" class="aboutSection divcol">
-          <h3 class="h7-em p">When</h3>
+				<aside v-if="Datos.about" class="aboutSection divcol">
+					<h3 class="h7-em p">When</h3>
 
-          <div class="acenter" style="gap: 10px">
-            <img src="@/assets/icons/calendar.svg" alt="calendar icon" style="width: 20px">
-            
-            <div class="divcol" style="gap: 4px">
-              <p class="p">
-                <strong>Start at: </strong>
-                {{ tsformart}}.
-              </p>
-              
-              <p class="p">
-                <strong>Ends at: </strong>
-                {{ tsendformat }}.
-              </p>
-            </div>
-          </div>
-        </aside>
+					<div class="acenter" style="gap: 10px">
+						<img
+							src="@/assets/icons/calendar.svg"
+							alt="calendar icon"
+							style="width: 20px"
+						/>
 
-        <aside class="contLocation divcol">
-          <h3 class="h7-em">Where</h3>
-          <p
-            class="h8-em mb-4"
-            style="display: flex; align-items: flex-end; gap: 0.5em"
-          >
-            <img src="@/assets/logo/Marker.svg" alt="marker icon" />
-            {{ Datos.location }}
-          </p>
-          <iframe
-            referrerpolicy="no-referrer-when-downgrade"
-            :src="googlemap"
-            allowfullscreen
-          >
-          </iframe>
-        </aside>
+						<div class="divcol" style="gap: 4px">
+							<p class="p">
+								<strong>Start at: </strong>
+								{{ tsformart }}.
+							</p>
 
-        <aside class="divcol">
-          <h3 class="h7-em">Details</h3>
-          <aside class="contDetails">
-            <p
-              v-for="(item, i) in Datos.details"
-              :key="i"
-              class="h8-em tittles"
-            >
-              <strong>{{ item.titlesDetails }}</strong>
-              <br />{{ item.textDetails }}
-            </p>
-          </aside>
-        </aside>
-      </div>
+							<p class="p">
+								<strong>Ends at: </strong>
+								{{ tsendformat }}.
+							</p>
+						</div>
+					</div>
+				</aside>
 
-      <article id="buy" class="divcol acenter" v-intersect="onIntersect">
-        <img class="ticket" :src="ticket_img" alt="Ticket" />
-        <div class="contenedor_aside divcol fill-w">
-          <aside class="divrow">
-            <span class="h8-em space" style="width: 100%; gap: 0.5em">
-              <strong class="number">{{ tokens_listed }}</strong> of
-              <strong class="number">{{ tokens_minted }}</strong> available
-            </span>
-          </aside>
-          <aside class="relative">
-            <v-text-field
-              disabled
-              type="number"
-              hide-spin-buttons
-              :hide-details="true"
-              solo
-              v-model="quantity"
-            >
-            </v-text-field>
-            <div class="contenedor_botones">
-              <v-btn color=" #C4C4C4" @click="controlAmount('less')">
-                <v-icon color="black"> mdi-minus </v-icon>
-              </v-btn>
-              <v-btn color=" #C4C4C4" @click="controlAmount('more')">
-                <v-icon color="black"> mdi-plus </v-icon>
-              </v-btn>
-            </div>
-          </aside>
+				<aside class="contLocation divcol">
+					<h3 class="h7-em">Where</h3>
+					<p
+						class="h8-em mb-4"
+						style="display: flex; align-items: flex-end; gap: 0.5em"
+					>
+						<img src="@/assets/logo/Marker.svg" alt="marker icon" />
+						{{ Datos.location }}
+					</p>
+					<iframe
+						referrerpolicy="no-referrer-when-downgrade"
+						:src="googlemap"
+						allowfullscreen
+					>
+					</iframe>
+				</aside>
 
-          <aside class="space">
-            <div class="divrow acenter">
-              <img src="@/assets/logo/logonear.svg" alt="Logo near" />
-              <span class="h8-em number ml-3">{{ price_near.toFixed(4) }}</span>
-            </div>
-            <span class="tend">~ {{ price_token_usd.toFixed(2) }} $USD</span>
-          </aside>
-        </div>
-        <div style="gap: 1em" class="divcol fill-w">
-          <v-btn
-            @click="mintGoodieProccess"
-            :loading="loading"
-            :disabled="disable || tokens_listed == 1"
-            class="paywallet h8-em"
-          >
-            Pay with NEAR
-          </v-btn>
-          <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
-        </div>
-      </article>
+				<aside class="divcol">
+					<h3 class="h7-em">Details</h3>
+					<aside class="contDetails">
+						<p
+							v-for="(item, i) in Datos.details"
+							:key="i"
+							class="h8-em tittles"
+						>
+							<strong>{{ item.titlesDetails }}</strong>
+							<br />{{ item.textDetails }}
+						</p>
+					</aside>
+				</aside>
+			</div>
 
-      <v-dialog v-model="dialog" width="500">
-        <v-card>
-          <v-card-title class="text-h5 grey lighten-2">
-            View transaction in explorer
-          </v-card-title>
+			<article id="buy" class="divcol acenter" v-intersect="onIntersect">
+				<img class="ticket" :src="ticket_img" alt="Ticket" />
+				<div class="contenedor_aside divcol fill-w">
+					<aside class="divrow">
+						<span class="h8-em space" style="width: 100%; gap: 0.5em">
+							<strong class="number">{{ tokens_listed }}</strong> of
+							<strong class="number">{{ tokens_minted }}</strong> available
+						</span>
+					</aside>
+					<aside class="relative">
+						<v-text-field
+							disabled
+							type="number"
+							hide-spin-buttons
+							:hide-details="true"
+							solo
+							v-model="quantity"
+						>
+						</v-text-field>
+						<div class="contenedor_botones">
+							<v-btn color=" #C4C4C4" @click="controlAmount('less')">
+								<v-icon color="black"> mdi-minus </v-icon>
+							</v-btn>
+							<v-btn color=" #C4C4C4" @click="controlAmount('more')">
+								<v-icon color="black"> mdi-plus </v-icon>
+							</v-btn>
+						</div>
+					</aside>
 
-          <v-card-text>
-            <center style="margin-top: 2.5em">
-              <a target="_blank" :href="hash">Explorer transaction</a>
-            </center>
-          </v-card-text>
+					<aside class="space">
+						<div class="divrow acenter">
+							<img src="@/assets/logo/logonear.svg" alt="Logo near" />
+							<span class="h8-em number ml-3">{{ price_near.toFixed(4) }}</span>
+						</div>
+						<span class="tend">~ {{ price_token_usd.toFixed(2) }} $USD</span>
+					</aside>
+				</div>
+				<div style="gap: 1em" class="divcol fill-w">
+					<v-btn
+						@click="buy"
+						:loading="loading"
+						:disabled="disable || tokens_listed == 1"
+						class="paywallet h8-em"
+					>
+						Pay with NEAR
+					</v-btn>
+					<!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
+				</div>
+			</article>
 
-          <v-divider></v-divider>
+			<v-dialog v-model="dialog" width="500">
+				<v-card>
+					<v-card-title class="text-h5 grey lighten-2">
+						View transaction in explorer
+					</v-card-title>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog = false"> OK </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </aside>
-      <ModalSuccess ref="modal"></ModalSuccess>
-  </section>
+					<v-card-text>
+						<center style="margin-top: 2.5em">
+							<a target="_blank" :href="hash">Explorer transaction</a>
+						</center>
+					</v-card-text>
+
+					<v-divider></v-divider>
+
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="primary" text @click="dialog = false"> OK </v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+		</aside>
+		<ModalSuccess ref="modal"></ModalSuccess>
+	</section>
 </template>
 
 <script>
@@ -216,25 +220,28 @@ const main_image = gql`
     }
   }
 `;
-const get_ticket_to_send = gql`
-  query MyQuery($_iregex: String!, $owner: String!) {
-  mb_views_nft_tokens_aggregate(
-    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "ticketing"}
-      , owner: {_eq: $owner}
-      , burned_receipt_id: {_is_null: true}}
-    order_by: {token_id: asc}  
-  ) {
-    aggregate {
-      count
-    }
-    nodes {
-      token_id
-      owner
+const mb_views_nft_tokens_ticketing = gql`
+  query MyQuery($metadata_id: String!) {
+    mb_views_nft_tokens(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
+        extra: { _eq: "ticketing" }
+      }
+      limit: 1
+    ) {
+      mint_memo
+      metadata_id
+      reference
+      royalties
+      royalties_percent
+      reference_hash
+      base_uri
       extra
+      owner
+      title
+      media
     }
   }
-}
 `;
 
 export default {
@@ -283,7 +290,8 @@ export default {
       time_start: "",
       time_end: "",
       tsformart: "",
-      tsendformat: ""
+      tsendformat: "",
+      burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
     };
   },
   mounted() {
@@ -292,7 +300,6 @@ export default {
     this.fetch();
     this.mainImg();
     localStorage.setItem('eventid', this.$route.query.thingid.toLowerCase())
-    //this.sendTicket()
     // 
     this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
@@ -306,7 +313,6 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
         this.$explorer+"/accounts/"+user
-      //this.sendTicket();
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -370,6 +376,7 @@ export default {
             ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_end + ' h';
             //Tittle
             this.tittle = value[0].title;
+            localStorage.setItem("tittle", this.tittle)
             //Ticket image
             this.ticket_img = value[0].reference_blob.media;
             //Html description
@@ -505,14 +512,20 @@ export default {
       return String(num).padEnd(targetLength, "0");
     },
     async buy() {
+      //Generate the reference for the burned image let me in
+      await this.getBase64FromUrl(this.burn_ticket_image)
+      //
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
       this.loading = true;
       const mintbase_marketplace = this.$mintbase_marketplace;
       let store = this.$store_mintbase;
+      let category = "ticketing";
+      let counter = 0;
       //console.log(this.padWithZero(this.price_near.toFixed(4), String(this.price_near.toFixed(4)).length + 24))
       this.tokens_buy.forEach((element) => {
         //console.log(element)
         // Pushh array for each element of the tokens selected
+        counter = counter + 1;
         this.txs.push({
                   receiverId: mintbase_marketplace,
                   functionCalls: [
@@ -528,8 +541,114 @@ export default {
                     },
                   ],
                 });
-      });
+
+                
+                
+       })
+       /////////////////////////////////////////////////////////
+       //Minting the let me in for each token the user is buying
+       //////////////////////////////////////////////////////////
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+        //Adding metadatada for the burned ticket
+        //Loading image
+        //Since te counter mint each one
+        for(let i = 0; i < counter; i++){
+            try {
+              var image = new Image();
+              image.src = localStorage.getItem("canvas_burn");
+              this.image =  image;
+
+              const file = this.dataURLtoFile(this.image, "mint.png");
+              const { data: fileUploadResult, error: fileError } =
+                await wallet.minter.uploadField(MetadataField.Media, file);
+              // localStorage.setItem("file", file);
+              if (fileError) {
+                throw new Error(fileError);
+              } else {
+                console.log(fileUploadResult);
+              }
+            } catch (error) {
+              console.error(error);
+              // TODO: handle error
+            }
+            
+        
+            //Metadata Object
+            let extra = [
+              {
+                trait_type: localStorage.getItem("eventid").split(":")[1],
+                value: "BurnTicket",
+              },
+              {
+                trait_type: "counter",
+                value: counter,
+              },
+            ];
+
+            const metadata = {
+              title: localStorage.getItem("tittle"),
+              description: "This is the let me in of the event",
+              extra,
+              store,
+              type: "NEP171",
+              category,
+            };
+            await wallet.minter.setMetadata(metadata, true);
+
+            const { data: metadataId, error } = await wallet.minter.getMetadataId();
+            localStorage.setItem("metadata_reference", metadataId);
+            //console.log("metadata_reference", metadataId);
+
+            let datos = JSON.parse(
+              localStorage.getItem("Mintbase.js_wallet_auth_key")
+            );
+            const user = datos.accountId;
+            // This is the let me in
+            
+              this.txs.push({
+                receiverId: store,
+                functionCalls: [
+                  {
+                    methodName: "nft_batch_mint",
+                    receiverId: store,
+                    gas: "200000000000000",
+                    args: {
+                      owner_id: user,
+                      metadata: {
+                        reference: localStorage.getItem("metadata_reference"),
+                        extra: "ticketing",
+                      },
+                      num_to_mint: parseInt(1),
+                      royalty_args: null,
+                      split_owners: null,
+                    },
+                    deposit: "1", //utils.format.parseNearAmount((0.01).toString()),
+                  },
+                ],
+              });
+          }
+      
       this.executeMultipleTransactions();
+    },
+    async getBase64FromUrl(url)  {
+      const data = await fetch(url);
+      const blob = await data.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        reader.onloadend = () => {
+          const base64data = reader.result;   
+          resolve(base64data);
+          localStorage.setItem("canvas_burn", base64data);
+        }
+      });
     },
     async mainImg() {
       var thingid = this.$route.query.thingid.toLowerCase();
@@ -571,122 +690,6 @@ export default {
           },
         });
       
-    },
-    async sendTicket() {
-      const url =  this.$node_url + "/nft-transfer";
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      let quantity = parseInt(localStorage.getItem('quantity'));
-      //Must repeate for any ticket the use purchased
-      for(let i = 0; i < quantity; i ++){
-            this.$apollo
-              .query({
-                query: get_ticket_to_send,
-                variables: {
-                  _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
-                  owner: localStorage.getItem('minter')
-                },
-              })
-              .then((response) => {
-                let item = {
-                  receiver_id: user,
-                  token_id: response.data.mb_views_nft_tokens_aggregate.nodes[i].token_id,
-                  msg: "",
-                  account_id: this.$owner
-                };
-                //console.log(item)
-                this.axios
-                  .post(url, item)
-                  .then(() => {
-                    console.log('Hash up')
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              })
-              .catch((err) => {
-                console.log("Error", err);
-              });
-      }        
-    },
-    async mintGoodieProccess() {
-        //Api key an data
-        let API_KEY = this.$dev_key.toString();
-        let networkName = this.$networkName.toString();
-        const { data: walletData } = await new Wallet().init({
-          networkName: networkName,
-          chain: Chain.near,
-          apiKey: API_KEY,
-        });
-        const { wallet } = walletData;
-        //Loading image
-        try {
-          var image = new Image();
-          image.src = localStorage.getItem("canvas");
-          //image.src = localStorage.getItem("canvas");
-          this.image = image;
-
-          const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
-          // localStorage.setItem("file", file);
-          if (fileError) {
-            throw new Error(fileError);
-          } else {
-            console.log(fileUploadResult);
-          }
-        } catch (error) {
-          console.error(error);
-          // TODO: handle error
-        }
-
-        //Extra data location , dates, place id
-        let extra = [
-          {
-            trait_type: "location",
-            value: "Entrance",
-          },
-          {
-            trait_type: "Promoter / Organizer name",
-            value: "LetMeIn",
-          },
-          {
-            trait_type: localStorage.getItem("eventid").split(":")[1],
-            value: "LetMeIn",
-          }
-        ];
-        let store = this.$store_mintbase;
-        let category = "redeemed";
-
-        //Metadata Object
-        const metadata = {
-          title: "GrabME",
-          description: "GrabME",
-          extra,
-          store,
-          type: "NEP171",
-          category,
-        };
-        await wallet.minter.setMetadata(metadata, true);
-        // console.log(metadata);
-
-        //handle royalties
-        const royalties = {};
-
-        //handle splits
-        const splits = {};
-        
-        
-        await wallet.mint(
-          1,
-          store.toString(),
-          null,
-          null,
-          null,
-          { owner: "merchant2022.testnet" }
-        );
     },
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.src.split(","),

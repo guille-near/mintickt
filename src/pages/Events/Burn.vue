@@ -8,7 +8,11 @@
 			max-width="max-content"
 		>
 			<h3 class="p">Token # {{ token }}</h3>
-			<img :src="media" alt="burn ticket" style="background: rgba(0, 0, 0, 0.87);" />
+			<img
+				:src="media"
+				alt="burn ticket"
+				style="background: rgba(0, 0, 0, 0.87)"
+			/>
 			<div class="divcol" style="gap: 0.5em">
 				<h3 class="p">{{ title }} ({{ extra }})</h3>
 				<p>Burn this NFT so event staff let you in at the venue.</p>
@@ -43,21 +47,30 @@ const mb_views_nft_tokens = gql`
   }
 }
 `;
-const goodies = gql`
-  query MyQuery($_iregex: String!, $owner: String!) {
-  mb_views_nft_tokens(
-    where: {owner: {_lte: $owner}
-      , reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "redeemed"} , burned_receipt_id: {_is_null: true}}
-    order_by: {token_id: asc}
-  ) {
-    token_id
-    title
-    extra
-    media
+
+const mb_views_nft_tokens_redeemed = gql`
+  query MyQuery($metadata_id: String!) {
+    mb_views_nft_tokens(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
+        extra: { _eq: "redeemed" }
+      }
+      limit: 1
+    ) {
+      mint_memo
+      metadata_id
+      reference
+      royalties
+      royalties_percent
+      reference_hash
+      base_uri
+      extra
+      owner
+      title
+    }
   }
-}
 `;
+
 export default {
   name: "Burn",
   components: {
@@ -72,7 +85,9 @@ export default {
       disable: true,
       loading: false,
       meta: "",
-      media: ""
+      media: "",
+      txs: [],
+      burn_goodie_image: this.$pinata_gateway+"QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
     };
   },
   mounted() {
@@ -83,29 +98,11 @@ export default {
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
     if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "goodie"
+      urlParams.get("transactionHashes") !== null
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      this.sendTicket();
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/mintickt/#/events/register"
-      );
-    }
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "last"
-    ) {
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/mintickt/#/events/register"
-      );
+      this.$router.push("/#/");
     }
   },
   methods: {
@@ -135,52 +132,30 @@ export default {
         .catch((err) => {
           console.log("Error", err);
         });
-    },
-    //Getting the goodies to send the first token found
-    async sendTicket() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+
       this.$apollo
         .query({
-          query: goodies,
+          query: mb_views_nft_tokens_redeemed,
           variables: {
-            _iregex: this.$route.query._iregex.toLowerCase(),
-            owner: user
+            metadata_id: this.$route.query._iregex,
           },
         })
         .then((response) => {
-          response.data.mb_views_nft_tokens.length > 0 ? this.disable = false : this.disable = true;
-          const url =  this.$node_url + "/nft-transfer";
-          let datos = JSON.parse(
-            localStorage.getItem("Mintbase.js_wallet_auth_key")
-          );
-          const user = datos.accountId;
-          //console.log(url)
-          let item = {
-            receiver_id: user,
-            token_id: response.data.mb_views_nft_tokens[0].token_id,
-            msg: "",
-            account_id: this.$owner
-          };
-          this.axios
-            .post(url, item)
-            .then(() => {
-              console.log('Hash up')
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
+              //console.log(response.data.mb_views_nft_tokens.length)
+              localStorage.setItem("counter", response.data.mb_views_nft_tokens.length);
+              localStorage.setItem("goodie_name", response.data.mb_views_nft_tokens[0].title);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
     },
     async burn() {
         // console.log(this.dataTickets.attendees);
+        await this.getBase64FromUrlGoodie(this.burn_goodie_image)
+
         this.loading = true;
         //Api key an data
+        let store = this.$store_mintbase;
         var meta = this.$route.query.extra === "ticketing" ? "goodie" : "last"
         let API_KEY = this.$dev_key.toString();
         let networkName = this.$networkName.toString();
@@ -194,13 +169,143 @@ export default {
         var tokens = [];
         tokens.push(this.token)
 
-        await wallet.burn(
-          tokens,
-          this.$store_mintbase,
-          {
-            meta: meta
-          }
-        );
+        this.txs.push({
+          receiverId: store,
+          functionCalls: [
+            {
+              methodName: "nft_batch_burn",
+              receiverId: store,
+              gas: "200000000000000",
+              args: {
+                token_ids: tokens
+              },
+              deposit: "1", //utils.format.parseNearAmount((0.01).toString()),
+            },
+            ],
+          });
+
+        //Verify if there is a redeemer to mint the user the goodie
+        //And start all the mint process
+        //if the goodie exists mint
+        //Adding metadatada for the burned ticket
+        //Loading image
+        //Since te counter mint each one
+        if(parseInt(localStorage.getItem("counter")) > 0 && this.$route.query.extra != "redeemed"){
+          try {
+            var image = new Image();
+            image.src = localStorage.getItem("canvas_goodie");
+            this.image =  image;
+
+            const file = this.dataURLtoFile(this.image, "mint.png");
+            const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
+              // localStorage.setItem("file", file);
+            if (fileError) {
+              throw new Error(fileError);
+            } else {
+              console.log(fileUploadResult);
+            }
+            } catch (error) {
+              console.error(error);
+                // TODO: handle error
+            }
+              
+          
+            //Metadata Object
+            let extra = [
+                {
+                  trait_type: this.$route.query._iregex,
+                  value: "BurnTicket",
+                }
+              ];
+              let category = "redeemed";
+              const metadata = {
+                title: localStorage.getItem("goodie_name"),
+                description: "This is the Goodie",
+                extra,
+                store,
+                type: "NEP171",
+                category,
+              };
+              await wallet.minter.setMetadata(metadata, true);
+
+              const { data: metadataId, error } = await wallet.minter.getMetadataId();
+              localStorage.setItem("metadata_reference", metadataId);
+              //console.log("metadata_reference", metadataId);
+
+              let datos = JSON.parse(
+                localStorage.getItem("Mintbase.js_wallet_auth_key")
+              );
+              const user = datos.accountId;
+              // This is the let me in
+              
+                this.txs.push({
+                  receiverId: store,
+                  functionCalls: [
+                    {
+                      methodName: "nft_batch_mint",
+                      receiverId: store,
+                      gas: "200000000000000",
+                      args: {
+                        owner_id: user,
+                        metadata: {
+                          reference: localStorage.getItem("metadata_reference"),
+                          extra: "redeemed",
+                        },
+                        num_to_mint: parseInt(1),
+                        royalty_args: null,
+                        split_owners: null,
+                      },
+                      deposit: "1", //utils.format.parseNearAmount((0.01).toString()),
+                    },
+                  ],
+                });
+        }
+      this.executeMultipleTransactions();
+    },
+    async executeMultipleTransactions() {
+        //Gettintg the tokens ID
+        //this.getTokensId();
+        //Adding metadata for the burn ticket
+        let API_KEY = this.$dev_key.toString();
+        let networkName = this.$networkName.toString();
+        const { data: walletData } = await new Wallet().init({
+          networkName: networkName,
+          chain: Chain.near,
+          apiKey: API_KEY,
+        });
+        const { wallet } = walletData;
+
+        await wallet.executeMultipleTransactions({
+          transactions: this.txs,
+          options: {
+            meta: "buy",
+          },
+        });
+    },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    async getBase64FromUrlGoodie(url)  {
+      const data = await fetch(url);
+      const blob = await data.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        reader.onloadend = () => {
+          const base64data = reader.result;   
+          resolve(base64data);
+          localStorage.setItem("canvas_goodie", base64data);
+        }
+      });
     },
   },
 };

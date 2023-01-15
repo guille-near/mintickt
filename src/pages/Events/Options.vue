@@ -1,7 +1,6 @@
 <template>
 	<section id="options" class="divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
-		<ModalApprove ref="modala"></ModalApprove>
 
 		<div class="acenter">
 			<v-btn icon to="/events">
@@ -186,13 +185,13 @@
 			</v-card>
 		</v-dialog>
 		<div class="text-center">
-			<v-overlay :value="overlay">
+			<v-overlay :value="false">
 				<v-progress-circular indeterminate size="64"></v-progress-circular>
 				<h3 class="mt-3">Minting in progress...</h3>
 				<h3 ref="tminted">{{ show_total_minted }}</h3>
 			</v-overlay>
 
-			<v-overlay :value="overlay_building">
+			<v-overlay :value="false">
 				<v-progress-circular indeterminate size="64"></v-progress-circular>
 				<h3 class="mt-3">Building event be pacient...</h3>
 			</v-overlay>
@@ -203,7 +202,6 @@
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import ModalSuccess from "./ModalSuccess";
-import ModalApprove from "./ModalApprove";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
 import html2canvas from "html2canvas";
@@ -290,6 +288,8 @@ const mb_views_nft_tokens_ticketing = gql`
       base_uri
       extra
       owner
+      title
+      media
     }
   }
 `;
@@ -327,7 +327,7 @@ const mb_views_nft_tokens = gql`
 `;
 export default {
   name: "options",
-  components: { StreamBarcodeReader, ModalSuccess, ModalApprove },
+  components: { StreamBarcodeReader, ModalSuccess },
   data() {
     return {
       modalMintMore: false,
@@ -363,16 +363,11 @@ export default {
   },
   mounted() {
     //console.log("-->", this.urltickets)
-    this.$refs.modala.getData();
-    //setTimeout(localStorage.getItem("to_approve") != null ? this.$refs.modala.modalApprove = true : this.$refs.modala.modalApprove = false, 30000);
-    localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", localStorage.getItem("total_minted")) : "";
-    localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
+    //localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", localStorage.getItem("total_minted")) : "";
+    //localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.getTotalMinted();
     this.pollData();
-    this.pollData1();
-    // this.pollData1();
-    //this.overlay = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get("transactionHashes") !== null) {
@@ -380,30 +375,36 @@ export default {
       const user = datos.accountId;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.$refs.modal.modalSuccess = true;
-      //this.pollData1();
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/options?event=" +
-          localStorage.getItem("event_name") +
-          "&thingid=" +
-          localStorage.getItem("eventid")
-      );
+      // history.replaceState(
+      //   null,
+      //   location.href.split("?")[0],
+      //   "/#/events/options?event=" +
+      //     localStorage.getItem("event_name") +
+      //     "&thingid=" +
+      //     localStorage.getItem("eventid")
+      // );
     }
     //List
     if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
       this.$refs.modal.modalSuccess = false;
-      this.$refs.modala.modalApprove = false;
+      //  history.replaceState(
+      //   null,
+      //   location.href.split("?")[0],
+      //   "/#/events/options?event=" +
+      //     localStorage.getItem("event_name") +
+      //     "&thingid=" +
+      //     localStorage.getItem("eventid")
+      // );
     }
     if (urlParams.get("errorCode") !== null) {
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/options?event=" +
-          localStorage.getItem("event_name") +
-          "&thingid=" +
-          localStorage.getItem("eventid")
-      );
+      // history.replaceState(
+      //   null,
+      //   location.href.split("?")[0],
+      //   "/#/events/options?event=" +
+      //     localStorage.getItem("event_name") +
+      //     "&thingid=" +
+      //     localStorage.getItem("eventid")
+      // );
       localStorage.removeItem("new_minted");
     }
   },
@@ -525,7 +526,7 @@ export default {
             ],
           });
           var actual_counter = parseInt(localStorage.getItem("control_mint_appoval"));
-          localStorage.setItem("control_mint_appoval", (this.amount_list * 2) + actual_counter)
+          localStorage.setItem("control_mint_appoval", actual_counter)
           //Map the object value to be listed
           let counter = 0;
           Object.entries(response.data).forEach(([key, value]) => {
@@ -568,85 +569,85 @@ export default {
           console.log("Error", err);
         });
       //Mint ticketing
-      this.$apollo
-        .query({
-          query: mb_views_nft_tokens_ticketing,
-          variables: {
-            metadata_id: localStorage.getItem("metadata_id").split(":")[1],
-          },
-        })
-        .then((response) => {
-          //Map the object value to be listed
-          Object.entries(response.data).forEach(([key, value]) => {
-            const owners = {};
-            owners[value[0].owner] = 9000;
-            owners[this.$value_user_mint] = 1000;
-            this.txs.push({
-              receiverId: store,
-              functionCalls: [
-                {
-                  methodName: "nft_batch_mint",
-                  receiverId: store,
-                  gas: "200000000000000",
-                  args: {
-                    owner_id: value[0].owner,
-                    metadata: {
-                      reference: value[0].reference,
-                      extra: value[0].mint_memo,
-                    },
-                    num_to_mint: parseInt(this.amount_list),
-                    royalty_args: null,
-                    split_owners: owners,
-                  },
-                  deposit: "1",
-                },
-              ],
-            });
-          });
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+      // this.$apollo
+      //   .query({
+      //     query: mb_views_nft_tokens_ticketing,
+      //     variables: {
+      //       metadata_id: localStorage.getItem("metadata_id").split(":")[1],
+      //     },
+      //   })
+      //   .then((response) => {
+      //     //Map the object value to be listed
+      //     Object.entries(response.data).forEach(([key, value]) => {
+      //       const owners = {};
+      //       owners[value[0].owner] = 9000;
+      //       owners[this.$value_user_mint] = 1000;
+      //       this.txs.push({
+      //         receiverId: store,
+      //         functionCalls: [
+      //           {
+      //             methodName: "nft_batch_mint",
+      //             receiverId: store,
+      //             gas: "200000000000000",
+      //             args: {
+      //               owner_id: value[0].owner,
+      //               metadata: {
+      //                 reference: value[0].reference,
+      //                 extra: value[0].mint_memo,
+      //               },
+      //               num_to_mint: parseInt(this.amount_list),
+      //               royalty_args: null,
+      //               split_owners: owners,
+      //             },
+      //             deposit: "1",
+      //           },
+      //         ],
+      //       });
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     console.log("Error", err);
+      //   });
       //Mint redeemed
-      this.$apollo
-        .query({
-          query: mb_views_nft_tokens_redeemed,
-          variables: {
-            metadata_id: localStorage.getItem("metadata_id").split(":")[1],
-          },
-        })
-        .then((response) => {
-          //Map the object value to be listed
-          Object.entries(response.data).forEach(([key, value]) => {
-            const owners = {};
-            owners[value[0].owner] = 9000;
-            owners[this.$value_user_mint] = 1000;
-            this.txs.push({
-              receiverId: store,
-              functionCalls: [
-                {
-                  methodName: "nft_batch_mint",
-                  receiverId: store,
-                  gas: "200000000000000",
-                  args: {
-                    owner_id: value[0].owner,
-                    metadata: {
-                      reference: value[0].reference,
-                      extra: value[0].mint_memo,
-                    },
-                    num_to_mint: parseInt(this.amount_list),
-                    royalty_args: null,
-                    split_owners: owners,
-                  },
-                  deposit: "1",
-                },
-              ],
-            });
-          });
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+      // this.$apollo
+      //   .query({
+      //     query: mb_views_nft_tokens_redeemed,
+      //     variables: {
+      //       metadata_id: localStorage.getItem("metadata_id").split(":")[1],
+      //     },
+      //   })
+      //   .then((response) => {
+      //     //Map the object value to be listed
+      //     Object.entries(response.data).forEach(([key, value]) => {
+      //       const owners = {};
+      //       owners[value[0].owner] = 9000;
+      //       owners[this.$value_user_mint] = 1000;
+      //       this.txs.push({
+      //         receiverId: store,
+      //         functionCalls: [
+      //           {
+      //             methodName: "nft_batch_mint",
+      //             receiverId: store,
+      //             gas: "200000000000000",
+      //             args: {
+      //               owner_id: value[0].owner,
+      //               metadata: {
+      //                 reference: value[0].reference,
+      //                 extra: value[0].mint_memo,
+      //               },
+      //               num_to_mint: parseInt(this.amount_list),
+      //               royalty_args: null,
+      //               split_owners: owners,
+      //             },
+      //             deposit: "1",
+      //           },
+      //         ],
+      //       });
+      //     });
+      //   })
+        // .catch((err) => {
+        //   console.log("Error", err);
+        // });
       this.new_minted = parseInt(localStorage.getItem("total_minted")) + parseInt(this.amount_list);
       localStorage.setItem('new_minted', this.new_minted);
       this.executeMultipleTransactions();
@@ -674,9 +675,7 @@ export default {
     pollData() {
       this.polling = setInterval(() => {
         this.getData();
-        //this.$refs.modala.getData();
         this.getTotalMinted();
-        this.$refs.modala.getData();
         this.$forceUpdate();
       }, 5000);
     },
@@ -797,57 +796,6 @@ export default {
       var total_minted = this.available_to_list;
       this.amount_list > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
     },
-    pollData1() {
-      this.polling = setInterval(() => {
-      //check until mintin is done
-      //Fecth until the total minted is ok
-      this.new_minted = localStorage.getItem("new_minted");   
-      // console.log(this.minted)
-      // console.log(this.new_minted)
-      if (parseInt(this.new_minted) > parseInt(localStorage.getItem("total_minted"))){
-        this.overlay_building = true;
-        this.$refs.modal.modalSuccess = false;
-        this.$refs.modala.modalApprove = false;
-        //setTimeout(this.getData(), 10000);
-        // console.log(this.show_total_minted, this.mint_amount)
-        // console.log('polling', this.show_total_minted); 
-        this.getData();
-      } else {
-        this.overlay_building = false;
-        // this.$refs.modala.modalApprove = true;
-        // localStorage.setItem("new_minted", localStorage.getItem("total_minted"))
-      }
-       //When the amount is equal close the overlay
-       // this.overlay = !this.overlay;
-       this.$forceUpdate();
-      }, 5000);
-    },
-    prueba(item) {
-      console.log(item)
-    },
-    // async getMinted() {
-    //   this.$apollo
-    //     .mutate({
-    //       mutation: mb_views_nft_tokens,
-    //       variables: {
-    //         _iregex: localStorage.getItem("metadata_id").split(":")[1],
-    //       },
-    //     })
-    //     .then((response) => {
-    //       var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-    //       // console.log(counter)
-    //       if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){            
-    //          this.overlay_building = false;
-    //          this.$refs.modala.getData();
-    //       } else {
-    //          this.$refs.modala.modalApprove = false;
-    //          this.overlay_building = true;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log("Error", err);
-    //     });
-    // },
     async getTotalMinted() {
       this.$apollo
         .mutate({
@@ -858,7 +806,7 @@ export default {
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          localStorage.setItem("total_minted", counter/2);
+          localStorage.setItem("total_minted", counter);
         })
         .catch((err) => {
           console.log("Error", err);

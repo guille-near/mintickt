@@ -1,7 +1,6 @@
 <template>
 	<section id="createTickets" class="registerDashboard divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
-		<ModalApprove ref="modala"></ModalApprove>
 
 		<h2 class="eliminarmobile align" v-if="step==1" style="text-align: center">
 			Let's create your NFT for your event!
@@ -945,7 +944,6 @@
 
 <script>
 import ModalSuccess from "./ModalSuccess";
-import ModalApprove from "./ModalApprove";
 import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { CONFIG } from "@/services/api";
@@ -1027,8 +1025,7 @@ export default {
   name: "RegisterDashboard",
   components: {
     VueEditor,
-    ModalSuccess,
-    ModalApprove
+    ModalSuccess
   },
   data() {
     return {
@@ -1231,8 +1228,12 @@ export default {
        // this.overlay = !this.overlay;
        this.$forceUpdate();
       }, 5000);
-      //this.$refs.modala.getData();
-      //setTimeout(this.$refs.modal.modalApprove = true, 20000);
+      this.gotToEvents();
+      history.replaceState(
+        null,
+        location.href.split("?")[0],
+        "/#/events/register"
+      );
     }
     //
     if (urlParams.get("errorCode") === "userRejected") {
@@ -1243,9 +1244,6 @@ export default {
         "/#/events/register"
       );
     }
-    // if(parseInt(localStorage.getItem("step")) < 5){
-    //   //this.$$refs.modala.modalApprove = false;
-    // }
 
   },
   computed: {
@@ -1494,14 +1492,13 @@ export default {
     async mintGoodie() {
        if (this.$refs.form4.validate()) {
           this.getBase64FromUrlGoodie(this.burn_goodie_image);
-          setTimeout(this.mintGoodieProccess, 500);
+          setTimeout(() => { this.mintGoodieProccess() }, 1500);
        } 
     },
     async mintGoodieProccess() {
       if (this.$refs.form4.validate()) {
         // console.log(this.dataTickets.attendees);
         //this.nextLast();
-        
         this.loading = true;
         this.disable = true;
         //Api key an data
@@ -1607,12 +1604,8 @@ export default {
         //handle splits
         const splits = {};
         
-        //Updating the actual counter of let me in, adding the new goodies, this is to count the amount of tokens to be approved
-        var actual_counter = parseInt(localStorage.getItem("control_mint_appoval"));
-        localStorage.setItem("control_mint_appoval", (parseInt(this.dataTickets.goodies) * parseInt(localStorage.getItem("total_minted")))+ actual_counter)
-        
         await wallet.mint(
-          parseInt(this.dataTickets.goodies) * parseInt(localStorage.getItem("total_minted")),
+          parseInt(1),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
@@ -1986,7 +1979,6 @@ export default {
           //console.log(counter)
           if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){
              this.overlay_building = false;
-             this.$refs.modala.getData();
           } else {
              this.overlay_building = true;
           }
@@ -1994,6 +1986,43 @@ export default {
         .catch((err) => {
           console.log("Error", err);
         });
+    },
+    gotToEvents(){
+      this.step = 1;
+      localStorage.setItem("step", this.step);
+      this.$router.push("/events");
+      localStorage.removeItem("canvas");
+      localStorage.removeItem("canvas_burn");
+      localStorage.removeItem("canvas_goodie");
+      //localStorage.removeItem("canvas_main_image");
+      localStorage.removeItem("dataFormDate");
+      localStorage.removeItem("dataFormDescription");
+      localStorage.removeItem("dataFormLocation");
+      localStorage.removeItem("dataFormLongitude");
+      localStorage.removeItem("dataFormLatitude");
+      localStorage.removeItem("dataFormPlaceId");
+      localStorage.removeItem("dataFormName");
+      localStorage.removeItem("dataFormTimeStart");
+      localStorage.removeItem("dataFormTimeEnd");
+      localStorage.removeItem("dataFormPromoter");
+      localStorage.removeItem("dataFormMintAmount");
+      localStorage.removeItem("amount_list");
+      localStorage.removeItem("price");
+      localStorage.removeItem("dataFormAttendees");
+      localStorage.removeItem("dataFormGoodies");
+      localStorage.removeItem("tempid");
+      localStorage.removeItem("mint_amount");
+      localStorage.removeItem("mint_tittle");
+      localStorage.removeItem("canvas_main_image");
+      localStorage.removeItem("total_minted");
+      localStorage.removeItem("metadata");
+      localStorage.removeItem("metadata");
+      localStorage.removeItem("IpfsHash");
+      localStorage.removeItem("metadata_reference");
+      localStorage.removeItem("eventid");
+      localStorage.removeItem("event_name");
+      localStorage.removeItem("control_mint_appoval");
+      //localStorage.removeItem("metadata_id");
     },
     //Get the tokens id minted
     async list() {
@@ -2014,7 +2043,7 @@ export default {
           apiKey: API_KEY,
         });
         const { wallet } = walletData;
-        //Adding metadatada for teh burned ticket
+        //Adding metadatada for the burned ticket
         //Loading image
         try {
           var image = new Image();
@@ -2143,7 +2172,7 @@ export default {
             owners[datos.accountId] = 9000;
             owners[this.$value_user_mint] = 1000;
 
-            // Push object to mint store
+            // This is the let me in
             this.txs.push({
               receiverId: store,
               functionCalls: [
@@ -2155,11 +2184,9 @@ export default {
                     owner_id: user,
                     metadata: {
                       reference: localStorage.getItem("metadata_reference"),
-                      extra: "ticketing",
+                      extra: "Ticketing",
                     },
-                    num_to_mint: parseInt(
-                      localStorage.getItem("mint_amount")
-                    ),
+                    num_to_mint: parseInt(1),
                     royalty_args: null,
                     split_owners: owners,
                   },
