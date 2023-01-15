@@ -362,9 +362,6 @@ export default {
     };
   },
   mounted() {
-    //console.log("-->", this.urltickets)
-    //localStorage.getItem("new_minted") === null ? localStorage.setItem("new_minted", localStorage.getItem("total_minted")) : "";
-    //localStorage.setItem('metadata_id', this.$route.query.thingid.toLowerCase());
     this.getData();
     this.getTotalMinted();
     this.pollData();
@@ -506,11 +503,12 @@ export default {
         .query({
           query: tokens_id,
           variables: {
-            metadata_id: localStorage.getItem("metadata_id").toString(),
+            metadata_id: this.$route.query.thingid.toLowerCase(),
           },
         })
         .then((response) => {
           //Firts call storage deposit
+          console.log(this.amount_list)
           this.txs.push({
             receiverId: mintbase_marketplace,
             functionCalls: [
