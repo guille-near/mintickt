@@ -2362,8 +2362,8 @@ export default {
       if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
-         console.log(this.show_total_minted, this.mint_amount)
-         console.log('polling', this.show_total_minted); 
+        //  console.log(this.show_total_minted, this.mint_amount)
+        //  console.log('polling', this.show_total_minted); 
         this.getData();
       } else {
         this.overlay = false;

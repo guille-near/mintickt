@@ -112,7 +112,7 @@
 							<v-btn color=" #C4C4C4" @click="controlAmount('less')">
 								<v-icon color="black"> mdi-minus </v-icon>
 							</v-btn>
-							<v-btn color=" #C4C4C4" @click="controlAmount('more')">
+							<v-btn color="#C4C4C4" ref="myBtn" @click="controlAmount('more')">
 								<v-icon color="black"> mdi-plus </v-icon>
 							</v-btn>
 						</div>
@@ -262,7 +262,7 @@ export default {
     return {
       tittle: "",
       ticket_img: "",
-      quantity: 1,
+      quantity: 0,
       location: "",
       dialog: false,
       loading: false,
@@ -285,7 +285,7 @@ export default {
       price_near: 0,
       price_token_usd: 0,
       tokens: [],
-      tokens_buy: [0],
+      tokens_buy: [],
       txs: [],
       precio_yocto: null,
       hash: "",
@@ -313,7 +313,7 @@ export default {
     this.mainImg();
     this.$session.set('eventid', this.$route.query.thingid.toLowerCase())
     // 
-    this.quantity == 0 ? (this.disable = true) : (this.disable = false);
+    // this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes");
@@ -324,7 +324,7 @@ export default {
       const user = datos.accountId;
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        this.$explorer+"/accounts/"+user
+      this.$explorer+"/accounts/"+user
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -445,7 +445,14 @@ export default {
                   console.log("Error", err);
                 });
             });
-          });
+          });     
+          // control flow 1 toke by default
+          if(this.quantity===0){
+            this.quantity = 1;
+            this.tokens_buy.push(this.tokens[0].token_id);  
+          }
+
+           
         })
         .catch((err) => {
           console.log("Error", err);
@@ -526,6 +533,7 @@ export default {
     async buy() {
       //Generate the reference for the burned image let me in
       //Grant the minter if does not exist
+      
       this.grantMinter();
       await this.getBase64FromUrl(this.burn_ticket_image)
       //
@@ -666,7 +674,7 @@ export default {
     },
     async mainImg() {
       var thingid = this.$route.query.thingid.toLowerCase();
-      console.log(thingid)
+      //console.log(thingid)
       //reedemed
       this.$apollo
         .query({
@@ -677,7 +685,7 @@ export default {
           client: "mintickClient",
         })
         .then((response) => {
-          console.log(response.data)
+          //console.log(response.data)
           this.src = this.$pinata_gateway + response.data.ipfs[0].tokenid;
         })
         .catch((err) => {
