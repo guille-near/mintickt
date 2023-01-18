@@ -354,7 +354,7 @@ export default {
       modalGoodie: false,
       urlgoodies: this.$burn_page_ticket+"?extra=redeemed&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
       urltickets: this.$burn_page_ticket+"?extra=ticketing&_iregex="+this.$route.query.thingid.toLowerCase().split(":")[1],
-      show_total_minted:  localStorage.getItem("total_minted"),
+      show_total_minted:  this.$session.get("total_minted"),
       available_to_list: 0,
       overlay: false,
       new_minted: 0,
@@ -362,6 +362,9 @@ export default {
     };
   },
   mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.getData();
     this.getTotalMinted();
     this.pollData();
@@ -402,7 +405,7 @@ export default {
       //     "&thingid=" +
       //     localStorage.getItem("eventid")
       // );
-      localStorage.removeItem("new_minted");
+      // localStorage.removeItem("new_minted");
     }
   },
   methods: {
@@ -453,7 +456,7 @@ export default {
                 .then((response) => {
                   (this.name = this.$route.query.event),
                     (this.minted =
-                      response.data.nft_tokens_aggregate.aggregate.count - 1),
+                      response.data.nft_tokens_aggregate.aggregate.count),
                     (this.listed = value1.listings_aggregate.aggregate.count);
                     this.available_to_list = this.minted - this.listed;
                 })
@@ -523,8 +526,8 @@ export default {
               },
             ],
           });
-          var actual_counter = parseInt(localStorage.getItem("control_mint_appoval"));
-          localStorage.setItem("control_mint_appoval", actual_counter)
+          var actual_counter = this.$session.get("control_mint_appoval");
+          this.$session.get("control_mint_appoval", actual_counter)
           //Map the object value to be listed
           let counter = 0;
           Object.entries(response.data).forEach(([key, value]) => {
@@ -646,8 +649,8 @@ export default {
         // .catch((err) => {
         //   console.log("Error", err);
         // });
-      this.new_minted = parseInt(localStorage.getItem("total_minted")) + parseInt(this.amount_list);
-      localStorage.setItem('new_minted', this.new_minted);
+      this.new_minted = parseInt(this.$session.get("total_minted")) + parseInt(this.amount_list);
+      this.$session.set('new_minted', this.new_minted);
       this.executeMultipleTransactions();
     },
     async executeMultipleTransactions() {
@@ -804,7 +807,7 @@ export default {
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-          localStorage.setItem("total_minted", counter);
+          this.$session.set("total_minted", counter);
         })
         .catch((err) => {
           console.log("Error", err);

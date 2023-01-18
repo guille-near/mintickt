@@ -2,7 +2,11 @@
 	<section id="createTickets" class="registerDashboard divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
 
-		<h2 class="eliminarmobile align" v-if="step==1" style="text-align: center">
+		<h2
+			class="eliminarmobile align"
+			v-if="step == 1"
+			style="text-align: center"
+		>
 			Let's create your NFT for your event!
 		</h2>
 
@@ -112,6 +116,7 @@
 								append-icon="search"
 								v-bind:disabled="false"
 								flat
+                v-model="location"
 								hide-no-data
 								hide-selected
 								label="Search your location"
@@ -145,28 +150,29 @@
 									min-width="auto"
 								>
 									<template v-slot:activator="{ on, attrs }">
-                    <label for="date" class="mb-5">
-                      <v-combobox
-                        v-model="dates"
-                        id="date"
-                        solo
-                        multiple
-                        deletable-chips
-                        chips
-                        readonly
-                        clearable
-                        hide-details
-                        :class="{ rules: comboboxRules }"
-                        v-bind="attrs" v-on="on"
-                        :rules="rules.required"
-                      ></v-combobox>
-                    </label>
+										<label for="date" class="mb-5">
+											<v-combobox
+												v-model="dates"
+												id="date"
+												solo
+												multiple
+												deletable-chips
+												chips
+												readonly
+												clearable
+												hide-details
+												:class="{ rules: comboboxRules }"
+												v-bind="attrs"
+												v-on="on"
+												:rules="rules.required"
+											></v-combobox>
+										</label>
 									</template>
 									<v-date-picker
 										v-model="dates"
 										no-title
 										scrollable
-                    multiple
+										multiple
 										color="hsl(306, 100%, 50%)"
 										dark
 									>
@@ -186,7 +192,26 @@
 								<!-- start time -->
 								<div class="divcol" style="gap: 6px">
 									<label for="start-time"> Start Time </label>
-                  <time-picker v-model="startTime" dialog minute-interval="15">
+
+                  <!-- <label for=""> -->
+                    <date-picker
+                      id="start-time"
+                      v-model="startTime"
+                      type="time"
+                      :time-picker-options="{
+                        start: '06:15',
+                        step: '00:15',
+                        end: '23:30',
+                      }"
+                      format="HH:mm"
+                      placeholder="HH:mm"
+                      :class="{ rules: timepickerStartRules }"
+                      :editable="false"
+                      @input="validatorStartTime(startTime)"
+                    >
+                    </date-picker>
+                  <!-- </label> -->
+									<!-- <time-picker v-model="startTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="start-time">
                         <v-text-field
@@ -200,7 +225,8 @@
                         ></v-text-field>
                       </label>
 										</template>
-                  </time-picker>
+                  </time-picker> -->
+
 									<!-- <v-menu
 										ref="menu-start-time"
 										v-model="menuStartTime"
@@ -235,7 +261,24 @@
 								<!-- end date -->
 								<div class="divcol" style="gap: 6px">
 									<label for="end-time"> End Time </label>
-                  <time-picker v-model="endTime" dialog minute-interval="15">
+
+									<date-picker
+										v-model="endTime"
+										type="time"
+										:time-picker-options="{
+											start: '06:15',
+											step: '00:15',
+											end: '23:30',
+										}"
+										:open.sync="open"
+										format="HH:mm"
+										placeholder="HH:mm"
+										:class="{ rules: timepickerEndRules }"
+                    :editable="false"
+										@input="validatorEndTime(endTime)"
+									></date-picker>
+
+									<!-- <time-picker v-model="endTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="end-time">
                         <v-text-field
@@ -249,7 +292,8 @@
                         ></v-text-field>
                       </label>
 										</template>
-                  </time-picker>
+                  </time-picker> -->
+
 									<!-- <v-menu
 										ref="menu-end-time"
 										v-model="menuEndTime"
@@ -377,7 +421,12 @@
 									class="input-unique"
 								>
 									<template v-slot:selection>
-										<img class="imagePreview" :src="url" alt="Image preview" style="object-fit: cover" />
+										<img
+											class="imagePreview"
+											:src="url"
+											alt="Image preview"
+											style="object-fit: cover"
+										/>
 									</template>
 
 									<template v-slot:label>
@@ -412,7 +461,7 @@
 										>
 										<v-btn
 											class="btn-control"
-											:disabled="dataTickets.mint_amount == 19"
+											:disabled="dataTickets.mint_amount == 20"
 											@click="dataTickets.mint_amount++"
 											>+</v-btn
 										>
@@ -606,7 +655,7 @@
 							</v-btn>
 							<v-btn
 								type="submit"
-								@click="mint"
+								@click="mint()"
 								:loading="loading"
 								:disabled="disable"
 								class="mint"
@@ -707,7 +756,7 @@
 												>
 												<v-btn
 													class="btn-control"
-													:disabled="amount_list == total_minted -1"
+													:disabled="amount_list == total_minted - 1"
 													@click="add"
 													>+</v-btn
 												>
@@ -744,7 +793,7 @@
 							</v-btn>
 							<v-btn
 								type="submit"
-								@click="list"
+								@click="list()"
 								:loading="loading"
 								:disabled="disable"
 							>
@@ -846,7 +895,7 @@
 										></v-text-field>
 									</div>
 
-									<div class="divcol" style="display:none">
+									<div class="divcol" style="display: none">
 										<label for="goodies" class="sf-pro"
 											>How much goodies for each attendee per ticket?</label
 										>
@@ -952,6 +1001,9 @@ const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import html2canvas from "html2canvas";
 import gql from "graphql-tag";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 const nft_tokens_aggregate = gql`
   query MyQuery(
     $store: String!
@@ -1025,25 +1077,26 @@ export default {
   name: "RegisterDashboard",
   components: {
     VueEditor,
-    ModalSuccess
+    ModalSuccess,
+    DatePicker
   },
   data() {
     return {
       step:
-        localStorage.getItem("step") === undefined
+        this.$session.get("step") === undefined
           ? 1
-          : parseInt(localStorage.getItem("step")),
+          : this.$session.get("step"),
       dataTickets: {
-        name: localStorage.getItem("dataFormName") === null  ? "" : localStorage.getItem("dataFormName"),
-        promoter: localStorage.getItem("dataFormPromoter") === null  ? "" : localStorage.getItem("dataFormPromoter"),
-        img: localStorage.getItem("canvas") === null  ? "" : localStorage.getItem("canvas"),
-        img_main: localStorage.getItem("canvas_main_image") === null  ? null : localStorage.getItem("canvas_main_image"),
-        description: localStorage.getItem("dataFormDescription") === null  ? "" : localStorage.getItem("dataFormDescription"),
-        mint_amount: localStorage.getItem("dataFormMintAmount") === null  ? "" : localStorage.getItem("dataFormMintAmount"),
-        attendees: localStorage.getItem("dataFormAttendees") === null  ? "" : localStorage.getItem("dataFormAttendees"),
+        name: this.$session.get("dataFormName") === undefined  ? "" : this.$session.get("dataFormName"),
+        promoter: this.$session.get("dataFormPromoter") === undefined  ? "" : this.$session.get("dataFormPromoter"),
+        img: this.$session.get("canvas") === undefined  ? "" : this.$session.get("canvas"),
+        img_main: this.$session.get("canvas_main_image") === null  ? null : this.$session.get("canvas_main_image"),
+        description: this.$session.get("dataFormDescription") === undefined  ? "" : this.$session.get("dataFormDescription"),
+        mint_amount: this.$session.get("dataFormMintAmount") === undefined  ? "" : this.$session.get("dataFormMintAmount"),
+        attendees: this.$session.get("dataFormAttendees") === undefined  ? "" : this.$session.get("dataFormAttendees"),
         goodies: "1" // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
-      url: localStorage.getItem("canvas_main_image") === null  ? null : localStorage.getItem("canvas_main_image"),
+      url: this.$session.get("canvas_main_image") === null  ? null : this.$session.get("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -1054,15 +1107,15 @@ export default {
       model: null,
       search: null,
       address: "",
-      place_id: localStorage.getItem("dataFormPlaceId") === null  ? "" : localStorage.getItem("dataFormPlaceId"),
-      latitude: localStorage.getItem("dataFormLatitud") === null  ? "" : localStorage.getItem("dataFormLatitud"),
-      longitude: localStorage.getItem("dataFormLongitud") === null  ? "" : localStorage.getItem("dataFormLongitud"),
-      location: localStorage.getItem("dataFormLocation") === null ? "Search your location" : localStorage.getItem("dataFormLocation"),
+      place_id: this.$session.get("dataFormPlaceId") === undefined  ? "" : this.$session.get("dataFormPlaceId"),
+      latitude: this.$session.get("dataFormLatitud") === undefined  ? "" : this.$session.get("dataFormLatitud"),
+      longitude: this.$session.get("dataFormLongitud") === undefined  ? "" : this.$session.get("dataFormLongitud"),
+      location: this.$session.get("dataFormLocation") === undefined ? "Search your location" : this.$session.get("dataFormLocation"),
       address: "1234",
-      amount_list: localStorage.getItem("amount_list") === null ? 0 : localStorage.getItem("amount_list"),
-      price: localStorage.getItem("price") === null ? 0 : localStorage.getItem("price"),
+      amount_list: this.$session.get("amount_list") === undefined ? 0 : this.$session.get("amount_list"),
+      price: this.$session.get("price") === undefined ? 0 : this.$session.get("price"),
       menu: "",
-      time: localStorage.getItem("dataFormTime") === null  ? "" : localStorage.getItem("dataFormTime"),
+      time: this.$session.get("dataFormTime") === undefined  ? "" : this.$session.get("dataFormTime"),
       menu2: false,
       dataTicket: [
         {
@@ -1079,11 +1132,11 @@ export default {
         },
       ],
       MenuDates: false,
-      dates: localStorage.getItem("dataFormDate") === null ? undefined : Array.from(localStorage.getItem("dataFormDate").split(',')),
+      dates: this.$session.get("dataFormDate") === undefined ? undefined : this.$session.get("dataFormDate"),
       menuStartTime: false,
-      startTime: undefined,
-      menuEndTime: false,
-      endTime: undefined,
+      startTime: this.$session.get("dataFormTimeStart") === undefined  ? "" : new Date(this.$session.get("dataFormTimeStart")),
+      menuEndTime: "",
+      endTime: this.$session.get("dataFormTimeEnd") === undefined  ? "" : new Date(this.$session.get("dataFormTimeEnd")),
       // dates: [
       //   {
       //     id: 1,
@@ -1126,23 +1179,27 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas: localStorage.getItem("canvas") === null ? "" : localStorage.getItem("canvas"),
-      canvas_burn: localStorage.getItem("canvas_burn") === null ? "" : localStorage.getItem("canvas_burn"),
-      canvas_goodie: localStorage.getItem("canvas_goodie") === null ? "" : localStorage.getItem("canvas_goodie"),
+      canvas: this.$session.get("canvas") === undefined ? "" : this.$session.get("canvas"),
+      canvas_burn: this.$session.get("canvas_burn") === null ? "" : this.$session.get("canvas_burn"),
+      canvas_goodie: this.$session.get("canvas_goodie") === null ? "" : this.$session.get("canvas_goodie"),
       editorRules: false,
+      timepickerStartRules: false,
+      timepickerEndRules: false,
       comboboxRules: false,
-      total_minted: parseInt(localStorage.getItem("total_minted")),
+      total_minted: parseInt(this.$session.get("total_minted") === undefined  ? 0 : this.$session.get("total_minted")),
       nearid: false,
       burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       burn_goodie_image: this.$pinata_gateway+"QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
-      imagecanvas: localStorage.getItem("canvas") === null  ? false : true,
-      imagecanvas1: localStorage.getItem("canvas") === null  ? true : false,
-      imagegoodie: localStorage.getItem("canvas_goodie") === null  ? false : true,
-      imagegoodie1: localStorage.getItem("canvas_goodie") === null  ? true : false,
-      show_total_minted: localStorage.getItem("total_minted") === null ? "0" : localStorage.getItem("total_minted")-1,
+      imagecanvas: this.$session.get("canvas") === undefined  ? false : true,
+      imagecanvas1: this.$session.get("canvas") === undefined  ? true : false,
+      imagegoodie: this.$session.get("canvas_goodie") === undefined  ? false : true,
+      imagegoodie1: this.$session.get("canvas_goodie") === undefined  ? true : false,
+      show_total_minted: this.$session.get("total_minted") === undefined ? "0" : this.$session.get("total_minted"),
       overlay: false,
       overlay_building: false,
-      mint_amount: localStorage.getItem("mint_amount") === null ? 0 : parseInt(localStorage.getItem("mint_amount")),
+      mint_amount: this.$session.get("mint_amount") === undefined ? 0 : parseInt(this.$session.get("mint_amount")),
+      open: false,
+      i: null
     };
   },
   watch: {
@@ -1173,12 +1230,13 @@ export default {
     }
   },
   mounted() {
-    
     this.revisar();
     if (this.step === 1) {
       this.listenerEditor()
     }
-
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
@@ -1194,7 +1252,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 4;
-      localStorage.setItem("step", 4);
+      this.$session.set("step", 4);
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -1210,7 +1268,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 5;
-      localStorage.setItem("step", this.step);
+      this.$session.set("step", this.step);
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -1269,7 +1327,7 @@ export default {
         // console.log(this.$ipfs)
         await this.axios.post(this.$ipfs, formData).then((res) => {
           //console.log('res', res.data)
-          localStorage.setItem("IpfsHash", res.data.IpfsHash);
+          this.$session.set("IpfsHash", res.data.IpfsHash);
         });
         setTimeout(this.getBase64FromUrlMainImage(this.url),1500);
         // this.image = file;
@@ -1319,7 +1377,7 @@ export default {
     },
     async mint() {
       if (this.$refs.form2.validate()) {
-        localStorage.setItem("step", 4);
+        this.$session.set("step", 4);
         this.loading = true;
         this.disable = true;
         let datos = JSON.parse(
@@ -1338,7 +1396,7 @@ export default {
         //Loading image
         try {
           var image = new Image();
-          image.src = localStorage.getItem("canvas");
+          image.src = this.$session.get("canvas");
           this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
@@ -1356,7 +1414,7 @@ export default {
         }
 
         const random = (length = 8) => {
-          localStorage.setItem(
+          this.$session.set(
             "tempid",
             Math.random().toString(16).substr(2, length)
           );
@@ -1402,7 +1460,7 @@ export default {
             display_type: "date",
           },
           {
-            trait_type: localStorage.getItem("tempid"),
+            trait_type: this.$session.get("tempid"),
             value: "NFT",
           },
           {
@@ -1429,9 +1487,9 @@ export default {
         await wallet.minter.setMetadata(metadata, true);
         // console.log(metadata);
 
-        localStorage.setItem("mint_tittle", this.dataTickets.name);
+        this.$session.set("mint_tittle", this.dataTickets.name);
         //LocalStorage Metadata
-        localStorage.setItem("metadata", JSON.stringify(metadata));
+        this.$session.set("metadata", JSON.stringify(metadata));
 
         //handle royalties
         const royalties = {};
@@ -1473,12 +1531,12 @@ export default {
         //end split
 
         //LocalStora Mint amount
-        localStorage.setItem("mint_amount", this.dataTickets.mint_amount+1);
-        localStorage.setItem("total_minted", this.dataTickets.mint_amount+1);
+        this.$session.set("mint_amount", parseInt(this.dataTickets.mint_amount));
+        this.$session.set("total_minted", parseInt(this.dataTickets.mint_amount));
         //Control goodies and let me in for approval
-        localStorage.setItem("control_mint_appoval", this.dataTickets.mint_amount+1);
+        this.$session.set("control_mint_appoval", parseInt(this.dataTickets.mint_amount));
         await wallet.mint(
-          parseInt(this.dataTickets.mint_amount+1),
+          parseInt(this.dataTickets.mint_amount),
           store.toString(),
           JSON.stringify(royalties) === "{}" ? null : royalties,
           JSON.stringify(splits) === "{}" ? null : splits,
@@ -1514,7 +1572,7 @@ export default {
         //Loading image
         try {
           var image = new Image();
-          image.src = localStorage.getItem("canvas_goodie");
+          image.src = this.$session.get("canvas_goodie");
           //image.src = localStorage.getItem("canvas");
           this.image = image;
 
@@ -1569,7 +1627,7 @@ export default {
             display_type: "date",
           },
           {
-            trait_type: localStorage.getItem("metadata_id").split(":")[1],
+            trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
             value: this.dataTickets.attendees,
           },
           {
@@ -1596,8 +1654,8 @@ export default {
         await wallet.minter.setMetadata(metadata, true);
         // console.log(metadata);
 
-        localStorage.setItem('dataFormAttendees', this.dataTickets.attendees)
-        localStorage.setItem('dataFormGoodies', this.dataTickets.goodies)
+        this.$session.set('dataFormAttendees', this.dataTickets.attendees)
+        this.$session.set('dataFormGoodies', this.dataTickets.goodies)
 
         //handle royalties
         const royalties = {};
@@ -1615,7 +1673,7 @@ export default {
             meta: "goodies",
           }
         );
-        localStorage.setItem('step', 6)
+        // this.$session.set('step', 6)
       }
     },
     /**
@@ -1625,30 +1683,32 @@ export default {
      * @param {String} id Input container ID
      */
     getAddressData: function (addressData, placeResultData, id) {
-      this.address = addressData;
-      this.place_id = addressData.place_id;
-      this.location = placeResultData.formatted_address;
-      this.latitude = addressData.latitude;
-      this.longitude = addressData.longitude;
-      localStorage.setItem("dataFormPlaceId", addressData.place_id);
-      localStorage.setItem("dataFormLocation", placeResultData.formatted_address);
-      localStorage.setItem("dataFormLatitude", addressData.latitude);
-      localStorage.setItem("dataFormLongitude", addressData.longitude);
+      this.address = this.$session.get("dataFormPlaceId") === undefined  ? addressData : this.$session.get("dataFormPlaceId");
+      this.place_id = this.$session.get("dataFormPlaceId") === undefined  ? addressData.place_id : this.$session.get("dataFormPlaceId");
+      this.location = this.$session.get("dataFormLocation") === undefined ? placeResultData.formatted_address : this.$session.get("dataFormLocation");
+      this.latitude = this.$session.get("dataFormLatitud") === undefined  ? addressData.latitude : this.$session.get("dataFormLatitud");
+      this.longitude = this.$session.get("dataFormLatitud") === undefined  ? addressData.longitude : this.$session.get("dataFormLatitud");
+      this.$session.set("dataFormPlaceId", addressData.place_id);
+      this.$session.set("dataFormLocation", placeResultData.formatted_address);
+      this.$session.set("dataFormLatitude", addressData.latitude);
+      this.$session.set("dataFormLongitude", addressData.longitude);
     },
     next() {
       if (this.$refs.form.validate() && this.dataTickets.description && this.dates) {
         this.editorRules = false;
         this.comboboxRules = false;
-        localStorage.setItem("step", 2);
-        this.step = parseInt(localStorage.getItem("step"));
+        this.timepickerStartRules = false;
+        this.timepickerEndRules = false;
+        this.$session.set("step", 2);
+        this.step = this.$session.get("step");
         //Store all form data
-        localStorage.setItem("dataFormName", this.dataTickets.name);
-        localStorage.setItem("dataFormPromoter", this.dataTickets.promoter);
-        localStorage.setItem("dataFormDescription", this.dataTickets.description);
-        localStorage.setItem("dataFormDate", this.dates);
-        localStorage.setItem("dataFormTimeStart", this.startTime);
-        localStorage.setItem("dataFormTimeEnd", this.endTime);
-        
+        this.$session.set("dataFormName", this.dataTickets.name);
+        this.$session.set("dataFormPromoter", this.dataTickets.promoter);
+        this.$session.set("dataFormDescription", this.dataTickets.description);
+        this.$session.set("dataFormDate", this.dates);
+        this.$session.set("dataFormTimeStart", this.startTime);
+        this.$session.set("dataFormTimeEnd", this.endTime);
+        console.log('------------',this.startTime)
 
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
@@ -1664,7 +1724,7 @@ export default {
 
           var image = new Image();
           image.src = canvas.toDataURL("image/png", 1.0);
-          localStorage.setItem("canvas", canvas.toDataURL("image/png", 1.0));
+          this.$session.set("canvas", canvas.toDataURL("image/png", 1.0));
           this.image = image;
           this.getBase64FromUrl(this.burn_ticket_image)
           // console.log(this.image);
@@ -1672,6 +1732,8 @@ export default {
       }
       if (!this.dataTickets.description) this.editorRules = true;
       if (!this.dates || this.dates.length === 0) this.comboboxRules = true;
+      if (!this.startTime) this.timepickerStartRules = true;
+      if (!this.endTime) this.timepickerEndRules = true;
     },
     async getBase64FromUrl(url)  {
       const data = await fetch(url);
@@ -1682,7 +1744,7 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;   
           resolve(base64data);
-          localStorage.setItem("canvas_burn", base64data);
+          this.$session.set("canvas_burn", base64data);
         }
       });
     },
@@ -1695,7 +1757,7 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;   
           resolve(base64data);
-          localStorage.setItem("canvas_goodie", base64data);
+          this.$session.set("canvas_goodie", base64data);
         }
       });
     },
@@ -1708,7 +1770,7 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;   
           resolve(base64data);
-          localStorage.setItem("canvas_main_image", base64data);
+          this.$session.set("canvas_main_image", base64data);
           //console.log(base64data)
         }
       });
@@ -1749,23 +1811,23 @@ export default {
     },
     async next1() {
       if (this.$refs.form1.validate()) {
-        localStorage.setItem("step", 3);
-        this.step = parseInt(localStorage.getItem("step"));
+        this.$session.set("step", 3);
+        this.step = this.$session.get("step");
         this.ipfs();
-        localStorage.setItem("dataFormMintAmount", this.dataTickets.mint_amount+1);
+        this.$session.set("dataFormMintAmount", this.dataTickets.mint_amount);
       }
     },
     next2() {
       if (this.$refs.form2.validate()) {
-        localStorage.setItem("step", 4);
-        this.step = parseInt(localStorage.getItem("step"));
+        this.$session.set("step", 4);
+        this.step = this.$session.get("step");
       }
     },
     back() {
       this.step--;
       this.goodie = false;
-      var step = parseInt(localStorage.getItem("step")) - 1;
-      localStorage.setItem("step", step);
+      var step = this.$session.get("step") - 1;
+      this.$session.set("step", step);
     },
     // validating NEAR account
     async validateNearId(val, e) {
@@ -1902,7 +1964,7 @@ export default {
     // Remove data from de object
     remove1(pos) {
       this.dataSplit.splice(pos, 1);
-      localStorage.setItem("splits", this.dataSplit)
+      this.$session.get("splits", this.dataSplit)
       this.arr = [];
       for (const prop in this.dataRoyalties) {
         this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
@@ -1925,8 +1987,8 @@ export default {
           mutation: nft_tokens_aggregate,
           variables: {
             store: this.$store_mintbase,
-            tittle: localStorage.getItem("mint_tittle") === null ? "" : localStorage.getItem("mint_tittle"),
-            _iregex: localStorage.getItem("tempid") === null ? "" : localStorage.getItem("tempid")
+            tittle: this.$session.get("mint_tittle") === undefined ? "" : this.$session.get("mint_tittle"),
+            _iregex: this.$session.get("tempid") === undefined ? "" : this.$session.get("tempid")
           },
         })
         .then((response) => {
@@ -1941,7 +2003,7 @@ export default {
               // inner object entries
               //console.log(value[0].id);
               //Set total minted
-              localStorage.setItem('metadata_id', value[0].id);
+              this.$session.set('metadata_id', value[0].id);
               this.$apollo
               .mutate({
                 mutation: minted,
@@ -1951,11 +2013,11 @@ export default {
               })
               .then((response) => {
                   //console.log(response.data.nft_tokens_aggregate.aggregate.count);
-                  localStorage.setItem(
+                  this.$session.set(
                     "total_minted",
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
-                  this.show_total_minted = localStorage.getItem("total_minted")-1;
+                  this.show_total_minted = this.$session.get("total_minted");
               })
               .catch((err) => {
                 console.log("Error", err);
@@ -1972,13 +2034,13 @@ export default {
         .mutate({
           mutation: mb_views_nft_tokens,
           variables: {
-            _iregex: localStorage.getItem("metadata_id").split(":")[1],
+            _iregex: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
           },
         })
         .then((response) => {
           var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
           //console.log(counter)
-          if(counter >= parseInt(localStorage.getItem("control_mint_appoval"))){
+          if(counter >= parseInt(this.$session.get("control_mint_appoval"))){
              this.overlay_building = false;
           } else {
              this.overlay_building = true;
@@ -1990,46 +2052,15 @@ export default {
     },
     gotToEvents(){
       this.step = 1;
-      localStorage.setItem("step", this.step);
+      this.$session.set("step", this.step);
       this.$router.push("/events");
-      localStorage.removeItem("canvas");
-      localStorage.removeItem("canvas_burn");
-      localStorage.removeItem("canvas_goodie");
-      //localStorage.removeItem("canvas_main_image");
-      localStorage.removeItem("dataFormDate");
-      localStorage.removeItem("dataFormDescription");
-      localStorage.removeItem("dataFormLocation");
-      localStorage.removeItem("dataFormLongitude");
-      localStorage.removeItem("dataFormLatitude");
-      localStorage.removeItem("dataFormPlaceId");
-      localStorage.removeItem("dataFormName");
-      localStorage.removeItem("dataFormTimeStart");
-      localStorage.removeItem("dataFormTimeEnd");
-      localStorage.removeItem("dataFormPromoter");
-      localStorage.removeItem("dataFormMintAmount");
-      localStorage.removeItem("amount_list");
-      localStorage.removeItem("price");
-      localStorage.removeItem("dataFormAttendees");
-      localStorage.removeItem("dataFormGoodies");
-      localStorage.removeItem("tempid");
-      localStorage.removeItem("mint_amount");
-      localStorage.removeItem("mint_tittle");
-      localStorage.removeItem("canvas_main_image");
-      localStorage.removeItem("total_minted");
-      localStorage.removeItem("metadata");
-      localStorage.removeItem("metadata");
-      localStorage.removeItem("IpfsHash");
-      localStorage.removeItem("metadata_reference");
-      localStorage.removeItem("eventid");
-      localStorage.removeItem("event_name");
-      localStorage.removeItem("control_mint_appoval");
-      //localStorage.removeItem("metadata_id");
+      this.$session.clear();
     },
     //Get the tokens id minted
     async list() {
       if (this.$refs.form3.validate()) {
         //Upload ipfs
-        localStorage.setItem("step", 5);
+        this.$session.set("step", 5);
         this.getData();
         this.loading = true;
         this.disable = true;
@@ -2048,7 +2079,7 @@ export default {
         //Loading image
         try {
           var image = new Image();
-          image.src = localStorage.getItem("canvas_burn");
+          image.src = this.$session.get("canvas_burn");
           this.image =  image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
@@ -2098,21 +2129,21 @@ export default {
         //   });
 
         //Metadata Object
-        const metadata = JSON.parse(localStorage.getItem("metadata"));
+        const metadata = JSON.parse(this.$session.get("metadata"));
         metadata.extra.push({
-          trait_type: localStorage.getItem("metadata_id").split(":")[1],
+          trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
           value: "BurnTicket",
         });
         await wallet.minter.setMetadata(metadata, true);
 
         const { data: metadataId, error } = await wallet.minter.getMetadataId();
-        localStorage.setItem("metadata_reference", metadataId);
+        this.$session.set("metadata_reference", metadataId);
         //console.log("metadata_reference", metadataId);
         this.$apollo
           .query({
             query: tokens_id,
             variables: {
-              metadata_id: localStorage.getItem("metadata_id").toString(),
+              metadata_id: this.$session.get("metadata_id").toString(),
             },
           })
           .then((response) => {
@@ -2182,7 +2213,7 @@ export default {
                   args: {
                     owner_id: user,
                     metadata: {
-                      reference: localStorage.getItem("metadata_reference"),
+                      reference: this.$session.get("metadata_reference"),
                       extra: "Ticketing",
                     },
                     num_to_mint: parseInt(1),
@@ -2222,12 +2253,12 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if(localStorage.getItem("metadata_id") != null && localStorage.getItem("IpfsHash") != null){
+      if(this.$session.get("metadata_id") != null && this.$session.get("IpfsHash") != null){
         this.$apollo
           .query({
             query: ipfs,
             variables: {
-              _iregex: localStorage.getItem("metadata_id"),
+              _iregex: this.$session.get("metadata_id"),
             },
             client: "mintickClient",
           })
@@ -2238,8 +2269,8 @@ export default {
             if (res.data.ipfs.length === 0) {
               //console.log(url);
               let item = {
-                thingid: localStorage.getItem("metadata_id"),
-                tokenid: localStorage.getItem("IpfsHash"),
+                thingid: this.$session.get("metadata_id"),
+                tokenid: this.$session.get("IpfsHash"),
               };
               //console.log(item)
               this.axios
@@ -2273,7 +2304,7 @@ export default {
           parseInt(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
-      localStorage.setItem("price", this.price)
+      this.$session.set("price", this.price)
     },
     async ipfs() {
       const formData = new FormData();
@@ -2283,17 +2314,17 @@ export default {
       //console.log(this.$ipfs)
       await this.axios.post(this.$ipfs, formData).then((res) => {
         //console.log('res', res.data)
-        localStorage.setItem("IpfsHash", res.data.IpfsHash);
+        this.$session.set("IpfsHash", res.data.IpfsHash);
       });
     },
     async completeIpfs() {
       //this.ipfs();
-      if(localStorage.getItem("metadata_id") != null && localStorage.getItem("IpfsHash") != null){
+      if(this.$session.get("metadata_id") != null && this.$session.get("IpfsHash") != null){
         this.$apollo
           .query({
             query: ipfs,
             variables: {
-              _iregex: localStorage.getItem("metadata_id"),
+              _iregex: this.$session.get("metadata_id"),
             },
             client: "mintickClient",
           })
@@ -2304,8 +2335,8 @@ export default {
             if (res.data.ipfs.length === 0) {
               //console.log(url);
               let item = {
-                thingid: localStorage.getItem("metadata_id"),
-                tokenid: localStorage.getItem("IpfsHash"),
+                thingid: this.$session.get("metadata_id"),
+                tokenid: this.$session.get("IpfsHash"),
               };
               //console.log(item)
               this.axios
@@ -2328,7 +2359,7 @@ export default {
       //check until mintin is done
       //Fecth until the total minted is ok
       //console.log(this.show_total_minted, this.mint_amount)
-      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount-1)){
+      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
         this.overlay = true;
         //setTimeout(this.getData(), 10000);
          console.log(this.show_total_minted, this.mint_amount)
@@ -2356,19 +2387,27 @@ export default {
       if (model && model.length > 0) return this.comboboxRules = false;
       this.comboboxRules = true;
     },
+    validatorStartTime(model) {
+      if (model) return this.timepickerStartRules = false;
+      this.timepickerStartRules = true;
+    },
+    validatorEndTime(model) {
+      if (model) return this.timepickerEndRules = false;
+      this.timepickerEndRules = true;
+    },
     checkMintAmount(){
-      parseInt(this.dataTickets.mint_amount) > 19 ? this.dataTickets.mint_amount = 19 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+      parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
       parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
     },
     checkListAmount(){
       //this.getData();
-      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      var total_minted = parseInt(this.$session.get("total_minted"));
       parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
       parseInt(this.amount_list) < 0 ? this.amount_list = 0 : this.amount_list = this.amount_list;
-      localStorage.setItem("amount_list",this.amount_list);
+      this.$session.set("amount_list",this.amount_list);
     },
     checkGoodiesAmount(){
-      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      var total_minted = parseInt(this.$session.get("total_minted"));
       parseInt(this.dataTickets.goodies) > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
     },
     async revisar() {
@@ -2424,15 +2463,16 @@ export default {
     async add(){
       this.amount_list++;
       //this.getData();
-      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      var total_minted = parseInt(this.$session.get("total_minted"));
       parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
     },
     async substract(){
       this.amount_list--;
       //this.getData();
-      var total_minted = parseInt(localStorage.getItem("total_minted"));
+      var total_minted = parseInt(this.$session.get("total_minted"));
       parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
     },
+    
   },
 };
 </script>

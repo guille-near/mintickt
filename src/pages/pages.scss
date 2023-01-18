@@ -765,10 +765,43 @@
         letter-spacing: -0.03em;
         color: #FFFFFF !important;
       }
+      .container-times {
+       & > {
+        width: 50% !important;
+       }
+      }
       .v-input__slot {
         background: rgba(255, 255, 255, 0.15) !important;
         border-radius: 8px;
         .v-icon {color: #FFFFFF !important}
+      }
+      .mx-datepicker {
+        width: 100% !important;
+        min-height: 100.5px;
+        i {color: #FFFFFF !important}
+        input {
+          border-color: transparent;
+          background-color: transparent;
+          height: 48px;
+          padding-block: 4px;
+          padding-inline: 10px;
+          background: rgba(255, 255, 255, 0.15) !important;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        &.rules {
+          &::after {
+            content: "Field required";
+            color: #ff4081;
+            font-size: 12px;
+            padding-left: 12px;
+          }
+          input {
+            border: 1.5px solid red !important;
+          }
+        }
       }
       .v-file-input__text {
         height: 8.375em;
@@ -1420,11 +1453,11 @@
       }
       .ql {
         &-toolbar.ql-snow {
-          border: 2px solid red !important;
+          border: 1.5px solid red !important;
           border-bottom: none !important;
         }
         &-container.ql-snow {
-          border: 2px solid red !important;
+          border: 1.5px solid red !important;
           border-top: none !important;
         }
       }
@@ -1832,4 +1865,37 @@ body:has(#createTickets) {
   .vue-scroll-picker-item.-selected {color: #CC00B7 !important}
 }
 
-#start-time input {pointer-events: none !important}
+
+.mx-datepicker-main.mx-datepicker-popup {
+  border-radius: 10px;
+  border-color: #292929 !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  overflow: auto;
+  // transition: none !important;
+  // transform: translateY(280px);
+  
+  * {
+    border-color: #292929 !important;
+  }
+  .mx-time, .mx-datepicker-body, .mx-time-content {
+    color: #fff;
+    background: hsl(0, 0%, 0%, 1) !important;
+
+    * {
+      background-color: transparent !important;
+    }
+    .mx-time-option{
+      &:hover, &.active {color: #cc00b7}
+    }
+    .mx-time-item {
+      color: #fff;
+      &:hover, &.active {color: #cc00b7}
+    }
+  }
+    
+  // @layer layout {
+  //   :active {
+  //     background-color: #cc00b7 !important;
+  //   }
+  // }
+}

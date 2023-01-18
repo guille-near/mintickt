@@ -244,37 +244,8 @@ export default {
       this.user = "Login with NEAR";
     },
     goToEvent(){
-      localStorage.removeItem("canvas");
-      localStorage.removeItem("canvas_burn");
-      localStorage.removeItem("canvas_goodie");
-      //localStorage.removeItem("canvas_main_image");
-      localStorage.removeItem("dataFormDate");
-      localStorage.removeItem("dataFormDescription");
-      localStorage.removeItem("dataFormLocation");
-      localStorage.removeItem("dataFormLongitude");
-      localStorage.removeItem("dataFormLatitude");
-      localStorage.removeItem("dataFormPlaceId");
-      localStorage.removeItem("dataFormName");
-      localStorage.removeItem("dataFormTimeStart");
-      localStorage.removeItem("dataFormTimeEnd");
-      localStorage.removeItem("dataFormPromoter");
-      localStorage.removeItem("dataFormMintAmount");
-      localStorage.removeItem("amount_list");
-      localStorage.removeItem("price");
-      localStorage.removeItem("dataFormAttendees");
-      localStorage.removeItem("dataFormGoodies");
-      localStorage.removeItem("tempid");
-      localStorage.removeItem("mint_amount");
-      localStorage.removeItem("mint_tittle");
-      localStorage.removeItem("canvas_main_image");
-      localStorage.removeItem("total_minted");
-      localStorage.removeItem("metadata");
-      localStorage.removeItem("IpfsHash");
-      localStorage.removeItem("metadata_reference");
-      localStorage.removeItem("eventid");
-      localStorage.removeItem("event_name");
-      localStorage.removeItem("control_mint_appoval");
-      //localStorage.removeItem("metadata_id");
+
+      this.$session.clear();
       localStorage.setItem('step', 1);
       this.$router.push('/events/register')
     }
