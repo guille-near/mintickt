@@ -374,7 +374,7 @@ export default {
             this.Datos.location = value[0].reference_blob.extra[0].value;
             //Google map location
             this.googlemap =
-              "https://www.google.com/maps/embed/v1/place?key=AIzaSyDMtqgnD-Nbr_gk04K5H9HegRvnjvG7Fms&q=" +
+              "https://www.google.com/maps/embed/v1/place?key="+this.$key+"&q=" +
               this.Datos.location;
             //Extra data
             this.Datos.details = [

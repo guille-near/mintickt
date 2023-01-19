@@ -433,12 +433,14 @@ export default {
         });        
     },
     getIpfs(value) {
-				if (this.src.length > 0 || this.src != undefined) {
-					var src = this.src
+        if(this.src.filter(thingid => thingid.thingid == value)[0] === undefined){
+          return this.$pinata_gateway + "QmT26Az6EsepW3U5NpYtP3g78NwL4biEfNPECowPiNt5wm";
+        } else {
+          	var src = this.src
 						.filter(thingid => thingid.thingid == value)[0]
 						.tokenid;
 					return this.$pinata_gateway + src;
-				}
+        }   
 			},
     ModalQR() {
         this.modalQR=true

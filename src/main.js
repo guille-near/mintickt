@@ -43,6 +43,7 @@ Vue.prototype.$event_page = 'https://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
+Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w"
 
 //Session
 Vue.use(VueSession)
