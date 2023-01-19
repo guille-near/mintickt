@@ -5,7 +5,7 @@
 			<img class="eliminarmobile" :src="src" alt="Background Image" />
 			<img class="vermobile" :src="src" alt="Background Image" />
 			<!-- new -->
-			<div class="fill-w limiter align">
+			<div class="banner-title fill-w limiter align">
 				<!-- <v-chip color="rgba(0, 0, 0, 0.3)">
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
@@ -866,12 +866,22 @@ export default {
     }
   }
 
+  // aditional rules 19/1/23
+  .banner-title {
+    @media (max-width: 880px) {width: calc(80% + clamp(1em, 4vw, 4em)) !important}
+    @media (max-width: 400px) {width: calc(90% + clamp(1em, 4vw, 4em)) !important}
+  }
+
   &>aside+aside {
     width: 100%;
     padding: clamp(1em, 4vw, 4em);
     position: relative;
+    display: flex !important;
+    gap: 7em !important;
     .contleft {
-      min-width: 65% !important;
+      @media (min-width: 880px) {width: 65% !important}
+      @media (max-width: 880px) {width: 80% !important}
+      @media (max-width: 400px) {width: 90% !important}
       gap: 2em;
       .aboutSection {gap: 1em;}
       .conttitles {
@@ -1009,7 +1019,7 @@ export default {
     gap: 2em;
     z-index: 3;
     width: min(90%, 22em) !important;
-    transform: translateY(-100px) !important;
+    @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {width: 80% !important}
     @media (max-width: 400px) {width: 90% !important}
     h3 {
@@ -1021,15 +1031,15 @@ export default {
     &#claim {
       width: min(90%, 17em);
     }
-    &#buy {
-      @media (min-width: 880px) {
-        // width: min(90%, 22em) !important;
-        position: absolute;
-        right: clamp(2em, 4vw, 4em);
-        top: -16.5em;
-        // width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
-      }
-    }
+    // &#buy {
+    //   @media (min-width: 880px) {
+    //     width: min(90%, 22em) !important;
+    //     position: absolute;
+    //     right: clamp(2em, 4vw, 4em);
+    //     top: -13.5em;
+    //     width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
+    //   }
+    // }
     .ticket {
       width: 100% !important;
       border-radius: 15px !important;
