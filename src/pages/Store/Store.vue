@@ -1025,7 +1025,7 @@ export default {
         position: absolute;
         right: clamp(2em, 4vw, 4em);
         top: -16.5em;
-        width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
+        // width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
       }
     }
     .ticket {
