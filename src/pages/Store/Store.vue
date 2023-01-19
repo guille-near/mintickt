@@ -1008,7 +1008,8 @@ export default {
     color: white !important;
     gap: 2em;
     z-index: 3;
-    width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
+    width: min(90%, 22em) !important;
+    transform: translateY(-100px) !important;
     @media (max-width: 880px) {width: 80% !important}
     @media (max-width: 400px) {width: 90% !important}
     h3 {
