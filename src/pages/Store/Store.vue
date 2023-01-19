@@ -1021,7 +1021,7 @@ export default {
     }
     &#buy {
       @media (min-width: 880px) {
-        width: min(90%, 22em) !important;
+        // width: min(90%, 22em) !important;
         position: absolute;
         right: clamp(2em, 4vw, 4em);
         top: -16.5em;
