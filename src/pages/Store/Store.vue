@@ -19,7 +19,7 @@
 		<aside class="jspace divcolmobile gapmobile acentermobile limiter">
 			<div v-if="!isIntersecting" class="floatButton vermobile">
 				<div class="fill-w">
-					<v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
+					<v-btn class="h8-em fill-w" @click="scrollTo">Buy a ticket</v-btn>
 				</div>
 			</div>
 
@@ -89,9 +89,9 @@
 				</aside>
 			</div>
 
-			<article id="buy" class="divcol acenter" v-intersect="onIntersect">
+			<article class="divcol acenter" v-intersect="onIntersect">
 				<img class="ticket" :src="ticket_img" alt="Ticket" />
-				<div class="contenedor_aside divcol fill-w">
+				<div id="buy" class="contenedor_aside divcol fill-w">
 					<aside class="divrow">
 						<span class="h8-em space" style="width: 100%; gap: 0.5em">
 							<strong class="number">{{ tokens_listed }}</strong> of
@@ -160,16 +160,15 @@
 				</v-card>
 			</v-dialog>
 		</aside>
-		<ModalSuccess ref="modal"></ModalSuccess>
+		<modalSuccess ref="modal"></modalSuccess>
 	</section>
 </template>
 
 <script>
 import gql from "graphql-tag";
-import ModalSuccess from "./ModalSuccess";
+import modalSuccess from "./ModalSuccess.vue";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
-import { CONFIG } from "@/services/api";
 const { utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
@@ -220,29 +219,6 @@ const main_image = gql`
   }
 }
 `;
-const mb_views_nft_tokens_ticketing = gql`
-  query MyQuery($metadata_id: String!) {
-    mb_views_nft_tokens(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
-        extra: { _eq: "ticketing" }
-      }
-      limit: 1
-    ) {
-      mint_memo
-      metadata_id
-      reference
-      royalties
-      royalties_percent
-      reference_hash
-      base_uri
-      extra
-      owner
-      title
-      media
-    }
-  }
-`;
 
 const minter = gql`
   query MyQuery($store: String!, $user: String!) {
@@ -256,7 +232,7 @@ const minter = gql`
 export default {
   name: "Tienda",
   components: {
-    ModalSuccess,
+    modalSuccess,
   },
   data() {
     return {
@@ -312,6 +288,7 @@ export default {
     this.fetch();
     this.mainImg();
     this.$session.set('eventid', this.$route.query.thingid.toLowerCase())
+
     // 
     // this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
@@ -326,14 +303,14 @@ export default {
       this.$refs.modal.url =
       this.$explorer+"/accounts/"+user
       history.replaceState(
-        null,
+        "",
         location.href.split("?")[0],
         "/#/store/?thingid="+this.$session.get('eventid')
       );
     }
     if (urlParams.get("errorCode") !== null) {
-      history.replaceState(
-        null,
+     history.replaceState(
+        "",
         location.href.split("?")[0],
         "/#/store/?thingid="+this.$session.get('eventid')
       );
@@ -656,7 +633,7 @@ export default {
                 ],
               });
           }
-      
+      setTimeout(() => {this.loading = false}, 10000)
       this.executeMultipleTransactions();
     },
     async getBase64FromUrl(url)  {
@@ -706,10 +683,7 @@ export default {
         const { wallet } = walletData;
 
         await wallet.executeMultipleTransactions({
-          transactions: this.txs,
-          options: {
-            meta: "buy",
-          },
+          transactions: this.txs
         });
       
     },
@@ -758,6 +732,10 @@ export default {
             console.log("Error", err);
         });
     },
+    scrollTo(){
+      var top = $('#buy').position().top;
+      $(window).scrollTop( top );
+    }
     // async getTickettoSend(){
     //   this.$apollo
     //     .query({
