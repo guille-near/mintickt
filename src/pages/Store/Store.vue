@@ -1008,6 +1008,7 @@ export default {
     color: white !important;
     gap: 2em;
     z-index: 3;
+    width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
     @media (max-width: 880px) {width: 80% !important}
     @media (max-width: 400px) {width: 90% !important}
     h3 {
@@ -1029,7 +1030,7 @@ export default {
       }
     }
     .ticket {
-      width: 100%;
+      width: 100% !important;
       border-radius: 15px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
