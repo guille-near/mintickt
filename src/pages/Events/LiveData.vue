@@ -451,6 +451,9 @@ export default {
     };
   },
   mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.IsMobile()
     window.addEventListener("resize", this.IsMobile)
     this.responsive();

@@ -10,7 +10,7 @@
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
 				<v-chip color="rgba(0, 0, 0, 0.3)">
-					{{ date }}. {{ date_start }}, {{ time_start }}h
+					{{ date }}. {{ date_start }}, {{ time_start }} h.
 				</v-chip>
 				<h2>{{ tittle }}</h2>
 				<!-- <span>{{ tittle }}</span> -->
@@ -19,7 +19,7 @@
 		<aside class="jspace divcolmobile gapmobile acentermobile limiter">
 			<div v-if="!isIntersecting" class="floatButton vermobile">
 				<div class="fill-w">
-					<v-btn class="h8-em fill-w" href="#buy">Buy a ticket</v-btn>
+					<v-btn class="h8-em fill-w" @click="scrollTo">Buy a ticket</v-btn>
 				</div>
 			</div>
 
@@ -89,9 +89,9 @@
 				</aside>
 			</div>
 
-			<article id="buy" class="divcol acenter" v-intersect="onIntersect">
+			<article class="divcol acenter" v-intersect="onIntersect">
 				<img class="ticket" :src="ticket_img" alt="Ticket" />
-				<div class="contenedor_aside divcol fill-w">
+				<div id="buy" class="contenedor_aside divcol fill-w">
 					<aside class="divrow">
 						<span class="h8-em space" style="width: 100%; gap: 0.5em">
 							<strong class="number">{{ tokens_listed }}</strong> of
@@ -112,7 +112,7 @@
 							<v-btn color=" #C4C4C4" @click="controlAmount('less')">
 								<v-icon color="black"> mdi-minus </v-icon>
 							</v-btn>
-							<v-btn color=" #C4C4C4" @click="controlAmount('more')">
+							<v-btn color="#C4C4C4" ref="myBtn" @click="controlAmount('more')">
 								<v-icon color="black"> mdi-plus </v-icon>
 							</v-btn>
 						</div>
@@ -130,7 +130,7 @@
 					<v-btn
 						@click="buy"
 						:loading="loading"
-						:disabled="disable || tokens_listed == 1"
+						:disabled="disable"
 						class="paywallet h8-em"
 					>
 						Pay with NEAR
@@ -160,16 +160,15 @@
 				</v-card>
 			</v-dialog>
 		</aside>
-		<ModalSuccess ref="modal"></ModalSuccess>
+		<modalSuccess ref="modal"></modalSuccess>
 	</section>
 </template>
 
 <script>
 import gql from "graphql-tag";
-import ModalSuccess from "./ModalSuccess";
+import modalSuccess from "./ModalSuccess.vue";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
-import { CONFIG } from "@/services/api";
 const { utils } = nearAPI;
 const your_events = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
@@ -220,34 +219,20 @@ const main_image = gql`
   }
 }
 `;
-const mb_views_nft_tokens_ticketing = gql`
-  query MyQuery($metadata_id: String!) {
-    mb_views_nft_tokens(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $metadata_id } } }
-        extra: { _eq: "ticketing" }
-      }
-      limit: 1
-    ) {
-      mint_memo
-      metadata_id
-      reference
-      royalties
-      royalties_percent
-      reference_hash
-      base_uri
-      extra
-      owner
-      title
-      media
-    }
+
+const minter = gql`
+  query MyQuery($store: String!, $user: String!) {
+  mb_store_minters(where: {nft_contract_id: {_eq: $store}
+    , minter_id: {_eq: $user}}) {
+    minter_id
   }
+}
 `;
 
 export default {
   name: "Tienda",
   components: {
-    ModalSuccess,
+    modalSuccess,
   },
   data() {
     return {
@@ -295,13 +280,17 @@ export default {
     };
   },
   mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.$emit("renderHeader");
     this.getData();
     this.fetch();
     this.mainImg();
-    localStorage.setItem('eventid', this.$route.query.thingid.toLowerCase())
+    this.$session.set('eventid', this.$route.query.thingid.toLowerCase())
+
     // 
-    this.quantity == 0 ? (this.disable = true) : (this.disable = false);
+    // this.quantity == 0 ? (this.disable = true) : (this.disable = false);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     urlParams.get("transactionHashes");
@@ -312,18 +301,18 @@ export default {
       const user = datos.accountId;
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url =
-        this.$explorer+"/accounts/"+user
+      this.$explorer+"/accounts/"+user
       history.replaceState(
-        null,
+        "",
         location.href.split("?")[0],
-        "/#/store/?thingid="+localStorage.getItem('eventid')
+        "/#/store/?thingid="+this.$session.get('eventid')
       );
     }
     if (urlParams.get("errorCode") !== null) {
-      history.replaceState(
-        null,
+     history.replaceState(
+        "",
         location.href.split("?")[0],
-        "/#/store/?thingid="+localStorage.getItem('eventid')
+        "/#/store/?thingid="+this.$session.get('eventid')
       );
     }
   },
@@ -365,8 +354,8 @@ export default {
             this.date_end = new Date(
               value[0].reference_blob.extra[7].value * 1000
             ).toLocaleDateString("en-US", options_end);
-            this.time_start = value[0].reference_blob.extra[9].value;
-            this.time_end = value[0].reference_blob.extra[10].value;
+            this.time_start = new Date(value[0].reference_blob.extra[9].value).toLocaleTimeString('en-US', { hour12: false, hour: "2-digit", minute: "2-digit" });
+            this.time_end = new Date(value[0].reference_blob.extra[10].value).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
             //
             this.tsformart = new Date(
               value[0].reference_blob.extra[6].value * 1000
@@ -376,7 +365,7 @@ export default {
             ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_end + ' h';
             //Tittle
             this.tittle = value[0].title;
-            localStorage.setItem("tittle", this.tittle)
+            this.$session.set("tittle", this.tittle)
             //Ticket image
             this.ticket_img = value[0].reference_blob.media;
             //Html description
@@ -411,7 +400,7 @@ export default {
               value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
             //Add tokens
             this.tokens = value[0].listings_aggregate.nodes;
-            localStorage.setItem('minter', value[0].listings_aggregate.nodes[0].minter)
+            this.$session.set('minter', value[0].listings_aggregate.nodes[0].minter)
             Object.entries(value).forEach(([i, value1]) => {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
@@ -433,7 +422,14 @@ export default {
                   console.log("Error", err);
                 });
             });
-          });
+          });     
+          // control flow 1 toke by default
+          if(this.quantity===0){
+            this.quantity = 1;
+            this.tokens_buy.push(this.tokens[0].token_id);  
+          }
+
+           
         })
         .catch((err) => {
           console.log("Error", err);
@@ -444,7 +440,7 @@ export default {
       this.polling = setInterval(() => {
         this.getData();
         this.$forceUpdate();
-      }, 60000);
+      }, 45000);
     },
     fetch() {
       const BINANCE_NEAR = this.$binance;
@@ -456,7 +452,7 @@ export default {
         this.price_token_usd =
           parseFloat(this.lastPrice) *
           parseFloat(this.price_near) *
-          (this.quantity === 0 ? 1 : parseFloat(this.quantity));
+          parseInt(this.quantity);
       };
     },
     formatPrice(price) {
@@ -470,7 +466,7 @@ export default {
       var quantity_tokens = 0;
       if (item == "more" && this.quantity < this.tokens_listed) {
         this.quantity = this.quantity + 1;
-        localStorage.setItem('quantity', this.quantity);
+        this.$session.set('quantity', this.quantity);
         // this.lastPrice = this.lastPrice.lastPrice * this.quantity * this.price_near
         this.getData();
         this.fetch();
@@ -489,14 +485,14 @@ export default {
       }
       if (item == "less" && this.quantity > 1) {
         this.quantity--;
-        localStorage.setItem('quantity', this.quantity);
+        this.$session.set('quantity', this.quantity);
         this.getData();
         this.fetch();
         this.tokens_buy = [];
         this.tokens.forEach((element) => {
           if (
             !this.tokens_buy.includes(element.token_id) &&
-            quantity_tokens < this.quantity
+            quantity_tokens <= this.quantity
           ) {
             quantity_tokens++;
             this.tokens_buy.push(element.token_id);
@@ -513,6 +509,9 @@ export default {
     },
     async buy() {
       //Generate the reference for the burned image let me in
+      //Grant the minter if does not exist
+      
+      this.grantMinter();
       await this.getBase64FromUrl(this.burn_ticket_image)
       //
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
@@ -562,7 +561,7 @@ export default {
         for(let i = 0; i < counter; i++){
             try {
               var image = new Image();
-              image.src = localStorage.getItem("canvas_burn");
+              image.src = this.$session.get("canvas_burn");
               this.image =  image;
 
               const file = this.dataURLtoFile(this.image, "mint.png");
@@ -583,7 +582,7 @@ export default {
             //Metadata Object
             let extra = [
               {
-                trait_type: localStorage.getItem("eventid").split(":")[1],
+                trait_type: this.$session.get("eventid").split(":")[1],
                 value: "BurnTicket",
               },
               {
@@ -593,7 +592,7 @@ export default {
             ];
 
             const metadata = {
-              title: localStorage.getItem("tittle"),
+              title: this.$session.get("tittle"),
               description: "This is the let me in of the event",
               extra,
               store,
@@ -603,7 +602,7 @@ export default {
             await wallet.minter.setMetadata(metadata, true);
 
             const { data: metadataId, error } = await wallet.minter.getMetadataId();
-            localStorage.setItem("metadata_reference", metadataId);
+            this.$session.set("metadata_reference", metadataId);
             //console.log("metadata_reference", metadataId);
 
             let datos = JSON.parse(
@@ -622,7 +621,7 @@ export default {
                     args: {
                       owner_id: user,
                       metadata: {
-                        reference: localStorage.getItem("metadata_reference"),
+                        reference: this.$session.get("metadata_reference"),
                         extra: "ticketing",
                       },
                       num_to_mint: parseInt(1),
@@ -634,7 +633,7 @@ export default {
                 ],
               });
           }
-      
+      setTimeout(() => {this.loading = false}, 10000)
       this.executeMultipleTransactions();
     },
     async getBase64FromUrl(url)  {
@@ -646,13 +645,13 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;   
           resolve(base64data);
-          localStorage.setItem("canvas_burn", base64data);
+          this.$session.set("canvas_burn", base64data);
         }
       });
     },
     async mainImg() {
       var thingid = this.$route.query.thingid.toLowerCase();
-      console.log(thingid)
+      //console.log(thingid)
       //reedemed
       this.$apollo
         .query({
@@ -663,7 +662,7 @@ export default {
           client: "mintickClient",
         })
         .then((response) => {
-          console.log(response.data)
+          //console.log(response.data)
           this.src = this.$pinata_gateway + response.data.ipfs[0].tokenid;
         })
         .catch((err) => {
@@ -684,10 +683,7 @@ export default {
         const { wallet } = walletData;
 
         await wallet.executeMultipleTransactions({
-          transactions: this.txs,
-          options: {
-            meta: "buy",
-          },
+          transactions: this.txs
         });
       
     },
@@ -702,6 +698,44 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
+    async grantMinter() {
+      let datos = JSON.parse(
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
+      const user = datos.accountId;
+      this.$apollo
+        .query({
+          query: minter,
+          variables: {
+            store: this.$store_mintbase,
+            user: user
+          },
+        })
+        .then((response) => {
+         //console.log(response.data.mb_store_minters.length)
+         //If the user is not minter just give grant to him/her
+         if(response.data.mb_store_minters.length == 0){
+            const url =  this.$node_url + "/minter";
+            let item = {
+            account_id: user,
+            };
+            this.axios
+            .post(url, item)
+            .then(() => {
+              console.log('Hash up')
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+         }
+        }).catch((err) => {
+            console.log("Error", err);
+        });
+    },
+    scrollTo(){
+      var top = $('#buy').position().top;
+      $(window).scrollTop( top );
+    }
     // async getTickettoSend(){
     //   this.$apollo
     //     .query({

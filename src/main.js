@@ -20,6 +20,8 @@ import VueClipboard from 'vue-clipboard2'
 import VueQRCodeComponent from 'vue-qr-generator'
 import { TimePicker } from 'vue-drumroll-datetime-picker'
 import 'vue-drumroll-datetime-picker/dist/style.css'
+import VueCookies from 'vue-cookies'
+import VueSession from 'vue-session'
 
 
 //Global Variables
@@ -41,6 +43,13 @@ Vue.prototype.$event_page = 'https://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
+
+//Session
+Vue.use(VueSession)
+
+//Cookies
+Vue.use(require('vue-cookies'))
+Vue.use(VueCookies, { expires: '1d'})
 
 // time picker
 Vue.component('TimePicker', TimePicker)
@@ -76,7 +85,7 @@ const i18n = initI18n("ES", "US");
 Vue.use(Toast);
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyBXwqZH6fI3F6LTvjaVCBmkFR5YywUity8",
+    key: "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w",
     libraries: "places", // 'places,drawing,visualization',
     lang: "en"
   },

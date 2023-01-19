@@ -91,6 +91,9 @@ export default {
     };
   },
   mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.getData();
     //Show the modal and send the goodie if the result is goodie
     const queryString = window.location.search;
@@ -142,8 +145,8 @@ export default {
         })
         .then((response) => {
               //console.log(response.data.mb_views_nft_tokens.length)
-              localStorage.setItem("counter", response.data.mb_views_nft_tokens.length);
-              localStorage.setItem("goodie_name", response.data.mb_views_nft_tokens[0].title);
+              this.$session.set("counter", response.data.mb_views_nft_tokens.length);
+              this.$session.set("goodie_name", response.data.mb_views_nft_tokens[0].title);
         })
         .catch((err) => {
           console.log("Error", err);
@@ -190,10 +193,10 @@ export default {
         //Adding metadatada for the burned ticket
         //Loading image
         //Since te counter mint each one
-        if(parseInt(localStorage.getItem("counter")) > 0 && this.$route.query.extra === "ticketing"){
+        if(parseInt(this.$session.get("counter")) > 0 && this.$route.query.extra === "ticketing"){
           try {
             var image = new Image();
-            image.src = localStorage.getItem("canvas_goodie");
+            image.src = this.$session.get("canvas_goodie");
             this.image =  image;
 
             const file = this.dataURLtoFile(this.image, "mint.png");
@@ -220,7 +223,7 @@ export default {
               ];
               let category = "redeemed";
               const metadata = {
-                title: localStorage.getItem("goodie_name"),
+                title: this.$session.get("goodie_name"),
                 description: "This is the Goodie",
                 extra,
                 store,
@@ -230,7 +233,7 @@ export default {
               await wallet.minter.setMetadata(metadata, true);
 
               const { data: metadataId, error } = await wallet.minter.getMetadataId();
-              localStorage.setItem("metadata_reference", metadataId);
+              this.$session.set("metadata_reference", metadataId);
               //console.log("metadata_reference", metadataId);
 
               let datos = JSON.parse(
@@ -249,7 +252,7 @@ export default {
                       args: {
                         owner_id: user,
                         metadata: {
-                          reference: localStorage.getItem("metadata_reference"),
+                          reference: this.$session.get("metadata_reference"),
                           extra: "redeemed",
                         },
                         num_to_mint: parseInt(1),
@@ -303,7 +306,7 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;   
           resolve(base64data);
-          localStorage.setItem("canvas_goodie", base64data);
+          this.$session.set("canvas_goodie", base64data);
         }
       });
     },

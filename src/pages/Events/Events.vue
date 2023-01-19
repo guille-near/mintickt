@@ -30,9 +30,7 @@
 			</template>
 
 			<template v-slot:[`item.name`]="{ item }">
-				<a class="eventName" :href="$store_site + item.thingid" target="_new">{{
-					item.name
-				}}</a>
+        <v-btn style="color:white" text :href="$store_site + item.thingid" target="_blank" >{{ item.name }}</v-btn>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
@@ -63,12 +61,7 @@
 			>
 				<section class="acenter">
 					<span class="eventName">
-						<a
-							style="color: #cc00b7 !important"
-							:href="$store_site + item.thingid"
-							target="_new"
-							>{{ item.name }}</a
-						>
+						<v-btn style="color:white" text :href="$store_site + item.thingid" target="_blank" >{{ item.name }}</v-btn>
 					</span>
 					<span>{{ item.date }}</span>
 
@@ -216,6 +209,9 @@ export default {
     }
   },
   mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.scanListener()
     this.revisar();
     this.getData();
@@ -339,16 +335,16 @@ export default {
         path: "/events/liveData",
         query: { event: pevent, thingid: pthingid },
       });
-      localStorage.setItem('eventid', pthingid)
-      localStorage.setItem('event_name', pevent)
+      this.$session.get('eventid', pthingid)
+      this.$session.get('event_name', pevent)
     },
     goOptions(pevent, pthingid) {
       this.$router.push({
         path: "/events/options",
         query: { event: pevent, thingid: pthingid },
       });
-      localStorage.setItem('eventid', pthingid)
-      localStorage.setItem('event_name', pevent)
+      this.$session.get('eventid', pthingid)
+      this.$session.get('event_name', pevent)
     },
     fetch() {
       const BINANCE_NEAR =
