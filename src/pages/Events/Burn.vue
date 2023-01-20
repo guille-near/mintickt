@@ -90,10 +90,12 @@ export default {
       burn_goodie_image: this.$pinata_gateway+"QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
     };
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$session.start()
     }
+    //Generate the base 64 image to nft grab me something
+    await this.getBase64FromUrlGoodie(this.burn_goodie_image)
     this.getData();
     //Show the modal and send the goodie if the result is goodie
     const queryString = window.location.search;
@@ -105,7 +107,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      this.$router.push("/#/");
+      //this.$router.push("/#/");
     }
   },
   methods: {
@@ -154,7 +156,6 @@ export default {
     },
     async burn() {
         // console.log(this.dataTickets.attendees);
-        await this.getBase64FromUrlGoodie(this.burn_goodie_image)
 
         this.loading = true;
         //Api key an data

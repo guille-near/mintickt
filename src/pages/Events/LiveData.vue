@@ -369,11 +369,11 @@ const tickets = gql`
 
 `;
 const goods_redeemed = gql`
-  query MyQuery($_iregex: String!, $owner: String) {
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
-      , owner: {_like: $owner}}
+      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
   ) {
     description
     token_id
@@ -384,8 +384,8 @@ const goods_redeemed = gql`
     minted_timestamp
     last_transfer_receipt_id
     burned_receipt_id
-    burned_timestamp
     title
+    burned_timestamp
   }
 }
 `;
@@ -400,13 +400,13 @@ export default {
           key: "fans",
           name: "Fans inside",
           value: "0/0",
-          active: false,
+          active: true,
         },
         {
           key: "redeemed",
           name: "Goods redeemed",
           value: "0/0",
-          active: true,
+          active: false,
         },
       ],
       headersTable: [
@@ -538,50 +538,68 @@ export default {
     async getExtra() {
       var rows = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
       this.$apollo
         .mutate({
-          mutation: goods_redeemed,
+          mutation: burned_reedemed_tokens_aggregate,
           variables: {
             _iregex: thingid[1],
-            owner: this.owner
           },
+          client: "mintickClient",
         })
-        .then((response) => {
-          //Get the first object and loop
-          Object.entries(response.data.mb_views_nft_tokens).forEach(
-            ([key, value]) => {
-              var startTime =
-                 value.last_transfer_receipt_id === null
+        .then((res) => {
+          arr = res.data.redeemers.map(function (el) {
+            return el.tokenid;
+          });
+          this.$apollo
+            .query({
+              query: goods_redeemed,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
+              },
+            })
+            .then((response) => {
+              //Get the first object and loop
+              Object.entries(response.data.mb_views_nft_tokens).forEach(
+                ([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
                       ? moment.utc(value.burned_timestamp)
                       : moment.utc(value.last_transfer_timestamp);
-              var endTime = moment.utc(new Date());
-              var minutesDiff = endTime.diff(startTime, "minutes");
-              var hoursDiff = endTime.diff(startTime, "hours");
-              var daysDiff = endTime.diff(startTime, "day");
-              var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
-              var time2 = time > 24 ? daysDiff : time;
-              var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
-              var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-              var receipe = value.burned_receipt_id;
-              rows = {
-                nft: value.title,
-                //ticket: value.description,
-                signer: value.owner,
-                quantity: 1,
-                created: time2 + " " + timedesc2,
-                transaction:
-                  "https://explorer.testnet.near.org/?query=" + receipe,
-                tokenid: value.token_id,
-                loadingBtn: false,
-                show: false,
-                key: key
-              };
-              this.dataTableExtra.push(rows);
-              this.dataTableExtraMobile.push(rows);
-              this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
-              this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
-            }
-          );
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc =
+                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  rows = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: 1,
+                    created: time2 + " " + timedesc2,
+                    transaction:
+                      this.$explorer + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key
+                  };
+                  this.dataTableExtra.push(rows);
+                  this.dataTableExtraMobile.push(rows);
+                  this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                }
+              );
+            }) //mintickt query
+            .catch((err) => {
+              console.log("Error", err);
+            });
         })
         .catch((err) => {
           console.log("Error", err);
@@ -758,9 +776,11 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          this.getData();
+          // setTimeout( () => {
+          // this.getData();
+          // this.loadingBtn = false;
+          // } , 3000 );
           this.$router.go(0);
-          this.loadingBtn = false;
         })
         .catch((error) => {
           console.log(error);
@@ -777,13 +797,19 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          this.getData();
+          // setTimeout( () => {
+          // this.getData();
+          // this.$forceUpdate();
+          // this.loadingBtn = false;
+          // } , 3000 );
           this.$router.go(0);
-          this.loadingBtn = false;
+          
         })
         .catch((error) => {
           console.log(error);
         });
+        
+        
     },
      ModalQR() {
         this.modalQR=true

@@ -682,7 +682,7 @@ export default {
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 19) {
+      if (item == "more" && this.mint_amount < 20) {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
@@ -703,7 +703,7 @@ export default {
     },
     controlPrice(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 19) {
+      if (item == "more" && this.mint_amount < 20) {
         this.price_list++;
       }
       if (item == "less" && this.price_list > 1) {
@@ -791,7 +791,7 @@ export default {
       });
     },
     checkMintAmount(){
-      this.mint_amount > 19 ? this.mint_amount = 19 : this.mint_amount = this.mint_amount;
+      this.mint_amount > 20 ? this.mint_amount = 20 : this.mint_amount = this.mint_amount;
     },
     checkListAmount(){
       var total_minted = this.available_to_list;
