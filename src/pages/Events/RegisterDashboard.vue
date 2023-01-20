@@ -2213,7 +2213,7 @@ export default {
                   args: {
                     owner_id: user,
                     metadata: {
-                      reference: this.$session.get("metadata_reference"),
+                      reference: metadataId, //this.$session.get("metadata_reference"),
                       extra: "Ticketing",
                     },
                     num_to_mint: parseInt(1),

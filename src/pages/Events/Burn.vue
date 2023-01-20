@@ -107,7 +107,7 @@ export default {
     ) {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
-      //this.$router.push("/#/");
+      this.$router.push("/#/");
     }
   },
   methods: {
@@ -131,7 +131,7 @@ export default {
           const str2 = extra.charAt(0).toUpperCase() + extra.slice(1);
           this.token = response.data.mb_views_nft_tokens[0].token_id;
           this.title = response.data.mb_views_nft_tokens[0].title;
-          this.media = response.data.mb_views_nft_tokens[0].media;
+          this.media = response.data.mb_views_nft_tokens[0].media === null || undefined ? this.burn_goodie_image : response.data.mb_views_nft_tokens[0].media;
           this.extra = str2;
         })
         .catch((err) => {
@@ -199,10 +199,12 @@ export default {
             var image = new Image();
             image.src = this.$session.get("canvas_goodie");
             this.image =  image;
+            //console.log(this.image)
 
             const file = this.dataURLtoFile(this.image, "mint.png");
             const { data: fileUploadResult, error: fileError } =
             await wallet.minter.uploadField(MetadataField.Media, file);
+            //console.log("file", MetadataField.Media);
               // localStorage.setItem("file", file);
             if (fileError) {
               throw new Error(fileError);
@@ -232,9 +234,10 @@ export default {
                 category,
               };
               await wallet.minter.setMetadata(metadata, true);
+              console.log("metadata", metadata)
 
               const { data: metadataId, error } = await wallet.minter.getMetadataId();
-              this.$session.set("metadata_reference", metadataId);
+              //this.$session.set("metadata_reference", metadataId);
               //console.log("metadata_reference", metadataId);
 
               let datos = JSON.parse(
@@ -253,7 +256,7 @@ export default {
                       args: {
                         owner_id: user,
                         metadata: {
-                          reference: this.$session.get("metadata_reference"),
+                          reference: metadataId,
                           extra: "redeemed",
                         },
                         num_to_mint: parseInt(1),

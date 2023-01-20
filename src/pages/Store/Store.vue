@@ -281,9 +281,11 @@ export default {
   },
 
   async mounted() {
+
     if (!this.$session.exists()) {
       this.$session.start()
     }
+    
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
@@ -514,7 +516,7 @@ export default {
     async buy() {
       //Generate the reference for the burned image let me in
       //Grant the minter if does not exist
-      
+      this.revisar();
       this.grantMinter();
      
       //
@@ -606,7 +608,7 @@ export default {
             await wallet.minter.setMetadata(metadata, true);
 
             const { data: metadataId, error } = await wallet.minter.getMetadataId();
-            this.$session.set("metadata_reference", metadataId);
+            //this.$session.set("metadata_reference", metadataId);
             //console.log("metadata_reference", metadataId);
 
             let datos = JSON.parse(
@@ -625,7 +627,7 @@ export default {
                     args: {
                       owner_id: user,
                       metadata: {
-                        reference: this.$session.get("metadata_reference"),
+                        reference: metadataId,
                         extra: "ticketing",
                       },
                       num_to_mint: parseInt(1),
@@ -739,7 +741,24 @@ export default {
     scrollTo(){
       var top = $('#buy').position().top;
       $(window).scrollTop( top );
-    }
+    },
+    async revisar() {
+      let API_KEY = this.$dev_key;
+      let networkName = this.$networkName.toString();
+      const { data: walletData } = await new Wallet().init({
+        networkName: networkName,
+        chain: Chain.near,
+        apiKey: API_KEY,
+      });
+      const { wallet, isConnected } = walletData;
+      //console.info(isConnected)
+      if (!isConnected) {  
+          wallet.connect({ requestSignIn: true }).then;
+          this.nearid = true;
+          const { data: details } = await wallet.details();
+          this.user = details.accountId;
+      }
+    },
     // async getTickettoSend(){
     //   this.$apollo
     //     .query({
