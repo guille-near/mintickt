@@ -5,7 +5,7 @@
 			<img class="eliminarmobile" :src="src" alt="Background Image" />
 			<img class="vermobile" :src="src" alt="Background Image" />
 			<!-- new -->
-			<div class="fill-w limiter align">
+			<div class="banner-title fill-w limiter align">
 				<!-- <v-chip color="rgba(0, 0, 0, 0.3)">
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
@@ -16,7 +16,7 @@
 				<!-- <span>{{ tittle }}</span> -->
 			</div>
 		</aside>
-		<aside class="jspace divcolmobile gapmobile acentermobile limiter">
+		<aside class="gapmobile limiter">
 			<div v-if="!isIntersecting" class="floatButton vermobile">
 				<div class="fill-w">
 					<v-btn class="h8-em fill-w" @click="scrollTo">Buy a ticket</v-btn>
@@ -279,6 +279,7 @@ export default {
       burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
     };
   },
+<<<<<<< HEAD
   async mounted() {
     if (!this.$session.exists()) {
       this.$session.start()
@@ -286,6 +287,12 @@ export default {
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
+=======
+  mounted() {
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
+>>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
     this.$emit("renderHeader");
     this.getData();
     this.fetch();
@@ -515,6 +522,7 @@ export default {
       //Grant the minter if does not exist
       
       this.grantMinter();
+      await this.getBase64FromUrl(this.burn_ticket_image)
       //
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
       this.loading = true;
@@ -868,12 +876,27 @@ export default {
     }
   }
 
+  // aditional rules 19/1/23
+  .banner-title {
+    @media (max-width: 880px) {width: calc(80% + clamp(1em, 4vw, 4em)) !important}
+    @media (max-width: 400px) {width: calc(90% + clamp(1em, 4vw, 4em)) !important}
+  }
+
   &>aside+aside {
     width: 100%;
     padding: clamp(1em, 4vw, 4em);
     position: relative;
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 7em !important;
+    @media (max-width: 880px) {
+      flex-direction: column !important;
+      align-content: center !important;
+    }
     .contleft {
-      min-width: 65% !important;
+      @media (min-width: 880px) {width: 65% !important}
+      @media (max-width: 880px) {width: 80% !important}
+      @media (max-width: 400px) {width: 90% !important}
       gap: 2em;
       .aboutSection {gap: 1em;}
       .conttitles {
@@ -1010,7 +1033,8 @@ export default {
     color: white !important;
     gap: 2em;
     z-index: 3;
-    width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
+    width: min(90%, 22em) !important;
+    @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {width: 80% !important}
     @media (max-width: 400px) {width: 90% !important}
     h3 {
@@ -1022,15 +1046,15 @@ export default {
     &#claim {
       width: min(90%, 17em);
     }
-    &#buy {
-      @media (min-width: 880px) {
-        // width: min(90%, 22em) !important;
-        position: absolute;
-        right: clamp(2em, 4vw, 4em);
-        top: -16.5em;
-        // width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
-      }
-    }
+    // &#buy {
+    //   @media (min-width: 880px) {
+    //     width: min(90%, 22em) !important;
+    //     position: absolute;
+    //     right: clamp(2em, 4vw, 4em);
+    //     top: -13.5em;
+    //     width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
+    //   }
+    // }
     .ticket {
       width: 100% !important;
       border-radius: 15px !important;
