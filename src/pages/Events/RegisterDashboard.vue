@@ -1090,13 +1090,13 @@ export default {
         name: this.$session.get("dataFormName") === undefined  ? "" : this.$session.get("dataFormName"),
         promoter: this.$session.get("dataFormPromoter") === undefined  ? "" : this.$session.get("dataFormPromoter"),
         img: this.$session.get("canvas") === undefined  ? "" : this.$session.get("canvas"),
-        img_main: this.$session.get("canvas_main_image") === null  ? null : this.$session.get("canvas_main_image"),
+        img_main: this.$session.get("canvas_main_image") === undefined  ? undefined : this.$session.get("canvas_main_image"),
         description: this.$session.get("dataFormDescription") === undefined  ? "" : this.$session.get("dataFormDescription"),
         mint_amount: this.$session.get("dataFormMintAmount") === undefined  ? "" : this.$session.get("dataFormMintAmount"),
         attendees: this.$session.get("dataFormAttendees") === undefined  ? "" : this.$session.get("dataFormAttendees"),
         goodies: "1" // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
-      url: this.$session.get("canvas_main_image") === null  ? null : this.$session.get("canvas_main_image"),
+      url: this.$session.get("canvas_main_image") === undefined  ? undefined : this.$session.get("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -1180,8 +1180,8 @@ export default {
       txs: [],
       usd: 0,
       canvas: this.$session.get("canvas") === undefined ? "" : this.$session.get("canvas"),
-      canvas_burn: this.$session.get("canvas_burn") === null ? "" : this.$session.get("canvas_burn"),
-      canvas_goodie: this.$session.get("canvas_goodie") === null ? "" : this.$session.get("canvas_goodie"),
+      canvas_burn: this.$session.get("canvas_burn") === undefined ? "" : this.$session.get("canvas_burn"),
+      canvas_goodie: this.$session.get("canvas_goodie") === undefined ? "" : this.$session.get("canvas_goodie"),
       editorRules: false,
       timepickerStartRules: false,
       timepickerEndRules: false,
@@ -1252,6 +1252,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 4;
+      this.getData();
       this.$session.set("step", 4);
       history.replaceState(
         null,
@@ -1264,7 +1265,6 @@ export default {
       urlParams.get("transactionHashes") !== null &&
       urlParams.get("signMeta") === "list"
     ) {
-      this.completeIpfs();
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 5;
@@ -1323,14 +1323,14 @@ export default {
         const formData = new FormData();
         formData.append("uploaded_file", this.dataTickets.img_main);
         formData.append("name", this.dataTickets.name);
-        // console.log('formData', formData)
-        // console.log(this.$ipfs)
+        //  console.log('formData', formData)
+        //  console.log(this.$ipfs)
         await this.axios.post(this.$ipfs, formData).then((res) => {
-          //console.log('res', res.data)
+          console.log('res', res.data)
           this.$session.set("IpfsHash", res.data.IpfsHash);
         });
-        setTimeout(this.getBase64FromUrlMainImage(this.url),1500);
-        // this.image = file;
+        setTimeout(() => { this.getBase64FromUrlMainImage(this.url) },1500);
+        this.image = file;
         //console.log(e);
       }
     },
@@ -2235,6 +2235,7 @@ export default {
       //Gettintg the tokens ID
       //this.getTokensId();
       //Adding metadata for the burn ticket
+      this.completeIpfs();
       let API_KEY = this.$dev_key.toString();
       let networkName = this.$networkName.toString();
       const { data: walletData } = await new Wallet().init({
@@ -2253,7 +2254,7 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if(this.$session.get("metadata_id") != null && this.$session.get("IpfsHash") != null){
+      if(this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined){
         this.$apollo
           .query({
             query: ipfs,
@@ -2319,7 +2320,7 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if(this.$session.get("metadata_id") != null && this.$session.get("IpfsHash") != null){
+      if(this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined){
         this.$apollo
           .query({
             query: ipfs,
