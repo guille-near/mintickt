@@ -16,7 +16,7 @@
 				<!-- <span>{{ tittle }}</span> -->
 			</div>
 		</aside>
-		<aside class="jspace divcolmobile gapmobile acentermobile limiter">
+		<aside class="gapmobile limiter">
 			<div v-if="!isIntersecting" class="floatButton vermobile">
 				<div class="fill-w">
 					<v-btn class="h8-em fill-w" @click="scrollTo">Buy a ticket</v-btn>
@@ -877,7 +877,12 @@ export default {
     padding: clamp(1em, 4vw, 4em);
     position: relative;
     display: flex !important;
+    justify-content: space-between !important;
     gap: 7em !important;
+    @media (max-width: 880px) {
+      flex-direction: column !important;
+      align-content: center !important;
+    }
     .contleft {
       @media (min-width: 880px) {width: 65% !important}
       @media (max-width: 880px) {width: 80% !important}
