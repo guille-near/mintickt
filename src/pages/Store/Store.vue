@@ -885,7 +885,10 @@ export default {
     }
     .contleft {
       @media (min-width: 880px) {width: 65% !important}
-      @media (max-width: 880px) {width: 80% !important}
+      @media (max-width: 880px) {
+        width: 80% !important;
+        margin-inline: auto !important;
+      }
       @media (max-width: 400px) {width: 90% !important}
       gap: 2em;
       .aboutSection {gap: 1em;}
@@ -1025,7 +1028,10 @@ export default {
     z-index: 3;
     width: min(90%, 22em) !important;
     @media (min-width: 880px) {transform: translateY(-250px) !important}
-    @media (max-width: 880px) {width: 80% !important}
+    @media (max-width: 880px) {
+      width: 80% !important;
+      margin-inline: auto !important;
+    }
     @media (max-width: 400px) {width: 90% !important}
     h3 {
       font-weight: 700;
