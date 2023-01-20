@@ -989,6 +989,7 @@ export default {
     position: fixed;
     bottom: 3%;
     width: 100vw;
+    left: 0px !important;
     margin-inline: calc(-50vw + 50%);
     padding-inline: 16px;
     z-index: 5;
