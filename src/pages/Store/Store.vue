@@ -280,9 +280,9 @@ export default {
     };
   },
   async mounted() {
-    if (!this.$session.exists()) {
-      this.$session.start()
-    }
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
