@@ -280,6 +280,7 @@ export default {
     };
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   async mounted() {
     if (!this.$session.exists()) {
       this.$session.start()
@@ -288,10 +289,15 @@ export default {
     await this.getBase64FromUrl(this.burn_ticket_image);
 
 =======
+=======
+>>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
   mounted() {
     if (!this.$session.exists()) {
       this.$session.start()
     }
+<<<<<<< HEAD
+>>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
+=======
 >>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
     this.$emit("renderHeader");
     this.getData();
