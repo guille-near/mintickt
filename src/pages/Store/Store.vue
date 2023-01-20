@@ -279,8 +279,7 @@ export default {
       burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
     };
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
+
   async mounted() {
     if (!this.$session.exists()) {
       this.$session.start()
@@ -288,17 +287,6 @@ export default {
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
-=======
-=======
->>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
-  mounted() {
-    if (!this.$session.exists()) {
-      this.$session.start()
-    }
-<<<<<<< HEAD
->>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
-=======
->>>>>>> 363326e02e4b3b31be37ec6b053fdee69f309671
     this.$emit("renderHeader");
     this.getData();
     this.fetch();
@@ -528,7 +516,7 @@ export default {
       //Grant the minter if does not exist
       
       this.grantMinter();
-      await this.getBase64FromUrl(this.burn_ticket_image)
+     
       //
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
       this.loading = true;
