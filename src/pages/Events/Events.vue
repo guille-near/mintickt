@@ -34,7 +34,7 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<div class="divwrap_inv" style="gap: 1em">
+				<div class="cont_buttons" style="gap: 10px">
 					<v-btn @click="goLiveData(item.name, item.thingid)"
 						>Go to live data</v-btn
 					>

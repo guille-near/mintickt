@@ -2,8 +2,8 @@
 	<section id="options" class="divcol gap align">
 		<ModalSuccess ref="modal"></ModalSuccess>
 
-		<div class="acenter">
-			<v-btn icon to="/events">
+		<div class="acenter" style="position: relative">
+			<v-btn id="go-back" icon to="/events">
 				<v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
 			</v-btn>
 			<h2 class="p" style="margin: 0">{{ name }} / Settings</h2>

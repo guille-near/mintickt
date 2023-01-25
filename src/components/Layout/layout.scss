@@ -151,6 +151,15 @@
       width: 100%;
     }
   }
+
+  @layer layout {
+    &.delpaddlivedata {
+      .v-toolbar__content, .row, .col {padding-inline: 0 !important}
+      .v-toolbar__content {
+        padding-inline: calc(3em - 24px) !important;
+      }
+    }
+  }
 }
 
 :has(#tienda) #headerApp {

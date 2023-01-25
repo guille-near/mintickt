@@ -10,7 +10,7 @@
 			Let's create your NFT for your event!
 		</h2>
 
-		<v-window v-model="step" to>
+		<v-window v-model="step" to touchless>
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<h2 class="vermobile align" style="text-align: center">
@@ -333,15 +333,15 @@
 
 						<div class="container-content--actions center gap eliminarmobile">
 							<v-btn disabled>
-								<!-- <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon> -->
+								<v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon>
 								Back
 							</v-btn>
 							<v-btn @click="next">
 								Next
-								<!-- <v-icon style="color: #ffffff !important" small
+								<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
-                > -->
+                >
 							</v-btn>
 						</div>
 					</div>
@@ -349,15 +349,15 @@
 
 				<div class="container-content--actions center gap vermobile">
 					<v-btn disabled>
-						<!-- <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon> -->
+						<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon>
 						Back
 					</v-btn>
 					<v-btn @click="next">
 						Next
-						<!-- <v-icon style="color: #ffffff !important" small
+						<v-icon style="color: #ffffff !important" small
               >mdi-arrow-right</v-icon
-            > -->
+            >
 					</v-btn>
 				</div>
 			</v-window-item>

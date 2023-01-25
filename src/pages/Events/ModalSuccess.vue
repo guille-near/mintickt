@@ -10,7 +10,7 @@
         <v-btn @click="modalSuccess=false">Ok</v-btn>
         <a class="acenter" style="gap:.3em" :href="url" target="_blank">
           <span class="p">See transaction</span>
-          <img src="@/assets/icons/link.svg" alt="link icon">
+          <img src="@/assets/icons/transaction.svg" alt="link icon">
         </a>
       </div>
     </v-card>

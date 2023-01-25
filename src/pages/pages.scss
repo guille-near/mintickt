@@ -760,8 +760,10 @@
       :is(label, input, textarea) {
         font-weight: 500;
         font-size: 0.9375em;
-        letter-spacing: -0.03em;
         color: #FFFFFF !important;
+      }
+      p {
+        line-height: 1.2;
       }
       .container-times {
        & > {
@@ -894,6 +896,12 @@
         border-radius: 40%;
       }
     }
+
+    .cont_buttons {
+      display: flex !important;
+      .v-btn {margin: 0 !important}
+    }
+
     table {border-spacing: 0 1em}
     *:not(button span, span, i, h3) {color: #FFFFFF}
     th {
@@ -1058,8 +1066,8 @@
 #liveData {
   @media (max-width:420px) {font-size: 14px}
   padding-block: 160px 12em;
-  padding-inline: 2.5em;
-  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
+  padding-inline: 3em;
+  // @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
   position: relative;
   &::before {
     content: "";
@@ -1077,7 +1085,7 @@
     color: rgba(255, 255, 255, 0.5);
   }
   h2 {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.5625em;
     letter-spacing: -0.03em;
     color: #FFFFFF;
@@ -1266,8 +1274,8 @@
 #options {
   &>*{width: min(100%,22.5em)}
   padding-block: 160px 12em;
-  padding-inline: 2.5em;
-  @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
+  padding-inline: 3em;
+  // @include mq(max, small) {padding-inline: clamp(1em, 4vw, 4em)}
   position: relative;
   &::before {
     content: "";
@@ -1634,7 +1642,10 @@
     }
     //--- file-input (unique) ---//
     &.input-unique {
-      --height: 350px;
+      // min-height: 134px !important;
+      // height: 134px !important;
+      // max-height: 134px !important;
+      --height: 134px;
       label {
         text-align: center;
         overflow: visible !important;
@@ -1683,11 +1694,11 @@
   padding: clamp(1em, 2vw, 4em);
   border-radius: inherit;
   
-  border-left: 1.5px solid hsl(97, 97%, 86%, .7);
-  border-right: 1.5px solid hwb(306 0% 0% / 0.7);
+  border-left: 1.5px solid hsl(97, 97%, 86%, .7) !important;
+  border-right: 1.5px solid hsla(306, 100%, 50%, 0.7) !important;
   background-image:
     linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)),
-    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
+    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)) !important;
   background-size: 100% 1px;
   background-position: 0 0, 0 100%;
   div.divcol.center {gap: .5em}
@@ -1699,10 +1710,10 @@
   }
   a, span.p {
     font-weight: 400;
-    font-size: 0.9375em;
+    font-size: 15px;
     color: #6D6D6D;
   }
-  img {width: 1em}
+  img {width: 13.5px}
   .v-btn {
     padding: 17px;
     width: min(90%, 21.6875em);
@@ -1896,4 +1907,13 @@ body:has(#createTickets) {
   //     background-color: #cc00b7 !important;
   //   }
   // }
+}
+
+
+#go-back {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40px;
+  margin: auto;
 }

@@ -158,11 +158,25 @@ export default {
     window.onresize = () => {
       this.responsive();
     };
+    
+    const header = document.getElementById("headerApp")
+    console.log(this.$route.path);
+    if (this.$route.path === "/events/liveData" || this.$route.path == "/events/options") {
+      header.classList.add("delpaddlivedata")
+    } else {
+      header.classList.remove("delpaddlivedata")
+    }
   },
   watch: {
     $route(current) {
+      const header = document.getElementById("headerApp")
       this.routePath = current.path,
       this.routeName = current.name
+      if (current.path === "/events/liveData" || current.path == "/events/options") {
+        header.classList.add("delpaddlivedata")
+      } else {
+        header.classList.remove("delpaddlivedata")
+      }
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
 	<section id="liveData" class="align divcol gap">
-		<div class="acenter">
-			<v-btn icon to="/events">
+		<div class="acenter" style="position: relative">
+			<v-btn id="go-back" icon to="/events">
 				<v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
 			</v-btn>
 			<h2 style="margin: 0">Event / {{ this.$route.query.event }}</h2>
@@ -9,11 +9,11 @@
 
 		<aside class="container-info acenter">
 			<div class="divcol">
-				<label>Tickets sold</label>
+				<label style="font-size: 1em">Tickets sold</label>
 				<span>{{ ticketsSold }}</span>
 			</div>
 			<div class="divcol">
-				<label>Your incomes</label>
+				<label style="font-size: 1em">Your incomes</label>
 				<span>{{ incomes.toFixed(2) }} N</span>
 			</div>
 			<label style="margin-top: auto"

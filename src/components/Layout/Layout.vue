@@ -24,6 +24,11 @@ export default {
       renderHeader: true,
     };
   },
+  watch: {
+    $route(curr) {
+      if (curr.path === "/events/register" && window.innerHeight >= 940) document.body.style.overflow = "hidden"
+    }
+  },
   methods: {
     RenderHeader() {
       this.renderHeader = false;
