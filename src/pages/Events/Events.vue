@@ -30,7 +30,7 @@
 			</template>
 
 			<template v-slot:[`item.name`]="{ item }">
-        <v-btn style="color:white" text :href="$store_site + item.thingid" target="_blank" >{{ item.name }}</v-btn>
+        <v-btn class="btnWithoutStyles" :href="$store_site + item.thingid" target="_blank" >{{ item.name }}</v-btn>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">

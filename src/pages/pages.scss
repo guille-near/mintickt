@@ -1917,3 +1917,11 @@ body:has(#createTickets) {
   left: -40px;
   margin: auto;
 }
+
+@layer layout {
+  .btnWithoutStyles {
+    padding: 0 !important;
+    background-color: transparent !important;
+    span {color: #fff !important}
+  }
+}
