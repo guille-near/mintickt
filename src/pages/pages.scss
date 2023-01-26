@@ -1651,7 +1651,7 @@
         overflow: visible !important;
         left: clamp(10px, 3vw, 15px) !important;
         margin: auto !important;
-        top: calc(var(--height) / 2.5);
+        top: calc(var(--height) / 5);
       }
       .v-input__slot {
         height: var(--height);
