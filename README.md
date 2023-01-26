@@ -1,2 +1,2 @@
-# mintick_front
-Front end for minitck
+# Mintickt
+Front end for Mintickt
