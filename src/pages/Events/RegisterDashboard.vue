@@ -1210,6 +1210,9 @@ export default {
     },
     dates(curr) {
       this.validatorCombobox(curr)
+    },
+    $route(curr) {
+      this.hideScroll(curr)
     }
   },
   beforeMount(){
@@ -1230,6 +1233,7 @@ export default {
     }
   },
   mounted() {
+    this.hideScroll(this.$route)
     this.revisar();
     if (this.step === 1) {
       this.listenerEditor()
@@ -2473,7 +2477,13 @@ export default {
       var total_minted = parseInt(this.$session.get("total_minted"));
       parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
     },
-    
+    hideScroll(curr) {
+      if (curr.path === "/events/register" && window.innerHeight >= 950) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = "visible"
+      }
+    }
   },
 };
 </script>

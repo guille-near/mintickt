@@ -1,5 +1,128 @@
 @import "../styles/app";
 
+// proxima nova
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Light.otf) format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-LightItalic.otf) format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Regular.otf) format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-RegularItalic.otf) format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Semibold.otf) format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Semibold.otf) format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Bold.otf) format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Bold.otf) format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Extrabold.otf) format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Extrabold.otf) format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url(../assets/fonts/ProximaNova-Black.otf) format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// proxima nova condensed
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-Light.otf) format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-LightIt.otf) format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-Regular.otf) format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-RegularIt.otf) format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-Semibold.otf) format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proxima Nova Condensed';
+  src: url(../assets/fonts/ProximaNovaCond-SemiboldIt.otf) format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
 //global
 // .primary {
 //   color: #C4C4C4 !important;
@@ -906,13 +1029,12 @@
     *:not(button span, span, i, h3) {color: #FFFFFF}
     th {
       & :is(span, i) {
-        font-weight: 600;
-        font-size: 0.875em;
-        line-height: 1;
-        letter-spacing: -0.03em;
-        font-variant: small-caps;
-        color: #CC00B7;
-        -webkit-text-stroke: .04em #CC00B7;
+        font-family: 'Proxima Nova' !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        letter-spacing: -0.03em !important;
+        font-variant: small-caps !important;
+        color: #CC00B7 !important;
       }
       &:first-child {display: flex;align-items: center}
     }
@@ -943,7 +1065,20 @@
       //   }
       // }
       @media (min-width: 880px) {height: 91px !important}
-      td {padding-block: 1em; font-size: clamp(.7em, .8vw, .875em)}
+      td {
+        padding-block: 1em;
+        font-family: 'SF Pro', "Proxima Nova", sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        .btnWithoutStyles {
+          span {
+            font-family: 'SF Pro', "Proxima Nova", sans-serif !important;
+            font-weight: 510 !important;
+            font-size: 18px !important;
+            text-decoration-line: underline !important;
+          }
+        }
+      }
       td:nth-of-type(7n) {border-radius: 0 .6vmax .6vmax 0}
       td:first-child {
         --width: 220px;
@@ -992,8 +1127,9 @@
       border-radius: 6px;
       * {color: #000000 !important}
       span {
-        font-size: clamp(.7em, .8vw, .875em);
-        font-weight: 700;
+        font-family: 'Proxima Nova' !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
       }
     }
     .v-btn + .v-btn {padding: 6px}
@@ -1120,6 +1256,7 @@
         box-shadow: 0 0 15px 1px #CC00B7 !important;
       }
       label,span {pointer-events: none}
+      label {font-size: 13px}
       span {
         font-weight: 510;
         font-size: 1.375em;
@@ -1169,10 +1306,11 @@
       tr {
         th {
           span {
-            font-weight: 600;
-            font-size: 0.875em;
-            letter-spacing: -0.03em;
-            font-variant: small-caps;
+            font-family: 'Proxima Nova' !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            letter-spacing: -0.03em !important;
+            font-variant: small-caps !important;
             color: #CC00B7 !important;
           }
           &:first-of-type {width: 200px}
@@ -1182,9 +1320,10 @@
     tbody {
       tr {
         td {
-          font-weight: 510;
-          font-size: clamp(.8em, 1vw, 1em);
-          color: rgba(255, 255, 255, 0.5);
+          font-family: 'SF Pro', 'Proxima Nova' !important;
+          font-weight: 510 !important;
+          font-size: 16px !important;
+          color: rgba(255, 255, 255, 0.5) !important;
           &:first-of-type {
             max-width: 118px;
             overflow: hidden;
@@ -1200,10 +1339,11 @@
             background: #FFFFFF;
             border-radius: 6px;
             span {
-              font-weight: 600;
-              font-size: 0.875em;
-              text-align: center;
-              color: #000000;
+              font-family: 'Proxima Nova' !important;
+              font-weight: 600 !important;
+              font-size: 14px !important;
+              text-align: center !important;
+              color: #000000 !important;
             }
           }
         }
@@ -1394,7 +1534,7 @@
 }
 
 #createTickets.registerDashboard {
-  p, .sf-pro {font-family: 'SF Pro', "Proximanova", sans-serif !important}
+  p, .sf-pro {font-family: 'SF Pro', "Proxima Nova", sans-serif !important}
   padding-block: 160px 12em !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {

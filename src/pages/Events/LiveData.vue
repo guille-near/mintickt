@@ -23,7 +23,7 @@
 
 		<div class="divcol">
 			<h2 style="margin-bottom: 0.3em">Last updates</h2>
-			<label>Filter by</label>
+			<label style="font-size: 13px; font-weight: 510">Filter by</label>
 		</div>
 
 		<section class="container-down">
