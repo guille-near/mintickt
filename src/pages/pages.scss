@@ -728,6 +728,7 @@
 
 #createTickets {
   --margin: calc(100% - 2rem);
+  --ticket-height: 35.31625em;
   font-size: 16px;
   // min-height: 100vh;
   // padding-block: 6em;
@@ -753,8 +754,8 @@
       }
       .ticket-wrapper {
         margin-bottom: 30px !important;
-        height: 580px !important;
-        aspect-ratio: 1 / 2;
+        // height: 580px !important;
+        // aspect-ratio: 1 / 2;
         .v-input {
           &:nth-of-type(1) {
             // height: 68.1% !important;
@@ -776,11 +777,12 @@
     }
   }
   section {
-    gap: clamp(6em, 8vw, 8em);
+    gap: 6em;
     z-index: 2;
     @media (max-width: 880px) {
       gap: 10px;
       height: calc(100vh - (100px + 42px + 100px));
+      margin-top: 20px;
       padding-right: 5px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -862,7 +864,7 @@
       }
     }
     aside, .v-form {
-      @media (min-width: 880px) {--h: 580px}
+      @media (min-width: 880px) {--h: calc(var(--ticket-height) - (20px + 42px) + 20px)}
       position: relative;
       min-width: 100% !important;
       height: var(--h) !important;
@@ -1535,7 +1537,7 @@
 
 #createTickets.registerDashboard {
   p, .sf-pro {font-family: 'SF Pro', "Proxima Nova", sans-serif !important}
-  padding-block: 160px 12em !important;
+  padding-block: 160px 20px !important;
   padding-inline: 2.5em !important;
   @include mq(max, small) {
     padding-block: 100px 0 !important;
@@ -1656,8 +1658,8 @@
     // clip-path: polygon(0 5%, 100% 5%, 100% 94%, 0 94%);
     // border-radius: 16%;
     // .ticket {width: 100%}
-    width: min(var(--margin), 22rem);
-    height: 590px;
+    width: min(var(--margin), 314px);
+    height: var(--ticket-height);
     margin-block: auto;
     // height: 35em;
     position: relative;
