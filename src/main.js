@@ -22,6 +22,7 @@ import { TimePicker } from 'vue-drumroll-datetime-picker'
 import 'vue-drumroll-datetime-picker/dist/style.css'
 import VueCookies from 'vue-cookies'
 import VueSession from 'vue-session'
+import Carousel3d from 'vue-carousel-3d';
 
 
 //Global Variables
@@ -44,6 +45,9 @@ Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
 Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w"
+
+// 3d carousel
+Vue.use(Carousel3d);
 
 //Session
 Vue.use(VueSession)
