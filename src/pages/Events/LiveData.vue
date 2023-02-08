@@ -13,7 +13,7 @@
 				<span>{{ ticketsSold }}</span>
 			</div>
 			<div class="divcol">
-				<label style="font-size: 1em">Your incomes</label>
+				<label style="font-size: 1em">Your income</label>
 				<span>{{ incomes.toFixed(2) }} N</span>
 			</div>
 			<label style="margin-top: auto"
@@ -398,13 +398,13 @@ export default {
       dataFilters: [
         {
           key: "fans",
-          name: "Fans inside",
+          name: "Check-ins",
           value: "0/0",
           active: true,
         },
         {
           key: "redeemed",
-          name: "Goods redeemed",
+          name: "Goodies redeemed",
           value: "0/0",
           active: false,
         },

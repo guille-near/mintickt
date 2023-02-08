@@ -7,7 +7,7 @@
 			v-if="step == 1"
 			style="text-align: center"
 		>
-			Let's create your NFT for your event!
+			Let's create your event!
 		</h2>
 
 		<v-window v-model="step" to touchless>
@@ -16,7 +16,6 @@
 					<h2 class="vermobile align" style="text-align: center">
 						Let's create your NFT for your event!
 					</h2>
-
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
@@ -106,8 +105,7 @@
 
 							<h3>Location <span style="color: red">*</span></h3>
 							<p>
-								Help people in the area find out about the event and make sure
-								your attendees know where to go.
+								Help people in the area discover your event and let attendees know where to show up.
 							</p>
 
 							<vuetify-google-autocomplete
@@ -119,7 +117,7 @@
                 v-model="location"
 								hide-no-data
 								hide-selected
-								label="Search your location"
+								placeholder="Search your location"
 								clearable
 								classname="form-control"
 								style="padding-bottom: 15px"
@@ -132,8 +130,7 @@
 
 							<h3>Date and time <span style="color: red">*</span></h3>
 							<p>
-								Inform attendees when the event starts and ends so they can get
-								organized
+								Tell event-goers when your event starts and ends so they can make plans to attend.
 							</p>
 
 							<!-- full date -->
@@ -199,12 +196,12 @@
                       v-model="startTime"
                       type="time"
                       :time-picker-options="{
-                        start: '06:15',
-                        step: '00:15',
+                        start: '06:00',
+                        step: '00:30',
                         end: '23:30',
                       }"
                       format="HH:mm"
-                      placeholder="HH:mm"
+                      placeholder="hh:mm"
                       :class="{ rules: timepickerStartRules }"
                       :editable="false"
                       @input="validatorStartTime(startTime)"
@@ -266,13 +263,13 @@
 										v-model="endTime"
 										type="time"
 										:time-picker-options="{
-											start: '06:15',
-											step: '00:15',
+											start: '06:00',
+											step: '00:30',
 											end: '23:30',
 										}"
 										:open.sync="open"
 										format="HH:mm"
-										placeholder="HH:mm"
+										placeholder="hh:mm"
 										:class="{ rules: timepickerEndRules }"
                     :editable="false"
 										@input="validatorEndTime(endTime)"
@@ -1110,7 +1107,7 @@ export default {
       place_id: this.$session.get("dataFormPlaceId") === undefined  ? "" : this.$session.get("dataFormPlaceId"),
       latitude: this.$session.get("dataFormLatitud") === undefined  ? "" : this.$session.get("dataFormLatitud"),
       longitude: this.$session.get("dataFormLongitud") === undefined  ? "" : this.$session.get("dataFormLongitud"),
-      location: this.$session.get("dataFormLocation") === undefined ? "Search your location" : this.$session.get("dataFormLocation"),
+      location: this.$session.get("dataFormLocation") === undefined ? "" : this.$session.get("dataFormLocation"),
       address: "1234",
       amount_list: this.$session.get("amount_list") === undefined ? 0 : this.$session.get("amount_list"),
       price: this.$session.get("price") === undefined ? 0 : this.$session.get("price"),

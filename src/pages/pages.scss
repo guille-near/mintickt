@@ -898,6 +898,7 @@
       .v-input__slot {
         background: rgba(255, 255, 255, 0.15) !important;
         border-radius: 8px;
+        ::placeholder {color: #5a5a5a !important}
         .v-icon {color: #FFFFFF !important}
       }
       .mx-datepicker {
@@ -965,6 +966,9 @@
         }
       }
     }
+
+
+
   }
 }
 
@@ -1557,6 +1561,8 @@
     background-color: rgba(0,0,0,.2);
     pointer-events: none;
   }
+
+ 
   .v-input {
     .v-input__append-inner {
       gap: .4em;
@@ -1804,6 +1810,13 @@
     }
   }
 }
+
+
+
+
+
+
+
 
 .pac-container {
   .pac-matched {color: #CC00B7}
