@@ -10,7 +10,7 @@
 			Let's create your NFT for your event!
 		</h2>
 
-		<v-window v-model="step" to touchless>
+		<v-window v-model="step" to >
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<h2 class="vermobile align" style="text-align: center">
@@ -20,15 +20,10 @@
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							:src="
-                ticketType === 'event' ? require('@/assets/img/ticket-test.png') :
-                ticketType === 'con' ? require('@/assets/ticket-selection/ticket-con.png') :
-                ticketType === 'cinema' ? require('@/assets/ticket-selection/ticket-cinema.png') :
-                null
-              "
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
 							alt="Ticket image"
 						/>
 
@@ -372,10 +367,10 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
 							alt="Ticket image"
 						/>
 
@@ -509,10 +504,10 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
 							alt="Ticket image"
 						/>
 
@@ -698,10 +693,10 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
 							alt="Ticket image"
 						/>
 
@@ -834,10 +829,10 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
+					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
 							alt="Ticket image"
 						/>
 
@@ -1209,9 +1204,10 @@ export default {
   },
   watch: {
     step(newValue) {
-      if (newValue === 1) {
-        this.listenerEditor()
-      }
+      if (newValue === 1) this.listenerEditor()
+      setTimeout(() => {
+        this.addTicketClass()
+      }, 100);
     },
     dates(curr) {
       this.validatorCombobox(curr)
@@ -2494,10 +2490,18 @@ export default {
     //   }
     // },
     checkoutTicketType() {
-      if (!this.ticketType) {
-        this.$router.push("/events/select-ticket")
+      if (!this.ticketType) return this.$router.push("/events/select-ticket")
+
+      if (this.ticketType === "con" || this.ticketType === "cinema") {
+        this.dataTicket.shift()
+        this.dataTicket.shift()
+        this.addTicketClass()
       }
     },
+    addTicketClass() {
+      const tickets = document.querySelectorAll(".ticket-wrapper")
+      tickets.forEach(e => e.classList.add(this.ticketType))
+    }
   },
 };
 </script>
