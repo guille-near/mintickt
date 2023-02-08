@@ -2080,3 +2080,16 @@ body:has(#createTickets) {
     span {color: #fff !important}
   }
 }
+
+#createTickets.registerDashboard {
+  .ticket-wrapper[data-ticket].cinema .v-input {
+    top: 10.5% !important;
+    width: 88.1% !important;
+    height: 79.1% !important;
+  }
+  .ticket-wrapper[data-ticket].con .v-input {
+    top: 9.58% !important;
+    width: 86.1% !important;
+    height: 85.9% !important;
+  }
+}
