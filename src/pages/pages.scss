@@ -1,79 +1,207 @@
 @import "../styles/app";
 
+// sf pro
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Ultralight.ttf) format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-UltralightItalic.ttf) format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Thin.ttf) format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-ThinItalic.ttf) format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Light.ttf) format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-LightItalic.ttf) format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Regular.ttf) format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-RegularItalic.ttf) format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Medium.ttf) format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-MediumItalic.ttf) format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Semibold.ttf) format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-SemiboldItalic.ttf) format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Bold.ttf) format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-BoldItalic.ttf) format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Black.ttf) format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-BlackItalic.ttf) format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-Heavy.ttf) format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SF Pro';
+  src: url(../assets/fonts/sf-pro-font/SFProDisplay-HeavyItalic.ttf) format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 // proxima nova
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Light.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Light.otf) format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-LightItalic.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-LightItalic.otf) format('opentype');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Regular.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Regular.otf) format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-RegularItalic.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-RegularItalic.otf) format('opentype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Semibold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Semibold.otf) format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Semibold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Semibold.otf) format('opentype');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Bold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Bold.otf) format('opentype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Bold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Bold.otf) format('opentype');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Extrabold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Extrabold.otf) format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Extrabold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Extrabold.otf) format('opentype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova';
-  src: url(../assets/fonts/ProximaNova-Black.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova/ProximaNova-Black.otf) format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -82,42 +210,42 @@
 // proxima nova condensed
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-Light.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-Light.otf) format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-LightIt.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-LightIt.otf) format('opentype');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-Regular.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-Regular.otf) format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-RegularIt.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-RegularIt.otf) format('opentype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-Semibold.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-Semibold.otf) format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Proxima Nova Condensed';
-  src: url(../assets/fonts/ProximaNovaCond-SemiboldIt.otf) format('opentype');
+  src: url(../assets/fonts/proxima-nova-condensed/ProximaNovaCond-SemiboldIt.otf) format('opentype');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -1218,6 +1346,7 @@
     pointer-events: none;
   }
   label {
+    font-family: "SF Pro", "Proxima Nova" !important;
     font-weight: 510;
     font-size: .8125em;
     color: rgba(255, 255, 255, 0.5);
@@ -1229,8 +1358,9 @@
     color: #FFFFFF;
   }
   .container-info {
-    gap: 1em;
+    gap: 40px;
     span {
+      font-family: "SF Pro", "Proxima Nova" !important;
       font-weight: 510;
       font-size: 1.75em;
       color: #FFFFFF;
@@ -1257,7 +1387,7 @@
         border: 1px solid #CC00B7;
         box-shadow: 0 0 15px 1px #CC00B7 !important;
       }
-      label,span {pointer-events: none}
+      label,span {pointer-events: none; font-family: "SF Pro", "Proxima Nova" !important;}
       label {font-size: 13px}
       span {
         font-weight: 510;
@@ -1430,8 +1560,9 @@
   }
   label {
     font-weight: 510;
-    font-size: .8125em;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.5);
+    font-family: "SF Pro", "Proxima Nova" !important;
   }
   h2 {
     font-weight: 500;
@@ -1460,8 +1591,11 @@
       width: 100px;
       min-width: 100px;
     }
+    label, span {
+      font-family: "SF Pro", "Proxima Nova" !important;
+    }
     span {
-      font-weight: 510;
+      font-weight: 510 !important;
       line-height: 1;
       font-size: 1.75em;
       color: #FFFFFF;

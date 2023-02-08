@@ -4,21 +4,24 @@
 			<v-btn id="go-back" icon to="/events">
 				<v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
 			</v-btn>
-			<h2 style="margin: 0">Event / {{ this.$route.query.event }}</h2>
+			<h2 style="margin: 0">Event / {{ $route.query.event }}</h2>
 		</div>
 
 		<aside class="container-info acenter">
 			<div class="divcol">
-				<label style="font-size: 1em">Tickets sold</label>
+				<label style="font-size: 16px; transform: translateY(5px)">Tickets sold</label>
 				<span>{{ ticketsSold }}</span>
 			</div>
-			<div class="divcol">
-				<label style="font-size: 1em">Your incomes</label>
-				<span>{{ incomes.toFixed(2) }} N</span>
-			</div>
-			<label style="margin-top: auto"
-				>≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(2) }}</label
-			>
+
+      <div class="divrow">
+        <div class="divcol">
+          <label style="font-size: 16px; transform: translateY(5px)">Your incomes</label>
+          <span>{{ incomes.toFixed(2) }} N</span>
+        </div>
+        <label style="margin-top: auto"
+          >≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(2) }}
+        </label>
+      </div>
 		</aside>
 
 		<div class="divcol">
