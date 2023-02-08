@@ -880,7 +880,7 @@
         max-width: 100% !important;
         width: 100% !important;
       }
-      .ticket-wrapper {
+      .ticket-wrapper:not(.custom) {
         margin-bottom: 30px !important;
         // height: 580px !important;
         // aspect-ratio: 1 / 2;
@@ -1782,7 +1782,7 @@
   }
   .v-input i {color: #fff}
   //--- ticket ---//
-  .ticket-wrapper {
+  .ticket-wrapper:not(.custom) {
     // width: min(var(--margin), 22rem);
     // // height: 35em;
     // aspect-ratio: 1 / 2;
@@ -2212,5 +2212,45 @@ body:has(#createTickets) {
     top: 9.58% !important;
     width: 86.1% !important;
     height: 85.9% !important;
+  }
+  .ticket-wrapper.custom {
+    --width: 314px;
+    --height: 565.05px;
+    max-width: max-content !important;
+    max-height: max-content !important;
+    position: relative !important;
+
+    .image-ticket-event-empty {
+      position: absolute !important;
+      inset: 0;
+      width: var(--width) !important;
+      height: var(--height) !important;
+      // background-color: #000 !important;
+    }
+
+    .v-input {
+      .v-input__slot {
+        background: transparent !important;
+        padding: 0 !important;
+        .v-text-field__slot {
+          width: var(--width) !important;
+          height: var(--height) !important;
+          .image-ticket-event {
+            width: 100% !important;
+            height: 100% !important;
+            position: relative;
+            &::after {
+              content: "";
+              position: absolute;
+              inset: 0;
+              background: center no-repeat var(--bg-image);
+              // background-color: #000 !important;
+              background-size: fill;
+            }
+          }
+        }
+      }
+      &.active .v-input__slot {box-shadow: none !important}
+    }
   }
 }

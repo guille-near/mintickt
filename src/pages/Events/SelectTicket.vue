@@ -17,10 +17,16 @@
       </slide>
     </carousel-3d>
 
-    <v-btn
-      :disabled="sliderSelection === undefined"
-      @click="$router.push(`/events/register:${dataTickets[sliderSelection]}`)"
-    >Choose this one</v-btn>
+    <div class="divcol center" style="width: 100%; gap: 8px">
+      <v-btn
+        :disabled="sliderSelection === undefined"
+        @click="$router.push(`/events/register:${dataTickets[sliderSelection]}`)"
+      >Choose this one</v-btn>
+      <v-btn
+        class="ownBtn"
+        @click="$router.push(`/events/register:custom`)"
+      >Upload my own ticket</v-btn>
+    </div>
 	</section>
 </template>
 
@@ -100,16 +106,17 @@ export default {
     font-size: 1em;
     width: min(100%, 322px);
     height: 42px;
-    background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%) !important;
+    background: transparent;
+    &:not(.ownBtn) {background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%) !important}
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1)) !important;
     backdrop-filter: blur(7px) !important;
     border-radius: 8px !important;
     &--disabled {opacity: .5}
     span {
-      font-family: 'Proxima Nova', sans-serif;
+      font-family: 'Proxima Nova', "SF Pro", sans-serif;
       font-weight: 700;
-      font-size: 1.1em;
+      font-size: 15px;
       letter-spacing: -0.03em;
       color: #FFFFFF;
     }
