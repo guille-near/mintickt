@@ -53,9 +53,14 @@ export default new Router({
           component: () => import('@/pages/Events/Options'),
         },
         {
-          path: '/events/register',
+          path: '/events/register:type?',
           name: 'RegisterDashboard',
           component: () => import('@/pages/Events/RegisterDashboard'),
+        },
+        {
+          path: '/events/select-ticket',
+          name: 'SelectTicket',
+          component: () => import('@/pages/Events/SelectTicket'),
         },
         {
           path: '/events/burn',

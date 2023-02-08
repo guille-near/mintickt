@@ -22,7 +22,12 @@
 					<div class="ticket-wrapper" v-if="imagecanvas1" id="my-node">
 						<img
 							class="ticket"
-							src="@/assets/img/ticket-test.png"
+							:src="
+                ticketType === 'event' ? require('@/assets/img/ticket-test.png') :
+                ticketType === 'con' ? require('@/assets/ticket-selection/ticket-con.png') :
+                ticketType === 'cinema' ? require('@/assets/ticket-selection/ticket-cinema.png') :
+                null
+              "
 							alt="Ticket image"
 						/>
 
@@ -1230,6 +1235,7 @@ export default {
     }
   },
   mounted() {
+    this.checkoutTicketType()
     // this.hideScroll(this.$route)
     this.revisar();
     if (this.step === 1) {
@@ -1310,6 +1316,9 @@ export default {
     dateRangeText() {
       return this.dates.join(" ~ ");
     },
+    ticketType() {
+      return this.$route.params.type?.split(":")[1]
+    }
   },
   methods: {
     uploadImg(item) {
@@ -2480,7 +2489,12 @@ export default {
     //   } else {
     //     document.body.style.overflow = "visible"
     //   }
-    // }
+    // },
+    checkoutTicketType() {
+      if (!this.ticketType) {
+        this.$router.push("/events/select-ticket")
+      }
+    },
   },
 };
 </script>
