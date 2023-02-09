@@ -8,7 +8,7 @@
         :index="i"
         :class="{active: i === sliderSelection}"
       >
-        <button @click="ticketSelected(i)">
+        <button @click="sliderSelection = i">
           <img
             :src="require(`@/assets/ticket-selection/ticket-${item}.png`)"
             :alt="`${item} ticket`"
@@ -20,7 +20,7 @@
     <div class="divcol center" style="width: 100%; gap: 8px">
       <v-btn
         :disabled="sliderSelection === undefined"
-        @click="$router.push(`/events/register:${dataTickets[sliderSelection]}`)"
+        @click="goTo"
       >Choose this one</v-btn>
       <v-btn
         class="ownBtn"
@@ -40,9 +40,9 @@ export default {
     };
   },
   methods: {
-    ticketSelected(i) {
-      this.$sesssion.set("ticketType", this.sliderSelection[i])
-      this.sliderSelection = i
+    goTo(){
+      this.$router.push(`/events/register:${this.dataTickets[this.sliderSelection]}`)
+      this.$session.set("ticketval", this.dataTickets[this.sliderSelection])
     }
   }
 };

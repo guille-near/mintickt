@@ -1356,6 +1356,7 @@ export default {
     }
   },
   mounted() {
+
     this.checkoutTicketType()
     // this.hideScroll(this.$route)
     this.revisar();
@@ -1385,7 +1386,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/#/events/register:"+this.$session.get("ticketval")
       );
     }
     //List option
@@ -1400,7 +1401,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/#/events/register:"+this.$session.get("ticketval")
       );
     }
     //goodies option
@@ -1419,7 +1420,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/#/events/register:"+this.$session.get("ticketval")
       );
     }
     //
@@ -1428,7 +1429,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register"
+        "/#/events/register:"+this.$session.get("ticketval")
       );
     }
 
