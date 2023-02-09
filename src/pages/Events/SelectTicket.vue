@@ -42,7 +42,6 @@ export default {
   methods: {
     ticketSelected(i) {
       this.$sesssion.set("ticketType", this.sliderSelection[i])
-      this.$session.get("ticket")
       this.sliderSelection = i
     }
   }
