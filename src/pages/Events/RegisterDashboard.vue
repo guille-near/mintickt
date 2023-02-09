@@ -354,7 +354,7 @@
 						</v-form>
 
 						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn disabled>
+							<v-btn @click="design">
 								<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-left</v-icon>
 								Back
@@ -2591,6 +2591,9 @@ export default {
     },
     showModal(){
       this.$router.push("/events");
+    },
+    design(){
+      this.$router.push("/events/select-ticket")
     },
     async add(){
       this.amount_list++;

@@ -160,7 +160,7 @@ export default {
     };
     
     const header = document.getElementById("headerApp")
-    console.log(this.$route.path);
+    // console.log(this.$route.path);
     if (this.$route.path === "/events/liveData" || this.$route.path == "/events/options") {
       header.classList.add("delpaddlivedata")
     } else {
