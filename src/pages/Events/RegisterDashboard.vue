@@ -10,7 +10,7 @@
 			Let's create your event!
 		</h2>
 
-		<v-window v-model="step" to >
+		<v-window v-model="step" to touchless>
 			<v-window-item :value="1">
 				<section class="center divwrap">
 					<h2 class="vermobile align" style="text-align: center">
@@ -19,7 +19,32 @@
 					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
+
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+            <img
+              v-show="!dataTicket[0].img"
+              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              alt="custom ticket" class="image-ticket-event-empty">
+
+            <v-file-input
+              v-model="dataTicket[0].img"
+              hide-details
+              solo
+              prepend-icon=""
+              :clearable="false"
+              @change="uploadImg(dataTicket[0])"
+              :class="{ active: dataTicket[0].img }"
+            >
+              <template v-slot:selection>
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${dataTicket[0].url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
+
+					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
 							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
@@ -364,7 +389,32 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
+          
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+            <img
+              v-show="!dataTicket[0].img"
+              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              alt="custom ticket" class="image-ticket-event-empty">
+
+            <v-file-input
+              v-model="dataTicket[0].img"
+              hide-details
+              solo
+              prepend-icon=""
+              :clearable="false"
+              @change="uploadImg(dataTicket[0])"
+              :class="{ active: dataTicket[0].img }"
+            >
+              <template v-slot:selection>
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${dataTicket[0].url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
+
+					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
 							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
@@ -501,7 +551,32 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
+          
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+            <img
+              v-show="!dataTicket[0].img"
+              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              alt="custom ticket" class="image-ticket-event-empty">
+
+            <v-file-input
+              v-model="dataTicket[0].img"
+              hide-details
+              solo
+              prepend-icon=""
+              :clearable="false"
+              @change="uploadImg(dataTicket[0])"
+              :class="{ active: dataTicket[0].img }"
+            >
+              <template v-slot:selection>
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${dataTicket[0].url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
+
+					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
 							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
@@ -690,7 +765,32 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
+          
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+            <img
+              v-show="!dataTicket[0].img"
+              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              alt="custom ticket" class="image-ticket-event-empty">
+
+            <v-file-input
+              v-model="dataTicket[0].img"
+              hide-details
+              solo
+              prepend-icon=""
+              :clearable="false"
+              @change="uploadImg(dataTicket[0])"
+              :class="{ active: dataTicket[0].img }"
+            >
+              <template v-slot:selection>
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${dataTicket[0].url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
+
+					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
 							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
@@ -826,7 +926,32 @@
 					<div class="ticket-wrapper" v-if="imagecanvas">
 						<img class="ticket" :src="canvas" alt="Ticket image" />
 					</div>
-					<div class="ticket-wrapper" v-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
+          
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+            <img
+              v-show="!dataTicket[0].img"
+              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              alt="custom ticket" class="image-ticket-event-empty">
+
+            <v-file-input
+              v-model="dataTicket[0].img"
+              hide-details
+              solo
+              prepend-icon=""
+              :clearable="false"
+              @change="uploadImg(dataTicket[0])"
+              :class="{ active: dataTicket[0].img }"
+            >
+              <template v-slot:selection>
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${dataTicket[0].url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
+
+					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
 							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
@@ -2489,7 +2614,7 @@ export default {
     checkoutTicketType() {
       if (!this.ticketType) return this.$router.push("/events/select-ticket")
 
-      if (this.ticketType === "con" || this.ticketType === "cinema") {
+      if (this.ticketType === "con" || this.ticketType === "cinema" || this.ticketType === "custom") {
         this.dataTicket.shift()
         this.dataTicket.shift()
         this.addTicketClass()
