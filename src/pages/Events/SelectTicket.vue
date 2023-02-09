@@ -8,7 +8,7 @@
         :index="i"
         :class="{active: i === sliderSelection}"
       >
-        <button @click="sliderSelection = i">
+        <button @click="ticketSelected(i)">
           <img
             :src="require(`@/assets/ticket-selection/ticket-${item}.png`)"
             :alt="`${item} ticket`"
@@ -40,6 +40,11 @@ export default {
     };
   },
   methods: {
+    ticketSelected(i) {
+      this.$sesssion.set("ticketType", this.sliderSelection[i])
+      this.$session.get("ticket")
+      this.sliderSelection = i
+    }
   }
 };
 </script>
