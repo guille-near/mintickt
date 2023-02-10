@@ -848,11 +848,12 @@ export default {
       z-index: 2;
     }
     .v-chip {
-      border-radius: 11px !important;
+      height: 44px !important;
+      border-radius: 6.68864px !important;
       word-spacing: 0.5ch;
       letter-spacing: 0.12em;
       max-width: max-content !important;
-      padding: 0.6em 0.4em;
+      padding: 6px 12px !important;
 
       .v-chip__content {
         max-width: max-content !important;
@@ -861,7 +862,7 @@ export default {
     }
 
     h2 {
-      margin-block: 16px;
+      margin-block: 8px 16px;
       letter-spacing: -0.03em;
       font-weight: 800;
       font-size: clamp(3.5em, calc(6vw + 1em), 6.25em);
@@ -1077,7 +1078,7 @@ export default {
     // }
     .ticket {
       width: 100% !important;
-      border-radius: 15px !important;
+      border-radius: 20px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
       // }

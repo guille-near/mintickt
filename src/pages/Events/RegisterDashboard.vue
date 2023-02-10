@@ -664,7 +664,7 @@
 									</v-sheet>
 								</section>
 
-								<div class="divcol">
+								<div class="divcol" style="margin-top: 30px">
 									<h3>Split Revenue</h3>
 									<p>
 										Split revenue clears after each sale. Needs at least two

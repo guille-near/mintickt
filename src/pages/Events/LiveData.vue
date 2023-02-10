@@ -13,7 +13,7 @@
 				<span>{{ ticketsSold }}</span>
 			</div>
 			<div class="divcol">
-				<label style="font-size: 1em">Your income</label>
+				<label style="font-size: 1em; transform: translateY(5px)">Your income</label>
 				<span>{{ incomes.toFixed(2) }} N</span>
 			</div>
 			<label style="margin-top: auto"
@@ -178,6 +178,46 @@
 				</v-card>
 			</section> -->
 
+
+      <!-- people -->
+			<v-data-table
+				id="dataTable"
+				:loading="loading"
+				:search="search"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'people')].active ==
+					true
+				"
+				:headers="isMobile ? headersTableMobilePeople : headersTablePeople"
+				:items="dataTablePeople"
+				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+				:mobile-breakpoint="-1"
+			>
+				<template v-slot:[`item.transaction`]="{ item }">
+					<v-btn :href="item.transaction" target="_blank" icon>
+						<img
+							class="copyImg"
+							src="@/assets/icons/link.svg"
+							alt="external link"
+						/>
+					</v-btn>
+				</template>
+
+				<template v-slot:[`item.action`]="{ item }">
+					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
+						>Complete order</v-btn
+					>
+					<v-btn
+            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
+            style="padding: 1px !important" @click="completeOrderFans(item)" :loading="item.loadingBtn">
+            <v-icon>mdi-check</v-icon>
+          </v-btn
+					>
+				</template>
+			</v-data-table>
+
+
+      <!-- goofie -->
 			<v-data-table
 				id="dataTable"
 				:loading="loading"
@@ -403,6 +443,12 @@ export default {
           active: true,
         },
         {
+          key: "people",
+          name: "People inside",
+          value: "0/0",
+          active: false,
+        },
+        {
           key: "redeemed",
           name: "Goodies redeemed",
           value: "0/0",
@@ -424,6 +470,21 @@ export default {
       ],
       dataTable: [],
       dataTableMobile: [],
+      headersTablePeople: [
+        { value: "nft", text: "NFT" },
+        { value: "signer", text: "SIGNER" },
+        { value: "quantity", text: "QUANTITY" },
+        { value: "created", text: "CREATED" },
+        { value: "transaction", text: "TRANSACTION", sortable: false },
+        { value: "action", text: "ACTION", sortable: false },
+      ],
+      headersTableMobilePeople: [
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
+      ],
+      dataTablePeople: [],
+      dataTableMobilePeople: [],
       headersTableExtra: [
         { value: "nft", text: "NFT" },
         { value: "signer", text: "SIGNER" },
@@ -471,6 +532,13 @@ export default {
 
       return filter
     },
+    filter_dataTableMobilePeople() {
+      let filter = this.dataTableMobilePeople
+      
+      if (this.search) filter = filter.filter(data => data.ticket.includes(this.search))
+
+      return filter
+    },
     filter_dataTableMobile() {
       let filter = this.dataTableMobile
       
@@ -508,6 +576,8 @@ export default {
       );
       this.dataTable = [];
       this.dataTableMobile = [];
+      // this.dataTablePeople = [];
+      // this.dataTableMobilePeople = [];
       this.dataTableExtra = [];
       this.dataTableExtraMobile = [];
       const user = datos.accountId;

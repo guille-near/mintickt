@@ -1114,6 +1114,7 @@
     margin-inline: calc(50% - 50vw);
     inset: 0;
     background-color: rgba(0,0,0,.2);
+    pointer-events: none;
   }
   h2 {
     font-weight: 500;
@@ -1169,6 +1170,10 @@
         letter-spacing: -0.03em !important;
         font-variant: small-caps !important;
         color: #CC00B7 !important;
+      }
+      i {
+        top: -3px;
+        left: 5px;
       }
       &:first-child {display: flex;align-items: center}
     }
@@ -1448,6 +1453,10 @@
             letter-spacing: -0.03em !important;
             font-variant: small-caps !important;
             color: #CC00B7 !important;
+          }
+          i {
+            top: -3px;
+            left: 5px;
           }
           &:first-of-type {width: 200px}
         }
