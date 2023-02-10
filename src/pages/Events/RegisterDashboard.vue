@@ -1334,9 +1334,9 @@ export default {
     dates(curr) {
       this.validatorCombobox(curr)
     },
-    // $route(curr) {
-    //   this.hideScroll(curr)
-    // }
+    $route(curr, old) {
+      if (curr !== old) this.checkoutTicketType()
+    }
   },
   beforeMount(){
     const queryString = window.location.search;
