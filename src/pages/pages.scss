@@ -868,7 +868,7 @@
   // overflow: hidden !important;
   .v-window {
     @media (max-width: 880px) {
-      width: min(var(--margin), 22rem);
+      width: min(var(--margin), 321px);
       margin-inline: auto;
       &-item {
         display: flex;
@@ -1804,7 +1804,7 @@
     // height: 35em;
     position: relative;
     border-radius: 19.2px;
-    background-color: #000;
+    // background-color: #000;
     .ticket {width: 100% !important; height: 100% !important}
     .v-input {
       position: absolute;
@@ -2227,15 +2227,20 @@ body:has(#createTickets) {
     height: 85.9% !important;
   }
   .ticket-wrapper.custom {
-    --width: 314px;
-    --height: 565.05px;
+    --width: 314px; // 305.5px
+    --height: 565.05px; // 496px
     max-width: max-content !important;
     max-height: max-content !important;
     position: relative !important;
+    margin-bottom: auto;
 
     .image-ticket-event-empty {
       position: absolute !important;
-      inset: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
       width: var(--width) !important;
       height: var(--height) !important;
       // background-color: #000 !important;

@@ -6,12 +6,12 @@
       <slide
         v-for="(item, i) in dataTickets" :key="i"
         :index="i"
-        :class="{active: i === sliderSelection}"
+        :class="{active: item.active}"
       >
-        <button @click="sliderSelection = i">
+        <button @click="item.active ? item.active = !item.active : dataTickets.forEach(e => {e.active = false; item.active = true})">
           <img
-            :src="require(`@/assets/ticket-selection/ticket-${item}.png`)"
-            :alt="`${item} ticket`"
+            :src="require(`@/assets/ticket-selection/ticket-${item.name}.svg`)"
+            :alt="`${item.name} ticket`"
           >
         </button>
       </slide>
@@ -19,12 +19,12 @@
 
     <div class="divcol center" style="width: 100%; gap: 8px">
       <v-btn
-        :disabled="sliderSelection === undefined"
+        :disabled="!dataTickets.some(el => el.active)"
         @click="goTo"
       >Choose this one</v-btn>
       <v-btn
         class="ownBtn"
-        @click="$router.push(`/events/register:custom`)"
+        @click="goToCustom"
       >Upload my own ticket</v-btn>
     </div>
 	</section>
@@ -35,14 +35,22 @@ export default {
   name: "SelectTicket",
   data() {
     return {
-      sliderSelection: undefined,
-      dataTickets: ["event", "con", "cinema"],
+      dataTickets: [
+        {name: "con", active: false},
+        {name: "cinema", active: false},
+        {name: "event", active: false},
+      ],
     };
   },
   methods: {
-    goTo(){
-      this.$router.push(`/events/register:${this.dataTickets[this.sliderSelection]}`)
-      this.$session.set("ticketval", this.dataTickets[this.sliderSelection])
+    goTo() {
+      const currentSelection = this.dataTickets.find(el => el.active)?.name
+      this.$router.push(`/events/register:${currentSelection}`)
+      this.$session.set("ticketval", currentSelection)
+    },
+    goToCustom() {
+      this.$router.push(`/events/register:custom`)
+      this.$session.set("ticketval", "custom")
     }
   }
 };
@@ -62,7 +70,7 @@ export default {
     padding-inline: 7.5px !important
   }
   @media (max-height: 900px) and (min-width: 880px) {
-    font-size: clamp(10px, 1vh, 15px);
+    font-size: clamp(10px, 1.5vh, 15px);
   }
 
   h2 {
@@ -75,7 +83,7 @@ export default {
   }
 
   .carousel-3d-container {
-    --height: 29.4375em;
+    --height: clamp(20em, 29vw, 29.4375em);
     height: calc(var(--height) + (40px * 2)) !important;
     padding-block: 40px;
     margin: 0 !important;
@@ -92,7 +100,10 @@ export default {
         background: transparent !important;
         &:not(.current) {opacity: .4 !important}
         img {
-          height: var(--height);
+          min-height: var(--height) !important;
+          height: var(--height) !important;
+          max-height: var(--height) !important;
+          // aspect-ratio: 1.3 / 2;
           border-radius: 15px;
         }
         &.current.active {
@@ -101,6 +112,18 @@ export default {
             0px 0px 70.3929px rgba(204, 0, 183, 0.88),
             inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
             inset 0px 0px 500px rgba(204, 0, 183, 0.88);
+        }
+        &.left-1 {
+          transform: translateX(-19em) translateZ(-400px) rotateY(35deg) !important;
+          @media (max-width: 880px) {
+            transform: translateX(-14em) translateZ(-400px) rotateY(35deg) !important;
+          }
+        }
+        &.right-1 {
+          transform: translateX(19em) translateZ(-400px) rotateY(-35deg) !important;
+          @media (max-width: 880px) {
+            transform: translateX(14em) translateZ(-400px) rotateY(-35deg) !important;
+          }
         }
       }
     }
