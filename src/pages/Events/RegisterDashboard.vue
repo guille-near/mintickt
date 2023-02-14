@@ -22,8 +22,7 @@
 
           <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
             <img
-              v-show="!dataTicket[0].img"
-              src="@/assets/ticket-selection/ticket-custom-upload.png"
+              src="@/assets/ticket-selection/ticket-custom-upload.svg"
               alt="custom ticket" class="image-ticket-event-empty">
 
             <v-file-input
@@ -47,7 +46,7 @@
 					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
 						<img
 							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
+							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)"
 							alt="Ticket image"
 						/>
 

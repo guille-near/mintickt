@@ -868,7 +868,7 @@
   // overflow: hidden !important;
   .v-window {
     @media (max-width: 880px) {
-      width: min(var(--margin), 321px);
+      width: 321px;
       margin-inline: auto;
       &-item {
         display: flex;
@@ -887,17 +887,17 @@
         .v-input {
           &:nth-of-type(1) {
             // height: 68.1% !important;
-            height: 68.6% !important;
+            // height: 68.6% !important;
           }
           &:nth-of-type(2) {
             left: 7.4% !important;
             // bottom: 5.4% !important;
-            bottom: 4.5% !important;
+            bottom: 4.4% !important;
           }
           &:nth-of-type(3) {
             right: 7.5% !important;
             // bottom: 5.4% !important;
-            bottom: 4.5% !important;
+            bottom: 4.4% !important;
           }
         }
       }
@@ -1829,13 +1829,14 @@
           background: center no-repeat var(--bg-image);
           background-color: #000 !important;
           background-size: cover;
+          border-radius: 4px !important;
         }
       }
       @layer layout {
         @media (min-width: 1px) {
           img {
             object-fit: cover !important;
-            background-color: #000 !important;
+            // background-color: #000 !important;
           }
         }
       }
@@ -1851,6 +1852,7 @@
       &:nth-of-type(1) {
         width: 85%;
         height: 68.7%;
+        // aspect-ratio: 1.4 / 2 !important;
         
         top: 4.5%;
         left: 0;
@@ -2224,16 +2226,17 @@ body:has(#createTickets) {
   }
 }
 
+
 #createTickets.registerDashboard {
   .ticket-wrapper[data-ticket].cinema .v-input {
     top: 10.5% !important;
-    width: 88.1% !important;
+    width: 85.1% !important; // original in png 88.1%
     height: 79.1% !important;
   }
   .ticket-wrapper[data-ticket].con .v-input {
-    top: 9.58% !important;
+    top: 16.58% !important; // original in png 9.58%
     width: 86.1% !important;
-    height: 85.9% !important;
+    height: 71% !important; // original in png 85.9%
   }
   .ticket-wrapper.custom {
     --width: 314px; // 305.5px
@@ -2242,42 +2245,47 @@ body:has(#createTickets) {
     max-height: max-content !important;
     position: relative !important;
     margin-bottom: auto;
+    position: relative;
 
     .image-ticket-event-empty {
-      position: absolute !important;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
       width: var(--width) !important;
       height: var(--height) !important;
       // background-color: #000 !important;
     }
 
     .v-input {
+      position: absolute;
+      margin: auto;
+      top: 5%;
+      left: 0;
+      right: 0;
+      height: 88.6%;
+      border-radius: 4px !important;
+      * {
+        cursor: pointer;
+        background-color: transparent !important;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+      }
+      .v-input__append-inner {display: none}
+      &.active .v-input__slot {box-shadow: none !important}
       .v-input__slot {
-        background: transparent !important;
         padding: 0 !important;
-        .v-text-field__slot {
-          width: var(--width) !important;
-          height: var(--height) !important;
-          .image-ticket-event {
-            width: 100% !important;
-            height: 100% !important;
-            position: relative;
-            &::after {
-              content: "";
-              position: absolute;
-              inset: 0;
-              background: center no-repeat var(--bg-image);
-              // background-color: #000 !important;
-              background-size: fill;
-            }
+        .image-ticket-event {
+          position: relative;
+          &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: center no-repeat var(--bg-image);
+            // background-color: #000 !important;
+            background-size: fill;
+            border-radius: 4px !important;
           }
         }
       }
-      &.active .v-input__slot {box-shadow: none !important}
     }
   }
 }
