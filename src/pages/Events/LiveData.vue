@@ -9,11 +9,15 @@
 
 		<aside class="container-info acenter">
 			<div class="divcol">
-				<label style="font-size: 16px; transform: translateY(5px)">Tickets sold</label>
+				<label style="font-size: 16px; transform: translateY(5px)"
+					>Tickets sold</label
+				>
 				<span>{{ ticketsSold }}</span>
 			</div>
 			<div class="divcol">
-				<label style="font-size: 1em; transform: translateY(5px)">Your income</label>
+				<label style="font-size: 1em; transform: translateY(5px)"
+					>Your income</label
+				>
 				<span>{{ incomes.toFixed(2) }} N</span>
 			</div>
 			<label style="margin-top: auto"
@@ -45,35 +49,40 @@
 				</v-card>
 			</div>
 			<v-row no-gutters>
-        <h3 class="p vermobile mt-10" style="font-size: 23px">Orders</h3>
-        <!-- <div class="container-search center"> -->
-          <!--Modal ticket Url -->
-          <v-text-field
-            v-model="search"
-            :append-icon="search ? '' : 'mdi-magnify'"
-            placeholder="Search a nickname or scan it"
-            single-line
-            hide-details
-            clear-icon="mdi-close"
-            clearable
-            class="search scan"
-          >
-            <template v-slot:append>
-              <v-dialog width="420px" v-model="modalQR">
-                <template v-slot:activator="{ on, attrs }">
-                  <img src="@/assets/icons/scan.svg" alt="scan button" v-bind="attrs" v-on="on" />
-                </template>
+				<h3 class="p vermobile mt-10" style="font-size: 23px">Orders</h3>
+				<!-- <div class="container-search center"> -->
+				<!--Modal ticket Url -->
+				<v-text-field
+					v-model="search"
+					:append-icon="search ? '' : 'mdi-magnify'"
+					placeholder="Search a nickname or scan it"
+					single-line
+					hide-details
+					clear-icon="mdi-close"
+					clearable
+					class="search scan"
+				>
+					<template v-slot:append>
+						<v-dialog width="420px" v-model="modalQR">
+							<template v-slot:activator="{ on, attrs }">
+								<img
+									src="@/assets/icons/scan.svg"
+									alt="scan button"
+									v-bind="attrs"
+									v-on="on"
+								/>
+							</template>
 
-                <v-card id="modalUrl" class="pa-10">
-                  <StreamBarcodeReader
-                    @decode="onDecode"
-                    @loaded="onLoaded"
-                  ></StreamBarcodeReader>
-                </v-card>
-              </v-dialog>
-            </template>
-          </v-text-field>
-        <!-- </div> -->
+							<v-card id="modalUrl" class="pa-10">
+								<StreamBarcodeReader
+									@decode="onDecode"
+									@loaded="onLoaded"
+								></StreamBarcodeReader>
+							</v-card>
+						</v-dialog>
+					</template>
+				</v-text-field>
+				<!-- </div> -->
 			</v-row>
 			<v-data-table
 				id="dataTable"
@@ -99,15 +108,24 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
+					<v-btn
+						class="eliminarmobile"
+						@click="completeOrderFans(item)"
+						:loading="item.loadingBtn"
 						><v-icon>mdi-checkbox-blank-outline</v-icon> Approve</v-btn
 					>
 					<v-btn
-            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
-            style="padding: 1px !important" @click="completeOrderFans(item)" :loading="item.loadingBtn">
-            <v-icon>mdi-check</v-icon>
-          </v-btn
+						class="vermobile"
+						min-width="max-content"
+						max-width="max-content"
+						min-height="max-content"
+						height="max-content"
+						style="padding: 1px !important"
+						@click="completeOrderFans(item)"
+						:loading="item.loadingBtn"
 					>
+						<v-icon>mdi-check</v-icon>
+					</v-btn>
 				</template>
 			</v-data-table>
 
@@ -178,8 +196,7 @@
 				</v-card>
 			</section> -->
 
-
-      <!-- people -->
+			<!-- people -->
 			<v-data-table
 				id="dataTable"
 				:loading="loading"
@@ -204,20 +221,29 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" disabled :loading="item.loadingBtn"
+					<v-btn
+						class="eliminarmobile"
+						@click="completeOrderFans(item)"
+						disabled
+						:loading="item.loadingBtn"
 						><v-icon>mdi-checkbox-marked-outline</v-icon> Approved</v-btn
 					>
 					<v-btn
-            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
-            style="padding: 1px !important" @click="completeOrderFans(item)" :loading="item.loadingBtn">
-            <v-icon>mdi-check</v-icon>
-          </v-btn
+						class="vermobile"
+						min-width="max-content"
+						max-width="max-content"
+						min-height="max-content"
+						height="max-content"
+						style="padding: 1px !important"
+						@click="completeOrderFans(item)"
+						:loading="item.loadingBtn"
 					>
+						<v-icon>mdi-check</v-icon>
+					</v-btn>
 				</template>
 			</v-data-table>
 
-
-      <!-- goofie -->
+			<!-- goofie -->
 			<v-data-table
 				id="dataTable"
 				:loading="loading"
@@ -242,15 +268,24 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn class="eliminarmobile" @click="completeOrderReedemer(item)" :loading="item.loadingBtn"
+					<v-btn
+						class="eliminarmobile"
+						@click="completeOrderReedemer(item)"
+						:loading="item.loadingBtn"
 						>Complete order</v-btn
 					>
 					<v-btn
-            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
-            style="padding: 1px !important" @click="completeOrderReedemer(item)" :loading="item.loadingBtn">
-            <v-icon>mdi-check</v-icon>
-          </v-btn
+						class="vermobile"
+						min-width="max-content"
+						max-width="max-content"
+						min-height="max-content"
+						height="max-content"
+						style="padding: 1px !important"
+						@click="completeOrderReedemer(item)"
+						:loading="item.loadingBtn"
 					>
+						<v-icon>mdi-check</v-icon>
+					</v-btn>
 				</template>
 			</v-data-table>
 
@@ -362,10 +397,11 @@ const burned_reedemed_tokens_aggregate = gql`
 `;
 //Waiting in line
 const waiting_in_line = gql`
-      query MyQuery($_iregex: String!) {
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
   ) {
     description
     token_id
@@ -383,10 +419,11 @@ const waiting_in_line = gql`
 `;
 //peple inside
 const people_inside = gql`
-      query MyQuery($_iregex: String!) {
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_in: $tokens}, owner: {_like: $owner}}
   ) {
     description
     token_id
@@ -404,7 +441,7 @@ const people_inside = gql`
 `;
 //Redeemed
 const goods_redeemed = gql`
-      query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
@@ -622,7 +659,9 @@ export default {
             .query({
               query: waiting_in_line,
               variables: {
-                _iregex: thingid[1]
+               _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
               },
             })
             .then((response) => {
@@ -660,7 +699,7 @@ export default {
                   this.dataTable.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[0].value =  this.dataTable.length - arr.length + " / " + this.dataTable.length
+                  this.dataFilters[0].value =  this.dataTable.length  + " / " + (this.dataTable.length + arr.length)
                 }
               );
             }) //mintickt query
@@ -694,7 +733,9 @@ export default {
             .query({
               query: people_inside,
               variables: {
-                _iregex: thingid[1]
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
               },
             })
             .then((response) => {
@@ -732,7 +773,7 @@ export default {
                   this.dataTablePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobilePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[1].value =  arr.length + " / " + this.dataTable.length
+                  this.dataFilters[1].value =  (this.dataTablePeople.length) + " / " + (this.dataTable.length + arr.length)
                 }
               );
             }) //mintickt query
@@ -766,7 +807,7 @@ export default {
             .query({
               query: goods_redeemed,
               variables: {
-                 _iregex: thingid[1],
+                _iregex: thingid[1],
                 tokens: arr,
                 owner: this.owner
               },
@@ -808,7 +849,7 @@ export default {
                   this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[2].value =  arr.length + " / " + this.dataTable.length
+                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableExtra.length)
                 }
               );
             }) //mintickt query
