@@ -45,7 +45,7 @@
 				</v-card>
 			</div>
 			<v-row no-gutters>
-        <h3 class="p vermobile mt-10" style="font-size: 23px">Orders to deliver</h3>
+        <h3 class="p vermobile mt-10" style="font-size: 23px">Orders</h3>
         <!-- <div class="container-search center"> -->
           <!--Modal ticket Url -->
           <v-text-field
