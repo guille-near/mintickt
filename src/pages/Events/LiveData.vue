@@ -100,7 +100,7 @@
 
 				<template v-slot:[`item.action`]="{ item }">
 					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
-						>Complete order</v-btn
+						>Approve</v-btn
 					>
 					<v-btn
             class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
@@ -205,7 +205,7 @@
 
 				<template v-slot:[`item.action`]="{ item }">
 					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
-						>Complete order</v-btn
+						>Approved</v-btn
 					>
 					<v-btn
             class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
@@ -342,43 +342,17 @@ const mb_views_nft_tokens_aggregate = gql`
   }
 }
 `;
-const redeemed_tokens_aggregate = gql`
-  query MyQuery($_iregex: String!) {
-    mb_views_nft_tokens_aggregate(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "redeemed" }
-        burned_receipt_id: { _is_null: false }
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-  }
-`;
-const fans_tokens_aggregate = gql`
-  query MyQuery($_iregex: String!) {
-    mb_views_nft_tokens_aggregate(
-      where: {
-        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-        extra: { _eq: "ticketing" }
-        burned_receipt_id: { _is_null: false }
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-  }
-`;
-const burned_fans_tokens_aggregate = gql`
+//Extra smart contract to handle tokens burned
+//Burned tokens, apply for wainting in line and peopel inside
+const burned_tokens_aggregate = gql`
   query MyQuery($_iregex: String!) {
     fansinsides(where: { thingid: $_iregex }) {
       tokenid
     }
   }
 `;
+//Extra smart contract to handle tokens burned
+//Burned tokens for redeemer
 const burned_reedemed_tokens_aggregate = gql`
   query MyQuery($_iregex: String!) {
     redeemers(where: { thingid: $_iregex }) {
@@ -386,8 +360,9 @@ const burned_reedemed_tokens_aggregate = gql`
     }
   }
 `;
-const tickets = gql`
-  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+//Waiting in line
+const waiting_in_line = gql`
+    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
@@ -406,10 +381,32 @@ const tickets = gql`
     burned_timestamp
   }
 }
-
 `;
+//peple inside
+const people_inside = gql`
+    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+  mb_views_nft_tokens(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+  ) {
+    description
+    token_id
+    owner
+    last_transfer_timestamp
+    minted_receipt_id
+    nft_contract_created_at
+    minted_timestamp
+    last_transfer_receipt_id
+    burned_receipt_id
+    title
+    burned_timestamp
+  }
+}
+`;
+//Redeemed
 const goods_redeemed = gql`
-  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
@@ -439,19 +436,19 @@ export default {
         {
           key: "fans",
           name: "Waiting in line",
-          value: "0/0",
+          value: "0 / 0",
           active: true,
         },
         {
           key: "people",
           name: "People inside",
-          value: "0/0",
+          value: "0 / 0",
           active: false,
         },
         {
           key: "redeemed",
           name: "Beers redeemed",
-          value: "0/0",
+          value: "0 / 0",
           active: false,
         },
       ],
@@ -508,7 +505,8 @@ export default {
       loading: true,
       search: "",
       modalQR: false,
-      owner: "%"
+      owner: "%",
+      goodie_title: ""
     };
   },
   mounted() {
@@ -576,8 +574,8 @@ export default {
       );
       this.dataTable = [];
       this.dataTableMobile = [];
-      // this.dataTablePeople = [];
-      // this.dataTableMobilePeople = [];
+      this.dataTablePeople = [];
+      this.dataTableMobilePeople = [];
       this.dataTableExtra = [];
       this.dataTableExtraMobile = [];
       const user = datos.accountId;
@@ -596,16 +594,165 @@ export default {
           this.incomes =
             response.data.nft_earnings_aggregate.aggregate.sum.amount /
             Math.pow(10, 24);
-          this.getFansInside();
-          this.getExtra();
-          this.getExtraFilter();
+          this.get_waiting_in_line();
+          setTimeout(() => {this.get_people_inside()}, 200);
+          setTimeout(() => {this.get_redeemed()}, 400);
+          
         })
         .catch((err) => {
           console.log("Error", err);
         });
     },
-    //Data extra to get burned, beers, tshirts, pop corn, etc
-    async getExtra() {
+    //Waiting in line
+    async get_waiting_in_line() {
+      var rows = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
+      this.$apollo
+        .mutate({
+          mutation: burned_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+          client: "mintickClient",
+        })
+        .then((res) => {
+          arr = res.data.fansinsides.map(function (el) {
+            return el.tokenid;
+          });
+          this.$apollo
+            .query({
+              query: waiting_in_line,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
+              },
+            })
+            .then((response) => {
+              //Get the first object and loop
+              Object.entries(response.data.mb_views_nft_tokens).forEach(
+                ([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc =
+                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  rows = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: 1,
+                    created: time2 + " " + timedesc2,
+                    transaction:
+                      this.$explorer + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key
+                  };
+                  this.dataTable.push(rows);
+                  this.dataTableMobile.push(rows);
+                  this.dataTable.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+
+                  this.dataFilters[0].value =  this.dataTable.length - arr.length + " / " + this.dataTable.length
+                }
+              );
+            }) //mintickt query
+            .catch((err) => {
+              console.log("Error", err);
+            });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    //People inside
+    async get_people_inside() {
+      var rows = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
+      this.$apollo
+        .mutate({
+          mutation: burned_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+          client: "mintickClient",
+        })
+        .then((res) => {
+          arr = res.data.fansinsides.map(function (el) {
+            return el.tokenid;
+          });
+          this.$apollo
+            .query({
+              query: people_inside,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
+              },
+            })
+            .then((response) => {
+              //Get the first object and loop
+              Object.entries(response.data.mb_views_nft_tokens).forEach(
+                ([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc =
+                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  rows = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: 1,
+                    created: time2 + " " + timedesc2,
+                    transaction:
+                      this.$explorer + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key
+                  };
+                  this.dataTablePeople.push(rows);
+                  this.filter_dataTableMobilePeople.push(rows);
+                  this.dataTablePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobilePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
+
+                  this.dataFilters[1].value =  arr.length + " / " + this.dataTable.length
+                }
+              );
+            }) //mintickt query
+            .catch((err) => {
+              console.log("Error", err);
+            });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    //Redeemed
+    async get_redeemed() {
       var rows = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       var arr = [];
@@ -648,6 +795,8 @@ export default {
                     minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
                   var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
                   var receipe = value.burned_receipt_id;
+                  this.goodie_title = value.title;
+                  this.dataFilters[2].name = this.goodie_title + " redeemed";
                   rows = {
                     nft: value.title,
                     signer: value.owner,
@@ -661,152 +810,11 @@ export default {
                     key: key
                   };
                   this.dataTableExtra.push(rows);
-                  this.dataTableExtraMobile.push(rows);
+                  this.filter_dataTableExtraMobile.push(rows);
                   this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                }
-              );
-            }) //mintickt query
-            .catch((err) => {
-              console.log("Error", err);
-            });
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
-    },
-    async getExtraFilter() {
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      //console.log(Object.values(this.dataFilters)[0].value)
-      //reedemed
-      this.$apollo
-        .query({
-          query: redeemed_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
-          },
-        })
-        .then((response) => {
-          //Burned reedemed burned_fans_tokens_aggregate
-          this.$apollo
-            .query({
-              query: burned_reedemed_tokens_aggregate,
-              variables: {
-                _iregex: thingid[1],
-              },
-              client: "mintickClient",
-            })
-            .then((res) => {
-              Object.values(this.dataFilters)[1].value =
-                res.data.redeemers.length +
-                " / " +
-                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-            })
-            .catch((err) => {
-              console.log("Error", err);
-            })
-            .finally(() => (this.loading = false));
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
 
-      //Fans inside
-      this.$apollo
-        .query({
-          query: fans_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
-          },
-        })
-        .then((response) => {
-          //Burned reedemed burned_fans_tokens_aggregate
-          this.$apollo
-            .query({
-              query: burned_fans_tokens_aggregate,
-              variables: {
-                _iregex: thingid[1],
-              },
-              client: "mintickClient",
-            })
-            .then((res) => {
-              Object.values(this.dataFilters)[0].value =
-                res.data.fansinsides.length +
-                " / " +
-                response.data.mb_views_nft_tokens_aggregate.aggregate.count;
-            })
-            .catch((err) => {
-              console.log("Error", err);
-            })
-            .finally(() => (this.loading = false));
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
-    },
-    //Data extra to get burned, beers, tshirts, pop corn, etc
-    async getFansInside() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      var arr = [];
-      this.$apollo
-        .mutate({
-          mutation: burned_fans_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
-          },
-          client: "mintickClient",
-        })
-        .then((res) => {
-          arr = res.data.fansinsides.map(function (el) {
-            return el.tokenid;
-          });
-          this.$apollo
-            .query({
-              query: tickets,
-              variables: {
-                _iregex: thingid[1],
-                tokens: arr,
-                owner: this.owner
-              },
-            })
-            .then((response) => {
-              //Get the first object and loop
-              Object.entries(response.data.mb_views_nft_tokens).forEach(
-                ([key, value]) => {
-                  var startTime =
-                    value.last_transfer_receipt_id === null
-                      ? moment.utc(value.burned_timestamp)
-                      : moment.utc(value.last_transfer_timestamp);
-                  var endTime = moment.utc(new Date());
-                  var minutesDiff = endTime.diff(startTime, "minutes");
-                  var hoursDiff = endTime.diff(startTime, "hours");
-                  var daysDiff = endTime.diff(startTime, "day");
-                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
-                  var time2 = time > 24 ? daysDiff : time;
-                  var timedesc =
-                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
-                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-                  var receipe = value.burned_receipt_id;
-                  rows = {
-                    nft: value.title,
-                    signer: value.owner,
-                    quantity: 1,
-                    created: time2 + " " + timedesc2,
-                    transaction:
-                      this.$explorer + receipe,
-                    tokenid: value.token_id,
-                    loadingBtn: false,
-                    show: false,
-                    key: key
-                  };
-                  this.dataTable.push(rows);
-                  this.dataTableMobile.push(rows);
-                  this.dataTable.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                  this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataFilters[2].value =  arr.length + " / " + this.dataTable.length
                 }
               );
             }) //mintickt query
