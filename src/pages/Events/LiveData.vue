@@ -100,7 +100,7 @@
 
 				<template v-slot:[`item.action`]="{ item }">
 					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
-						>Approve</v-btn
+						><v-icon>mdi-checkbox-blank-outline</v-icon> Approve</v-btn
 					>
 					<v-btn
             class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
@@ -204,8 +204,8 @@
 				</template>
 
 				<template v-slot:[`item.action`]="{ item }">
-					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
-						>Approved</v-btn
+					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" disabled :loading="item.loadingBtn"
+						><v-icon>mdi-checkbox-marked-outline</v-icon> Approved</v-btn
 					>
 					<v-btn
             class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
@@ -362,11 +362,10 @@ const burned_reedemed_tokens_aggregate = gql`
 `;
 //Waiting in line
 const waiting_in_line = gql`
-    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+      query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
-      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}}
   ) {
     description
     token_id
@@ -384,11 +383,10 @@ const waiting_in_line = gql`
 `;
 //peple inside
 const people_inside = gql`
-    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+      query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}
-      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+      , extra: {_eq: "ticketing"}, burned_receipt_id: {_is_null: false}}
   ) {
     description
     token_id
@@ -406,11 +404,10 @@ const people_inside = gql`
 `;
 //Redeemed
 const goods_redeemed = gql`
-    query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+      query MyQuery($_iregex: String!) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
-      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}}
   ) {
     description
     token_id
@@ -624,9 +621,7 @@ export default {
             .query({
               query: waiting_in_line,
               variables: {
-                _iregex: thingid[1],
-                tokens: arr,
-                owner: this.owner
+                _iregex: thingid[1]
               },
             })
             .then((response) => {
@@ -698,9 +693,7 @@ export default {
             .query({
               query: people_inside,
               variables: {
-                _iregex: thingid[1],
-                tokens: arr,
-                owner: this.owner
+                _iregex: thingid[1]
               },
             })
             .then((response) => {
@@ -772,9 +765,7 @@ export default {
             .query({
               query: goods_redeemed,
               variables: {
-                _iregex: thingid[1],
-                tokens: arr,
-                owner: this.owner
+                _iregex: thingid[1]
               },
             })
             .then((response) => {
