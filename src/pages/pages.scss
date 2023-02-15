@@ -2228,15 +2228,19 @@ body:has(#createTickets) {
 
 
 #createTickets.registerDashboard {
+  .v-input .v-input__slot {
+    border: none !important;
+  }
+
   .ticket-wrapper[data-ticket].cinema .v-input {
     top: 10.5% !important;
-    width: 85.1% !important; // original in png 88.1%
+    width: 87% !important; // original in png 88.1%
     height: 79.1% !important;
   }
   .ticket-wrapper[data-ticket].con .v-input {
-    top: 16.58% !important; // original in png 9.58%
-    width: 86.1% !important;
-    height: 71% !important; // original in png 85.9%
+    top: 16.2% !important; // original in png 9.58%
+    width: 86.6% !important;
+    height: 72% !important; // original in png 85.9%
   }
   .ticket-wrapper.custom {
     --width: 314px; // 305.5px
@@ -2251,6 +2255,9 @@ body:has(#createTickets) {
       width: var(--width) !important;
       height: var(--height) !important;
       // background-color: #000 !important;
+      &.active {
+        opacity: 0;
+      }
     }
 
     .v-input {
