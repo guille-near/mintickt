@@ -630,8 +630,8 @@ export default {
             response.data.nft_earnings_aggregate.aggregate.sum.amount /
             Math.pow(10, 24);
           this.get_waiting_in_line();
-          setTimeout(() => {this.get_people_inside()}, 200);
-          setTimeout(() => {this.get_redeemed()}, 400);
+          setTimeout(() => {this.get_people_inside()}, 300);
+          setTimeout(() => {this.get_redeemed()}, 500);
           
         })
         .catch((err) => {
