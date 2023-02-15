@@ -2433,7 +2433,7 @@ export default {
       this.price < 0 ? this.price = 0 : this.price;
       request.onload = () => {
         this.usd = (
-          parseInt(JSON.parse(request.responseText).lastPrice) * this.price
+          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
       this.$session.set("price", this.price)

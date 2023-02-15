@@ -438,7 +438,7 @@ export default {
       dataFilters: [
         {
           key: "fans",
-          name: "Check-ins",
+          name: "Waiting in line",
           value: "0/0",
           active: true,
         },
@@ -450,7 +450,7 @@ export default {
         },
         {
           key: "redeemed",
-          name: "Goodies redeemed",
+          name: "Beers redeemed",
           value: "0/0",
           active: false,
         },
