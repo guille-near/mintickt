@@ -404,10 +404,11 @@ const people_inside = gql`
 `;
 //Redeemed
 const goods_redeemed = gql`
-      query MyQuery($_iregex: String!) {
+      query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
-      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}}
+      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_nin: $tokens}, owner: {_like: $owner}}
   ) {
     description
     token_id
@@ -765,7 +766,9 @@ export default {
             .query({
               query: goods_redeemed,
               variables: {
-                _iregex: thingid[1]
+                 _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
               },
             })
             .then((response) => {
