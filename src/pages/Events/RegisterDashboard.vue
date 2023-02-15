@@ -23,7 +23,7 @@
           <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
             <img
               src="@/assets/ticket-selection/ticket-custom-upload.svg"
-              alt="custom ticket" class="image-ticket-event-empty">
+              alt="custom ticket" class="image-ticket-event-empty" :class="{active: dataTicket[0].img}">
 
             <v-file-input
               v-model="dataTicket[0].img"
