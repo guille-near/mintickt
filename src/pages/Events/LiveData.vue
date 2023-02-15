@@ -27,7 +27,7 @@
 		</div>
 
 		<section class="container-down">
-			<div class="container-filter acenter gap">
+			<div class="container-filter acenter">
 				<v-card
 					v-for="(item, i) in dataFilters"
 					:key="i"

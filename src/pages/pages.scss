@@ -1367,7 +1367,7 @@
     color: #FFFFFF;
   }
   .container-info {
-    gap: 40px;
+    gap: clamp(10px, 4vw, 40px);
     span {
       font-family: "SF Pro", "Proxima Nova" !important;
       font-weight: 510;
@@ -1384,6 +1384,13 @@
     }
   }
   .container-filter {
+    flex-wrap: wrap-reverse !important;
+    gap: 23px !important;
+    @media (max-width: 720px) {
+      .v-card:nth-child(1) {order: 3}
+      .v-card:nth-child(2) {order: 1}
+      .v-card:nth-child(3) {order: 2}
+    }
     .v-card {
       display: grid !important;
       place-content: center;
