@@ -244,17 +244,17 @@
 			</v-data-table>
 
 
-			<!-- orders -->
+			<!-- redeemed -->
 			<v-data-table
 				id="dataTable"
 				:loading="loading"
 				:search="search"
 				v-show="
-					dataFilters[dataFilters.findIndex((e) => e.key == 'orders')].active ==
+					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')].active ==
 					true
 				"
-				:headers="isMobile ? headersTableMobileOrders : headersTableOrders"
-				:items="dataTableOrders"
+				:headers="isMobile ? headersTableMobileRedeemer : headersTableRedeemer"
+				:items="dataTableRedeemer"
 				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
 				:mobile-breakpoint="-1"
 			>
@@ -292,17 +292,17 @@
 			</v-data-table>
 
 
-			<!-- goofie -->
+			<!-- orders -->
 			<v-data-table
 				id="dataTable"
 				:loading="loading"
 				:search="search"
 				v-show="
-					dataFilters[dataFilters.findIndex((e) => e.key == 'redeemed')]
+					dataFilters[dataFilters.findIndex((e) => e.key == 'orders')]
 						.active == true
 				"
-				:headers="isMobile ? headersTableExtraMobile : headersTableExtra"
-				:items="dataTableExtra"
+				:headers="isMobile ? headersTableOrdersMobile : headersTableOrders"
+				:items="dataTableOrders"
 				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
 				:mobile-breakpoint="-1"
 			>
@@ -369,7 +369,7 @@
 								:style="item.show ? 'transform:rotate(180deg)' : ''"
 								size="2em"
 								@click="
-									dataTableExtraMobile.forEach((e) => {
+									dataTableOrdersMobile.forEach((e) => {
 										e !== item ? (e.show = false) : null;
 									});
 									item.show = !item.show;
@@ -572,6 +572,21 @@ export default {
       ],
       dataTablePeople: [],
       dataTableMobilePeople: [],
+      headersTableRedeemer: [
+        { value: "nft", text: "NFT" },
+        { value: "signer", text: "SIGNER" },
+        { value: "quantity", text: "QUANTITY" },
+        { value: "created", text: "CREATED" },
+        { value: "transaction", text: "TRANSACTION", sortable: false },
+        { value: "action", text: "ACTION", sortable: false },
+      ],
+      headersTableMobileRedeemer: [
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
+      ],
+      dataTableRedeemer: [],
+      dataTableMobileRedeemer: [],
       headersTableOrders: [
         { value: "nft", text: "NFT" },
         { value: "signer", text: "SIGNER" },
@@ -580,28 +595,13 @@ export default {
         { value: "transaction", text: "TRANSACTION", sortable: false },
         { value: "action", text: "ACTION", sortable: false },
       ],
-      headersTableMobileOrders: [
+      headersTableOrdersMobile: [
         { value: "signer", text: "SIGNER" },
         { value: "created", text: "CREATED" },
         { value: "action", text: "ACTION", align: "end", sortable: false },
       ],
       dataTableOrders: [],
-      dataTableMobileOrders: [],
-      headersTableExtra: [
-        { value: "nft", text: "NFT" },
-        { value: "signer", text: "SIGNER" },
-        { value: "quantity", text: "QUANTITY" },
-        { value: "created", text: "CREATED" },
-        { value: "transaction", text: "TRANSACTION", sortable: false },
-        { value: "action", text: "ACTION", sortable: false },
-      ],
-      headersTableExtraMobile: [
-        { value: "signer", text: "SIGNER" },
-        { value: "created", text: "CREATED" },
-        { value: "action", text: "ACTION", align: "end", sortable: false },
-      ],
-      dataTableExtra: [],
-      dataTableExtraMobile: [],
+      dataTableOrdersMobile: [],
       ticketsSold: 0,
       incomes: 0,
       lastPrice: [],
@@ -629,7 +629,7 @@ export default {
   },
   computed: {
     filter_dataTableExtraMobile() {
-      let filter = this.dataTableExtraMobile
+      let filter = this.dataTableOrdersMobile
       
       if (this.search) filter = filter.filter(data => data.ticket.includes(this.search))
 
@@ -681,8 +681,8 @@ export default {
       this.dataTableMobile = [];
       this.dataTablePeople = [];
       this.dataTableMobilePeople = [];
-      this.dataTableExtra = [];
-      this.dataTableExtraMobile = [];
+      this.dataTableOrders = [];
+      this.dataTableOrdersMobile = [];
       const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
       this.$apollo
@@ -914,12 +914,12 @@ export default {
                     show: false,
                     key: key
                   };
-                  this.dataTableExtra.push(rows);
+                  this.dataTableOrders.push(rows);
                   this.filter_dataTableExtraMobile.push(rows);
-                  this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                  this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableExtra.length)
+                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableOrders.length)
                 }
               );
             }) //mintickt query
@@ -994,7 +994,7 @@ export default {
                   this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableExtra.length)
+                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableOrders.length)
                 }
               );
             }) //mintickt query
@@ -1075,9 +1075,9 @@ export default {
     onDecode(result) {
       // this.owner = result.split(":")[1];
       // this.dataTableMobile = [];
-      // this.dataTableExtraMobile = [];
+      // this.dataTableOrdersMobile = [];
       // this.dataTable = [];
-      // this.dataTableExtra = [];
+      // this.dataTableOrders = [];
       // this.getFansInside();
       // this.getExtra();
       // this.$forceUpdate();
