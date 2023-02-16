@@ -108,6 +108,7 @@ export default {
         }
         &.current.active {
           border-radius: 15px;
+          // box-shadow: 0px 0px 16.7089px rgba(211, 254, 184, 0.8), 0px 0px 61.519px rgba(204, 0, 183, 0.88); // ? figma
           box-shadow: 0px 0px 19.119px rgba(211, 254, 184, 0.8),
             0px 0px 70.3929px rgba(204, 0, 183, 0.88),
             inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
