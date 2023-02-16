@@ -1264,6 +1264,11 @@
       margin-inline: auto;
       background: #FFFFFF;
       border-radius: 6px;
+      &:disabled {
+        background: #FFFFFF !important;
+        opacity: .45 !important;
+        span {color: #000000 !important}
+      }
       * {color: #000000 !important}
       span {
         font-family: 'Proxima Nova' !important;
@@ -1497,6 +1502,11 @@
             padding: 9px 20px;
             background: #FFFFFF;
             border-radius: 6px;
+            &:disabled {
+              background: #FFFFFF !important;
+              opacity: .45 !important;
+              span {color: #000000 !important}
+            }
             span {
               font-family: 'Proxima Nova' !important;
               font-weight: 600 !important;
