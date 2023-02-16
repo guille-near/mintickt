@@ -217,6 +217,44 @@
 			</v-data-table>
 
 
+      <!-- orders -->
+			<v-data-table
+				id="dataTable"
+				:loading="loading"
+				:search="search"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'orders')].active ==
+					true
+				"
+				:headers="isMobile ? headersTableMobileOrders : headersTableOrders"
+				:items="dataTableOrders"
+				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+				:mobile-breakpoint="-1"
+			>
+				<template v-slot:[`item.transaction`]="{ item }">
+					<v-btn :href="item.transaction" target="_blank" icon>
+						<img
+							class="copyImg"
+							src="@/assets/icons/link.svg"
+							alt="external link"
+						/>
+					</v-btn>
+				</template>
+
+				<template v-slot:[`item.action`]="{ item }">
+					<v-btn class="eliminarmobile" @click="completeOrderFans(item)" :loading="item.loadingBtn"
+						>Complete order</v-btn
+					>
+					<v-btn
+            class="vermobile" min-width="max-content" max-width="max-content" min-height="max-content" height="max-content"
+            style="padding: 1px !important" @click="completeOrderFans(item)" :loading="item.loadingBtn">
+            <v-icon>mdi-check</v-icon>
+          </v-btn
+					>
+				</template>
+			</v-data-table>
+
+
       <!-- goofie -->
 			<v-data-table
 				id="dataTable"
@@ -449,6 +487,12 @@ export default {
           active: false,
         },
         {
+          key: "orders",
+          name: "Beers orders",
+          value: "0/0",
+          active: false,
+        },
+        {
           key: "redeemed",
           name: "Beers redeemed",
           value: "0/0",
@@ -485,6 +529,21 @@ export default {
       ],
       dataTablePeople: [],
       dataTableMobilePeople: [],
+      headersTableOrders: [
+        { value: "nft", text: "NFT" },
+        { value: "signer", text: "SIGNER" },
+        { value: "quantity", text: "QUANTITY" },
+        { value: "created", text: "CREATED" },
+        { value: "transaction", text: "TRANSACTION", sortable: false },
+        { value: "action", text: "ACTION", sortable: false },
+      ],
+      headersTableMobileOrders: [
+        { value: "signer", text: "SIGNER" },
+        { value: "created", text: "CREATED" },
+        { value: "action", text: "ACTION", align: "end", sortable: false },
+      ],
+      dataTableOrders: [],
+      dataTableMobileOrders: [],
       headersTableExtra: [
         { value: "nft", text: "NFT" },
         { value: "signer", text: "SIGNER" },
@@ -512,9 +571,9 @@ export default {
     };
   },
   mounted() {
-    if (!this.$session.exists()) {
-      this.$session.start()
-    }
+    if (!this.$session.exists()) {
+      this.$session.start()
+    }
     this.IsMobile()
     window.addEventListener("resize", this.IsMobile)
     this.responsive();

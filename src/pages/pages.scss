@@ -1386,10 +1386,17 @@
   .container-filter {
     flex-wrap: wrap-reverse !important;
     gap: 23px !important;
-    @media (max-width: 720px) {
-      .v-card:nth-child(1) {order: 3}
+    @media (max-width: 936px) {
+      .v-card:nth-child(1) {order: 4}
       .v-card:nth-child(2) {order: 1}
       .v-card:nth-child(3) {order: 2}
+      .v-card:nth-child(4) {order: 3}
+    }
+    @media (max-width: 720px) {
+      .v-card:nth-child(1) {order: 3}
+      .v-card:nth-child(2) {order: 4}
+      .v-card:nth-child(3) {order: 1}
+      .v-card:nth-child(4) {order: 2}
     }
     .v-card {
       display: grid !important;
