@@ -471,25 +471,25 @@ export default {
       dataFilters: [
         {
           key: "fans",
-          name: "Waiting in line",
+          name: "Waiting in Line",
           value: "0 / 0",
           active: true,
         },
         {
           key: "people",
-          name: "People inside",
+          name: "People Inside",
           value: "0 / 0",
           active: false,
         },
         {
           key: "orders",
-          name: "Beers orders",
+          name: "Beers Orders",
           value: "0/0",
           active: false,
         },
         {
           key: "redeemed",
-          name: "Beers redeemed",
+          name: "Beers Redeemed",
           value: "0 / 0",
           active: false,
         },
@@ -654,7 +654,7 @@ export default {
           this.get_waiting_in_line();
           setTimeout(() => {this.get_people_inside()}, 300);
           setTimeout(() => {this.get_redeemed()}, 500);
-          
+          setTimeout(() => {this.get_redeemed_orders()}, 800);
         })
         .catch((err) => {
           console.log("Error", err);
@@ -795,7 +795,7 @@ export default {
                   this.dataTablePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobilePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[1].value =  (this.dataTablePeople.length) + " / " + (this.dataTable.length + arr.length)
+                  this.dataFilters[1].value =  (this.dataTablePeople.length)
                 }
               );
             }) //mintickt query
@@ -853,7 +853,7 @@ export default {
                   var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
                   var receipe = value.burned_receipt_id;
                   this.goodie_title = value.title;
-                  this.dataFilters[2].name = this.goodie_title + " redeemed";
+                  this.dataFilters[2].name = this.goodie_title + " Orders";
                   rows = {
                     nft: value.title,
                     signer: value.owner,
@@ -870,6 +870,81 @@ export default {
                   this.filter_dataTableExtraMobile.push(rows);
                   this.dataTableExtra.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableExtraMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+
+                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableExtra.length)
+                }
+              );
+            }) //mintickt query
+            .catch((err) => {
+              console.log("Error", err);
+            });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    async get_redeemed_orders() {
+      var rows = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
+      this.$apollo
+        .mutate({
+          mutation: burned_reedemed_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+          client: "mintickClient",
+        })
+        .then((res) => {
+          arr = res.data.redeemers.map(function (el) {
+            return el.tokenid;
+          });
+          this.$apollo
+            .query({
+              query: goods_redeemed,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
+              },
+            })
+            .then((response) => {
+              //Get the first object and loop
+              Object.entries(response.data.mb_views_nft_tokens).forEach(
+                ([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc =
+                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  this.goodie_title = value.title;
+                  this.dataFilters[2].name = this.goodie_title + " Orders";
+                  rows = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: 1,
+                    created: time2 + " " + timedesc2,
+                    transaction:
+                      this.$explorer + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key
+                  };
+                  this.dataTableOrders.push(rows);
+                  this.dataTableOrders.push(rows);
+                  this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
                   this.dataFilters[2].value =  arr.length + " / " + (this.dataTableExtra.length)
                 }
