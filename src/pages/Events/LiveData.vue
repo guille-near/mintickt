@@ -244,6 +244,54 @@
 			</v-data-table>
 
 
+			<!-- orders -->
+			<v-data-table
+				id="dataTable"
+				:loading="loading"
+				:search="search"
+				v-show="
+					dataFilters[dataFilters.findIndex((e) => e.key == 'orders')].active ==
+					true
+				"
+				:headers="isMobile ? headersTableMobileOrders : headersTableOrders"
+				:items="dataTableOrders"
+				:footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+				:mobile-breakpoint="-1"
+			>
+				<template v-slot:[`item.transaction`]="{ item }">
+					<v-btn :href="item.transaction" target="_blank" icon>
+						<img
+							class="copyImg"
+							src="@/assets/icons/link.svg"
+							alt="external link"
+						/>
+					</v-btn>
+				</template>
+
+				<template v-slot:[`item.action`]="{ item }">
+					<v-btn
+						class="eliminarmobile"
+						@click="completeOrderFans(item)"
+						disabled
+						:loading="item.loadingBtn"
+						><v-icon>mdi-checkbox-marked-outline</v-icon> Approved</v-btn
+					>
+					<v-btn
+						class="vermobile"
+						min-width="max-content"
+						max-width="max-content"
+						min-height="max-content"
+						height="max-content"
+						style="padding: 1px !important"
+						@click="completeOrderFans(item)"
+						:loading="item.loadingBtn"
+					>
+						<v-icon>mdi-check</v-icon>
+					</v-btn>
+				</template>
+			</v-data-table>
+
+
 			<!-- goofie -->
 			<v-data-table
 				id="dataTable"
