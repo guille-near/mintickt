@@ -277,6 +277,8 @@ export default {
           },
         })
         .then((response) => {
+          this.data = [];
+          this.dataTableMobile = [];
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
           //Map the objectvalue
           Object.entries(response.data).forEach(([key, value]) => {
