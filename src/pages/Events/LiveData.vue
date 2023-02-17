@@ -489,12 +489,34 @@ const people_inside = gql`
 }
 `;
 //Redeemed
-const goods_redeemed = gql`
+const goods_order = gql`
   query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
   mb_views_nft_tokens(
     where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
       , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
       , token_id: {_nin: $tokens}, owner: {_like: $owner}}
+  ) {
+    description
+    token_id
+    owner
+    last_transfer_timestamp
+    minted_receipt_id
+    nft_contract_created_at
+    minted_timestamp
+    last_transfer_receipt_id
+    burned_receipt_id
+    title
+    burned_timestamp
+  }
+}
+`;
+//Redeemed
+const goods_redeemed = gql`
+  query MyQuery($_iregex: String!, $tokens: [String]!, $owner: String) {
+  mb_views_nft_tokens(
+    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}
+      , extra: {_eq: "redeemed"}, burned_receipt_id: {_is_null: false}
+      , token_id: {_in: $tokens}, owner: {_like: $owner}}
   ) {
     description
     token_id
@@ -624,6 +646,9 @@ export default {
     this.fetch();
     this.getData();
   },
+  beforeMount(){
+    this.getData();
+  },
   beforeDestroy() {
     window.removeEventListener("resize", this.IsMobile)
   },
@@ -683,6 +708,8 @@ export default {
       this.dataTableMobilePeople = [];
       this.dataTableOrders = [];
       this.dataTableOrdersMobile = [];
+      this.dataTablePeople = [];
+      this.dataTableMobilePeople = [];
       const user = datos.accountId;
       var metadata_id = this.$route.query.thingid.toLowerCase();
       this.$apollo
@@ -701,8 +728,8 @@ export default {
             Math.pow(10, 24);
           this.get_waiting_in_line();
           setTimeout(() => {this.get_people_inside()}, 300);
-          setTimeout(() => {this.get_redeemed()}, 500);
-          setTimeout(() => {this.get_redeemed_orders()}, 800);
+          setTimeout(() => {this.get_orders()}, 500);
+          setTimeout(() => {this.get_redeemed()}, 800);
         })
         .catch((err) => {
           console.log("Error", err);
@@ -726,8 +753,8 @@ export default {
             return el.tokenid;
           });
           this.$apollo
-            .query({
-              query: waiting_in_line,
+            .mutate({
+              mutation: waiting_in_line,
               variables: {
                _iregex: thingid[1],
                 tokens: arr,
@@ -735,6 +762,8 @@ export default {
               },
             })
             .then((response) => {
+              this.dataTable = [];
+              this.dataTableMobile = [];
               //Get the first object and loop
               Object.entries(response.data.mb_views_nft_tokens).forEach(
                 ([key, value]) => {
@@ -768,10 +797,9 @@ export default {
                   this.dataTableMobile.push(rows);
                   this.dataTable.sort((a, b) => (a.key > b.key) ? -1 : 1);
                   this.dataTableMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
-
-                  this.dataFilters[0].value =  this.dataTable.length  + " / " + (this.dataTable.length + arr.length)
                 }
               );
+              this.dataFilters[0].value =  this.dataTable.length  + " / " + (this.dataTable.length + arr.length)
             }) //mintickt query
             .catch((err) => {
               console.log("Error", err);
@@ -809,6 +837,8 @@ export default {
               },
             })
             .then((response) => {
+              this.dataTablePeople = [];
+              this.dataTableMobilePeople = [];
               //Get the first object and loop
               Object.entries(response.data.mb_views_nft_tokens).forEach(
                 ([key, value]) => {
@@ -826,6 +856,86 @@ export default {
                     minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
                   var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
                   var receipe = value.burned_receipt_id;
+                  
+                  rows = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: value.token_id,
+                    created: time2 + " " + timedesc2,
+                    transaction:
+                      this.$explorer + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key
+                  };
+                  this.dataTablePeople.push(rows);
+                  this.dataTableMobilePeople.push(rows);
+                  this.dataTablePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobilePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
+
+                  
+                }
+              );
+              this.dataFilters[1].value =  (arr.length)
+            }) //mintickt query
+            .catch((err) => {
+              console.log("Error", err);
+            });
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    //Redeemed
+    async get_orders() {
+      var rows = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
+      this.$apollo
+        .mutate({
+          mutation: burned_reedemed_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+          client: "mintickClient",
+        })
+        .then((res) => {
+          arr = res.data.redeemers.map(function (el) {
+            return el.tokenid;
+          });
+          this.$apollo
+            .query({
+              query: goods_order,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner
+              },
+            })
+            .then((response) => {
+              this.dataTableOrders = [];
+              this.dataTableOrdersMobile = [];
+              //Get the first object and loop
+              Object.entries(response.data.mb_views_nft_tokens).forEach(
+                ([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc =
+                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  this.goodie_title = value.title;
+                  this.dataFilters[2].name = this.goodie_title + " Orders";
                   rows = {
                     nft: value.title,
                     signer: value.owner,
@@ -838,14 +948,13 @@ export default {
                     show: false,
                     key: key
                   };
-                  this.dataTablePeople.push(rows);
-                  this.filter_dataTableMobilePeople.push(rows);
-                  this.dataTablePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                  this.dataTableMobilePeople.sort((a, b) => (a.key > b.key) ? -1 : 1);
-
-                  this.dataFilters[1].value =  (this.dataTablePeople.length)
+                  this.dataTableOrders.push(rows);
+                  this.dataTableOrdersMobile.push(rows);
+                  this.dataTableOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
                 }
               );
+              this.dataFilters[2].value =  arr.length + " / " + (this.dataTableOrders.length+arr.length)
             }) //mintickt query
             .catch((err) => {
               console.log("Error", err);
@@ -856,7 +965,6 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
-    //Redeemed
     async get_redeemed() {
       var rows = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
@@ -883,6 +991,8 @@ export default {
               },
             })
             .then((response) => {
+              this.dataTableRedeemer = [];
+              this.dataTableMobileRedeemer = [];
               //Get the first object and loop
               Object.entries(response.data.mb_views_nft_tokens).forEach(
                 ([key, value]) => {
@@ -914,89 +1024,15 @@ export default {
                     show: false,
                     key: key
                   };
-                  this.dataTableOrders.push(rows);
-                  this.filter_dataTableExtraMobile.push(rows);
-                  this.dataTableOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                  this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableRedeemer.push(rows);
+                  this.dataTableMobileRedeemer.push(rows);
+                  this.dataTableRedeemer.sort((a, b) => (a.key > b.key) ? -1 : 1);
+                  this.dataTableMobileRedeemer.sort((a, b) => (a.key > b.key) ? -1 : 1);
 
-                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableOrders.length)
+                  
                 }
               );
-            }) //mintickt query
-            .catch((err) => {
-              console.log("Error", err);
-            });
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
-    },
-    async get_redeemed_orders() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      var arr = [];
-      this.$apollo
-        .mutate({
-          mutation: burned_reedemed_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
-          },
-          client: "mintickClient",
-        })
-        .then((res) => {
-          arr = res.data.redeemers.map(function (el) {
-            return el.tokenid;
-          });
-          this.$apollo
-            .query({
-              query: goods_redeemed,
-              variables: {
-                _iregex: thingid[1],
-                tokens: arr,
-                owner: this.owner
-              },
-            })
-            .then((response) => {
-              //Get the first object and loop
-              Object.entries(response.data.mb_views_nft_tokens).forEach(
-                ([key, value]) => {
-                  var startTime =
-                    value.last_transfer_receipt_id === null
-                      ? moment.utc(value.burned_timestamp)
-                      : moment.utc(value.last_transfer_timestamp);
-                  var endTime = moment.utc(new Date());
-                  var minutesDiff = endTime.diff(startTime, "minutes");
-                  var hoursDiff = endTime.diff(startTime, "hours");
-                  var daysDiff = endTime.diff(startTime, "day");
-                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
-                  var time2 = time > 24 ? daysDiff : time;
-                  var timedesc =
-                    minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
-                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-                  var receipe = value.burned_receipt_id;
-                  this.goodie_title = value.title;
-                  this.dataFilters[2].name = this.goodie_title + " Orders";
-                  rows = {
-                    nft: value.title,
-                    signer: value.owner,
-                    quantity: 1,
-                    created: time2 + " " + timedesc2,
-                    transaction:
-                      this.$explorer + receipe,
-                    tokenid: value.token_id,
-                    loadingBtn: false,
-                    show: false,
-                    key: key
-                  };
-                  this.dataTableOrders.push(rows);
-                  this.dataTableOrders.push(rows);
-                  this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
-                  this.dataTableMobileOrders.sort((a, b) => (a.key > b.key) ? -1 : 1);
-
-                  this.dataFilters[2].value =  arr.length + " / " + (this.dataTableOrders.length)
-                }
-              );
+              this.dataFilters[3].value =  arr.length
             }) //mintickt query
             .catch((err) => {
               console.log("Error", err);
