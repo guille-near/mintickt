@@ -115,6 +115,17 @@ const apolloClient = new ApolloClient({
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
   uri: (Vue.config.productionTip) ? "https://interop-testnet.hasura.app/v1/graphql" : "https://interop-testnet.hasura.app/v1/graphql",
   cache,
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+    },
+    mutate: {
+      fetchPolicy: 'no-cache',
+    },
+  },
 });
 const mintickClient = new ApolloClient({
   // You should use an absolute URL here
