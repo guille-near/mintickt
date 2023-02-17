@@ -111,9 +111,9 @@ export default {
           // box-shadow: 0px 0px 16.7089px rgba(211, 254, 184, 0.8), 0px 0px 61.519px rgba(204, 0, 183, 0.88); // ? figma
           box-shadow:
             // 0px 0px 19.119px rgba(211, 254, 184, 0.8),
-            0px 0px 70.3929px rgba(204, 0, 183, 0.88),
+            0px 0px 3.8449375em rgba(204, 0, 183, 0.88),
             // inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
-            inset 0px 0px 500px rgba(204, 0, 183, 0.7);
+            inset 0px 0px 1500px rgba(204, 0, 183, 0.58);
         }
         &.left-1 {
           transform: translateX(-19em) translateZ(-400px) rotateY(35deg) !important;
