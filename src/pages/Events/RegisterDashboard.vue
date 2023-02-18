@@ -1844,18 +1844,19 @@ export default {
         var container = document.getElementById("my-node"); /* full page */
         html2canvas(container, {
           backgroundColor: null,
+          allowTaint: true,
           //y: (container / 2, container / 2, 30),
           //height: 570,
         }).then((canvas) => {
-          // let link = document.createElement("a");
-          // link.download = "image_name.png";
-          // link.href = canvas.toDataURL("image/png", 1.0);
-          // document.body.appendChild(link);
-          // link.click();
+          let link = document.createElement("a");
+          link.download = "image.svg";
+          link.href = canvas.toDataURL('image/svg+xml');
+          document.body.appendChild(link);
+          link.click();
 
           var image = new Image();
-          image.src = canvas.toDataURL("image/png", 1.0);
-          this.$session.set("canvas", canvas.toDataURL("image/png", 1.0));
+          image.src = canvas.toDataURL('image/svg+xml');
+          this.$session.set("canvas", canvas.toDataURL('image/svg+xml'));
           this.image = image;
           this.getBase64FromUrl(this.burn_ticket_image)
           // console.log(this.image);
