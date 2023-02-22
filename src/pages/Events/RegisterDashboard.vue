@@ -1,34 +1,41 @@
 <template>
-	<section id="createTickets" class="registerDashboard divcol gap align">
-		<ModalSuccess ref="modal"></ModalSuccess>
+  <section id="createTickets" class="registerDashboard divcol gap align">
+    <ModalSuccess ref="modal"></ModalSuccess>
 
-		<h2
-			class="eliminarmobile align"
-			v-if="step == 1"
-			style="text-align: center"
-		>
-			Let's create your event!
-		</h2>
+    <h2
+      class="eliminarmobile align"
+      v-if="step == 1"
+      style="text-align: center"
+    >
+      Let's create your event!
+    </h2>
 
-		<v-window v-model="step" to touchless>
-			<v-window-item :value="1">
-				<section class="center divwrap">
-					<h2 class="vermobile align" style="text-align: center">
-						Let's create your NFT for your event!
-					</h2>
-					<div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
-						<img class="ticket" :src="canvas" alt="Ticket image" />
-					</div>
+    <v-window v-model="step" to touchless>
+      <v-window-item :value="1">
+        <section class="center divwrap">
+          <h2 class="vermobile align" style="text-align: center">
+            Let's create your NFT for your event!
+          </h2>
+          <div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
+            <img class="ticket" :src="canvas" alt="Ticket image" />
+          </div>
 
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+          <div
+            v-if="imagecanvas1 && ticketType === 'custom'"
+            class="ticket-wrapper custom"
+          >
             <img
               src="@/assets/ticket-selection/ticket-custom-upload.svg"
-              alt="custom ticket" class="image-ticket-event-empty" :class="{active: dataTicket[0].img}">
+              alt="custom ticket"
+              class="image-ticket-event-empty"
+              :class="{ active: dataTicket[0].img }"
+            />
 
             <v-file-input
               v-model="dataTicket[0].img"
               hide-details
               solo
+              name="ticket_design"
               prepend-icon=""
               :clearable="false"
               @change="uploadImg(dataTicket[0])"
@@ -43,196 +50,205 @@
             </v-file-input>
           </div>
 
-					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
-						<img
-							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)"
-							alt="Ticket image"
-						/>
+          <div
+            class="ticket-wrapper"
+            v-else-if="imagecanvas1 && ticketType"
+            id="my-node"
+            data-ticket
+          >
+            <img
+              class="ticket"
+              :src="
+                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)
+              "
+              alt="Ticket image"
+            />
 
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-								<div
-									class="image-ticket-event"
-									:style="`--bg-image: url(${ticket.url})`"
-								/>
-							</template>
-						</v-file-input>
-					</div>
+            <v-file-input
+              v-for="(ticket, i) in dataTicket"
+              :key="i"
+              v-model="ticket.img"
+              hide-details
+              solo
+              prepend-icon=""
+              @change="uploadImg(ticket)"
+              :class="{ active: ticket.img }"
+            >
+              <template v-slot:selection>
+                <!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <div
+                  class="image-ticket-event"
+                  :style="`--bg-image: url(${ticket.url})`"
+                />
+              </template>
+            </v-file-input>
+          </div>
 
-					<div class="container-content divcol" style="gap: 20px">
-						<v-form
-							ref="form"
-							v-model="valid"
-							@submit.prevent="next()"
-							class="divcol"
-						>
-							<h3>Basic Information</h3>
-							<p>
-								Choose a name for your event and tell attendees why you think
-								they will have a great time. Add details that highlight why your
-								event is unique.
-							</p>
+          <div class="container-content divcol" style="gap: 20px">
+            <v-form
+              ref="form"
+              v-model="valid"
+              @submit.prevent="next()"
+              class="divcol"
+            >
+              <h3>Basic Information</h3>
+              <p>
+                Choose a name for your event and tell attendees why you think
+                they will have a great time. Add details that highlight why your
+                event is unique.
+              </p>
 
-							<div class="divcol">
-								<label for="name"
-									>Event name <span style="color: red">*</span></label
-								>
-								<v-text-field
-									v-model="dataTickets.name"
-									id="name"
-									:rules="rules.required"
-									solo
-								></v-text-field>
-							</div>
+              <div class="divcol">
+                <label for="name"
+                  >Event name <span style="color: red">*</span></label
+                >
+                <v-text-field
+                  v-model="dataTickets.name"
+                  id="name"
+                  :rules="rules.required"
+                  solo
+                ></v-text-field>
+              </div>
 
-							<div class="divcol">
-								<label for="promoter"
-									>Promoter / Organizer name
-									<span style="color: red">*</span></label
-								>
-								<v-text-field
-									v-model="dataTickets.promoter"
-									:rules="rules.required"
-									id="promoter"
-									solo
-								></v-text-field>
-							</div>
+              <div class="divcol">
+                <label for="promoter"
+                  >Promoter / Organizer name
+                  <span style="color: red">*</span></label
+                >
+                <v-text-field
+                  v-model="dataTickets.promoter"
+                  :rules="rules.required"
+                  id="promoter"
+                  solo
+                ></v-text-field>
+              </div>
 
-							<h3>Description <span style="color: red">*</span></h3>
-							<p>
-								Add more details of your event, such as program, sponsors or
-								featured guests.
-							</p>
+              <h3>Description <span style="color: red">*</span></h3>
+              <p>
+                Add more details of your event, such as program, sponsors or
+                featured guests.
+              </p>
 
-							<vue-editor
-								v-model="dataTickets.description"
-								class="editor"
-								:class="{ rules: editorRules }"
-							/>
-							<!--<v-textarea
+              <vue-editor
+                v-model="dataTickets.description"
+                class="editor"
+                :class="{ rules: editorRules }"
+              />
+              <!--<v-textarea
                 v-model="dataTickets.description"
                 solo
                 auto-grow
                 :rules="rules.required"
               ></v-textarea>-->
 
-							<h3>Location <span style="color: red">*</span></h3>
-							<p>
-								Help people in the area discover your event and let attendees know where to show up.
-							</p>
+              <h3>Location <span style="color: red">*</span></h3>
+              <p>
+                Help people in the area discover your event and let attendees
+                know where to show up.
+              </p>
 
-							<vuetify-google-autocomplete
-								id="map"
-								:loading="loading"
-								append-icon="search"
-								v-bind:disabled="false"
-								flat
+              <vuetify-google-autocomplete
+                id="map"
+                :loading="loading"
+                append-icon="search"
+                v-bind:disabled="false"
+                flat
                 v-model="location"
-								hide-no-data
-								hide-selected
-								placeholder="Search your location"
-								clearable
-								classname="form-control"
-								style="padding-bottom: 15px"
-								:enable-geolocation="false"
-								:rules="rules.required"
-								solo
-								v-on:placechanged="getAddressData"
-							>
-							</vuetify-google-autocomplete>
+                hide-no-data
+                hide-selected
+                placeholder="Search your location"
+                clearable
+                classname="form-control"
+                style="padding-bottom: 15px"
+                :enable-geolocation="false"
+                :rules="rules.required"
+                solo
+                v-on:placechanged="getAddressData"
+              >
+              </vuetify-google-autocomplete>
 
-							<h3>Date and time <span style="color: red">*</span></h3>
-							<p>
-								Tell event-goers when your event starts and ends so they can make plans to attend.
-							</p>
+              <h3>Date and time <span style="color: red">*</span></h3>
+              <p>
+                Tell event-goers when your event starts and ends so they can
+                make plans to attend.
+              </p>
 
-							<!-- full date -->
-							<div class="divcol" style="gap: 6px">
-								<label for="date"> Full Date </label>
-								<v-menu
-									ref="menu-date"
-									v-model="MenuDates"
-									:close-on-content-click="false"
-									:return-value.sync="dates"
-									:rules="rules.required"
-									transition="scale-transition"
-									offset-y
-									min-width="auto"
-								>
-									<template v-slot:activator="{ on, attrs }">
-										<label for="date" class="mb-5">
-											<v-combobox
-												v-model="dates"
-												id="date"
-												solo
-												multiple
-												deletable-chips
-												chips
-												readonly
-												clearable
-												hide-details
-												:class="{ rules: comboboxRules }"
-												v-bind="attrs"
-												v-on="on"
-												:rules="rules.required"
-											></v-combobox>
-										</label>
-									</template>
-									<v-date-picker
-										v-model="dates"
-										no-title
-										scrollable
-										multiple
-										color="hsl(306, 100%, 50%)"
-										dark
-									>
-										<v-spacer></v-spacer>
-										<v-btn
-											text
-											color="primary"
-											@click="$refs['menu-date'].save(dates)"
-										>
-											OK
-										</v-btn>
-									</v-date-picker>
-								</v-menu>
-							</div>
+              <!-- full date -->
+              <div class="divcol" style="gap: 6px">
+                <label for="date"> Full Date </label>
+                <v-menu
+                  ref="menu-date"
+                  v-model="MenuDates"
+                  :close-on-content-click="false"
+                  :return-value.sync="dates"
+                  :rules="rules.required"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <label for="date" class="mb-5">
+                      <v-combobox
+                        v-model="dates"
+                        id="date"
+                        solo
+                        multiple
+                        deletable-chips
+                        chips
+                        readonly
+                        clearable
+                        hide-details
+                        :class="{ rules: comboboxRules }"
+                        v-bind="attrs"
+                        v-on="on"
+                        :rules="rules.required"
+                      ></v-combobox>
+                    </label>
+                  </template>
+                  <v-date-picker
+                    v-model="dates"
+                    no-title
+                    scrollable
+                    multiple
+                    color="hsl(306, 100%, 50%)"
+                    dark
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs['menu-date'].save(dates)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </div>
 
-							<div class="space" style="gap: 20px">
-								<!-- start time -->
-								<div class="divcol" style="gap: 6px">
-									<label for="start-time"> Start Time </label>
+              <div class="space" style="gap: 20px">
+                <!-- start time -->
+                <div class="divcol" style="gap: 6px">
+                  <label for="start-time"> Start Time </label>
 
                   <!-- <label for=""> -->
-                    <date-picker
-                      id="start-time"
-                      v-model="startTime"
-                      type="time"
-                      :time-picker-options="{
-                        start: '06:00',
-                        step: '00:30',
-                        end: '23:30',
-                      }"
-                      format="HH:mm"
-                      placeholder="hh:mm"
-                      :class="{ rules: timepickerStartRules }"
-                      :editable="false"
-                      @input="validatorStartTime(startTime)"
-                    >
-                    </date-picker>
+                  <date-picker
+                    id="start-time"
+                    v-model="startTime"
+                    type="time"
+                    :time-picker-options="{
+                      start: '06:00',
+                      step: '00:30',
+                      end: '23:30',
+                    }"
+                    format="HH:mm"
+                    placeholder="hh:mm"
+                    :class="{ rules: timepickerStartRules }"
+                    :editable="false"
+                    @input="validatorStartTime(startTime)"
+                  >
+                  </date-picker>
                   <!-- </label> -->
-									<!-- <time-picker v-model="startTime" dialog minute-interval="15">
+                  <!-- <time-picker v-model="startTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="start-time">
                         <v-text-field
@@ -248,7 +264,7 @@
 										</template>
                   </time-picker> -->
 
-									<!-- <v-menu
+                  <!-- <v-menu
 										ref="menu-start-time"
 										v-model="menuStartTime"
 										:close-on-content-click="false"
@@ -277,29 +293,29 @@
 											@click:minute="$refs[`menu-start-time`].save(startTime)"
 										></v-time-picker>
 									</v-menu> -->
-								</div>
+                </div>
 
-								<!-- end date -->
-								<div class="divcol" style="gap: 6px">
-									<label for="end-time"> End Time </label>
+                <!-- end date -->
+                <div class="divcol" style="gap: 6px">
+                  <label for="end-time"> End Time </label>
 
-									<date-picker
-										v-model="endTime"
-										type="time"
-										:time-picker-options="{
-											start: '06:00',
-											step: '00:30',
-											end: '23:30',
-										}"
-										:open.sync="open"
-										format="HH:mm"
-										placeholder="hh:mm"
-										:class="{ rules: timepickerEndRules }"
+                  <date-picker
+                    v-model="endTime"
+                    type="time"
+                    :time-picker-options="{
+                      start: '06:00',
+                      step: '00:30',
+                      end: '23:30',
+                    }"
+                    :open.sync="open"
+                    format="HH:mm"
+                    placeholder="hh:mm"
+                    :class="{ rules: timepickerEndRules }"
                     :editable="false"
-										@input="validatorEndTime(endTime)"
-									></date-picker>
+                    @input="validatorEndTime(endTime)"
+                  ></date-picker>
 
-									<!-- <time-picker v-model="endTime" dialog minute-interval="15">
+                  <!-- <time-picker v-model="endTime" dialog minute-interval="15">
 										<template v-slot:activator="{ on }">
                       <label for="end-time">
                         <v-text-field
@@ -315,7 +331,7 @@
 										</template>
                   </time-picker> -->
 
-									<!-- <v-menu
+                  <!-- <v-menu
 										ref="menu-end-time"
 										v-model="menuEndTime"
 										:close-on-content-click="false"
@@ -344,772 +360,566 @@
 											@click:minute="$refs[`menu-end-time`].save(endTime)"
 										></v-time-picker>
 									</v-menu> -->
-								</div>
-							</div>
+                </div>
+              </div>
 
-							<v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
-								<v-icon color="#868686">mdi-trash-can-outline</v-icon>
-							</v-btn>
-						</v-form>
+              <v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
+                <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+              </v-btn>
+            </v-form>
 
-						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn @click="design">
-								<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon>
-								Back
-							</v-btn>
-							<v-btn @click="next">
-								Next
-								<v-icon style="color: #ffffff !important" small
+            <div class="container-content--actions center gap eliminarmobile">
+              <v-btn @click="design">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >
+                Back
+              </v-btn>
+              <v-btn :loading="loading" @click="next">
+                Next
+                <v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
-							</v-btn>
-						</div>
-					</div>
-				</section>
+              </v-btn>
+            </div>
+          </div>
+        </section>
 
-				<div class="container-content--actions center gap vermobile">
-					<v-btn disabled>
-						<v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon>
-						Back
-					</v-btn>
-					<v-btn @click="next">
-						Next
-						<v-icon style="color: #ffffff !important" small
+        <div class="container-content--actions center gap vermobile">
+          <v-btn disabled>
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >
+            Back
+          </v-btn>
+          <v-btn @click="next">
+            Next
+            <v-icon style="color: #ffffff !important" small
               >mdi-arrow-right</v-icon
             >
-					</v-btn>
-				</div>
-			</v-window-item>
+          </v-btn>
+        </div>
+      </v-window-item>
 
-			<v-window-item :value="2">
-				<section class="jcenter divwrap">
-					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket" :src="canvas" alt="Ticket image" />
-					</div>
-          
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
-            <img
-              v-show="!dataTicket[0].img"
-              src="@/assets/ticket-selection/ticket-custom-upload.png"
-              alt="custom ticket" class="image-ticket-event-empty">
-
-            <v-file-input
-              v-model="dataTicket[0].img"
-              hide-details
-              solo
-              prepend-icon=""
-              :clearable="false"
-              @change="uploadImg(dataTicket[0])"
-              :class="{ active: dataTicket[0].img }"
-            >
-              <template v-slot:selection>
-                <div
-                  class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
-                />
-              </template>
-            </v-file-input>
+      <v-window-item :value="2">
+        <section class="jcenter divwrap">
+          <div class="ticket-wrapper">
+            <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
-
-					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
-						<img
-							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
-							alt="Ticket image"
-						/>
-
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-								<div
-									class="image-ticket-event"
-									:style="`--bg-image: url(${ticket.url})`"
-								/>
-							</template>
-						</v-file-input>
-					</div>
-
-					<div class="container-content divcol" style="gap: 20px">
-						<v-form
-							ref="form1"
-							v-model="valid"
-							enctype="multipart/form-data"
-							@submit.prevent="next1()"
-							class="divcol"
-							style="min-height: 100%"
-						>
-							<div class="divcol">
-								<h3>Main event image <span style="color: red">*</span></h3>
-								<p>
-									This is the first image attendees will see at the top of your
-									event page.
-								</p>
-
-								<v-file-input
-									v-model="dataTickets.img_main"
-									solo
-									prepend-icon
-									name="uploaded_file"
-									accept="image/*"
-									:rules="rules.required"
-									@change="ImagePreview"
-									class="input-unique"
-								>
-									<template v-slot:selection>
-										<img
-											class="imagePreview"
-											:src="url"
-											alt="Image preview"
-											style="object-fit: cover"
-										/>
-									</template>
-
-									<template v-slot:label>
-										<img src="@/assets/icons/link.svg" alt="drag icon" />
-										<p class="p">
-											Drag and drop or click here to upload your main event
-											image
-										</p>
-									</template>
-								</v-file-input>
-								<h3>
-									How many tickets you would like have for your event?
-									<span style="color: red">*</span>
-								</h3>
-								<p>You can always mint/list more NFT tickets later.</p>
-
-								<v-text-field
-									v-model="dataTickets.mint_amount"
-									id="amount_list"
-									solo
-									:rules="rules.required"
-									v-debounce:800ms="checkMintAmount"
-									type="number"
-									hide-spin-buttons
-								>
-									<template v-slot:append>
-										<v-btn
-											class="btn-control"
-											:disabled="dataTickets.mint_amount == 0"
-											@click="dataTickets.mint_amount--"
-											>-</v-btn
-										>
-										<v-btn
-											class="btn-control"
-											:disabled="dataTickets.mint_amount == 20"
-											@click="dataTickets.mint_amount++"
-											>+</v-btn
-										>
-									</template>
-								</v-text-field>
-							</div>
-						</v-form>
-
-						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn @click="back">
-								<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-left</v-icon
-								>Back
-							</v-btn>
-							<v-btn @click="next1">
-								Next<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-right</v-icon
-								>
-							</v-btn>
-						</div>
-					</div>
-				</section>
-
-				<div class="container-content--actions center gap vermobile">
-					<v-btn @click="back">
-						<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-left</v-icon
-						>Back
-					</v-btn>
-					<v-btn @click="next1">
-						Next<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-right</v-icon
-						>
-					</v-btn>
-				</div>
-			</v-window-item>
-
-			<v-window-item :value="3">
-				<section class="jcenter divwrap">
-					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket" :src="canvas" alt="Ticket image" />
-					</div>
-          
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
-            <img
-              v-show="!dataTicket[0].img"
-              src="@/assets/ticket-selection/ticket-custom-upload.png"
-              alt="custom ticket" class="image-ticket-event-empty">
-
-            <v-file-input
-              v-model="dataTicket[0].img"
-              hide-details
-              solo
-              prepend-icon=""
-              :clearable="false"
-              @change="uploadImg(dataTicket[0])"
-              :class="{ active: dataTicket[0].img }"
+          <div class="container-content divcol" style="gap: 20px">
+            <v-form
+              ref="form1"
+              v-model="valid"
+              enctype="multipart/form-data"
+              @submit.prevent="next1()"
+              class="divcol"
+              style="min-height: 100%"
             >
-              <template v-slot:selection>
-                <div
-                  class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
-                />
-              </template>
-            </v-file-input>
+              <div class="divcol">
+                <h3>Main event image <span style="color: red">*</span></h3>
+                <p>
+                  This is the first image attendees will see at the top of your
+                  event page.
+                </p>
+
+                <v-file-input
+                  v-model="dataTickets.img_main"
+                  solo
+                  prepend-icon
+                  name="uploaded_file"
+                  accept="image/*"
+                  :rules="rules.required"
+                  @change="ImagePreview"
+                  class="input-unique"
+                >
+                  <template v-slot:selection>
+                    <img
+                      class="imagePreview"
+                      :src="url"
+                      alt="Image preview"
+                      style="object-fit: cover"
+                    />
+                  </template>
+
+                  <template v-slot:label>
+                    <img src="@/assets/icons/link.svg" alt="drag icon" />
+                    <p class="p">
+                      Drag and drop or click here to upload your main event
+                      image
+                    </p>
+                  </template>
+                </v-file-input>
+                <h3>
+                  How many tickets you would like have for your event?
+                  <span style="color: red">*</span>
+                </h3>
+                <p>You can always mint/list more NFT tickets later.</p>
+
+                <v-text-field
+                  v-model="dataTickets.mint_amount"
+                  id="amount_list"
+                  solo
+                  :rules="rules.required"
+                  v-debounce:800ms="checkMintAmount"
+                  type="number"
+                  hide-spin-buttons
+                >
+                  <template v-slot:append>
+                    <v-btn
+                      class="btn-control"
+                      :disabled="dataTickets.mint_amount == 0"
+                      @click="dataTickets.mint_amount--"
+                      >-</v-btn
+                    >
+                    <v-btn
+                      class="btn-control"
+                      :disabled="dataTickets.mint_amount == 20"
+                      @click="dataTickets.mint_amount++"
+                      >+</v-btn
+                    >
+                  </template>
+                </v-text-field>
+              </div>
+            </v-form>
+
+            <div class="container-content--actions center gap eliminarmobile">
+              <v-btn @click="back">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >Back
+              </v-btn>
+              <v-btn @click="next1">
+                Next<v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-right</v-icon
+                >
+              </v-btn>
+            </div>
           </div>
+        </section>
 
-					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
-						<img
-							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
-							alt="Ticket image"
-						/>
-
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-								<div
-									class="image-ticket-event"
-									:style="`--bg-image: url(${ticket.url})`"
-								/>
-							</template>
-						</v-file-input>
-					</div>
-
-					<div class="container-content divcol" style="gap: 20px">
-						<aside class="divcol gap" style="min-height: 100%">
-							<v-form
-								ref="form2"
-								v-model="valid"
-								@submit.prevent="mint()"
-								class="divcol"
-								style="min-height: 100%"
-							>
-								<div class="divcol">
-									<h3>Royalties</h3>
-									<p>
-										Royalties are perpetual. You can add royalties up to 50%
-										across 25 accounts.
-									</p>
-
-									<v-btn
-										@click="dataRoyalties.push({ account: '', percentage: 0 })"
-										>Add royalties</v-btn
-									>
-									<p class="p" style="margin-top: 1em">
-										Avalilable {{ available }} %
-									</p>
-								</div>
-
-								<section class="container-inputs">
-									<v-sheet v-for="(item, i) in dataRoyalties" :key="i">
-										<div class="divcol">
-											<label :for="`account${i}`">NEAR account</label>
-											<v-text-field
-												v-model="item.account"
-												:id="`account|${i}`"
-												label="account.near"
-												v-debounce:800ms="validateNearId"
-												:error-messages="errorAccount[i]"
-												:success-messages="successAccount[i]"
-												solo
-											></v-text-field>
-										</div>
-
-										<div class="divcol percentage">
-											<label :for="`percentage${i}`">%</label>
-											<v-text-field
-												ref="numberField"
-												v-model="item.percentage"
-												:id="`percentage|${i}`"
-												label="1 %"
-												solo
-												:rules="rules.required"
-												min="0"
-												v-debounce:300ms="chkPercentage"
-												:error-messages="errorPercentaje[i]"
-												type="number"
-											></v-text-field>
-										</div>
-										<v-btn icon @click="remove(i)">
-											<v-icon color="#868686">mdi-trash-can-outline</v-icon>
-										</v-btn>
-									</v-sheet>
-								</section>
-
-								<div class="divcol" style="margin-top: 30px">
-									<h3>Split Revenue</h3>
-									<p>
-										Split revenue clears after each sale. Needs at least two
-										wallet addresses. The minter will receive 100% of split
-										revenue unless splits are added.
-									</p>
-
-									<v-btn @click="dataSplit.push({ account: '', percentage: 0 })"
-										>Add split</v-btn
-									>
-									<p class="p" style="margin-top: 1em">
-										Avalilable {{ available1 }} %
-									</p>
-								</div>
-
-								<section class="container-inputs">
-									<v-sheet v-for="(item, i) in dataSplit" :key="i">
-										<div class="divcol">
-											<label :for="`account${i}`">NEAR account</label>
-											<v-text-field
-												v-model="item.account"
-												:id="`account|${i}`"
-												label="account.near"
-												v-debounce:800ms="validateNearId1"
-												:error-messages="errorAccount1[i]"
-												:success-messages="successAccount1[i]"
-												solo
-											></v-text-field>
-										</div>
-
-										<div class="divcol percentage">
-											<label :for="`percentage${i}`">%</label>
-											<v-text-field
-												ref="numberField"
-												v-model="item.percentage"
-												:id="`percentage|${i}`"
-												label="1 %"
-												solo
-												:rules="rules.required"
-												min="0"
-												v-debounce:300ms="chkPercentage1"
-												:error-messages="errorPercentaje1[i]"
-												type="number"
-											></v-text-field>
-										</div>
-
-										<v-btn icon @click="remove1(i)">
-											<v-icon color="#868686">mdi-trash-can-outline</v-icon>
-										</v-btn>
-									</v-sheet>
-								</section>
-							</v-form>
-						</aside>
-
-						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn @click="back">
-								<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-left</v-icon
-								>Back
-							</v-btn>
-							<v-btn
-								type="submit"
-								@click="mint()"
-								:loading="loading"
-								:disabled="disable"
-								class="mint"
-							>
-								Mint<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-right</v-icon
-								>
-							</v-btn>
-						</div>
-					</div>
-				</section>
-
-				<div class="container-content--actions center gap vermobile">
-					<v-btn @click="back">
-						<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-left</v-icon
-						>Back
-					</v-btn>
-					<v-btn
-						type="submit"
-						@click="mint"
-						:loading="loading"
-						:disabled="disable"
-						class="mint"
-					>
-						Mint<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-right</v-icon
-						>
-					</v-btn>
-				</div>
-			</v-window-item>
-
-			<v-window-item :value="4">
-				<section class="jcenter divwrap">
-					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket" :src="canvas" alt="Ticket image" />
-					</div>
-          
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
-            <img
-              v-show="!dataTicket[0].img"
-              src="@/assets/ticket-selection/ticket-custom-upload.png"
-              alt="custom ticket" class="image-ticket-event-empty">
-
-            <v-file-input
-              v-model="dataTicket[0].img"
-              hide-details
-              solo
-              prepend-icon=""
-              :clearable="false"
-              @change="uploadImg(dataTicket[0])"
-              :class="{ active: dataTicket[0].img }"
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn @click="next1">
+            Next<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
             >
-              <template v-slot:selection>
-                <div
-                  class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
-                />
-              </template>
-            </v-file-input>
+          </v-btn>
+        </div>
+      </v-window-item>
+
+      <v-window-item :value="3">
+        <section class="jcenter divwrap">
+          <div class="ticket-wrapper">
+            <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
+          <div class="container-content divcol" style="gap: 20px">
+            <aside class="divcol gap" style="min-height: 100%">
+              <v-form
+                ref="form2"
+                v-model="valid"
+                @submit.prevent="mint()"
+                class="divcol"
+                style="min-height: 100%"
+              >
+                <div class="divcol">
+                  <h3>Royalties</h3>
+                  <p>
+                    Royalties are perpetual. You can add royalties up to 50%
+                    across 25 accounts.
+                  </p>
 
-					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
-						<img
-							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
-							alt="Ticket image"
-						/>
+                  <v-btn
+                    @click="dataRoyalties.push({ account: '', percentage: 0 })"
+                    >Add royalties</v-btn
+                  >
+                  <p class="p" style="margin-top: 1em">
+                    Avalilable {{ available }} %
+                  </p>
+                </div>
 
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-								<div
-									class="image-ticket-event"
-									:style="`--bg-image: url(${ticket.url})`"
-								/>
-							</template>
-						</v-file-input>
-					</div>
+                <section class="container-inputs">
+                  <v-sheet v-for="(item, i) in dataRoyalties" :key="i">
+                    <div class="divcol">
+                      <label :for="`account${i}`">NEAR account</label>
+                      <v-text-field
+                        v-model="item.account"
+                        :id="`account|${i}`"
+                        label="account.near"
+                        v-debounce:800ms="validateNearId"
+                        :error-messages="errorAccount[i]"
+                        :success-messages="successAccount[i]"
+                        solo
+                      ></v-text-field>
+                    </div>
 
-					<div class="container-content divcol" style="gap: 20px">
-						<v-form
-							ref="form3"
-							v-model="valid"
-							@submit.prevent="list()"
-							class="divcol"
-							style="min-height: 100%"
-						>
-							<div class="divcol">
-								<h3>List NFT For Sale <span style="color: red">*</span></h3>
+                    <div class="divcol percentage">
+                      <label :for="`percentage${i}`">%</label>
+                      <v-text-field
+                        ref="numberField"
+                        v-model="item.percentage"
+                        :id="`percentage|${i}`"
+                        label="1 %"
+                        solo
+                        :rules="rules.required"
+                        min="0"
+                        v-debounce:300ms="chkPercentage"
+                        :error-messages="errorPercentaje[i]"
+                        type="number"
+                      ></v-text-field>
+                    </div>
+                    <v-btn icon @click="remove(i)">
+                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                    </v-btn>
+                  </v-sheet>
+                </section>
 
-								<div class="divcol">
-									<label for="amount_list"
-										>Amount to list Max ( {{ show_total_minted }} )
-										<span style="color: red">*</span></label
-									>
-									<div class="divcol">
-										<v-text-field
-											v-model="amount_list"
-											id="amount_list"
-											solo
-											:rules="rules.required"
-											min="0"
-											v-debounce:800ms="checkListAmount"
-											type="number"
-											hide-spin-buttons
-										>
-											<template v-slot:append>
-												<v-btn
-													class="btn-control"
-													:disabled="amount_list == 0"
-													@click="substract"
-													>-</v-btn
-												>
-												<v-btn
-													class="btn-control"
-													:disabled="amount_list == total_minted - 1"
-													@click="add"
-													>+</v-btn
-												>
-											</template>
-										</v-text-field>
-									</div>
-								</div>
+                <div class="divcol" style="margin-top: 30px">
+                  <h3>Split Revenue</h3>
+                  <p>
+                    Split revenue clears after each sale. Needs at least two
+                    wallet addresses. The minter will receive 100% of split
+                    revenue unless splits are added.
+                  </p>
 
-								<div class="divcol">
-									<label for="price"
-										>Price (NEAR)<span style="color: red">*</span></label
-									>
-									<div class="divcol">
-										<v-text-field
-											v-model="price"
-											id="price"
-											solo
-											v-debounce:300ms="priceNEAR"
-											min="0"
-											:rules="rules.required"
-											type="number"
-										></v-text-field>
-										<span class="conversion">~ {{ usd }} USD</span>
-									</div>
-								</div>
-							</div>
-						</v-form>
+                  <v-btn @click="dataSplit.push({ account: '', percentage: 0 })"
+                    >Add split</v-btn
+                  >
+                  <p class="p" style="margin-top: 1em">
+                    Avalilable {{ available1 }} %
+                  </p>
+                </div>
 
-						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn @click="back">
-								<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-left</v-icon
-								>Back
-							</v-btn>
-							<v-btn
-								type="submit"
-								@click="list()"
-								:loading="loading"
-								:disabled="disable"
-							>
-								List<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-right</v-icon
-								>
-							</v-btn>
-						</div>
-					</div>
-				</section>
+                <section class="container-inputs">
+                  <v-sheet v-for="(item, i) in dataSplit" :key="i">
+                    <div class="divcol">
+                      <label :for="`account${i}`">NEAR account</label>
+                      <v-text-field
+                        v-model="item.account"
+                        :id="`account|${i}`"
+                        label="account.near"
+                        v-debounce:800ms="validateNearId1"
+                        :error-messages="errorAccount1[i]"
+                        :success-messages="successAccount1[i]"
+                        solo
+                      ></v-text-field>
+                    </div>
 
-				<div class="container-content--actions center gap vermobile">
-					<v-btn @click="back">
-						<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-left</v-icon
-						>Back
-					</v-btn>
-					<v-btn
-						type="submit"
-						@click="list"
-						:loading="loading"
-						:disabled="disable"
-					>
-						List<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-right</v-icon
-						>
-					</v-btn>
-				</div>
-			</v-window-item>
+                    <div class="divcol percentage">
+                      <label :for="`percentage${i}`">%</label>
+                      <v-text-field
+                        ref="numberField"
+                        v-model="item.percentage"
+                        :id="`percentage|${i}`"
+                        label="1 %"
+                        solo
+                        :rules="rules.required"
+                        min="0"
+                        v-debounce:300ms="chkPercentage1"
+                        :error-messages="errorPercentaje1[i]"
+                        type="number"
+                      ></v-text-field>
+                    </div>
 
-			<v-window-item :value="5">
-				<section class="jcenter divwrap">
-					<div class="ticket-wrapper" v-if="imagecanvas">
-						<img class="ticket" :src="canvas" alt="Ticket image" />
-					</div>
-          
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
-            <img
-              v-show="!dataTicket[0].img"
-              src="@/assets/ticket-selection/ticket-custom-upload.png"
-              alt="custom ticket" class="image-ticket-event-empty">
+                    <v-btn icon @click="remove1(i)">
+                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
+                    </v-btn>
+                  </v-sheet>
+                </section>
+              </v-form>
+            </aside>
 
-            <v-file-input
-              v-model="dataTicket[0].img"
-              hide-details
-              solo
-              prepend-icon=""
-              :clearable="false"
-              @change="uploadImg(dataTicket[0])"
-              :class="{ active: dataTicket[0].img }"
+            <div class="container-content--actions center gap eliminarmobile">
+              <v-btn @click="back">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >Back
+              </v-btn>
+              <v-btn
+                type="submit"
+                @click="mint()"
+                :loading="loading"
+                :disabled="disable"
+                class="mint"
+              >
+                Mint<v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-right</v-icon
+                >
+              </v-btn>
+            </div>
+          </div>
+        </section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn
+            type="submit"
+            @click="mint"
+            :loading="loading"
+            :disabled="disable"
+            class="mint"
+          >
+            Mint<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
             >
-              <template v-slot:selection>
-                <div
-                  class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
-                />
-              </template>
-            </v-file-input>
+          </v-btn>
+        </div>
+      </v-window-item>
+
+      <v-window-item :value="4">
+        <section class="jcenter divwrap">
+          <div class="ticket-wrapper">
+            <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
+          <div class="container-content divcol" style="gap: 20px">
+            <v-form
+              ref="form3"
+              v-model="valid"
+              @submit.prevent="list()"
+              class="divcol"
+              style="min-height: 100%"
+            >
+              <div class="divcol">
+                <h3>List NFT For Sale <span style="color: red">*</span></h3>
 
-					<div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket>
-						<img
-							class="ticket"
-							:src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)"
-							alt="Ticket image"
-						/>
+                <div class="divcol">
+                  <label for="amount_list"
+                    >Amount to list Max ( {{ show_total_minted }} )
+                    <span style="color: red">*</span></label
+                  >
+                  <div class="divcol">
+                    <v-text-field
+                      v-model="amount_list"
+                      id="amount_list"
+                      solo
+                      :rules="rules.required"
+                      min="0"
+                      v-debounce:800ms="checkListAmount"
+                      type="number"
+                      hide-spin-buttons
+                    >
+                      <template v-slot:append>
+                        <v-btn
+                          class="btn-control"
+                          :disabled="amount_list == 0"
+                          @click="substract"
+                          >-</v-btn
+                        >
+                        <v-btn
+                          class="btn-control"
+                          :disabled="amount_list == total_minted"
+                          @click="add"
+                          >+</v-btn
+                        >
+                      </template>
+                    </v-text-field>
+                  </div>
+                </div>
 
-						<v-file-input
-							v-for="(ticket, i) in dataTicket"
-							:key="i"
-							v-model="ticket.img"
-							hide-details
-							solo
-							prepend-icon=""
-							@change="uploadImg(ticket)"
-							:class="{ active: ticket.img }"
-						>
-							<template v-slot:selection>
-								<!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-								<div
-									class="image-ticket-event"
-									:style="`--bg-image: url(${ticket.url})`"
-								/>
-							</template>
-						</v-file-input>
-					</div>
+                <div class="divcol">
+                  <label for="price"
+                    >Price (NEAR)<span style="color: red">*</span></label
+                  >
+                  <div class="divcol">
+                    <v-text-field
+                      v-model="price"
+                      id="price"
+                      solo
+                      v-debounce:300ms="priceNEAR"
+                      min="0"
+                      :rules="rules.required"
+                      type="number"
+                    ></v-text-field>
+                    <span class="conversion">~ {{ usd }} USD</span>
+                  </div>
+                </div>
+              </div>
+            </v-form>
 
-					<div class="container-content divcol" style="gap: 20px">
-						<v-form
-							ref="form4"
-							v-model="valid"
-							@submit.prevent="mintGoodie()"
-							class="divcol"
-							style="min-height: 100%"
-						>
-							<aside class="divcol" style="min-height: 100%">
-								<div class="divcol">
-									<h3>
-										Would you like to give a physical goodie with your ticket?
-										(Drink, popcorn...)
-									</h3>
-									<p>
-										We will transfer this NFT once your attendes get inside the
-										venue so they can redeem it to get a real good.
-									</p>
+            <div class="container-content--actions center gap eliminarmobile">
+              <v-btn @click="back">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >Back
+              </v-btn>
+              <v-btn
+                type="submit"
+                @click="list()"
+                :loading="loading"
+                :disabled="disable"
+              >
+                List<v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-right</v-icon
+                >
+              </v-btn>
+            </div>
+          </div>
+        </section>
 
-									<div id="container-actions" class="gap">
-										<v-btn @click="goodie = true">Yes</v-btn>
-										<v-btn @click="showModal" :disabled="goodie">No</v-btn>
-									</div>
-								</div>
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn
+            type="submit"
+            @click="list"
+            :loading="loading"
+            :disabled="disable"
+          >
+            List<v-icon style="color: #ffffff !important" small
+              >mdi-arrow-right</v-icon
+            >
+          </v-btn>
+        </div>
+      </v-window-item>
 
-								<template v-if="goodie">
-									<div class="divcol" style="margin-top: 1.5em">
-										<label for="attendees" class="sf-pro"
-											>What are attendees going to receive with the NFT
-											ticket?</label
-										>
-										<v-text-field
-											v-model="dataTickets.attendees"
-											:rules="rules.required"
-											id="attendees"
-											solo
-										></v-text-field>
-									</div>
+      <v-window-item :value="5">
+        <section class="jcenter divwrap">
+          <div class="ticket-wrapper">
+            <img class="ticket" :src="canvas" alt="Ticket image" />
+          </div>
+          <div class="container-content divcol" style="gap: 20px">
+            <v-form
+              ref="form4"
+              v-model="valid"
+              @submit.prevent="mintGoodie()"
+              class="divcol"
+              style="min-height: 100%"
+            >
+              <aside class="divcol" style="min-height: 100%">
+                <div class="divcol">
+                  <h3>
+                    Would you like to give a physical goodie with your ticket?
+                    (Drink, popcorn...)
+                  </h3>
+                  <p>
+                    We will transfer this NFT once your attendes get inside the
+                    venue so they can redeem it to get a real good.
+                  </p>
 
-									<div class="divcol" style="display: none">
-										<label for="goodies" class="sf-pro"
-											>How much goodies for each attendee per ticket?</label
-										>
-										<v-text-field
-											v-model="dataTickets.goodies"
-											id="goodies"
-											solo
-											:rules="rules.required"
-											type="number"
-											min="0"
-											hide-spin-buttons
-										>
-											<template v-slot:append>
-												<v-btn
-													class="btn-control"
-													@click="dataTickets.goodies--"
-													>-</v-btn
-												>
-												<v-btn
-													class="btn-control"
-													@click="dataTickets.goodies++"
-													>+</v-btn
-												>
-											</template>
-										</v-text-field>
-									</div>
-								</template>
-							</aside>
-						</v-form>
+                  <div id="container-actions" class="gap">
+                    <v-btn @click="goodie = true">Yes</v-btn>
+                    <v-btn @click="showModal" :disabled="goodie">No</v-btn>
+                  </div>
+                </div>
 
-						<div class="container-content--actions center gap eliminarmobile">
-							<v-btn @click="back">
-								<v-icon style="color: #ffffff !important" small
-									>mdi-arrow-left</v-icon
-								>Back
-							</v-btn>
-							<v-btn
-								v-show="goodie"
-								type="submit"
-								@click="mintGoodie"
-								:loading="loading"
-								:disabled="disable"
-								style="
-									background: linear-gradient(
-										183.61deg,
-										#cc00b7 49.78%,
-										rgba(0, 0, 0, 0) 225.35%
-									);
-								"
-							>
-								Mint
-							</v-btn>
-						</div>
-					</div>
-				</section>
+                <template v-if="goodie">
+                  <div class="divcol" style="margin-top: 1.5em">
+                    <label for="attendees" class="sf-pro"
+                      >What are attendees going to receive with the NFT
+                      ticket?</label
+                    >
+                    <v-text-field
+                      v-model="dataTickets.attendees"
+                      :rules="rules.required"
+                      id="attendees"
+                      solo
+                    ></v-text-field>
+                  </div>
 
-				<div class="container-content--actions center gap vermobile">
-					<v-btn @click="back">
-						<v-icon style="color: #ffffff !important" small
-							>mdi-arrow-left</v-icon
-						>Back
-					</v-btn>
-					<v-btn
-						v-show="goodie"
-						type="submit"
-						@click="mintGoodie"
-						:loading="loading"
-						:disabled="disable"
-						style="
-							background: linear-gradient(
-								183.61deg,
-								#cc00b7 49.78%,
-								rgba(0, 0, 0, 0) 225.35%
-							);
-						"
-					>
-						Mint
-					</v-btn>
-				</div>
-			</v-window-item>
-		</v-window>
-		<div class="text-center">
-			<v-overlay :value="overlay">
-				<v-progress-circular indeterminate size="64"></v-progress-circular>
-				<h3 class="mt-3">Minting in progress...</h3>
-				<h3 ref="tminted">{{ show_total_minted }}</h3>
-			</v-overlay>
-			<v-overlay :value="overlay_building">
-				<v-progress-circular indeterminate size="64"></v-progress-circular>
-				<h3 class="mt-3">Building event be pacient...</h3>
-			</v-overlay>
-		</div>
-	</section>
+                  <div class="divcol" style="display: none">
+                    <label for="goodies" class="sf-pro"
+                      >How much goodies for each attendee per ticket?</label
+                    >
+                    <v-text-field
+                      v-model="dataTickets.goodies"
+                      id="goodies"
+                      solo
+                      :rules="rules.required"
+                      type="number"
+                      min="0"
+                      hide-spin-buttons
+                    >
+                      <template v-slot:append>
+                        <v-btn
+                          class="btn-control"
+                          @click="dataTickets.goodies--"
+                          >-</v-btn
+                        >
+                        <v-btn
+                          class="btn-control"
+                          @click="dataTickets.goodies++"
+                          >+</v-btn
+                        >
+                      </template>
+                    </v-text-field>
+                  </div>
+                </template>
+              </aside>
+            </v-form>
+
+            <div class="container-content--actions center gap eliminarmobile">
+              <v-btn @click="back">
+                <v-icon style="color: #ffffff !important" small
+                  >mdi-arrow-left</v-icon
+                >Back
+              </v-btn>
+              <v-btn
+                v-show="goodie"
+                type="submit"
+                @click="mintGoodie"
+                :loading="loading"
+                :disabled="disable"
+                style="
+                  background: linear-gradient(
+                    183.61deg,
+                    #cc00b7 49.78%,
+                    rgba(0, 0, 0, 0) 225.35%
+                  );
+                "
+              >
+                Mint
+              </v-btn>
+            </div>
+          </div>
+        </section>
+
+        <div class="container-content--actions center gap vermobile">
+          <v-btn @click="back">
+            <v-icon style="color: #ffffff !important" small
+              >mdi-arrow-left</v-icon
+            >Back
+          </v-btn>
+          <v-btn
+            v-show="goodie"
+            type="submit"
+            @click="mintGoodie"
+            :loading="loading"
+            :disabled="disable"
+            style="
+              background: linear-gradient(
+                183.61deg,
+                #cc00b7 49.78%,
+                rgba(0, 0, 0, 0) 225.35%
+              );
+            "
+          >
+            Mint
+          </v-btn>
+        </div>
+      </v-window-item>
+    </v-window>
+    <div class="text-center">
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+        <h3 class="mt-3">Minting in progress...</h3>
+        <h3 ref="tminted">{{ show_total_minted }}</h3>
+      </v-overlay>
+      <v-overlay :value="overlay_building">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+        <h3 class="mt-3">Building event be pacient...</h3>
+      </v-overlay>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -1122,15 +932,11 @@ const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import html2canvas from "html2canvas";
 import gql from "graphql-tag";
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 const nft_tokens_aggregate = gql`
-  query MyQuery(
-    $store: String!
-    $tittle: String!
-    $_iregex: String!
-  ) {
+  query MyQuery($store: String!, $tittle: String!, $_iregex: String!) {
     nft_metadata(
       where: {
         title: { _eq: $tittle }
@@ -1145,20 +951,24 @@ const nft_tokens_aggregate = gql`
 `;
 const mb_views_nft_tokens = gql`
   query MyQuery($_iregex: String!) {
-  mb_views_nft_tokens_aggregate(
-    where: {reference_blob: {_cast: {String: {_iregex: $_iregex}}}, burned_receipt_id: {_is_null: true}, last_transfer_timestamp: {_is_null: true}}
-  ) {
-    aggregate {
-      count
+    mb_views_nft_tokens_aggregate(
+      where: {
+        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
+        burned_receipt_id: { _is_null: true }
+        last_transfer_timestamp: { _is_null: true }
+      }
+    ) {
+      aggregate {
+        count
+      }
     }
   }
-}
 `;
 const tokens_id = gql`
   query MyQuery($metadata_id: String) {
     nft_tokens_aggregate(
       where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
-      order_by: {token_id: asc}
+      order_by: { token_id: asc }
     ) {
       nodes {
         token_id
@@ -1187,11 +997,12 @@ const minted = gql`
 `;
 const minter = gql`
   query MyQuery($store: String!, $user: String!) {
-  mb_store_minters(where: {nft_contract_id: {_eq: $store}
-    , minter_id: {_eq: $user}}) {
-    minter_id
+    mb_store_minters(
+      where: { nft_contract_id: { _eq: $store }, minter_id: { _eq: $user } }
+    ) {
+      minter_id
+    }
   }
-}
 `;
 
 export default {
@@ -1199,25 +1010,47 @@ export default {
   components: {
     VueEditor,
     ModalSuccess,
-    DatePicker
+    DatePicker,
   },
   data() {
     return {
       step:
-        this.$session.get("step") === undefined
-          ? 1
-          : this.$session.get("step"),
+        this.$session.get("step") === undefined ? 1 : this.$session.get("step"),
       dataTickets: {
-        name: this.$session.get("dataFormName") === undefined  ? "" : this.$session.get("dataFormName"),
-        promoter: this.$session.get("dataFormPromoter") === undefined  ? "" : this.$session.get("dataFormPromoter"),
-        img: this.$session.get("canvas") === undefined  ? "" : this.$session.get("canvas"),
-        img_main: this.$session.get("canvas_main_image") === undefined  ? undefined : this.$session.get("canvas_main_image"),
-        description: this.$session.get("dataFormDescription") === undefined  ? "" : this.$session.get("dataFormDescription"),
-        mint_amount: this.$session.get("dataFormMintAmount") === undefined  ? "" : this.$session.get("dataFormMintAmount"),
-        attendees: this.$session.get("dataFormAttendees") === undefined  ? "" : this.$session.get("dataFormAttendees"),
-        goodies: "1" // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
+        name:
+          this.$session.get("dataFormName") === undefined
+            ? ""
+            : this.$session.get("dataFormName"),
+        promoter:
+          this.$session.get("dataFormPromoter") === undefined
+            ? ""
+            : this.$session.get("dataFormPromoter"),
+        img:
+          this.$session.get("canvas") === undefined
+            ? ""
+            : this.$session.get("canvas"),
+        img_main:
+          this.$session.get("canvas_main_image") === undefined
+            ? undefined
+            : this.$session.get("canvas_main_image"),
+        description:
+          this.$session.get("dataFormDescription") === undefined
+            ? ""
+            : this.$session.get("dataFormDescription"),
+        mint_amount:
+          this.$session.get("dataFormMintAmount") === undefined
+            ? ""
+            : this.$session.get("dataFormMintAmount"),
+        attendees:
+          this.$session.get("dataFormAttendees") === undefined
+            ? ""
+            : this.$session.get("dataFormAttendees"),
+        goodies: "1", // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
-      url: this.$session.get("canvas_main_image") === undefined  ? undefined : this.$session.get("canvas_main_image"),
+      url:
+        this.$session.get("canvas_main_image") === undefined
+          ? undefined
+          : this.$session.get("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -1228,15 +1061,36 @@ export default {
       model: null,
       search: null,
       address: "",
-      place_id: this.$session.get("dataFormPlaceId") === undefined  ? "" : this.$session.get("dataFormPlaceId"),
-      latitude: this.$session.get("dataFormLatitud") === undefined  ? "" : this.$session.get("dataFormLatitud"),
-      longitude: this.$session.get("dataFormLongitud") === undefined  ? "" : this.$session.get("dataFormLongitud"),
-      location: this.$session.get("dataFormLocation") === undefined ? "" : this.$session.get("dataFormLocation"),
+      place_id:
+        this.$session.get("dataFormPlaceId") === undefined
+          ? ""
+          : this.$session.get("dataFormPlaceId"),
+      latitude:
+        this.$session.get("dataFormLatitud") === undefined
+          ? ""
+          : this.$session.get("dataFormLatitud"),
+      longitude:
+        this.$session.get("dataFormLongitud") === undefined
+          ? ""
+          : this.$session.get("dataFormLongitud"),
+      location:
+        this.$session.get("dataFormLocation") === undefined
+          ? ""
+          : this.$session.get("dataFormLocation"),
       address: "1234",
-      amount_list: this.$session.get("amount_list") === undefined ? 0 : this.$session.get("amount_list"),
-      price: this.$session.get("price") === undefined ? 0 : this.$session.get("price"),
+      amount_list:
+        this.$session.get("amount_list") === undefined
+          ? 0
+          : this.$session.get("amount_list"),
+      price:
+        this.$session.get("price") === undefined
+          ? 0
+          : this.$session.get("price"),
       menu: "",
-      time: this.$session.get("dataFormTime") === undefined  ? "" : this.$session.get("dataFormTime"),
+      time:
+        this.$session.get("dataFormTime") === undefined
+          ? ""
+          : this.$session.get("dataFormTime"),
       menu2: false,
       dataTicket: [
         {
@@ -1253,11 +1107,20 @@ export default {
         },
       ],
       MenuDates: false,
-      dates: this.$session.get("dataFormDate") === undefined ? undefined : this.$session.get("dataFormDate"),
+      dates:
+        this.$session.get("dataFormDate") === undefined
+          ? undefined
+          : this.$session.get("dataFormDate"),
       menuStartTime: false,
-      startTime: this.$session.get("dataFormTimeStart") === undefined  ? "" : new Date(this.$session.get("dataFormTimeStart")),
+      startTime:
+        this.$session.get("dataFormTimeStart") === undefined
+          ? ""
+          : new Date(this.$session.get("dataFormTimeStart")),
       menuEndTime: "",
-      endTime: this.$session.get("dataFormTimeEnd") === undefined  ? "" : new Date(this.$session.get("dataFormTimeEnd")),
+      endTime:
+        this.$session.get("dataFormTimeEnd") === undefined
+          ? ""
+          : new Date(this.$session.get("dataFormTimeEnd")),
       // dates: [
       //   {
       //     id: 1,
@@ -1265,7 +1128,7 @@ export default {
       //     startDate: undefined,
       //     menuStartTime: false,
       //     startTime: undefined,
-          
+
       //     menuEndDate: false,
       //     endDate: undefined,
       //     menuEndTime: false,
@@ -1290,7 +1153,7 @@ export default {
       successAccount: [],
       successAccount1: [],
       available: 50,
-      available1:  parseInt(100-this.$owner_split),
+      available1: parseInt(100 - this.$owner_split),
       errorPercentaje: [],
       errorPercentaje1: [],
       counter: 0,
@@ -1300,71 +1163,99 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas: this.$session.get("canvas") === undefined ? "" : this.$session.get("canvas"),
-      canvas_burn: this.$session.get("canvas_burn") === undefined ? "" : this.$session.get("canvas_burn"),
-      canvas_goodie: this.$session.get("canvas_goodie") === undefined ? "" : this.$session.get("canvas_goodie"),
+      canvas:
+        this.$session.get("canvas") === undefined
+          ? "@/assets/ticket-selection/ticket-custom-upload.png"
+          : this.$session.get("canvas"),
+      canvas_burn:
+        this.$session.get("canvas_burn") === undefined
+          ? ""
+          : this.$session.get("canvas_burn"),
+      canvas_goodie:
+        this.$session.get("canvas_goodie") === undefined
+          ? ""
+          : this.$session.get("canvas_goodie"),
       editorRules: false,
       timepickerStartRules: false,
       timepickerEndRules: false,
       comboboxRules: false,
-      total_minted: parseInt(this.$session.get("total_minted") === undefined  ? 0 : this.$session.get("total_minted")),
+      total_minted: parseInt(
+        this.$session.get("total_minted") === undefined
+          ? 0
+          : this.$session.get("total_minted")
+      ),
       nearid: false,
-      burn_ticket_image: this.$pinata_gateway+"QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
-      burn_goodie_image: this.$pinata_gateway+"QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
-      imagecanvas: this.$session.get("canvas") === undefined  ? false : true,
-      imagecanvas1: this.$session.get("canvas") === undefined  ? true : false,
-      imagegoodie: this.$session.get("canvas_goodie") === undefined  ? false : true,
-      imagegoodie1: this.$session.get("canvas_goodie") === undefined  ? true : false,
-      show_total_minted: this.$session.get("total_minted") === undefined ? "0" : this.$session.get("total_minted"),
+      burn_ticket_image:
+        this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
+      burn_goodie_image:
+        this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
+      imagecanvas: this.$session.get("canvas") === undefined ? false : true,
+      imagecanvas1: this.$session.get("canvas") === undefined ? true : false,
+      imagegoodie:
+        this.$session.get("canvas_goodie") === undefined ? false : true,
+      imagegoodie1:
+        this.$session.get("canvas_goodie") === undefined ? true : false,
+      show_total_minted:
+        this.$session.get("total_minted") === undefined
+          ? "0"
+          : this.$session.get("total_minted"),
       overlay: false,
       overlay_building: false,
-      mint_amount: this.$session.get("mint_amount") === undefined ? 0 : parseInt(this.$session.get("mint_amount")),
+      mint_amount:
+        this.$session.get("mint_amount") === undefined
+          ? 0
+          : parseInt(this.$session.get("mint_amount")),
       open: false,
-      i: null
+      i: null,
     };
   },
   watch: {
     step(newValue) {
-      if (newValue === 1) this.listenerEditor()
+      if (newValue === 1) this.listenerEditor();
       setTimeout(() => {
-        this.addTicketClass()
+        this.addTicketClass();
       }, 100);
     },
     dates(curr) {
-      this.validatorCombobox(curr)
+      this.validatorCombobox(curr);
     },
     $route(curr, old) {
-      if (curr !== old) this.checkoutTicketType()
-    }
+      if (curr !== old) this.checkoutTicketType();
+    },
   },
-  beforeMount(){
+  beforeMount() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-     //
-    if (urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "mint") {
+    //
+    if (
+      urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "mint"
+    ) {
       this.back();
     }
-    if (urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "list") {
+    if (
+      urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "list"
+    ) {
       this.back();
     }
-    if (urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "goodies") {
+    if (
+      urlParams.get("errorCode") === "userRejected" &&
+      urlParams.get("signMeta") === "goodies"
+    ) {
       this.back();
     }
   },
   mounted() {
-
-    this.checkoutTicketType()
+    this.checkoutTicketType();
     // this.hideScroll(this.$route)
     this.revisar();
     if (this.step === 1) {
-      this.listenerEditor()
+      this.listenerEditor();
     }
-    if (!this.$session.exists()) {
-      this.$session.start()
-    }
+    if (!this.$session.exists()) {
+      this.$session.start();
+    }
     this.grantMinter();
     let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = datos.accountId;
@@ -1385,7 +1276,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register:"+this.$session.get("ticketval")
+        "/#/events/register:" + this.$session.get("ticketval")
       );
     }
     //List option
@@ -1400,7 +1291,7 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register:"+this.$session.get("ticketval")
+        "/#/events/register:" + this.$session.get("ticketval")
       );
     }
     //goodies option
@@ -1410,16 +1301,16 @@ export default {
     ) {
       this.getMinted();
       this.polling = setInterval(() => {
-      this.getMinted();
-       //When the amount is equal close the overlay
-       // this.overlay = !this.overlay;
-       this.$forceUpdate();
+        this.getMinted();
+        //When the amount is equal close the overlay
+        // this.overlay = !this.overlay;
+        this.$forceUpdate();
       }, 5000);
       this.gotToEvents();
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register:"+this.$session.get("ticketval")
+        "/#/events/register:" + this.$session.get("ticketval")
       );
     }
     //
@@ -1428,18 +1319,17 @@ export default {
       history.replaceState(
         null,
         location.href.split("?")[0],
-        "/#/events/register:"+this.$session.get("ticketval")
+        "/#/events/register:" + this.$session.get("ticketval")
       );
     }
-
   },
   computed: {
     dateRangeText() {
       return this.dates.join(" ~ ");
     },
     ticketType() {
-      return this.$route.params.type?.split(":")[1]
-    }
+      return this.$route.params.type?.split(":")[1];
+    },
   },
   methods: {
     uploadImg(item) {
@@ -1457,10 +1347,12 @@ export default {
         //  console.log('formData', formData)
         //  console.log(this.$ipfs)
         await this.axios.post(this.$ipfs, formData).then((res) => {
-          console.log('res', res.data)
+          console.log("res", res.data);
           this.$session.set("IpfsHash", res.data.IpfsHash);
         });
-        setTimeout(() => { this.getBase64FromUrlMainImage(this.url) },1500);
+        setTimeout(() => {
+          this.getBase64FromUrlMainImage(this.url);
+        }, 1500);
         this.image = file;
         //console.log(e);
       }
@@ -1482,28 +1374,29 @@ export default {
           query: minter,
           variables: {
             store: this.$store_mintbase,
-            user: user
+            user: user,
           },
         })
         .then((response) => {
-         //console.log(response.data.mb_store_minters.length)
-         //If the user is not minter just give grant to him/her
-         if(response.data.mb_store_minters.length == 0){
-            const url =  this.$node_url + "/minter";
+          //console.log(response.data.mb_store_minters.length)
+          //If the user is not minter just give grant to him/her
+          if (response.data.mb_store_minters.length == 0) {
+            const url = this.$node_url + "/minter";
             let item = {
-            account_id: user,
+              account_id: user,
             };
             this.axios
-            .post(url, item)
-            .then(() => {
-              console.log('Hash up')
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-         }
-        }).catch((err) => {
-            console.log("Error", err);
+              .post(url, item)
+              .then(() => {
+                console.log("Hash up");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
         });
     },
     async mint() {
@@ -1642,30 +1535,41 @@ export default {
         // const multiplier1 = Math.round(multiplied1 / counter1);
         this.dataSplit.forEach((element) => {
           //Validate not to add your own
-            splits[element.account] = parseInt(element.percentage * 100);
-            //If the user adds royaltie to the owner needs to sum more
-            if(element.account === this.$owner){
-              royaltie_for_owner = parseInt(element.percentage * 100);
-            }
+          splits[element.account] = parseInt(element.percentage * 100);
+          //If the user adds royaltie to the owner needs to sum more
+          if (element.account === this.$owner) {
+            royaltie_for_owner = parseInt(element.percentage * 100);
+          }
         });
         //Add split for owner
-        if(user != this.$owner){
-            splits[this.$owner] = parseInt(parseInt(this.$owner_split)* 100 + (royaltie_for_owner));
-            counter1 = counter1  + parseInt(this.$owner_split);
+        if (user != this.$owner) {
+          splits[this.$owner] = parseInt(
+            parseInt(this.$owner_split) * 100 + royaltie_for_owner
+          );
+          counter1 = counter1 + parseInt(this.$owner_split);
         }
         //Add the rest for minter
-        if(user === this.$owner && this.dataSplit.length === 0){
+        if (user === this.$owner && this.dataSplit.length === 0) {
           splits[user] = parseInt(10000);
         } else {
-          splits[user] = parseInt(10000 - (counter1* 100));
+          splits[user] = parseInt(10000 - counter1 * 100);
         }
         //end split
 
         //LocalStora Mint amount
-        this.$session.set("mint_amount", parseInt(this.dataTickets.mint_amount));
-        this.$session.set("total_minted", parseInt(this.dataTickets.mint_amount));
+        this.$session.set(
+          "mint_amount",
+          parseInt(this.dataTickets.mint_amount)
+        );
+        this.$session.set(
+          "total_minted",
+          parseInt(this.dataTickets.mint_amount)
+        );
         //Control goodies and let me in for approval
-        this.$session.set("control_mint_appoval", parseInt(this.dataTickets.mint_amount));
+        this.$session.set(
+          "control_mint_appoval",
+          parseInt(this.dataTickets.mint_amount)
+        );
         await wallet.mint(
           parseInt(this.dataTickets.mint_amount),
           store.toString(),
@@ -1680,10 +1584,12 @@ export default {
       }
     },
     async mintGoodie() {
-       if (this.$refs.form4.validate()) {
-          this.getBase64FromUrlGoodie(this.burn_goodie_image);
-          setTimeout(() => { this.mintGoodieProccess() }, 1500);
-       } 
+      if (this.$refs.form4.validate()) {
+        this.getBase64FromUrlGoodie(this.burn_goodie_image);
+        setTimeout(() => {
+          this.mintGoodieProccess();
+        }, 1500);
+      }
     },
     async mintGoodieProccess() {
       if (this.$refs.form4.validate()) {
@@ -1758,7 +1664,10 @@ export default {
             display_type: "date",
           },
           {
-            trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
+            trait_type:
+              this.$session.get("metadata_id").split(":")[1] === undefined
+                ? ""
+                : this.$session.get("metadata_id").split(":")[1],
             value: this.dataTickets.attendees,
           },
           {
@@ -1785,15 +1694,15 @@ export default {
         await wallet.minter.setMetadata(metadata, true);
         // console.log(metadata);
 
-        this.$session.set('dataFormAttendees', this.dataTickets.attendees)
-        this.$session.set('dataFormGoodies', this.dataTickets.goodies)
+        this.$session.set("dataFormAttendees", this.dataTickets.attendees);
+        this.$session.set("dataFormGoodies", this.dataTickets.goodies);
 
         //handle royalties
         const royalties = {};
 
         //handle splits
         const splits = {};
-        
+
         await wallet.mint(
           parseInt(1),
           store.toString(),
@@ -1814,51 +1723,77 @@ export default {
      * @param {String} id Input container ID
      */
     getAddressData: function (addressData, placeResultData, id) {
-      this.address = this.$session.get("dataFormPlaceId") === undefined  ? addressData : this.$session.get("dataFormPlaceId");
-      this.place_id = this.$session.get("dataFormPlaceId") === undefined  ? addressData.place_id : this.$session.get("dataFormPlaceId");
-      this.location = this.$session.get("dataFormLocation") === undefined ? placeResultData.formatted_address : this.$session.get("dataFormLocation");
-      this.latitude = this.$session.get("dataFormLatitud") === undefined  ? addressData.latitude : this.$session.get("dataFormLatitud");
-      this.longitude = this.$session.get("dataFormLatitud") === undefined  ? addressData.longitude : this.$session.get("dataFormLatitud");
+      this.address =
+        this.$session.get("dataFormPlaceId") === undefined
+          ? addressData
+          : this.$session.get("dataFormPlaceId");
+      this.place_id =
+        this.$session.get("dataFormPlaceId") === undefined
+          ? addressData.place_id
+          : this.$session.get("dataFormPlaceId");
+      this.location =
+        this.$session.get("dataFormLocation") === undefined
+          ? placeResultData.formatted_address
+          : this.$session.get("dataFormLocation");
+      this.latitude =
+        this.$session.get("dataFormLatitud") === undefined
+          ? addressData.latitude
+          : this.$session.get("dataFormLatitud");
+      this.longitude =
+        this.$session.get("dataFormLatitud") === undefined
+          ? addressData.longitude
+          : this.$session.get("dataFormLatitud");
       this.$session.set("dataFormPlaceId", addressData.place_id);
       this.$session.set("dataFormLocation", placeResultData.formatted_address);
       this.$session.set("dataFormLatitude", addressData.latitude);
       this.$session.set("dataFormLongitude", addressData.longitude);
     },
     next() {
-      if (this.$refs.form.validate() && this.dataTickets.description && this.dates) {
+      if (
+        this.$refs.form.validate() &&
+        this.dataTickets.description &&
+        this.dates
+      ) {
+        this.loading = true;
         this.editorRules = false;
         this.comboboxRules = false;
-        this.timepickerStartRules = false;
-        this.timepickerEndRules = false;
-        this.$session.set("step", 2);
-        this.step = this.$session.get("step");
-        //Store all form data
-        this.$session.set("dataFormName", this.dataTickets.name);
-        this.$session.set("dataFormPromoter", this.dataTickets.promoter);
-        this.$session.set("dataFormDescription", this.dataTickets.description);
-        this.$session.set("dataFormDate", this.dates);
-        this.$session.set("dataFormTimeStart", this.startTime);
-        this.$session.set("dataFormTimeEnd", this.endTime);
-        console.log('------------',this.startTime)
-
         var container = document.getElementById("my-node"); /* full page */
-        html2canvas(container, {
+        // //replacing canvas for domtoimage in order to generate al full resolution png ticket
+        // // Set the scale option to 2 for 2x resolution
+        const options = {
           backgroundColor: null,
+          allowTaint: true,
           //y: (container / 2, container / 2, 30),
           //height: 570,
-        }).then((canvas) => {
-          // let link = document.createElement("a");
-          // link.download = "image_name.png";
-          // link.href = canvas.toDataURL("image/png", 1.0);
-          // document.body.appendChild(link);
-          // link.click();
-
-          var image = new Image();
-          image.src = canvas.toDataURL("image/png", 1.0);
-          this.$session.set("canvas", canvas.toDataURL("image/png", 1.0));
-          this.image = image;
-          this.getBase64FromUrl(this.burn_ticket_image)
-          // console.log(this.image);
+          scale: 4,
+        };
+        html2canvas(container, options).then((canvas) => {
+          this.axios.post(this.$node_url+"/uploads", {
+              name: this.dataTickets.name,
+              data: canvas.toDataURL("image/png", 1.0)
+            })
+          .then(response => {
+            console.log(response.data);
+            this.timepickerStartRules = false;
+            this.timepickerEndRules = false;
+            //Store all form data
+            this.$session.set("dataFormName", this.dataTickets.name);
+            this.$session.set("dataFormPromoter", this.dataTickets.promoter);
+            this.$session.set("dataFormDescription", this.dataTickets.description);
+            this.$session.set("dataFormDate", this.dates);
+            this.$session.set("dataFormTimeStart", this.startTime);
+            this.$session.set("dataFormTimeEnd", this.endTime);
+            this.$session.set("canvas", response.data);
+            this.canvas = response.data;
+            this.$session.set("step", 2);
+            this.step = this.$session.get("step");
+            this.loading = false;
+            this.getBase64FromUrl(this.burn_ticket_image)
+            //console.log(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
         });
       }
       if (!this.dataTickets.description) this.editorRules = true;
@@ -1866,44 +1801,44 @@ export default {
       if (!this.startTime) this.timepickerStartRules = true;
       if (!this.endTime) this.timepickerEndRules = true;
     },
-    async getBase64FromUrl(url)  {
+    async getBase64FromUrl(url) {
       const data = await fetch(url);
       const blob = await data.blob();
       return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.readAsDataURL(blob); 
+        reader.readAsDataURL(blob);
         reader.onloadend = () => {
-          const base64data = reader.result;   
+          const base64data = reader.result;
           resolve(base64data);
           this.$session.set("canvas_burn", base64data);
-        }
+        };
       });
     },
-    async getBase64FromUrlGoodie(url)  {
+    async getBase64FromUrlGoodie(url) {
       const data = await fetch(url);
       const blob = await data.blob();
       return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.readAsDataURL(blob); 
+        reader.readAsDataURL(blob);
         reader.onloadend = () => {
-          const base64data = reader.result;   
+          const base64data = reader.result;
           resolve(base64data);
           this.$session.set("canvas_goodie", base64data);
-        }
+        };
       });
     },
-    async getBase64FromUrlMainImage(url)  {
+    async getBase64FromUrlMainImage(url) {
       const data = await fetch(url);
       const blob = await data.blob();
       return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.readAsDataURL(blob); 
+        reader.readAsDataURL(blob);
         reader.onloadend = () => {
-          const base64data = reader.result;   
+          const base64data = reader.result;
           resolve(base64data);
           this.$session.set("canvas_main_image", base64data);
           //console.log(base64data)
-        }
+        };
       });
     },
     // nextLast() {
@@ -2029,12 +1964,14 @@ export default {
         this.disable = false;
         this.errorPercentaje[pos] = null;
       }
-      if (Number.isInteger(parseInt(this.dataRoyalties[pos].percentage))===false){
+      if (
+        Number.isInteger(parseInt(this.dataRoyalties[pos].percentage)) === false
+      ) {
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
       }
-      if (parseInt(this.dataRoyalties[pos].percentage) < 0){
+      if (parseInt(this.dataRoyalties[pos].percentage) < 0) {
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
@@ -2045,33 +1982,36 @@ export default {
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
       let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
+        localStorage.getItem("Mintbase.js_wallet_auth_key")
+      );
       const user = datos.accountId;
       for (const prop in this.dataSplit) {
-        if(user != this.dataSplit[prop].account){
+        if (user != this.dataSplit[prop].account) {
           this.arr.push(parseInt(this.dataSplit[prop].percentage));
         }
       }
       this.counter1 = this.arr.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.available1 = parseInt(100-this.$owner_split) - this.counter1;
+      this.available1 = parseInt(100 - this.$owner_split) - this.counter1;
       //console.log(this.counter1)
-      if (this.counter1 > parseInt(100-this.$owner_split)) {
+      if (this.counter1 > parseInt(100 - this.$owner_split)) {
         this.disable = true;
         this.available1 = 0;
-        this.errorPercentaje1[pos] = "≤" + parseInt(97-this.$owner_split) + "%";
+        this.errorPercentaje1[pos] =
+          "≤" + parseInt(97 - this.$owner_split) + "%";
       } else {
         this.disable = false;
         this.errorPercentaje1[pos] = null;
       }
-      if (Number.isInteger(parseInt(this.dataSplit[pos].percentage))===false){
+      if (
+        Number.isInteger(parseInt(this.dataSplit[pos].percentage)) === false
+      ) {
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
       }
-      if (parseInt(this.dataSplit[pos].percentage) < 0){
+      if (parseInt(this.dataSplit[pos].percentage) < 0) {
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
@@ -2095,7 +2035,7 @@ export default {
     // Remove data from de object
     remove1(pos) {
       this.dataSplit.splice(pos, 1);
-      this.$session.get("splits", this.dataSplit)
+      this.$session.get("splits", this.dataSplit);
       this.arr = [];
       for (const prop in this.dataRoyalties) {
         this.arr.push(parseInt(this.dataRoyalties[prop].percentage));
@@ -2103,7 +2043,7 @@ export default {
       this.counter1 = this.arr.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.available1 = parseInt(100-this.$$owner_split) - this.counter1;
+      this.available1 = parseInt(100 - this.$$owner_split) - this.counter1;
       this.successAccount1[pos] = null;
       this.errorAccount1[pos] = null;
       this.errorPercentaje1[pos] = null;
@@ -2118,8 +2058,14 @@ export default {
           mutation: nft_tokens_aggregate,
           variables: {
             store: this.$store_mintbase,
-            tittle: this.$session.get("mint_tittle") === undefined ? "" : this.$session.get("mint_tittle"),
-            _iregex: this.$session.get("tempid") === undefined ? "" : this.$session.get("tempid")
+            tittle:
+              this.$session.get("mint_tittle") === undefined
+                ? ""
+                : this.$session.get("mint_tittle"),
+            _iregex:
+              this.$session.get("tempid") === undefined
+                ? ""
+                : this.$session.get("tempid"),
           },
         })
         .then((response) => {
@@ -2134,25 +2080,25 @@ export default {
               // inner object entries
               //console.log(value[0].id);
               //Set total minted
-              this.$session.set('metadata_id', value[0].id);
+              this.$session.set("metadata_id", value[0].id);
               this.$apollo
-              .mutate({
-                mutation: minted,
-                variables: {
-                  metadata_id: value[0].id,
-                },
-              })
-              .then((response) => {
+                .mutate({
+                  mutation: minted,
+                  variables: {
+                    metadata_id: value[0].id,
+                  },
+                })
+                .then((response) => {
                   //console.log(response.data.nft_tokens_aggregate.aggregate.count);
                   this.$session.set(
                     "total_minted",
                     response.data.nft_tokens_aggregate.aggregate.count
                   );
                   this.show_total_minted = this.$session.get("total_minted");
-              })
-              .catch((err) => {
-                console.log("Error", err);
-              });
+                })
+                .catch((err) => {
+                  console.log("Error", err);
+                });
             });
           }
         })
@@ -2165,23 +2111,27 @@ export default {
         .mutate({
           mutation: mb_views_nft_tokens,
           variables: {
-            _iregex: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
+            _iregex:
+              this.$session.get("metadata_id").split(":")[1] === undefined
+                ? ""
+                : this.$session.get("metadata_id").split(":")[1],
           },
         })
         .then((response) => {
-          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          var counter =
+            response.data.mb_views_nft_tokens_aggregate.aggregate.count;
           //console.log(counter)
-          if(counter >= parseInt(this.$session.get("control_mint_appoval"))){
-             this.overlay_building = false;
+          if (counter >= parseInt(this.$session.get("control_mint_appoval"))) {
+            this.overlay_building = false;
           } else {
-             this.overlay_building = true;
+            this.overlay_building = true;
           }
         })
         .catch((err) => {
           console.log("Error", err);
         });
     },
-    gotToEvents(){
+    gotToEvents() {
       this.step = 1;
       this.$session.set("step", this.step);
       this.$router.push("/events");
@@ -2211,7 +2161,7 @@ export default {
         try {
           var image = new Image();
           image.src = this.$session.get("canvas_burn");
-          this.image =  image;
+          this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
@@ -2262,7 +2212,10 @@ export default {
         //Metadata Object
         const metadata = JSON.parse(this.$session.get("metadata"));
         metadata.extra.push({
-          trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
+          trait_type:
+            this.$session.get("metadata_id").split(":")[1] === undefined
+              ? ""
+              : this.$session.get("metadata_id").split(":")[1],
           value: "BurnTicket",
         });
         await wallet.minter.setMetadata(metadata, true);
@@ -2359,7 +2312,7 @@ export default {
           .catch((err) => {
             console.log("Error", err);
           });
-         this.executeMultipleTransactions();
+        this.executeMultipleTransactions();
       }
     },
     async executeMultipleTransactions() {
@@ -2385,7 +2338,10 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if(this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined){
+      if (
+        this.$session.get("metadata_id") != undefined &&
+        this.$session.get("IpfsHash") != undefined
+      ) {
         this.$apollo
           .query({
             query: ipfs,
@@ -2430,13 +2386,13 @@ export default {
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();
-      this.price < 0 ? this.price = 0 : this.price;
+      this.price < 0 ? (this.price = 0) : this.price;
       request.onload = () => {
         this.usd = (
           parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
         ).toFixed(4);
       };
-      this.$session.set("price", this.price)
+      this.$session.set("price", this.price);
     },
     async ipfs() {
       const formData = new FormData();
@@ -2451,7 +2407,10 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if(this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined){
+      if (
+        this.$session.get("metadata_id") != undefined &&
+        this.$session.get("IpfsHash") != undefined
+      ) {
         this.$apollo
           .query({
             query: ipfs,
@@ -2488,59 +2447,71 @@ export default {
     },
     pollData() {
       this.polling = setInterval(() => {
-      //check until mintin is done
-      //Fecth until the total minted is ok
-      //console.log(this.show_total_minted, this.mint_amount)
-      if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)){
-        this.overlay = true;
-        //setTimeout(this.getData(), 10000);
-        //  console.log(this.show_total_minted, this.mint_amount)
-        //  console.log('polling', this.show_total_minted); 
-        this.getData();
-      } else {
-        this.overlay = false;
-      }
-       //When the amount is equal close the overlay
-       // this.overlay = !this.overlay;
-       this.$forceUpdate();
+        //check until mintin is done
+        //Fecth until the total minted is ok
+        //console.log(this.show_total_minted, this.mint_amount)
+        if (parseInt(this.show_total_minted) < parseInt(this.mint_amount)) {
+          this.overlay = true;
+          //setTimeout(this.getData(), 10000);
+          //  console.log(this.show_total_minted, this.mint_amount)
+          //  console.log('polling', this.show_total_minted);
+          this.getData();
+        } else {
+          this.overlay = false;
+        }
+        //When the amount is equal close the overlay
+        // this.overlay = !this.overlay;
+        this.$forceUpdate();
       }, 5000);
     },
     listenerEditor() {
       setTimeout(() => {
         const editor = document.querySelector(".editor .ql-editor");
-        editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description))
+        editor?.addEventListener("keyup", () =>
+          this.validator(this.dataTickets.description)
+        );
       }, 400);
     },
     validator(model) {
-      if (model) return this.editorRules = false;
+      if (model) return (this.editorRules = false);
       this.editorRules = true;
     },
     validatorCombobox(model) {
-      if (model && model.length > 0) return this.comboboxRules = false;
+      if (model && model.length > 0) return (this.comboboxRules = false);
       this.comboboxRules = true;
     },
     validatorStartTime(model) {
-      if (model) return this.timepickerStartRules = false;
+      if (model) return (this.timepickerStartRules = false);
       this.timepickerStartRules = true;
     },
     validatorEndTime(model) {
-      if (model) return this.timepickerEndRules = false;
+      if (model) return (this.timepickerEndRules = false);
       this.timepickerEndRules = true;
     },
-    checkMintAmount(){
-      parseInt(this.dataTickets.mint_amount) > 20 ? this.dataTickets.mint_amount = 20 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
-      parseInt(this.dataTickets.mint_amount) < 0 ? this.dataTickets.mint_amount = 0 : this.dataTickets.mint_amount = this.dataTickets.mint_amount;
+    checkMintAmount() {
+      parseInt(this.dataTickets.mint_amount) > 20
+        ? (this.dataTickets.mint_amount = 20)
+        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
+      parseInt(this.dataTickets.mint_amount) < 0
+        ? (this.dataTickets.mint_amount = 0)
+        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
     },
-    checkListAmount(){
+    checkListAmount() {
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
-      parseInt(this.amount_list) < 0 ? this.amount_list = 0 : this.amount_list = this.amount_list;
-      this.$session.set("amount_list",this.amount_list);
+      parseInt(this.amount_list) > total_minted
+        ? (this.amount_list = total_minted)
+        : (this.amount_list = this.amount_list);
+      parseInt(this.amount_list) < 0
+        ? (this.amount_list = 0)
+        : (this.amount_list = this.amount_list);
+      this.$session.set("amount_list", this.amount_list);
     },
-    checkGoodiesAmount(){
+    checkGoodiesAmount() {
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.dataTickets.goodies) > total_minted ? this.dataTickets.goodies = total_minted : this.dataTickets.goodies = this.dataTickets.goodies;
+      parseInt(this.dataTickets.goodies) > total_minted
+        ? (this.dataTickets.goodies = total_minted)
+        : (this.dataTickets.goodies = this.dataTickets.goodies);
     },
     async revisar() {
       let API_KEY = this.$dev_key;
@@ -2573,39 +2544,40 @@ export default {
           localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         this.user = datos.accountId;
-        
-      } 
+      }
     },
     onlyNumberKey(evt) {
-          
-        // Only ASCII character in that range allowed
-        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
-        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
-            return false;
-        return true;
+      // Only ASCII character in that range allowed
+      var ASCIICode = evt.which ? evt.which : evt.keyCode;
+      if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return false;
+      return true;
     },
-    loadAgain(){
+    loadAgain() {
       this.imagecanvas = false;
       this.imagecanvas1 = true;
       this.$forceUpdate();
     },
-    showModal(){
+    showModal() {
       this.$router.push("/events");
     },
-    design(){
-      this.$router.push("/events/select-ticket")
+    design() {
+      this.$router.push("/events/select-ticket");
     },
-    async add(){
+    async add() {
       this.amount_list++;
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+      parseInt(this.amount_list) > total_minted
+        ? (this.amount_list = total_minted)
+        : (this.amount_list = this.amount_list);
     },
-    async substract(){
+    async substract() {
       this.amount_list--;
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted ? this.amount_list = total_minted : this.amount_list = this.amount_list;
+      parseInt(this.amount_list) > total_minted
+        ? (this.amount_list = total_minted)
+        : (this.amount_list = this.amount_list);
     },
     // hideScroll(curr) {
     //   if (curr.path === "/events/register" && window.innerHeight >= 950) {
@@ -2615,18 +2587,22 @@ export default {
     //   }
     // },
     checkoutTicketType() {
-      if (!this.ticketType) return this.$router.push("/events/select-ticket")
+      if (!this.ticketType) return this.$router.push("/events/select-ticket");
 
-      if (this.ticketType === "con" || this.ticketType === "cinema" || this.ticketType === "custom") {
-        this.dataTicket.shift()
-        this.dataTicket.shift()
-        this.addTicketClass()
+      if (
+        this.ticketType === "con" ||
+        this.ticketType === "cinema" ||
+        this.ticketType === "custom"
+      ) {
+        this.dataTicket.shift();
+        this.dataTicket.shift();
+        this.addTicketClass();
       }
     },
     addTicketClass() {
-      const tickets = document.querySelectorAll(".ticket-wrapper")
-      tickets.forEach(e => e.classList.add(this.ticketType))
-    }
+      const tickets = document.querySelectorAll(".ticket-wrapper");
+      tickets.forEach((e) => e.classList.add(this.ticketType));
+    },
   },
 };
 </script>

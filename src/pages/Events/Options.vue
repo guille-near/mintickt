@@ -367,7 +367,6 @@ export default {
     }
     this.getData();
     this.getTotalMinted();
-    this.pollData();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get("transactionHashes") !== null) {
@@ -429,47 +428,43 @@ export default {
       );
       const user = datos.accountId;
       this.$apollo
-        .mutate({
-          mutation: your_events,
+        .watchQuery({
+          query: your_events,
           variables: {
             store: this.$store_mintbase,
             user: user,
             metadata_id: this.$route.query.thingid.toLowerCase(),
           },
+          pollInterval: 3000, // 10 seconds in milliseconds
         })
-        .then((response) => {
+        .subscribe(({ data }) => {
           //Map the objectvalue
-          Object.entries(response.data).forEach(([key, value]) => {
+          Object.entries(data).forEach(([key, value]) => {
             // inner object entries
             Object.entries(value).forEach(([i, value1]) => {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
               this.$apollo
-                .mutate({
-                  mutation: mb_views_nft_tokens_aggregate,
+                .watchQuery({
+                  query: mb_views_nft_tokens_aggregate,
                   variables: {
                     store: this.$store_mintbase,
                     user: user,
                     metadata_id: this.$route.query.thingid.toLowerCase(),
                   },
+                  pollInterval: 3000, // 10 seconds in milliseconds
                 })
-                .then((response) => {
+                .subscribe(({ data }) => {
                   (this.name = this.$route.query.event),
                     (this.minted =
-                      response.data.nft_tokens_aggregate.aggregate.count),
+                      data.nft_tokens_aggregate.aggregate.count),
                     (this.listed = value1.listings_aggregate.aggregate.count);
                     this.available_to_list = this.minted - this.listed;
-                })
-                .catch((err) => {
-                  console.log("Error", err);
                 });
             });
           });
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
+        });
+        this.loading = false
     },
     async mint() {
       this.loading = true;
@@ -673,13 +668,6 @@ export default {
         },
       });
     },
-    pollData() {
-      this.polling = setInterval(() => {
-        this.getData();
-        this.getTotalMinted();
-        this.$forceUpdate();
-      }, 5000);
-    },
     controlAmount(item) {
       this.getData();
       if (item == "more" && this.mint_amount < 20) {
@@ -726,7 +714,7 @@ export default {
       this.disable = false;
       request.onload = () => {
         this.usd = (
-          parseInt(JSON.parse(request.responseText).lastPrice) *
+          parseFloat(JSON.parse(request.responseText).lastPrice) *
           this.price_list
         ).toFixed(2);
       };
@@ -799,18 +787,16 @@ export default {
     },
     async getTotalMinted() {
       this.$apollo
-        .mutate({
-          mutation: mb_views_nft_tokens,
+        .watchQuery({
+          query: mb_views_nft_tokens,
           variables: {
             _iregex: this.$route.query.thingid.toLowerCase().split(":")[1],
           },
+          pollInterval: 3000, // 10 seconds in milliseconds
         })
-        .then((response) => {
-          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+        .subscribe(({ data }) => {
+          var counter = data.mb_views_nft_tokens_aggregate.aggregate.count;
           this.$session.set("total_minted", counter);
-        })
-        .catch((err) => {
-          console.log("Error", err);
         });
     },
   },

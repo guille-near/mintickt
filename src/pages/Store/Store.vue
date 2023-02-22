@@ -335,20 +335,21 @@ export default {
       this.dataTableMobile = [];
       var metadata_id = this.$route.query.thingid.toLowerCase();
       this.$apollo
-        .query({
+        .watchQuery({
           query: your_events,
           variables: {
             store: this.$store_mintbase,
             metadata_id: metadata_id,
           },
+          pollInterval: 10000, // 10 seconds in milliseconds
         })
-        .then((response) => {
+        .subscribe(({ data }) => {
           var options = { month: "short" }; //Format data
           var options_start = { day: "numeric" }; //Format data
           var options_end = { day: "numeric" }; //Format data
           var year = { year: "numeric" }; //Format data
           //Map the objectvalue
-          Object.entries(response.data).forEach(([key, value]) => {
+          Object.entries(data).forEach(([key, value]) => {
             // inner object entries
             //Dates
             this.date = new Date(
@@ -411,42 +412,29 @@ export default {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
               this.$apollo
-                .query({
-                  query: mb_views_nft_tokens_aggregate,
-                  variables: {
-                    store: this.$store_mintbase,
-                    metadata_id: value1.id,
-                  },
-                })
-                .then((response) => {
+                  .watchQuery({
+                    query: mb_views_nft_tokens_aggregate,
+                    variables: {
+                      store: this.$store_mintbase,
+                      metadata_id: value1.id,
+                    },
+                    pollInterval: 10000, // 10 seconds in milliseconds
+                  })
+                  .subscribe(({ data }) => {
                   this.tokens_minted =
-                    response.data.nft_tokens_aggregate.aggregate.count;
+                    data.nft_tokens_aggregate.aggregate.count;
                   this.tokens_listed =
                     value1.listings_aggregate.aggregate.count;
                 })
-                .catch((err) => {
-                  console.log("Error", err);
-                });
             });
           });     
           // control flow 1 toke by default
           if(this.quantity===0){
             this.quantity = 1;
             this.tokens_buy.push(this.tokens[0].token_id);  
-          }
-
-           
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        })
-        .finally(() => (this.loading = false));
-    },
-    pollData() {
-      this.polling = setInterval(() => {
-        this.getData();
-        this.$forceUpdate();
-      }, 45000);
+          } 
+        });
+        this.loading = false
     },
     fetch() {
       const BINANCE_NEAR = this.$binance;
