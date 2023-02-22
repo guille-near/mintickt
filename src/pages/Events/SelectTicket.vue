@@ -83,6 +83,7 @@ export default {
   }
 
   .carousel-3d-container {
+    overflow: visible !important;
     --height: clamp(20em, 29vw, 29.4375em);
     height: calc(var(--height) + (40px * 2)) !important;
     padding-block: 40px;
@@ -102,6 +103,8 @@ export default {
         min-height: max-content !important;
         min-width: max-content !important;
         background: transparent !important;
+        overflow: visible !important;
+        isolation: isolate;
         &:not(.current) {opacity: .4 !important}
         img {
           min-height: var(--height) !important;
@@ -113,11 +116,21 @@ export default {
         &.current.active {
           border-radius: 15px !important;
           // box-shadow: 0px 0px 16.7089px rgba(211, 254, 184, 0.8), 0px 0px 61.519px rgba(204, 0, 183, 0.88); // ? figma
-          box-shadow:
-            // 0px 0px 19.119px rgba(211, 254, 184, 0.8),
-            0px 0px 3.8449375em rgba(204, 0, 183, 0.88),
-            // inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
-            inset 0px 0px 1500px rgba(204, 0, 183, 0.58) !important;
+          // box-shadow:
+          //   // 0px 0px 19.119px rgba(211, 254, 184, 0.8),
+          //   0px 0px 3.8449375em rgba(204, 0, 183, 0.88),
+          //   // inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
+          //   inset 0px 0px 1500px rgba(204, 0, 183, 0.58) !important;
+          // ? Added here
+          &::before {
+            content: "";
+            position: absolute !important;
+            inset: 0;
+            z-index: -1;
+            filter: blur(30px);
+            background-color: rgba(204, 0, 183, 0.88) !important;
+          }
+          // ? Added here
         }
         &.left-1 {
           transform: translateX(-19em) translateZ(-400px) rotateY(35deg) !important;
