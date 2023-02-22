@@ -1765,7 +1765,7 @@ export default {
           allowTaint: true,
           //y: (container / 2, container / 2, 30),
           //height: 570,
-          scale: 10,
+          scale: 4,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
