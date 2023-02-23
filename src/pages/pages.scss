@@ -1845,6 +1845,8 @@
       border-radius: 4px !important;
       &.active .v-input__slot {box-shadow: none !important}
       .image-ticket-event {
+        width: 100% !important;
+        height: 100% !important;
         position: relative;
         &::after {
           content: "";
@@ -2255,12 +2257,12 @@ body:has(#createTickets) {
       border: none !important;
     }
 
-    .ticket-wrapper.cinema .v-input {
+    .ticket-wrapper[data-ticket].cinema .v-input {
       top: 10.5% !important;
       width: 87% !important; // original in png 88.1%
       height: 79.1% !important;
     }
-    .ticket-wrapper.con .v-input {
+    .ticket-wrapper[data-ticket].con .v-input {
       top: 16.2% !important; // original in png 9.58%
       width: 86.6% !important;
       height: 72% !important; // original in png 85.9%

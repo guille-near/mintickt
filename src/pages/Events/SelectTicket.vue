@@ -111,10 +111,10 @@ export default {
           height: var(--height) !important;
           max-height: var(--height) !important;
           // aspect-ratio: 1.3 / 2;
-          border-radius: 15px;
+          // border-radius: 15px;
         }
         &.current.active {
-          border-radius: 15px !important;
+          // border-radius: 15px !important;
           // box-shadow: 0px 0px 16.7089px rgba(211, 254, 184, 0.8), 0px 0px 61.519px rgba(204, 0, 183, 0.88); // ? figma
           // box-shadow:
           //   // 0px 0px 19.119px rgba(211, 254, 184, 0.8),
