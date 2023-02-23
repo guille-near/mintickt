@@ -202,7 +202,7 @@ export default {
   data() {
     return {
       headers: [
-        { align: "start", value: "image" },
+        { align: "start", value: "image", sortable: false },
         { text: "NAME", align: "start", value: "name" },
         { text: "DATE", align: "start", value: "date" },
         { text: "TICKETS MINTED", align: "start", value: "minted" },
