@@ -127,7 +127,8 @@ export default {
             position: absolute !important;
             inset: 0;
             z-index: -1;
-            filter: blur(30px);
+            filter: blur(30px) !important;
+            -ms-filter: blur(20px) !important;
             background-color: rgba(204, 0, 183, 0.88) !important;
           }
           // ? Added here
