@@ -1562,19 +1562,17 @@
     }
   }
   
-  @layer layout {
-    .v-data-table {
-      @media (max-width: 880px) {
-        background: transparent !important;
-        tbody ::after {display: none !important} // <--------
-        th {
-          padding: 0 !important;
-          width: max-content !important;
-        }
-        td {
-          font-size: 14px !important;
-          padding: 0 !important;
-        }
+  .v-data-table {
+    @media (max-width: 880px) {
+      background: transparent !important;
+      tbody ::after {display: none !important} // <--------
+      th {
+        padding: 0 !important;
+        width: max-content !important;
+      }
+      td {
+        font-size: 14px !important;
+        padding: 0 !important;
       }
     }
   }
@@ -1858,12 +1856,10 @@
           border-radius: 4px !important;
         }
       }
-      @layer layout {
-        @media (min-width: 1px) {
-          img {
-            object-fit: cover !important;
-            // background-color: #000 !important;
-          }
+      @media (min-width: 1px) {
+        img {
+          object-fit: cover !important;
+          // background-color: #000 !important;
         }
       }
       * {
@@ -2168,9 +2164,7 @@ body:has(#createTickets) {
 .v-data-table th i {color: #CC00B7 !important}
 .v-chip--select {
   background-color: #6d6d6d !important;
-  @layer layout {
-    :is(span, span.v-chip__content, *)  {color: #fff !important}
-  }
+  :is(span, span.v-chip__content, *)  {color: #fff !important}
 }
 .v-input.rules {
   flex-direction: column;

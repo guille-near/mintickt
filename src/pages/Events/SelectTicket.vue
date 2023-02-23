@@ -128,7 +128,7 @@ export default {
             inset: 0;
             z-index: -1;
             filter: blur(30px) !important;
-            -ms-filter: blur(20px) !important;
+            @media (max-width: 880px) {inset: 0 50px} // for mobile device
             background-color: rgba(204, 0, 183, 0.88) !important;
           }
           // ? Added here
