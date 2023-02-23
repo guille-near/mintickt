@@ -1347,7 +1347,7 @@ export default {
         //  console.log('formData', formData)
         //  console.log(this.$ipfs)
         await this.axios.post(this.$ipfs, formData).then((res) => {
-          console.log("res", res.data);
+          //console.log("res", res.data);
           this.$session.set("IpfsHash", res.data.IpfsHash);
         });
         setTimeout(() => {
@@ -1763,9 +1763,8 @@ export default {
         const options = {
           backgroundColor: null,
           allowTaint: true,
-          //y: (container / 2, container / 2, 30),
-          //height: 570,
-          scale: 4,
+          removeContainer: true,
+          scale: 3,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
@@ -1773,7 +1772,7 @@ export default {
               data: canvas.toDataURL("image/png", 1.0)
             })
           .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             this.timepickerStartRules = false;
             this.timepickerEndRules = false;
             //Store all form data
@@ -1789,6 +1788,8 @@ export default {
             this.step = this.$session.get("step");
             this.loading = false;
             this.getBase64FromUrl(this.burn_ticket_image)
+            canvas.remove();
+            container.parentNode.removeChild(container);
             //console.log(response.data);
           })
           .catch(error => {
