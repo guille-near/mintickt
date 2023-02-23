@@ -151,6 +151,14 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 });
 
+// Polyfill
+if (!String.prototype.cutString) {
+  String.prototype.ellipsisRange = function(length = 7) {
+    if (this.length > length) return `${this.substring(0, length)}...`
+    return this
+  }
+}
+
 
 new Vue({
   vuetify,

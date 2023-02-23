@@ -71,11 +71,11 @@
         <section class="acenter">
           <span class="eventName">
             <v-btn
-              style="color: white"
+              style="color: white; padding: 0"
               text
               :href="$store_site + item.thingid"
               target="_blank"
-              >{{ item.name }}</v-btn
+              >{{ item.name.ellipsisRange(14) }}</v-btn
             >
           </span>
           <span>{{ item.date }}</span>
