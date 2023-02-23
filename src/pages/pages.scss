@@ -2319,7 +2319,8 @@ body:has(#createTickets) {
             inset: 0;
             background: center no-repeat var(--bg-image);
             // background-color: #000 !important;
-            background-size: cover !important;
+            background-size: contain  !important;
+            // background-size: 100% 100%  !important;
             border-radius: 4px !important;
           }
         }
