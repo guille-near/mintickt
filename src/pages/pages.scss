@@ -2247,7 +2247,6 @@ body:has(#createTickets) {
   margin: auto;
 }
 
-@layer layout {
   .btnWithoutStyles {
     padding: 0 !important;
     background-color: transparent !important;
@@ -2271,7 +2270,6 @@ body:has(#createTickets) {
       height: 72% !important; // original in png 85.9%
     }
   }
-}
 
 #createTickets.registerDashboard {
   .ticket-wrapper.custom {
