@@ -122,19 +122,15 @@ export default {
           //   // inset 0px 0px 100px 5px rgba(211, 254, 184, 0.8),
           //   inset 0px 0px 1500px rgba(204, 0, 183, 0.58) !important;
           // ? Added here
+          @media (max-width: 880px) {
+            button {width: 215px !important}
+          }
           &::before {
             content: "";
             position: absolute !important;
             inset: 0;
             z-index: -1;
             filter: blur(30px) !important;
-            @media (max-width: 880px) {
-              inset: 0 50px;
-              -ms-inset: 0 50px;
-              -webkit-inset: 0;
-              -moz-inset: 0;
-              -o-inset: 0;
-            } // for mobile device
             background-color: rgba(204, 0, 183, 0.88) !important;
           }
           // ? Added here
