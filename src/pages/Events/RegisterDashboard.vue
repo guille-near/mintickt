@@ -59,7 +59,7 @@
             <img
               class="ticket"
               :src="
-                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)
+                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)
               "
               alt="Ticket image"
             />
