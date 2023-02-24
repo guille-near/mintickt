@@ -1025,10 +1025,10 @@ export default {
           this.$session.get("dataFormPromoter") === undefined
             ? ""
             : this.$session.get("dataFormPromoter"),
-        img:
-          this.$session.get("canvas") === undefined
-            ? ""
-            : this.$session.get("canvas"),
+        img: this.canvas,
+          // this.$session.get("canvas") === undefined
+          //   ? ""
+          //   : this.$session.get("canvas"),
         img_main:
           this.$session.get("canvas_main_image") === undefined
             ? undefined
@@ -1189,8 +1189,8 @@ export default {
         this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       burn_goodie_image:
         this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
-      imagecanvas: this.$session.get("canvas") === undefined ? false : true,
-      imagecanvas1: this.$session.get("canvas") === undefined ? true : false,
+      imagecanvas: this.canvas,//this.$session.get("canvas") === undefined ? false : true,
+      imagecanvas1: this.canvas,//this.$session.get("canvas") === undefined ? true : false,
       imagegoodie:
         this.$session.get("canvas_goodie") === undefined ? false : true,
       imagegoodie1:
@@ -1247,6 +1247,20 @@ export default {
     }
   },
   mounted() {
+    //getting the canvas
+    if(this.dataTickets.name){
+      this.axios.post(this.$node_url+"/get-uploads", {
+        name: this.dataTickets.name,
+      }).then(response => {
+        //console.log('---data---', response.data);
+        this.canvas = response.data;
+      }).catch(error => {
+        console.error(error);
+      })
+    } else {
+      this.imagecanvas = false;
+      this.imagecanvas1 = true;
+    }
     this.checkoutTicketType();
     // this.hideScroll(this.$route)
     this.revisar();
@@ -1311,17 +1325,7 @@ export default {
         null,
         location.href.split("?")[0],
         "/#/events/register:" + this.$session.get("ticketval")
-      );
-
-      this.axios.get(this.$node_url+"/get-uploads", {
-              name: this.dataTickets.name,
-            })
-          .then(response => {
-            console.log(response.data);
-          })
-          .catch(error => {
-            console.error(error);
-          });
+      );;
     }
     //
     if (urlParams.get("errorCode") === "userRejected") {
@@ -1793,7 +1797,7 @@ export default {
             this.$session.set("dataFormDate", this.dates);
             this.$session.set("dataFormTimeStart", this.startTime);
             this.$session.set("dataFormTimeEnd", this.endTime);
-            //this.$session.set("canvas", response.data);
+            this.$session.set("canvas", "true");
             this.canvas = response.data;
             this.$session.set("step", 2);
             this.step = this.$session.get("step");
