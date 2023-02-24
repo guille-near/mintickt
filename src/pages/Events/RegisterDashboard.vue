@@ -1757,6 +1757,7 @@ export default {
         this.loading = true;
         this.editorRules = false;
         this.comboboxRules = false;
+        if(!this.$session.get("canvas")){
         var container = document.getElementById("my-node"); /* full page */
         // //replacing canvas for domtoimage in order to generate al full resolution png ticket
         // // Set the scale option to 2 for 2x resolution
@@ -1796,6 +1797,11 @@ export default {
             console.error(error);
           });
         });
+      } else {
+        this.$session.set("step", 2);
+        this.step = this.$session.get("step");
+        this.loading = false;
+      }
       }
       if (!this.dataTickets.description) this.editorRules = true;
       if (!this.dates || this.dates.length === 0) this.comboboxRules = true;
@@ -1895,6 +1901,8 @@ export default {
       this.goodie = false;
       var step = this.$session.get("step") - 1;
       this.$session.set("step", step);
+      
+      this.step === 1 ? this.$router.go("0") : "";
     },
     // validating NEAR account
     async validateNearId(val, e) {
@@ -2556,6 +2564,7 @@ export default {
     loadAgain() {
       this.imagecanvas = false;
       this.imagecanvas1 = true;
+      this.$session.remove("canvas");
       this.$forceUpdate();
     },
     showModal() {
