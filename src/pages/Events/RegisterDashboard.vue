@@ -1163,10 +1163,10 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas:
-        this.$session.get("canvas") === undefined
-          ? "@/assets/ticket-selection/ticket-custom-upload.png"
-          : this.$session.get("canvas"),
+      canvas: "",
+        //this.$session.get("canvas") === undefined
+        //  ? "@/assets/ticket-selection/ticket-custom-upload.png"
+        //  : this.$session.get("canvas"),
       canvas_burn:
         this.$session.get("canvas_burn") === undefined
           ? ""
@@ -1312,6 +1312,16 @@ export default {
         location.href.split("?")[0],
         "/#/events/register:" + this.$session.get("ticketval")
       );
+
+      this.axios.get(this.$node_url+"/get-uploads", {
+              name: this.dataTickets.name,
+            })
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
     //
     if (urlParams.get("errorCode") === "userRejected") {
@@ -1419,9 +1429,9 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
-          var image = new Image();
-          image.src = this.$session.get("canvas");
-          this.image = image;
+          // var image = new Image();
+          // image.src = this.$session.get("canvas");
+          this.image = this.canvas;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
@@ -1765,7 +1775,7 @@ export default {
           backgroundColor: null,
           allowTaint: true,
           removeContainer: true,
-          scale: 3,
+          scale: 4,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
@@ -1783,7 +1793,7 @@ export default {
             this.$session.set("dataFormDate", this.dates);
             this.$session.set("dataFormTimeStart", this.startTime);
             this.$session.set("dataFormTimeEnd", this.endTime);
-            this.$session.set("canvas", response.data);
+            //this.$session.set("canvas", response.data);
             this.canvas = response.data;
             this.$session.set("step", 2);
             this.step = this.$session.get("step");
