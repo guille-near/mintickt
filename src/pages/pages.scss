@@ -1214,6 +1214,7 @@
             font-family: 'SF Pro', "Proxima Nova", sans-serif !important;
             font-weight: 510 !important;
             font-size: 18px !important;
+            color: #fff !important;
             text-decoration-line: underline !important;
           }
         }
@@ -1884,7 +1885,7 @@
         width: 33.4%;
         height: 11.7%;
         
-        bottom: 4.4%;
+        bottom: 4.6% !important;
         left: 7.5%;
         right: auto;
       }
@@ -1892,7 +1893,7 @@
         width: 33.4%;
         height: 11.7%;
         
-        bottom: 4.4%;
+        bottom: 4.6% !important;
         left: auto;
         right: 7.5%;
       }
@@ -2255,13 +2256,15 @@ body:has(#createTickets) {
 
     .ticket-wrapper[data-ticket].cinema .v-input {
       top: 10.5% !important;
-      width: 87% !important; // original in png 88.1%
+      width: 86% !important; // original in png 88.1%
       height: 79.1% !important;
+      .v-input__slot {border-radius: 7px !important}
     }
     .ticket-wrapper[data-ticket].con .v-input {
-      top: 16.2% !important; // original in png 9.58%
-      width: 86.6% !important;
-      height: 72% !important; // original in png 85.9%
+      top: 9.58% !important; // original in png 9.58%
+      width: 86.5% !important;
+      height: 85.9% !important; // original in png 85.9%
+      .v-input__slot {border-radius: 7px !important}
     }
   }
 
