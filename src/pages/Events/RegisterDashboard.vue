@@ -10,7 +10,7 @@
       Let's create your event!
     </h2>
 
-    <v-window v-model="step" to >
+    <v-window v-model="step" to touchless>
       <v-window-item :value="1">
         <section class="center divwrap">
           <h2 class="vermobile align" style="text-align: center">
@@ -410,7 +410,7 @@
       <v-window-item :value="2">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <v-form

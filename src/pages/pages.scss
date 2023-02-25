@@ -2278,6 +2278,11 @@ body:has(#createTickets) {
     margin-bottom: auto;
     position: relative;
 
+    .ticket {
+      width: var(--width);
+      height: var(--height);
+    }
+
     .image-ticket-event-empty {
       width: var(--width) !important;
       height: var(--height) !important;
