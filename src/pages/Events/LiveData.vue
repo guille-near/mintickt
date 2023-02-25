@@ -803,7 +803,7 @@ export default {
           query: waiting_in_line,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokens"),
+            tokens: this.$session.get("tokens") === null ? "" : this.$session.get("tokens"),
             owner: this.owner,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
@@ -839,7 +839,7 @@ export default {
             };
             this.dataTable.push(rows);
             this.dataTableMobile.push(rows);
-            this.dataTable.sort((a, b) => (a.key > b.key ? -1 : 1));
+            this.dataTable.sort((a, b) => (a.startTime > b.startTime ? -1 : 1));
             this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
           });
           //this.loading = false;
