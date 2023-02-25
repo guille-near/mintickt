@@ -2279,8 +2279,9 @@ body:has(#createTickets) {
     position: relative;
 
     .ticket {
-      width: var(--width);
-      height: var(--height);
+      width: var(--width) !important;
+      height: var(--height) !important;
+      object-fit: contain !important;
     }
 
     .image-ticket-event-empty {
