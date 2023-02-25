@@ -10,7 +10,7 @@
       Let's create your event!
     </h2>
 
-    <v-window v-model="step" to touchless>
+    <v-window v-model="step" to >
       <v-window-item :value="1">
         <section class="center divwrap">
           <h2 class="vermobile align" style="text-align: center">
