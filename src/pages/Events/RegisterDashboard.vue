@@ -16,10 +16,12 @@
           <h2 class="vermobile align" style="text-align: center">
             Let's create your NFT for your event!
           </h2>
+          <!-- // * canvas ticket -->
           <div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
 
+          <!-- // * custome ticket -->
           <div
             v-if="imagecanvas1 && ticketType === 'custom'"
             class="ticket-wrapper custom"
@@ -50,11 +52,13 @@
             </v-file-input>
           </div>
 
+          <!-- // * normal tickets -->
           <div
             class="ticket-wrapper"
             v-else-if="imagecanvas1 && ticketType"
             id="my-node"
             data-ticket
+            :class="ticketType"
           >
             <img
               class="ticket"
@@ -83,6 +87,7 @@
               </template>
             </v-file-input>
           </div>
+
 
           <div class="container-content divcol" style="gap: 20px">
             <v-form
