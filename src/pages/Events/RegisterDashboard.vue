@@ -1261,7 +1261,7 @@ export default {
       this.axios.post(this.$node_url+"/get-uploads", {
         name: user+"-"+this.dataTickets.name,
       }).then(response => {
-        //console.log('---data---', response.data);
+        console.log('---data---', response.data);
         this.canvas = response.data;
         this.imagecanvas = true;
         this.imagecanvas1 = false;
@@ -1794,7 +1794,7 @@ export default {
           backgroundColor: null,
           allowTaint: true,
           removeContainer: true,
-          scale: 8,
+          scale: 5,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
@@ -1931,7 +1931,8 @@ export default {
       var step = this.$session.get("step") - 1;
       this.$session.set("step", step);
       //console.log(this.step)
-      if(this.step === 1 && this.$session.get("canvas") === "true"){
+      if(this.step === 1 && this.$session.get("canvas")){
+        console.log('---canvas---', this.$session.get("canvas"));
         let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
@@ -1943,6 +1944,7 @@ export default {
           this.canvas = response.data;
           this.imagecanvas = true;
           this.imagecanvas1 = false;
+          this.$forceUpdate();
         }).catch(error => {
           console.error(error);
         })
