@@ -1030,10 +1030,10 @@ export default {
           this.$session.get("dataFormPromoter") === undefined
             ? ""
             : this.$session.get("dataFormPromoter"),
-        img: this.canvas,
-          // this.$session.get("canvas") === undefined
-          //   ? ""
-          //   : this.$session.get("canvas"),
+        img: 
+           this.$session.get("canvas") === undefined
+             ? ""
+             : this.$session.get("canvas"),
         img_main:
           this.$session.get("canvas_main_image") === undefined
             ? undefined
@@ -1168,10 +1168,10 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas: "",
-        //this.$session.get("canvas") === undefined
-        //  ? "@/assets/ticket-selection/ticket-custom-upload.png"
-        //  : this.$session.get("canvas"),
+      canvas: 
+        this.$session.get("canvas") === undefined
+          ? "@/assets/ticket-selection/ticket-custom-upload.png"
+          : this.$session.get("canvas"),
       canvas_burn:
         this.$session.get("canvas_burn") === undefined
           ? ""
@@ -1194,8 +1194,8 @@ export default {
         this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       burn_goodie_image:
         this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
-      imagecanvas: this.canvas,//this.$session.get("canvas") === undefined ? false : true,
-      imagecanvas1: this.canvas,//this.$session.get("canvas") === undefined ? true : false,
+      imagecanvas: this.$session.get("canvas") === undefined ? false : true,
+      imagecanvas1: this.$session.get("canvas") === undefined ? true : false,
       imagegoodie:
         this.$session.get("canvas_goodie") === undefined ? false : true,
       imagegoodie1:
@@ -1252,26 +1252,6 @@ export default {
     }
   },
   mounted() {
-    //getting the canvas
-    if(this.dataTickets.name){
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-      const user = datos.accountId;
-      this.axios.post(this.$node_url+"/get-uploads", {
-        name: user+"-"+this.dataTickets.name,
-      }).then(response => {
-        console.log('---data---', response.data);
-        this.canvas = response.data;
-        this.imagecanvas = true;
-        this.imagecanvas1 = false;
-      }).catch(error => {
-        console.error(error);
-      })
-    } else {
-      this.imagecanvas = false;
-      this.imagecanvas1 = true;
-    }
     this.checkoutTicketType();
     // this.hideScroll(this.$route)
     this.revisar();
@@ -1444,9 +1424,9 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
-          // var image = new Image();
-          // image.src = this.$session.get("canvas");
-          this.image = this.canvas;
+          var image = new Image();
+          image.src = this.$session.get("canvas");
+          this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
@@ -1794,7 +1774,7 @@ export default {
           backgroundColor: null,
           allowTaint: true,
           removeContainer: true,
-          scale: 5,
+          scale: 4,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
@@ -1812,7 +1792,7 @@ export default {
             this.$session.set("dataFormDate", this.dates);
             this.$session.set("dataFormTimeStart", this.startTime);
             this.$session.set("dataFormTimeEnd", this.endTime);
-            this.$session.set("canvas", "true");
+            this.$session.set("canvas", response.data);
             this.canvas = response.data;
             this.$session.set("step", 2);
             this.step = this.$session.get("step");
@@ -1930,28 +1910,6 @@ export default {
       this.goodie = false;
       var step = this.$session.get("step") - 1;
       this.$session.set("step", step);
-      //console.log(this.step)
-      if(this.step === 1 && this.$session.get("canvas")){
-        console.log('---canvas---', this.$session.get("canvas"));
-        let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
-        this.axios.post(this.$node_url+"/get-uploads", {
-        name: user+"-"+this.dataTickets.name,
-        }).then(response => {
-          //console.log('---data---', response.data);
-          this.canvas = response.data;
-          this.imagecanvas = true;
-          this.imagecanvas1 = false;
-          this.$forceUpdate();
-        }).catch(error => {
-          console.error(error);
-        })
-      } else {
-        this.imagecanvas = false;
-        this.imagecanvas1 = true;
-      }
     },
     // validating NEAR account
     async validateNearId(val, e) {
