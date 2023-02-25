@@ -45,6 +45,7 @@
             >
               <template v-slot:selection>
                 <div
+                  id="my-node1"
                   class="image-ticket-event"
                   :style="`--bg-image: url(${dataTicket[0].url})`"
                 />
@@ -1767,14 +1768,17 @@ export default {
         );
         const user = datos.accountId;
         if(!this.$session.get("canvas")){
-        var container = document.getElementById("my-node"); /* full page */
+        var container = "" /* full page */
+        this.$session.get("ticketval") === "custom"
+          ? (container = document.getElementById("my-node1"))
+          : (container = document.getElementById("my-node"));
         // //replacing canvas for domtoimage in order to generate al full resolution png ticket
         // // Set the scale option to 2 for 2x resolution
         const options = {
           backgroundColor: null,
           allowTaint: true,
           removeContainer: true,
-          scale: 4,
+          scale: 5,
         };
         html2canvas(container, options).then((canvas) => {
           this.axios.post(this.$node_url+"/uploads", {
