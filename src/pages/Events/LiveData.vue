@@ -742,16 +742,16 @@ export default {
           this.get_tokens_redeemed();
           setTimeout(() => {
             this.get_waiting_in_line();
-          }, 200);
-          setTimeout(() => {
-            this.get_people_inside();
           }, 400);
           setTimeout(() => {
-            this.get_orders();
+            this.get_people_inside();
           }, 600);
           setTimeout(() => {
-            this.get_redeemed();
+            this.get_orders();
           }, 800);
+          setTimeout(() => {
+            this.get_redeemed();
+          }, 1000);
     },
     //Get tokens
     async get_tokens() {
@@ -764,7 +764,7 @@ export default {
             _iregex: thingid[1],
           },
           client: "mintickClient",
-          pollInterval: 3000, // 10 seconds in milliseconds
+          pollInterval: 9000, // 9 seconds in milliseconds
         })
         .subscribe(({ data }) => {
           //console.log(data);
@@ -784,7 +784,7 @@ export default {
             _iregex: thingid[1],
           },
           client: "mintickClient",
-          pollInterval: 3000, // 10 seconds in milliseconds
+          pollInterval: 9000, // 9 seconds in milliseconds
         })
         .subscribe(({ data }) => {
           //console.log(data);
@@ -831,7 +831,7 @@ export default {
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
@@ -858,7 +858,7 @@ export default {
           query: people_inside,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokens"),
+            tokens: this.$session.get("tokens") === null ? "" : this.$session.get("tokens"),
             owner: this.owner,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
@@ -886,7 +886,7 @@ export default {
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
@@ -910,7 +910,7 @@ export default {
           query: goods_order,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokensRedeemed"),
+            tokens: this.$session.get("tokensRedeemed") === null ? "" : this.$session.get("tokensRedeemed"),
             owner: this.owner,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
@@ -938,7 +938,7 @@ export default {
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
@@ -964,7 +964,7 @@ export default {
           query: goods_redeemed,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokensRedeemed"),
+            tokens: this.$session.get("tokensRedeemed") === null ? "" : this.$session.get("tokensRedeemed"),
             owner: this.owner,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
@@ -993,7 +993,7 @@ export default {
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
@@ -1030,11 +1030,8 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          setTimeout( () => {
-            element.loadingBtn = false;
-            this.getData();
-            this.$forceUpdate();
-          } , 3000 );
+            setTimeout( ()=> element.loadingBtn = false, 1500 );
+            setTimeout( ()=> this.$router.go(0), 3000);
         })
         .catch((error) => {
           console.log(error);
@@ -1052,12 +1049,8 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          setTimeout( () => {
-            element.loadingBtn = false;
-            this.getData();
-            this.$forceUpdate();
-          } , 3000 );
-          //this.$router.go(0);
+            setTimeout( ()=> element.loadingBtn = false, 1500 );
+            setTimeout( ()=> this.$router.go(0), 3000);
         })
         .catch((error) => {
           console.log(error);
