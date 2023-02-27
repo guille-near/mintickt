@@ -1038,7 +1038,7 @@ export default {
     color: white !important;
     gap: 2em;
     z-index: 3;
-    width: min(90%, 22em) !important;
+    width: min(90%, 319.08px) !important;
     @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {
       width: 80% !important;
@@ -1065,6 +1065,7 @@ export default {
     // }
     .ticket {
       width: 100% !important;
+      @media (min-width: 880px) {max-height: 565px !important}
       border-radius: 20px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
