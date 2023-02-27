@@ -1065,7 +1065,10 @@ export default {
     // }
     .ticket {
       width: 100% !important;
-      @media (min-width: 880px) {max-height: 565px !important}
+      @media (min-width: 880px) {
+        width: 314px !important;
+        max-height: 565px !important;
+      }
       border-radius: 20px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
