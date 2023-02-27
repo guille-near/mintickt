@@ -28,7 +28,6 @@
 					<h3 class="h7-em p">About</h3>
 
 					<div v-if="Datos.about.event" class="divcol h8-em">
-						<p class="p"><strong>Event Information:</strong></p>
 						<p class="mt-3" v-html="Datos.about.event.text" />
 					</div>
 				</aside>

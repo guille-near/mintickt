@@ -740,21 +740,23 @@ export default {
         });
           this.get_tokens();
           this.get_tokens_redeemed();
-          setTimeout(() => {
-            this.get_waiting_in_line();
-          }, 200);
-          setTimeout(() => {
-            this.get_people_inside();
-          }, 400);
-          setTimeout(() => {
-            this.get_orders();
-          }, 600);
-          setTimeout(() => {
-            this.get_redeemed();
-          }, 800);
+          // setTimeout(() => {
+          //   this.get_waiting_in_line();
+          // }, 400);
+          // setTimeout(() => {
+          //   this.get_people_inside();
+          // }, 600);
+          // setTimeout(() => {
+          //   this.get_orders();
+          // }, 800);
+          // setTimeout(() => {
+          //   this.get_redeemed();
+          // }, 1000);
     },
     //Get tokens
     async get_tokens() {
+      var rowsa = [];
+      var rowsb = [];
       var thingid = this.$route.query.thingid.toLowerCase().split(":");
       var arr = [];
       this.$apollo
@@ -764,49 +766,23 @@ export default {
             _iregex: thingid[1],
           },
           client: "mintickClient",
-          pollInterval: 3000, // 10 seconds in milliseconds
+          pollInterval: 5000, // 9 seconds in milliseconds
         })
         .subscribe(({ data }) => {
           //console.log(data);
           arr = data.fansinsides.map(function (el) {
             return el.tokenid;
           });
-          this.$session.set("tokens", arr);
-        });
-    },
-    async get_tokens_redeemed() {
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      var arr = [];
-      this.$apollo
-        .watchQuery({
-          query: burned_reedemed_tokens_aggregate,
-          variables: {
-            _iregex: thingid[1],
-          },
-          client: "mintickClient",
-          pollInterval: 3000, // 10 seconds in milliseconds
-        })
-        .subscribe(({ data }) => {
-          //console.log(data);
-          arr = data.redeemers.map(function (el) {
-            return el.tokenid;
-          });
-          this.$session.set("tokensRedeemed", arr);
-        });
-    },
-    //Waiting in line
-    async get_waiting_in_line() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      this.$apollo
+          //this.$session.set("tokens", arr);
+        this.$apollo
         .watchQuery({
           query: waiting_in_line,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokens"),
+            tokens: arr,
             owner: this.owner,
           },
-          pollInterval: 10000, // 10 seconds in milliseconds
+          pollInterval: 5000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
           this.dataTable = [];
@@ -826,42 +802,38 @@ export default {
             var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
             var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
             var receipe = value.burned_receipt_id;
-            rows = {
+            rowsa = {
               nft: value.title,
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
               key: key,
             };
-            this.dataTable.push(rows);
-            this.dataTableMobile.push(rows);
-            this.dataTable.sort((a, b) => (a.key > b.key ? -1 : 1));
+            this.dataTable.push(rowsa);
+            this.dataTableMobile.push(rowsa);
+            this.dataTable.sort((a, b) => (a.startTime > b.startTime ? -1 : 1));
             this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
           });
           //this.loading = false;
           this.dataFilters[0].value =
             this.dataTable.length +
             " / " +
-            (this.dataTable.length + this.$session.get("tokens").length);
+            (this.dataTable.length + arr.length);
         });
-    },
-    //People inside
-    async get_people_inside() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      this.$apollo
+
+        this.$apollo
         .watchQuery({
           query: people_inside,
           variables: {
             _iregex: thingid[1],
-            tokens: this.$session.get("tokens"),
+            tokens: arr,
             owner: this.owner,
           },
-          pollInterval: 10000, // 10 seconds in milliseconds
+          pollInterval: 8000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
           this.dataTablePeople = [];
@@ -881,135 +853,366 @@ export default {
             var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
             var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
             var receipe = value.burned_receipt_id;
-            rows = {
+            rowsb = {
               nft: value.title,
               signer: value.owner,
               quantity: 1,
               created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
+              transaction: this.$explorer + "?query=" + receipe,
               tokenid: value.token_id,
               loadingBtn: false,
               show: false,
               key: key,
             };
-            this.dataTablePeople.push(rows);
-            this.dataTableMobilePeople.push(rows);
+            this.dataTablePeople.push(rowsb);
+            this.dataTableMobilePeople.push(rowsb);
             this.dataTablePeople.sort((a, b) => (a.key > b.key ? -1 : 1));
             this.dataTableMobilePeople.sort((a, b) => (a.key > b.key ? -1 : 1));
           });
           //this.loading = false;
-          this.dataFilters[1].value = this.$session.get("tokens").length;
+          this.dataFilters[1].value = arr.length;
+        });
         });
     },
+    async get_tokens_redeemed() {
+      var rowsa = [];
+      var rowsb = [];
+      var thingid = this.$route.query.thingid.toLowerCase().split(":");
+      var arr = [];
+      this.$apollo
+        .watchQuery({
+          query: burned_reedemed_tokens_aggregate,
+          variables: {
+            _iregex: thingid[1],
+          },
+          client: "mintickClient",
+          pollInterval: 5000, // 9 seconds in milliseconds
+        })
+        .subscribe(({ data }) => {
+          //console.log(data);
+          arr = data.redeemers.map(function (el) {
+            return el.tokenid;
+          });
+            //this.$session.set("tokensRedeemed", arr);
+            this.$apollo
+            .watchQuery({
+              query: goods_order,
+              variables: {
+                _iregex: thingid[1],
+                tokens: arr,
+                owner: this.owner,
+              },
+              pollInterval: 8000, // 10 seconds in milliseconds
+            })
+            .subscribe(({ data }) => {
+              this.dataTableOrders = [];
+              this.dataTableOrdersMobile = [];
+              //Get the first object and loop
+              Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+                var startTime =
+                  value.last_transfer_receipt_id === null
+                    ? moment.utc(value.burned_timestamp)
+                    : moment.utc(value.last_transfer_timestamp);
+                var endTime = moment.utc(new Date());
+                var minutesDiff = endTime.diff(startTime, "minutes");
+                var hoursDiff = endTime.diff(startTime, "hours");
+                var daysDiff = endTime.diff(startTime, "day");
+                var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                var time2 = time > 24 ? daysDiff : time;
+                var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                var receipe = value.burned_receipt_id;
+                rowsa = {
+                  nft: value.title,
+                  signer: value.owner,
+                  quantity: 1,
+                  created: time2 + " " + timedesc2,
+                  transaction: this.$explorer + "?query=" + receipe,
+                  tokenid: value.token_id,
+                  loadingBtn: false,
+                  show: false,
+                  key: key,
+                };
+                this.dataTableOrders.push(rowsa);
+                this.dataTableOrdersMobile.push(rowsa);
+                this.dataTableOrders.sort((a, b) => (a.key > b.key ? -1 : 1));
+                this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
+              });
+              //this.loading = false;
+              this.dataFilters[2].value =
+                this.dataTableOrders.length +
+                " / " +
+                (this.dataTableOrders.length + arr.length);
+            });
+
+            this.$apollo
+              .watchQuery({
+                query: goods_redeemed,
+                variables: {
+                  _iregex: thingid[1],
+                  tokens: arr,
+                  owner: this.owner,
+                },
+                pollInterval: 8000, // 10 seconds in milliseconds
+              })
+              .subscribe(({ data }) => {
+                //console.log('data', data)
+                this.dataTableRedeemer = [];
+                this.dataTableMobileRedeemer = [];
+                //Get the first object and loop
+                Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+                  var startTime =
+                    value.last_transfer_receipt_id === null
+                      ? moment.utc(value.burned_timestamp)
+                      : moment.utc(value.last_transfer_timestamp);
+                  var endTime = moment.utc(new Date());
+                  var minutesDiff = endTime.diff(startTime, "minutes");
+                  var hoursDiff = endTime.diff(startTime, "hours");
+                  var daysDiff = endTime.diff(startTime, "day");
+                  var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+                  var time2 = time > 24 ? daysDiff : time;
+                  var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+                  var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+                  var receipe = value.burned_receipt_id;
+                  rowsb = {
+                    nft: value.title,
+                    signer: value.owner,
+                    quantity: 1,
+                    created: time2 + " " + timedesc2,
+                    transaction: this.$explorer + "?query=" + receipe,
+                    tokenid: value.token_id,
+                    loadingBtn: false,
+                    show: false,
+                    key: key,
+                  };
+                  this.dataTableRedeemer.push(rowsb);
+                  this.dataTableMobileRedeemer.push(rowsb);
+                  this.dataTableRedeemer.sort((a, b) => (a.key > b.key ? -1 : 1));
+                  this.dataTableMobileRedeemer.sort((a, b) =>
+                    a.key > b.key ? -1 : 1
+                  );
+                });
+                this.loading = false;
+                this.dataFilters[3].value = arr.length;
+              });
+        });
+    },
+    //Waiting in line
+    // async get_waiting_in_line() {
+    //   var rows = [];
+    //   var thingid = this.$route.query.thingid.toLowerCase().split(":");
+    //   this.$apollo
+    //     .watchQuery({
+    //       query: waiting_in_line,
+    //       variables: {
+    //         _iregex: thingid[1],
+    //         tokens: this.$session.get("tokens") === null ? "" : this.$session.get("tokens"),
+    //         owner: this.owner,
+    //       },
+    //       pollInterval: 10000, // 10 seconds in milliseconds
+    //     })
+    //     .subscribe(({ data }) => {
+    //       this.dataTable = [];
+    //       this.dataTableMobile = [];
+    //       //Get the first object and loop
+    //       Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+    //         var startTime =
+    //           value.last_transfer_receipt_id === null
+    //             ? moment.utc(value.burned_timestamp)
+    //             : moment.utc(value.last_transfer_timestamp);
+    //         var endTime = moment.utc(new Date());
+    //         var minutesDiff = endTime.diff(startTime, "minutes");
+    //         var hoursDiff = endTime.diff(startTime, "hours");
+    //         var daysDiff = endTime.diff(startTime, "day");
+    //         var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+    //         var time2 = time > 24 ? daysDiff : time;
+    //         var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+    //         var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+    //         var receipe = value.burned_receipt_id;
+    //         rows = {
+    //           nft: value.title,
+    //           signer: value.owner,
+    //           quantity: 1,
+    //           created: time2 + " " + timedesc2,
+    //           transaction: this.$explorer + "?query=" + receipe,
+    //           tokenid: value.token_id,
+    //           loadingBtn: false,
+    //           show: false,
+    //           key: key,
+    //         };
+    //         this.dataTable.push(rows);
+    //         this.dataTableMobile.push(rows);
+    //         this.dataTable.sort((a, b) => (a.startTime > b.startTime ? -1 : 1));
+    //         this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //       });
+    //       //this.loading = false;
+    //       this.dataFilters[0].value =
+    //         this.dataTable.length +
+    //         " / " +
+    //         (this.dataTable.length + this.$session.get("tokens").length);
+    //     });
+    // },
+    //People inside
+    // async get_people_inside() {
+    //   var rows = [];
+    //   var thingid = this.$route.query.thingid.toLowerCase().split(":");
+    //   this.$apollo
+    //     .watchQuery({
+    //       query: people_inside,
+    //       variables: {
+    //         _iregex: thingid[1],
+    //         tokens: this.$session.get("tokens") === null ? "" : this.$session.get("tokens"),
+    //         owner: this.owner,
+    //       },
+    //       pollInterval: 10000, // 10 seconds in milliseconds
+    //     })
+    //     .subscribe(({ data }) => {
+    //       this.dataTablePeople = [];
+    //       this.dataTableMobilePeople = [];
+    //       //Get the first object and loop
+    //       Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+    //         var startTime =
+    //           value.last_transfer_receipt_id === null
+    //             ? moment.utc(value.burned_timestamp)
+    //             : moment.utc(value.last_transfer_timestamp);
+    //         var endTime = moment.utc(new Date());
+    //         var minutesDiff = endTime.diff(startTime, "minutes");
+    //         var hoursDiff = endTime.diff(startTime, "hours");
+    //         var daysDiff = endTime.diff(startTime, "day");
+    //         var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+    //         var time2 = time > 24 ? daysDiff : time;
+    //         var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+    //         var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+    //         var receipe = value.burned_receipt_id;
+    //         rows = {
+    //           nft: value.title,
+    //           signer: value.owner,
+    //           quantity: 1,
+    //           created: time2 + " " + timedesc2,
+    //           transaction: this.$explorer + "?query=" + receipe,
+    //           tokenid: value.token_id,
+    //           loadingBtn: false,
+    //           show: false,
+    //           key: key,
+    //         };
+    //         this.dataTablePeople.push(rows);
+    //         this.dataTableMobilePeople.push(rows);
+    //         this.dataTablePeople.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //         this.dataTableMobilePeople.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //       });
+    //       //this.loading = false;
+    //       this.dataFilters[1].value = this.$session.get("tokens").length;
+    //     });
+    // },
     //Redeemed
-    async get_orders() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      this.$apollo
-        .watchQuery({
-          query: goods_order,
-          variables: {
-            _iregex: thingid[1],
-            tokens: this.$session.get("tokensRedeemed"),
-            owner: this.owner,
-          },
-          pollInterval: 10000, // 10 seconds in milliseconds
-        })
-        .subscribe(({ data }) => {
-          this.dataTableOrders = [];
-          this.dataTableOrdersMobile = [];
-          //Get the first object and loop
-          Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
-            var startTime =
-              value.last_transfer_receipt_id === null
-                ? moment.utc(value.burned_timestamp)
-                : moment.utc(value.last_transfer_timestamp);
-            var endTime = moment.utc(new Date());
-            var minutesDiff = endTime.diff(startTime, "minutes");
-            var hoursDiff = endTime.diff(startTime, "hours");
-            var daysDiff = endTime.diff(startTime, "day");
-            var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
-            var time2 = time > 24 ? daysDiff : time;
-            var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
-            var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-            var receipe = value.burned_receipt_id;
-            rows = {
-              nft: value.title,
-              signer: value.owner,
-              quantity: 1,
-              created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
-              tokenid: value.token_id,
-              loadingBtn: false,
-              show: false,
-              key: key,
-            };
-            this.dataTableOrders.push(rows);
-            this.dataTableOrdersMobile.push(rows);
-            this.dataTableOrders.sort((a, b) => (a.key > b.key ? -1 : 1));
-            this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
-          });
-          //this.loading = false;
-          this.dataFilters[2].value =
-            this.dataTableOrders.length +
-            " / " +
-            (this.dataTableOrders.length + this.$session.get("tokensRedeemed").length);
-        });
-    },
-    async get_redeemed() {
-      var rows = [];
-      var thingid = this.$route.query.thingid.toLowerCase().split(":");
-      this.$apollo
-        .watchQuery({
-          query: goods_redeemed,
-          variables: {
-            _iregex: thingid[1],
-            tokens: this.$session.get("tokensRedeemed"),
-            owner: this.owner,
-          },
-          pollInterval: 10000, // 10 seconds in milliseconds
-        })
-        .subscribe(({ data }) => {
-          //console.log('data', data)
-          this.dataTableRedeemer = [];
-          this.dataTableMobileRedeemer = [];
-          //Get the first object and loop
-          Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
-            var startTime =
-              value.last_transfer_receipt_id === null
-                ? moment.utc(value.burned_timestamp)
-                : moment.utc(value.last_transfer_timestamp);
-            var endTime = moment.utc(new Date());
-            var minutesDiff = endTime.diff(startTime, "minutes");
-            var hoursDiff = endTime.diff(startTime, "hours");
-            var daysDiff = endTime.diff(startTime, "day");
-            var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
-            var time2 = time > 24 ? daysDiff : time;
-            var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
-            var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
-            var receipe = value.burned_receipt_id;
-            rows = {
-              nft: value.title,
-              signer: value.owner,
-              quantity: 1,
-              created: time2 + " " + timedesc2,
-              transaction: this.$explorer + receipe,
-              tokenid: value.token_id,
-              loadingBtn: false,
-              show: false,
-              key: key,
-            };
-            this.dataTableRedeemer.push(rows);
-            this.dataTableMobileRedeemer.push(rows);
-            this.dataTableRedeemer.sort((a, b) => (a.key > b.key ? -1 : 1));
-            this.dataTableMobileRedeemer.sort((a, b) =>
-              a.key > b.key ? -1 : 1
-            );
-          });
-          this.loading = false;
-          this.dataFilters[3].value = this.$session.get("tokensRedeemed").length;
-        });
-    },
+    // async get_orders() {
+    //   var rows = [];
+    //   var thingid = this.$route.query.thingid.toLowerCase().split(":");
+    //   this.$apollo
+    //     .watchQuery({
+    //       query: goods_order,
+    //       variables: {
+    //         _iregex: thingid[1],
+    //         tokens: this.$session.get("tokensRedeemed") === null ? "" : this.$session.get("tokensRedeemed"),
+    //         owner: this.owner,
+    //       },
+    //       pollInterval: 10000, // 10 seconds in milliseconds
+    //     })
+    //     .subscribe(({ data }) => {
+    //       this.dataTableOrders = [];
+    //       this.dataTableOrdersMobile = [];
+    //       //Get the first object and loop
+    //       Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+    //         var startTime =
+    //           value.last_transfer_receipt_id === null
+    //             ? moment.utc(value.burned_timestamp)
+    //             : moment.utc(value.last_transfer_timestamp);
+    //         var endTime = moment.utc(new Date());
+    //         var minutesDiff = endTime.diff(startTime, "minutes");
+    //         var hoursDiff = endTime.diff(startTime, "hours");
+    //         var daysDiff = endTime.diff(startTime, "day");
+    //         var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+    //         var time2 = time > 24 ? daysDiff : time;
+    //         var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+    //         var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+    //         var receipe = value.burned_receipt_id;
+    //         rows = {
+    //           nft: value.title,
+    //           signer: value.owner,
+    //           quantity: 1,
+    //           created: time2 + " " + timedesc2,
+    //           transaction: this.$explorer + "?query=" + receipe,
+    //           tokenid: value.token_id,
+    //           loadingBtn: false,
+    //           show: false,
+    //           key: key,
+    //         };
+    //         this.dataTableOrders.push(rows);
+    //         this.dataTableOrdersMobile.push(rows);
+    //         this.dataTableOrders.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //         this.dataTableOrdersMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //       });
+    //       //this.loading = false;
+    //       this.dataFilters[2].value =
+    //         this.dataTableOrders.length +
+    //         " / " +
+    //         (this.dataTableOrders.length + this.$session.get("tokensRedeemed").length);
+    //     });
+    // },
+    // async get_redeemed() {
+    //   var rows = [];
+    //   var thingid = this.$route.query.thingid.toLowerCase().split(":");
+    //   this.$apollo
+    //     .watchQuery({
+    //       query: goods_redeemed,
+    //       variables: {
+    //         _iregex: thingid[1],
+    //         tokens: this.$session.get("tokensRedeemed") === null ? "" : this.$session.get("tokensRedeemed"),
+    //         owner: this.owner,
+    //       },
+    //       pollInterval: 10000, // 10 seconds in milliseconds
+    //     })
+    //     .subscribe(({ data }) => {
+    //       //console.log('data', data)
+    //       this.dataTableRedeemer = [];
+    //       this.dataTableMobileRedeemer = [];
+    //       //Get the first object and loop
+    //       Object.entries(data.mb_views_nft_tokens).forEach(([key, value]) => {
+    //         var startTime =
+    //           value.last_transfer_receipt_id === null
+    //             ? moment.utc(value.burned_timestamp)
+    //             : moment.utc(value.last_transfer_timestamp);
+    //         var endTime = moment.utc(new Date());
+    //         var minutesDiff = endTime.diff(startTime, "minutes");
+    //         var hoursDiff = endTime.diff(startTime, "hours");
+    //         var daysDiff = endTime.diff(startTime, "day");
+    //         var time = minutesDiff > 60 ? hoursDiff : minutesDiff;
+    //         var time2 = time > 24 ? daysDiff : time;
+    //         var timedesc = minutesDiff > 60 ? "hour(s) ago" : "minute(s) ago";
+    //         var timedesc2 = time > 24 ? "day(s) ago" : timedesc;
+    //         var receipe = value.burned_receipt_id;
+    //         rows = {
+    //           nft: value.title,
+    //           signer: value.owner,
+    //           quantity: 1,
+    //           created: time2 + " " + timedesc2,
+    //           transaction: this.$explorer + "?query=" + receipe,
+    //           tokenid: value.token_id,
+    //           loadingBtn: false,
+    //           show: false,
+    //           key: key,
+    //         };
+    //         this.dataTableRedeemer.push(rows);
+    //         this.dataTableMobileRedeemer.push(rows);
+    //         this.dataTableRedeemer.sort((a, b) => (a.key > b.key ? -1 : 1));
+    //         this.dataTableMobileRedeemer.sort((a, b) =>
+    //           a.key > b.key ? -1 : 1
+    //         );
+    //       });
+    //       this.loading = false;
+    //       this.dataFilters[3].value = this.$session.get("tokensRedeemed").length;
+    //     });
+    // },
     fetch() {
       const BINANCE_NEAR = this.$binance;
       var request = new XMLHttpRequest();
@@ -1030,11 +1233,8 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          setTimeout( () => {
-            element.loadingBtn = false;
-            this.getData();
-            this.$forceUpdate();
-          } , 3000 );
+            setTimeout( ()=> element.loadingBtn = false, 1500 );
+            //setTimeout( ()=> this.$router.go(0), 3000);
         })
         .catch((error) => {
           console.log(error);
@@ -1052,12 +1252,8 @@ export default {
       this.axios
         .post(url, item)
         .then(() => {
-          setTimeout( () => {
-            element.loadingBtn = false;
-            this.getData();
-            this.$forceUpdate();
-          } , 3000 );
-          //this.$router.go(0);
+            setTimeout( ()=> element.loadingBtn = false, 1500 );
+            //setTimeout( ()=> this.$router.go(0), 3000);
         })
         .catch((error) => {
           console.log(error);
