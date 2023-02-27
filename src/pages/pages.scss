@@ -1029,6 +1029,9 @@
         ::placeholder {color: #5a5a5a !important}
         .v-icon {color: #FFFFFF !important}
       }
+      .v-input.error--text .v-input__slot {
+        border: 1.5px solid red !important;
+      }
       .mx-datepicker {
         width: 100% !important;
         min-height: 100.5px;

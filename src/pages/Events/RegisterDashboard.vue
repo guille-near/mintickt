@@ -193,7 +193,17 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <label for="date" class="mb-5">
+                    <label for="date">
+                      <v-text-field
+                        id="date"
+                        v-model="dateRangeText"
+                        readonly solo
+                        v-on="on"
+                        v-bind="attrs"
+                        :rules="rules.required"
+                      ></v-text-field>
+                    </label>
+                    <!-- <label for="date" class="mb-5">
                       <v-combobox
                         v-model="dates"
                         id="date"
@@ -209,13 +219,13 @@
                         v-on="on"
                         :rules="rules.required"
                       ></v-combobox>
-                    </label>
+                    </label> -->
                   </template>
                   <v-date-picker
                     v-model="dates"
                     no-title
                     scrollable
-                    multiple
+                    range
                     color="hsl(306, 100%, 50%)"
                     dark
                   >
@@ -1317,7 +1327,7 @@ export default {
         null,
         location.href.split("?")[0],
         "/#/events/register:" + this.$session.get("ticketval")
-      );;
+      );
     }
     //
     if (urlParams.get("errorCode") === "userRejected") {
@@ -1331,7 +1341,7 @@ export default {
   },
   computed: {
     dateRangeText() {
-      return this.dates.join(" ~ ");
+      return this.dates?.join(" ~ ");
     },
     ticketType() {
       return this.$route.params.type?.split(":")[1];
