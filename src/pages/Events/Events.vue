@@ -22,6 +22,7 @@
       :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
       calculate-widths
       :mobile-breakpoint="880"
+      :custom-sort="customSort"
       class="eliminarmobile"
     >
       <template v-slot:[`item.image`]="{ item }">
@@ -205,9 +206,9 @@ export default {
         { align: "start", value: "image", sortable: false },
         { text: "NAME", align: "start", value: "name" },
         { text: "DATE", align: "start", value: "date" },
-        { text: "TICKETS MINTED", align: "start", value: "minted" },
-        { text: "TICKETS SOLD", align: "start", value: "sold" },
-        { text: "TICKETS LISTED", align: "start", value: "listed" },
+        { text: "TICKETS MINTED", align: "start", value: "minted", sortable: false },
+        { text: "TICKETS SOLD", align: "start", value: "sold", sortable: false },
+        { text: "TICKETS LISTED", align: "start", value: "listed", sortable: false },
         { sortable: false, align: "end", value: "actions" },
       ],
       data: [],
@@ -263,6 +264,28 @@ export default {
     }
   },
   methods: {
+    customSort: function(items, index, isDesc) {
+      items.sort((a, b) => {
+          if (index[0]=='date') {
+            if (!isDesc[0]) {
+                return new Date(b[index]) - new Date(a[index]);
+            } else {
+                return new Date(a[index]) - new Date(b[index]);
+            }
+          }
+          else {
+            if(typeof a[index] !== 'undefined'){
+              if (!isDesc[0]) {
+                 return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
+              }
+              else {
+                  return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
+              }
+            }
+          }
+      });
+      return items;
+    },
     async getData() {
       this.progress = true;
       let datos = JSON.parse(
