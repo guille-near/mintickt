@@ -89,7 +89,6 @@
             </v-file-input>
           </div>
 
-
           <div class="container-content divcol" style="gap: 20px">
             <v-form
               ref="form"
@@ -197,7 +196,8 @@
                       <v-text-field
                         id="date"
                         v-model="dateRangeText"
-                        readonly solo
+                        readonly
+                        solo
                         v-on="on"
                         v-bind="attrs"
                         :rules="rules.required"
@@ -420,7 +420,12 @@
       <v-window-item :value="2">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper">
-            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
+            <img
+              class="ticket"
+              :class="ticketType"
+              :src="canvas"
+              alt="Ticket image"
+            />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <v-form
@@ -934,6 +939,10 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Building event be pacient...</h3>
       </v-overlay>
+      <v-overlay :value="overlay_ticket">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      <h3 class="mt-3">Building ticket be pacient...</h3>
+      </v-overlay>
     </div>
   </section>
 </template>
@@ -1041,14 +1050,14 @@ export default {
           this.$session.get("dataFormPromoter") === undefined
             ? ""
             : this.$session.get("dataFormPromoter"),
-        img: 
-           this.$session.get("canvas") === undefined
-             ? ""
-             : this.$session.get("canvas"),
-        img_main:
-          this.$session.get("canvas_main_image") === undefined
-            ? undefined
-            : this.$session.get("canvas_main_image"),
+        img: "",
+          // this.$session.get("canvas") === undefined
+          //   ? ""
+          //   : this.$session.get("canvas"),
+        img_main: this.url,
+          // this.$session.get("canvas_main_image") === undefined
+          //   ? undefined
+          //   : this.$session.get("canvas_main_image"),
         description:
           this.$session.get("dataFormDescription") === undefined
             ? ""
@@ -1063,10 +1072,10 @@ export default {
             : this.$session.get("dataFormAttendees"),
         goodies: "1", // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
-      url:
-        this.$session.get("canvas_main_image") === undefined
-          ? undefined
-          : this.$session.get("canvas_main_image"),
+      url: "",
+        // this.$session.get("canvas_main_image") === undefined
+        //   ? undefined
+        //   : this.$session.get("canvas_main_image"),
       url2: null,
       goodie: false,
       royalties: null,
@@ -1183,11 +1192,11 @@ export default {
         this.$session.get("canvas") === undefined
           ? "@/assets/ticket-selection/ticket-custom-upload.png"
           : this.$session.get("canvas"),
-      canvas_burn:
+      canvas_burn: 
         this.$session.get("canvas_burn") === undefined
           ? ""
           : this.$session.get("canvas_burn"),
-      canvas_goodie:
+      canvas_goodie: 
         this.$session.get("canvas_goodie") === undefined
           ? ""
           : this.$session.get("canvas_goodie"),
@@ -1217,6 +1226,7 @@ export default {
           : this.$session.get("total_minted"),
       overlay: false,
       overlay_building: false,
+      overlay_ticket: false,
       mint_amount:
         this.$session.get("mint_amount") === undefined
           ? 0
@@ -1277,6 +1287,9 @@ export default {
     const user = datos.accountId;
     this.getData();
     this.pollData();
+    if(this.$session.get("dataFormName")){
+      this.getCanvas();
+    }
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
@@ -1304,6 +1317,7 @@ export default {
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 5;
       this.$session.set("step", this.step);
+      this.$session.remove("canvas_burn");
       history.replaceState(
         null,
         location.href.split("?")[0],
@@ -1322,6 +1336,7 @@ export default {
         // this.overlay = !this.overlay;
         this.$forceUpdate();
       }, 5000);
+      this.$session.remove("canvas_goodie");
       this.gotToEvents();
       history.replaceState(
         null,
@@ -1435,8 +1450,9 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
+          this.getCanvas();
           var image = new Image();
-          image.src = this.$session.get("canvas");
+          image.src = this.canvas;
           this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
@@ -1624,6 +1640,7 @@ export default {
         const { wallet } = walletData;
         //Loading image
         try {
+          this.getBase64FromUrlGoodie(this.burn_goodie_image);
           var image = new Image();
           image.src = this.$session.get("canvas_goodie");
           //image.src = localStorage.getItem("canvas");
@@ -1770,66 +1787,111 @@ export default {
         this.dataTickets.description &&
         this.dates
       ) {
-        this.loading = true;
+        //this.loading = true;
+        this.overlay_ticket = true;
         this.editorRules = false;
         this.comboboxRules = false;
         let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         const user = datos.accountId;
-        if(!this.$session.get("canvas")){
-        var container = "" /* full page */
-        this.$session.get("ticketval") === "custom"
-          ? (container = document.getElementById("my-node1"))
-          : (container = document.getElementById("my-node"));
-        // //replacing canvas for domtoimage in order to generate al full resolution png ticket
-        // // Set the scale option to 2 for 2x resolution
-        const options = {
-          backgroundColor: null,
-          allowTaint: true,
-          removeContainer: true,
-          scale: 5,
-        };
-        html2canvas(container, options).then((canvas) => {
-          this.axios.post(this.$node_url+"/uploads", {
-              name: user+"-"+this.dataTickets.name,
-              data: canvas.toDataURL("image/png", 1.0)
-            })
-          .then(response => {
-            //console.log(response.data);
-            this.timepickerStartRules = false;
-            this.timepickerEndRules = false;
-            //Store all form data
-            this.$session.set("dataFormName", this.dataTickets.name);
-            this.$session.set("dataFormPromoter", this.dataTickets.promoter);
-            this.$session.set("dataFormDescription", this.dataTickets.description);
-            this.$session.set("dataFormDate", this.dates);
-            this.$session.set("dataFormTimeStart", this.startTime);
-            this.$session.set("dataFormTimeEnd", this.endTime);
-            this.$session.set("canvas", response.data);
-            this.canvas = response.data;
-            this.$session.set("step", 2);
-            this.step = this.$session.get("step");
-            this.loading = false;
-            this.getBase64FromUrl(this.burn_ticket_image)
-            canvas.remove();
-            container.parentNode.removeChild(container);
-            //console.log(response.data);
-          })
-          .catch(error => {
-            console.error(error);
+        console.log(this.$session.get("ticketval") === "custom" ? 10 : 4)
+        if (!this.$session.get("canvas")) {
+          var container = ""; /* full page */
+          this.$session.get("ticketval") === "custom"
+            ? (container = document.getElementById("my-node1"))
+            : (container = document.getElementById("my-node"));
+          // //replacing canvas for domtoimage in order to generate al full resolution png ticket
+          // // Set the scale option to 2 for 2x resolution
+          const options = {
+            backgroundColor: null,
+            allowTaint: true,
+            removeContainer: true,
+            scale: this.$session.get("ticketval") === "custom" ? 15 : 4,
+          };
+          html2canvas(container, options).then((canvas) => {
+            this.axios
+              .post(this.$node_url + "/uploads", {
+                name: user + "-" + this.dataTickets.name,
+                data: canvas.toDataURL("image/png", 1.0),
+              })
+              .then((response) => {
+                //console.log(response.data);
+                this.timepickerStartRules = false;
+                this.timepickerEndRules = false;
+                //Store all form data
+                this.$session.set("dataFormName", this.dataTickets.name);
+                this.$session.set(
+                  "dataFormPromoter",
+                  this.dataTickets.promoter
+                );
+                this.$session.set(
+                  "dataFormDescription",
+                  this.dataTickets.description
+                );
+                this.$session.set("dataFormDate", this.dates);
+                this.$session.set("dataFormTimeStart", this.startTime);
+                this.$session.set("dataFormTimeEnd", this.endTime);
+                this.$session.set("canvas", true);
+                //this.canvas = response.data;
+                this.$session.set("step", 2);
+                this.step = this.$session.get("step");
+                //this.loading = false;
+                this.overlay_ticket = false;
+                this.getBase64FromUrl(this.burn_ticket_image)
+                canvas.remove();
+                container.parentNode.removeChild(container);
+                setTimeout(() => this.getCanvas(), 800);
+                //console.log(response.data);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           });
-        });
-      } else {
-        this.$session.set("step", 2);
-        this.step = this.$session.get("step");
-        this.loading = false;
-      }
+        } else {
+          this.$session.set("step", 2);
+          this.step = this.$session.get("step");
+          this.loading = false;
+        }
       }
       if (!this.dataTickets.description) this.editorRules = true;
       if (!this.dates || this.dates.length === 0) this.comboboxRules = true;
       if (!this.startTime) this.timepickerStartRules = true;
       if (!this.endTime) this.timepickerEndRules = true;
+    },
+    async getCanvas() {
+      let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+      const user = datos.accountId;
+      await this.axios
+        .post(this.$node_url + "/get-uploads", {
+          name: user + "-" + this.$session.get("dataFormName"),
+        })
+        .then((response) => {
+         //console.log(response.data);
+         this.canvas = response.data;
+        })
+       .catch((error) => {
+         console.error(error);
+       });
+    },
+    async delCanvas() {
+      let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
+      const user = datos.accountId;
+      await this.axios
+        .post(this.$node_url + "/del-uploads", {
+          name: user + "-" + this.$session.get("dataFormName"),
+        })
+        .then((response) => {
+         //console.log(response.data);
+         this.canvas = response.data;
+        })
+       .catch((error) => {
+         console.error(error);
+       });
     },
     async getBase64FromUrl(url) {
       const data = await fetch(url);
@@ -1841,6 +1903,7 @@ export default {
           const base64data = reader.result;
           resolve(base64data);
           this.$session.set("canvas_burn", base64data);
+          //this.canvas_burn = base64data;
         };
       });
     },
@@ -1854,6 +1917,7 @@ export default {
           const base64data = reader.result;
           resolve(base64data);
           this.$session.set("canvas_goodie", base64data);
+          //this.canvas_goodie = base64data;
         };
       });
     },
@@ -1866,7 +1930,8 @@ export default {
         reader.onloadend = () => {
           const base64data = reader.result;
           resolve(base64data);
-          this.$session.set("canvas_main_image", base64data);
+          //this.$session.set("canvas_main_image", base64data);
+          this.url = base64data;
           //console.log(base64data)
         };
       });
@@ -2165,6 +2230,7 @@ export default {
       this.step = 1;
       this.$session.set("step", this.step);
       this.$router.push("/events");
+      this.delCanvas();
       this.$session.clear();
     },
     //Get the tokens id minted
@@ -2189,10 +2255,10 @@ export default {
         //Adding metadatada for the burned ticket
         //Loading image
         try {
+          this.getBase64FromUrl(this.burn_ticket_image);
           var image = new Image();
           image.src = this.$session.get("canvas_burn");
-          this.image = image;
-
+          this.image = image;       
           const file = this.dataURLtoFile(this.image, "mint.png");
           const { data: fileUploadResult, error: fileError } =
             await wallet.minter.uploadField(MetadataField.Media, file);
@@ -2589,7 +2655,11 @@ export default {
       this.$forceUpdate();
     },
     showModal() {
+      this.step = 1;
+      this.$session.set("step", this.step);
       this.$router.push("/events");
+      this.delCanvas();
+      this.$session.clear();
     },
     design() {
       this.$router.push("/events/select-ticket");
