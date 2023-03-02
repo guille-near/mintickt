@@ -1069,7 +1069,6 @@ export default {
         width: 314px !important;
         max-height: 565px !important;
       }
-      border-radius: 20px !important;
       // @include mq(max, small) {
       //   width: 100% !important;
       // }
