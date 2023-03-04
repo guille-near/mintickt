@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       dataTickets: [
-        {name: "con", active: false},
+        {name: "con", active: true},
         {name: "cinema", active: false},
         {name: "event", active: false},
       ],
