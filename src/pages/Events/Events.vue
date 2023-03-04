@@ -206,9 +206,9 @@ export default {
         { align: "start", value: "image", sortable: false },
         { text: "NAME", align: "start", value: "name" },
         { text: "DATE", align: "start", value: "date" },
-        { text: "TICKETS MINTED", align: "start", value: "minted", sortable: false },
-        { text: "TICKETS SOLD", align: "start", value: "sold", sortable: false },
-        { text: "TICKETS LISTED", align: "start", value: "listed", sortable: false },
+        { text: "TICKETS MINTED", align: "start", value: "minted" },
+        { text: "TICKETS SOLD", align: "start", value: "sold" },
+        { text: "TICKETS LISTED", align: "start", value: "listed" },
         { sortable: false, align: "end", value: "actions" },
       ],
       data: [],
@@ -337,9 +337,9 @@ export default {
                     key: i,
                   };
                   this.data.push(rows);
-                  this.data.sort((a, b) => (a.key > b.key ? 1 : -1));
+                  this.data.sort((a, b) => (a.key > b.key ? -1 : 1));
                   this.dataTableMobile.push(rows);
-                  this.dataTableMobile.sort((a, b) => (a.key > b.key ? 1 : -1));
+                  this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
                 });
             });
           });

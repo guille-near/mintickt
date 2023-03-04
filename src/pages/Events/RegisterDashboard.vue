@@ -57,14 +57,15 @@
           <div
             class="ticket-wrapper"
             v-else-if="imagecanvas1 && ticketType"
-            id="my-node"
+            
             data-ticket
             :class="ticketType"
           >
             <img
               class="ticket"
+              id="my-node"
               :src="
-                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.png`)
+                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)
               "
               alt="Ticket image"
             />
@@ -1190,7 +1191,7 @@ export default {
       usd: 0,
       canvas: 
         this.$session.get("canvas") === undefined
-          ? "@/assets/ticket-selection/ticket-custom-upload.png"
+          ? "@/assets/ticket-selection/ticket-custom-upload.svg"
           : this.$session.get("canvas"),
       canvas_burn: 
         this.$session.get("canvas_burn") === undefined
@@ -1797,26 +1798,74 @@ export default {
         const user = datos.accountId;
         console.log(this.$session.get("ticketval") === "custom" ? 10 : 4)
         if (!this.$session.get("canvas")) {
-          var container = ""; /* full page */
-          this.$session.get("ticketval") === "custom"
-            ? (container = document.getElementById("my-node1"))
-            : (container = document.getElementById("my-node"));
-          // //replacing canvas for domtoimage in order to generate al full resolution png ticket
-          // // Set the scale option to 2 for 2x resolution
-          const options = {
-            backgroundColor: null,
-            allowTaint: true,
-            removeContainer: true,
-            scale: this.$session.get("ticketval") === "custom" ? 15 : 4,
+          // var container = ""; /* full page */
+          // this.$session.get("ticketval") === "custom"
+          //   ? (container = document.getElementById("my-node1"))
+          //   : (container = document.getElementById("my-node"));
+          // // //replacing canvas for domtoimage in order to generate al full resolution png ticket
+          // // // Set the scale option to 2 for 2x resolution
+          // const options = {
+          //   backgroundColor: null,
+          //   allowTaint: true,
+          //   removeContainer: true,
+          //   scale: this.$session.get("ticketval") === "custom" ? 15 : 4,
+          // };
+          // html2canvas(container, options).then((canvas) => {
+          //   this.axios
+          //     .post(this.$node_url + "/uploads", {
+          //       name: user + "-" + this.dataTickets.name,
+          //       data: canvas.toDataURL("image/png", 1.0),
+          //     })
+          //     .then((response) => {
+          //       //console.log(response.data);
+          //       this.timepickerStartRules = false;
+          //       this.timepickerEndRules = false;
+          //       //Store all form data
+          //       this.$session.set("dataFormName", this.dataTickets.name);
+          //       this.$session.set(
+          //         "dataFormPromoter",
+          //         this.dataTickets.promoter
+          //       );
+          //       this.$session.set(
+          //         "dataFormDescription",
+          //         this.dataTickets.description
+          //       );
+          //       this.$session.set("dataFormDate", this.dates);
+          //       this.$session.set("dataFormTimeStart", this.startTime);
+          //       this.$session.set("dataFormTimeEnd", this.endTime);
+          //       this.$session.set("canvas", true);
+          //       //this.canvas = response.data;
+          //       this.$session.set("step", 2);
+          //       this.step = this.$session.get("step");
+          //       //this.loading = false;
+          //       this.overlay_ticket = false;
+          //       this.getBase64FromUrl(this.burn_ticket_image)
+          //       canvas.remove();
+          //       container.parentNode.removeChild(container);
+          //       setTimeout(() => this.getCanvas(), 800);
+          //       //console.log(response.data);
+          //     })
+          //     .catch((error) => {
+          //       console.error(error);
+          //     });
+          // });
+          // Get the HTML element to export
+          const svgImage = document.getElementById("my-node");
+          // Convert the HTML element to SVG
+          const svgData = new XMLSerializer().serializeToString(svgImage);
+          var base64Data = window.btoa(svgData);
+
+          // Prepare the data to be sent to the server
+          const data = {
+            svg: base64Data
           };
-          html2canvas(container, options).then((canvas) => {
-            this.axios
+          this.axios
               .post(this.$node_url + "/uploads", {
                 name: user + "-" + this.dataTickets.name,
-                data: canvas.toDataURL("image/png", 1.0),
+                data: svgData,
               })
               .then((response) => {
-                //console.log(response.data);
+                console.log(response.data);
                 this.timepickerStartRules = false;
                 this.timepickerEndRules = false;
                 //Store all form data
@@ -1836,18 +1885,14 @@ export default {
                 //this.canvas = response.data;
                 this.$session.set("step", 2);
                 this.step = this.$session.get("step");
-                //this.loading = false;
+                this.loading = false;
                 this.overlay_ticket = false;
                 this.getBase64FromUrl(this.burn_ticket_image)
-                canvas.remove();
-                container.parentNode.removeChild(container);
                 setTimeout(() => this.getCanvas(), 800);
-                //console.log(response.data);
-              })
+            })
               .catch((error) => {
                 console.error(error);
               });
-          });
         } else {
           this.$session.set("step", 2);
           this.step = this.$session.get("step");
@@ -1869,7 +1914,9 @@ export default {
           name: user + "-" + this.$session.get("dataFormName"),
         })
         .then((response) => {
-         //console.log(response.data);
+         console.log(response.data);
+         const img = new Image();
+         img.src = response.data;
          this.canvas = response.data;
         })
        .catch((error) => {
