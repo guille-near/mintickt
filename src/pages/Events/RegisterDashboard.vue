@@ -57,13 +57,13 @@
           <div
             class="ticket-wrapper"
             v-else-if="imagecanvas1 && ticketType"
-            
+            id="my-node"
             data-ticket
             :class="ticketType"
           >
             <img
-              class="ticket"
-              id="my-node"
+              class="ticket"  
+                      
               :src="
                 require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)
               "
@@ -81,11 +81,12 @@
               :class="{ active: ticket.img }"
             >
               <template v-slot:selection>
-                <!-- <img v-if="ticket.url" :src="ticket.url" /> -->
+                <img id="Img1"  v-if="ticket.url" :src="ticket.url" />
+                <!--
                 <div
                   class="image-ticket-event"
                   :style="`--bg-image: url(${ticket.url})`"
-                />
+                />-->
               </template>
             </v-file-input>
           </div>
@@ -957,6 +958,7 @@ import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import html2canvas from "html2canvas";
+import Urlbox from 'urlbox';
 import gql from "graphql-tag";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
@@ -1192,7 +1194,7 @@ export default {
       canvas: 
         this.$session.get("canvas") === undefined
           ? "@/assets/ticket-selection/ticket-custom-upload.svg"
-          : this.$session.get("canvas"),
+          : "",
       canvas_burn: 
         this.$session.get("canvas_burn") === undefined
           ? ""
@@ -1796,25 +1798,24 @@ export default {
           localStorage.getItem("Mintbase.js_wallet_auth_key")
         );
         const user = datos.accountId;
-        console.log(this.$session.get("ticketval") === "custom" ? 10 : 4)
+        //console.log(this.$session.get("ticketval") === "custom" ? 10 : 4)
         if (!this.$session.get("canvas")) {
-          // var container = ""; /* full page */
-          // this.$session.get("ticketval") === "custom"
-          //   ? (container = document.getElementById("my-node1"))
-          //   : (container = document.getElementById("my-node"));
-          // // //replacing canvas for domtoimage in order to generate al full resolution png ticket
-          // // // Set the scale option to 2 for 2x resolution
+          var container = ""; /* full page */
+            this.$session.get("ticketval") === "custom"
+            ? (container = document.getElementById("my-node1"))
+            : (container = document.getElementById("my-node"));
           // const options = {
           //   backgroundColor: null,
           //   allowTaint: true,
           //   removeContainer: true,
-          //   scale: this.$session.get("ticketval") === "custom" ? 15 : 4,
+          //   scale: this.$session.get("ticketval") === "custom" ? 5 : 3,
+          //   quality: 1 // Set the maximum quality
           // };
           // html2canvas(container, options).then((canvas) => {
           //   this.axios
           //     .post(this.$node_url + "/uploads", {
           //       name: user + "-" + this.dataTickets.name,
-          //       data: canvas.toDataURL("image/png", 1.0),
+          //       data: canvas.toDataURL("image/png", 1),
           //     })
           //     .then((response) => {
           //       //console.log(response.data);
@@ -1849,50 +1850,112 @@ export default {
           //       console.error(error);
           //     });
           // });
-          // Get the HTML element to export
-          const svgImage = document.getElementById("my-node");
-          // Convert the HTML element to SVG
-          const svgData = new XMLSerializer().serializeToString(svgImage);
-          var base64Data = window.btoa(svgData);
+          // get the div element
+         const getBase64StringFromDataURL = (dataURL) =>
+               dataURL.replace('data:', '').replace(/^.+,/, '');
 
-          // Prepare the data to be sent to the server
-          const data = {
-            svg: base64Data
-          };
-          this.axios
-              .post(this.$node_url + "/uploads", {
-                name: user + "-" + this.dataTickets.name,
-                data: svgData,
-              })
-              .then((response) => {
-                console.log(response.data);
-                this.timepickerStartRules = false;
-                this.timepickerEndRules = false;
-                //Store all form data
-                this.$session.set("dataFormName", this.dataTickets.name);
-                this.$session.set(
-                  "dataFormPromoter",
-                  this.dataTickets.promoter
-                );
-                this.$session.set(
-                  "dataFormDescription",
-                  this.dataTickets.description
-                );
-                this.$session.set("dataFormDate", this.dates);
-                this.$session.set("dataFormTimeStart", this.startTime);
-                this.$session.set("dataFormTimeEnd", this.endTime);
-                this.$session.set("canvas", true);
-                //this.canvas = response.data;
-                this.$session.set("step", 2);
-                this.step = this.$session.get("step");
-                this.loading = false;
-                this.overlay_ticket = false;
-                this.getBase64FromUrl(this.burn_ticket_image)
-                setTimeout(() => this.getCanvas(), 800);
-            })
-              .catch((error) => {
-                console.error(error);
-              });
+          const image = document.getElementById('Img1');
+
+          // Get the remote image as a Blob with the fetch API
+          fetch(image.src)
+              .then((res) => res.blob())
+              .then((blob) => {
+                  // Read the Blob as DataURL using the FileReader API
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                      console.log(reader.result);
+                      // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
+
+                      // Convert to Base64 string
+                      const base64 = getBase64StringFromDataURL(reader.result);
+                      //console.log(base64);
+                      // Logs wL2dvYWwgbW9yZ...
+                      this.axios
+                      .post(this.$node_url + "/uploads", {
+                        name: user + "-" + this.dataTickets.name,
+                        data: base64,
+                      })
+                      .then((response) => {
+                        //console.log(response.data);
+                        this.timepickerStartRules = false;
+                        this.timepickerEndRules = false;
+                        //Store all form data
+                        this.$session.set("dataFormName", this.dataTickets.name);
+                        this.$session.set(
+                          "dataFormPromoter",
+                          this.dataTickets.promoter
+                        );
+                        this.$session.set(
+                          "dataFormDescription",
+                          this.dataTickets.description
+                        );
+                        this.$session.set("dataFormDate", this.dates);
+                        this.$session.set("dataFormTimeStart", this.startTime);
+                        this.$session.set("dataFormTimeEnd", this.endTime);
+                        this.$session.set("canvas", true);
+                        //this.canvas = response.data;
+                        this.$session.set("step", 2);
+                        this.step = this.$session.get("step");
+                        //this.loading = false;
+                        this.overlay_ticket = false;
+                        this.getBase64FromUrl(this.burn_ticket_image)
+                        setTimeout(() => this.getCanvas(), 800);
+                        //console.log(response.data);
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
+                  };
+                  reader.readAsDataURL(blob);
+              });     
+       
+          
+          // Get the HTML element to export
+          // const imageDiv = document.getElementById('my-node');
+
+          // const serializer = new XMLSerializer();
+          // const svgString = serializer.serializeToString(imageDiv);
+
+          // const svgImage = new Image();
+          // svgImage.src = 'data:image/png;base64,' + window.btoa(svgString);
+
+          // this.axios
+          //     .post(this.$node_url + "/uploads", {
+          //       name: user + "-" + this.dataTickets.name,
+          //       data: svgImage.src,
+          //       header: {
+          //         'Content-Type': 'application/json'
+          //       }
+          //     })
+          //     .then((response) => {
+          //       console.log(response.data);
+          //       this.timepickerStartRules = false;
+          //       this.timepickerEndRules = false;
+          //       //Store all form data
+          //       this.$session.set("dataFormName", this.dataTickets.name);
+          //       this.$session.set(
+          //         "dataFormPromoter",
+          //         this.dataTickets.promoter
+          //       );
+          //       this.$session.set(
+          //         "dataFormDescription",
+          //         this.dataTickets.description
+          //       );
+          //       this.$session.set("dataFormDate", this.dates);
+          //       this.$session.set("dataFormTimeStart", this.startTime);
+          //       this.$session.set("dataFormTimeEnd", this.endTime);
+          //       this.$session.set("canvas", true);
+          //       //this.canvas = response.data;
+          //       this.$session.set("step", 2);
+          //       this.step = this.$session.get("step");
+          //       this.loading = false;
+          //       this.overlay_ticket = false;
+          //       this.getBase64FromUrl(this.burn_ticket_image)
+          //       setTimeout(() => this.getCanvas(), 800);
+          //   })
+          //     .catch((error) => {
+          //       console.error(error);
+          //     });
         } else {
           this.$session.set("step", 2);
           this.step = this.$session.get("step");
@@ -1914,10 +1977,8 @@ export default {
           name: user + "-" + this.$session.get("dataFormName"),
         })
         .then((response) => {
-         console.log(response.data);
-         const img = new Image();
-         img.src = response.data;
          this.canvas = response.data;
+         console.log(response.data);
         })
        .catch((error) => {
          console.error(error);
