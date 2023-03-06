@@ -1888,7 +1888,7 @@
         width: 33.4%;
         height: 11.8%;
         
-        bottom: 4.9% !important;
+        bottom: 4.4% !important;
         left: 7.5%;
         right: auto;
       }
@@ -1896,7 +1896,7 @@
         width: 33.4%;
         height: 11.8%;
         
-        bottom: 4.9% !important;
+        bottom: 4.4% !important;
         left: auto;
         right: 7.5%;
       }
@@ -2259,7 +2259,7 @@ body:has(#createTickets) {
 
     .ticket-wrapper[data-ticket].cinema .v-input {
       top: 10.5% !important;
-      width: 88.5% !important; // original in png 88.1%
+      width: 85.5% !important; // original in png 88.1%
       height: 79.1% !important;
       .v-input__slot {border-radius: 7px !important}
     }
@@ -2320,16 +2320,19 @@ body:has(#createTickets) {
           width: 100% !important;
           height: 100% !important;
           position: relative;
-          &::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: center no-repeat var(--bg-image);
-            // background-color: #000 !important;
-            background-size: contain  !important;
-            // background-size: 100% 100%  !important;
-            border-radius: 4px !important;
-          }
+          // ? changes 06/3/23 👇
+          object-fit: contain;
+          // &::after {
+          //   content: "";
+          //   position: absolute;
+          //   inset: 0;
+          //   background: center no-repeat var(--bg-image);
+          //   // background-color: #000 !important;
+          //   background-size: contain  !important;
+          //   // background-size: 100% 100%  !important;
+          //   border-radius: 4px !important;
+          // }
+          // ? changes 06/3/23 ☝️
         }
       }
     }

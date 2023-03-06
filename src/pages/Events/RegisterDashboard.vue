@@ -45,9 +45,10 @@
             >
               <template v-slot:selection>
                 <div
+                  id="my-node1"
                   class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
                 />
+                <!-- :style="`--bg-image: url(${dataTicket[0].url})`" -->
               </template>
             </v-file-input>
           </div>
