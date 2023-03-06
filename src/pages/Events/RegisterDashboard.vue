@@ -45,7 +45,6 @@
             >
               <template v-slot:selection>
                 <div
-                  id="my-node1"
                   class="image-ticket-event"
                   :style="`--bg-image: url(${dataTicket[0].url})`"
                 />
@@ -1797,114 +1796,112 @@ export default {
         );
         const user = datos.accountId;
         if (!this.$session.get("canvas")) {
-          var container = document.getElementById("my-node");
-          const options = {
-            backgroundColor: null,
-            allowTaint: true,
-            removeContainer: true,
-            scale: 10,
-            quality: 1 // Set the maximum quality
-          };
-          html2canvas(container, options).then((canvas) => {
-            this.axios
-              .post(this.$node_url + "/uploads", {
-                name: user + "-" + this.dataTickets.name,
-                data: canvas.toDataURL("image/png", 1),
-              })
-              .then((response) => {
-                //console.log(response.data);
-                this.timepickerStartRules = false;
-                this.timepickerEndRules = false;
-                //Store all form data
-                this.$session.set("dataFormName", this.dataTickets.name);
-                this.$session.set(
-                  "dataFormPromoter",
-                  this.dataTickets.promoter
-                );
-                this.$session.set(
-                  "dataFormDescription",
-                  this.dataTickets.description
-                );
-                this.$session.set("dataFormDate", this.dates);
-                this.$session.set("dataFormTimeStart", this.startTime);
-                this.$session.set("dataFormTimeEnd", this.endTime);
-                this.$session.set("canvas", true);
-                //this.canvas = response.data;
-                this.$session.set("step", 2);
-                this.step = this.$session.get("step");
-                //this.loading = false;
-                this.overlay_ticket = false;
-                this.getBase64FromUrl(this.burn_ticket_image)
-                canvas.remove();
-                container.parentNode.removeChild(container);
-                setTimeout(() => this.getCanvas(), 800);
-                //console.log(response.data);
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          });
-          // get the div element
-          // const getBase64StringFromDataURL = (dataURL) =>
-          //   dataURL.replace("data:", "").replace(/^.+,/, "");
+          if(this.$session.get("ticketval") !== "custom"){
+            var container = document.getElementById("my-node");
+            const options = {
+              backgroundColor: null,
+              allowTaint: true,
+              removeContainer: true,
+              scale: 10,
+              quality: 1 // Set the maximum quality
+            };
+            html2canvas(container, options).then((canvas) => {
+              this.axios
+                .post(this.$node_url + "/uploads", {
+                  name: user + "-" + this.dataTickets.name,
+                  data: canvas.toDataURL("image/png", 1),
+                })
+                .then((response) => {
+                  //console.log(response.data);
+                  this.timepickerStartRules = false;
+                  this.timepickerEndRules = false;
+                  //Store all form data
+                  this.$session.set("dataFormName", this.dataTickets.name);
+                  this.$session.set(
+                    "dataFormPromoter",
+                    this.dataTickets.promoter
+                  );
+                  this.$session.set(
+                    "dataFormDescription",
+                    this.dataTickets.description
+                  );
+                  this.$session.set("dataFormDate", this.dates);
+                  this.$session.set("dataFormTimeStart", this.startTime);
+                  this.$session.set("dataFormTimeEnd", this.endTime);
+                  this.$session.set("canvas", true);
+                  //this.canvas = response.data;
+                  this.$session.set("step", 2);
+                  this.step = this.$session.get("step");
+                  //this.loading = false;
+                  this.overlay_ticket = false;
+                  this.getBase64FromUrl(this.burn_ticket_image)
+                  canvas.remove();
+                  container.parentNode.removeChild(container);
+                  setTimeout(() => this.getCanvas(), 800);
+                  //console.log(response.data);
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            });
+          } else {
+            // get the div element
+            const getBase64StringFromDataURL = (dataURL) =>
+              dataURL.replace("data:", "").replace(/^.+,/, "");
 
-          // const design = [
-          //   document.getElementById("ticket-design"),
-          //   document.getElementById("image-design"),
-          // ];
-          // for (let i = 0; i < design.length; i++) {
-          //   // Get the remote image as a Blob with the fetch API
-          //   fetch(design[i].src)
-          //     .then((res) => res.blob())
-          //     .then((blob) => {
-          //       // Read the Blob as DataURL using the FileReader API
-          //       const reader = new FileReader();
-          //       reader.onloadend = () => {
-          //         // console.log(reader.result);
-          //         // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
+            const design = document.getElementById("my-node1");
+              // Get the remote image as a Blob with the fetch API
+              fetch(design.src)
+                .then((res) => res.blob())
+                .then((blob) => {
+                  // Read the Blob as DataURL using the FileReader API
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    // console.log(reader.result);
+                    // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
 
-          //         // Convert to Base64 string
-          //         const base64 = getBase64StringFromDataURL(reader.result);
-          //         //console.log(base64);
-          //         // Logs wL2dvYWwgbW9yZ...
-          //         this.axios
-          //           .post(this.$node_url + "/uploads", {
-          //             name: user + "-" + this.dataTickets.name + "-" + i,
-          //             data: base64,
-          //           })
-          //           .then((response) => {
-          //             console.log(response.data);
-          //           })
-          //           .catch((error) => {
-          //             console.error(error);
-          //           });
-          //       };
-          //       reader.readAsDataURL(blob);
-          //     });             
-          // }
-          // this.timepickerStartRules = false;
-          // this.timepickerEndRules = false;
-          // //Store all form data
-          //             this.$session.set("dataFormName", this.dataTickets.name);
-          //             this.$session.set(
-          //               "dataFormPromoter",
-          //               this.dataTickets.promoter
-          //             );
-          //             this.$session.set(
-          //               "dataFormDescription",
-          //               this.dataTickets.description
-          //             );
-          //             this.$session.set("dataFormDate", this.dates);
-          //             this.$session.set("dataFormTimeStart", this.startTime);
-          //             this.$session.set("dataFormTimeEnd", this.endTime);
-          //             this.$session.set("canvas", true);
-          //             //this.canvas = response.data;
-          //             this.$session.set("step", 2);
-          //             this.step = this.$session.get("step");
-          //             //this.loading = false;
-          //             this.overlay_ticket = false;
-          //             this.getBase64FromUrl(this.burn_ticket_image)
-          //             setTimeout(() => this.getCanvas(), 800); 
+                    // Convert to Base64 string
+                    const base64 = getBase64StringFromDataURL(reader.result);
+                    //console.log(base64);
+                    // Logs wL2dvYWwgbW9yZ...
+                    this.axios
+                      .post(this.$node_url + "/uploads", {
+                        name: user + "-" + this.dataTickets.name,
+                        data: base64,
+                      })
+                      .then((response) => {
+                        console.log(response.data);
+                          this.timepickerStartRules = false;
+                            this.timepickerEndRules = false;
+                            //Store all form data
+                        this.$session.set("dataFormName", this.dataTickets.name);
+                        this.$session.set(
+                          "dataFormPromoter",
+                          this.dataTickets.promoter
+                        );
+                        this.$session.set(
+                          "dataFormDescription",
+                          this.dataTickets.description
+                        );
+                        this.$session.set("dataFormDate", this.dates);
+                        this.$session.set("dataFormTimeStart", this.startTime);
+                        this.$session.set("dataFormTimeEnd", this.endTime);
+                        this.$session.set("canvas", true);
+                        //this.canvas = response.data;
+                        this.$session.set("step", 2);
+                        this.step = this.$session.get("step");
+                        //this.loading = false;
+                        this.overlay_ticket = false;
+                        this.getBase64FromUrl(this.burn_ticket_image)
+                        setTimeout(() => this.getCanvas(), 800); 
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
+                  };
+                  reader.readAsDataURL(blob);
+                });
+          }  
         } else {
           this.$session.set("step", 2);
           this.step = this.$session.get("step");
