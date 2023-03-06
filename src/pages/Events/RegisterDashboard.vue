@@ -45,7 +45,7 @@
             >
               <template v-slot:selection>
               <img
-                id="my-node1"
+                id="ticket_custom"
                 :src="dataTicket[0].url"
                 class="image-ticket-event"
               />
@@ -1798,8 +1798,7 @@ export default {
         );
         const user = datos.accountId;
         if (!this.$session.get("canvas")) {
-          if(this.$session.get("ticketval") !== "custom"){
-            var container = document.getElementById("my-node");
+            var container = this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
             const options = {
               backgroundColor: null,
               allowTaint: true,
@@ -1846,64 +1845,6 @@ export default {
                   console.error(error);
                 });
             });
-          } else {
-            // get the div element
-            const getBase64StringFromDataURL = (dataURL) =>
-              dataURL.replace("data:", "").replace(/^.+,/, "");
-
-            const design = document.getElementById("my-node1");
-              // Get the remote image as a Blob with the fetch API
-              fetch(design.src)
-                .then((res) => res.blob())
-                .then((blob) => {
-                  // Read the Blob as DataURL using the FileReader API
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    // console.log(reader.result);
-                    // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
-
-                    // Convert to Base64 string
-                    const base64 = getBase64StringFromDataURL(reader.result);
-                    //console.log(base64);
-                    // Logs wL2dvYWwgbW9yZ...
-                    this.axios
-                      .post(this.$node_url + "/uploads", {
-                        name: user + "-" + this.dataTickets.name,
-                        data: base64,
-                      })
-                      .then((response) => {
-                        console.log(response.data);
-                          this.timepickerStartRules = false;
-                            this.timepickerEndRules = false;
-                            //Store all form data
-                        this.$session.set("dataFormName", this.dataTickets.name);
-                        this.$session.set(
-                          "dataFormPromoter",
-                          this.dataTickets.promoter
-                        );
-                        this.$session.set(
-                          "dataFormDescription",
-                          this.dataTickets.description
-                        );
-                        this.$session.set("dataFormDate", this.dates);
-                        this.$session.set("dataFormTimeStart", this.startTime);
-                        this.$session.set("dataFormTimeEnd", this.endTime);
-                        this.$session.set("canvas", true);
-                        //this.canvas = response.data;
-                        this.$session.set("step", 2);
-                        this.step = this.$session.get("step");
-                        //this.loading = false;
-                        this.overlay_ticket = false;
-                        this.getBase64FromUrl(this.burn_ticket_image)
-                        setTimeout(() => this.getCanvas(), 800); 
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
-                  };
-                  reader.readAsDataURL(blob);
-                });
-          }  
         } else {
           this.$session.set("step", 2);
           this.step = this.$session.get("step");
@@ -1926,7 +1867,7 @@ export default {
         })
         .then((response) => {
           this.canvas = response.data;
-          //console.log(response.data);
+          console.log(this.canvas);
         })
         .catch((error) => {
           console.error(error);
