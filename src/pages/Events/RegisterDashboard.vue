@@ -44,11 +44,12 @@
               :class="{ active: dataTicket[0].img }"
             >
               <template v-slot:selection>
-                <div
+                <img
                   id="my-node1"
+                  :src="dataTicket[0].url"
                   class="image-ticket-event"
-                  :style="`--bg-image: url(${dataTicket[0].url})`"
                 />
+                <!-- :style="`--bg-image: url(${dataTicket[0].url})`" -->
               </template>
             </v-file-input>
           </div>
