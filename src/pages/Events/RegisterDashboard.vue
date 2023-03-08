@@ -1529,6 +1529,10 @@ export default {
             trait_type: "end_time",
             value: this.endTime,
           },
+          {
+            trait_type: "ticket_type",
+            value: this.$session.get("ticketval"),
+          },
         ];
         let store = this.$store_mintbase;
         let category = "ticketing";

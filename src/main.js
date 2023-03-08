@@ -38,9 +38,9 @@ Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:309
 Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
 Vue.prototype.$value_user_mint = "kamargo1.testnet"
 Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/events/burn" : "https://testnet.mintickt.com/#/events/burn"
-Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/store/?thingid=" : "https://testnet.mintickt.com/#/store/?thingid="
+Vue.prototype.$store_site = (Vue.config.productionTip) ? "http://localhost:8080/#/store/?thingid=" : "http://localhost:8080/#/store/?thingid="
 Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/events/burn" : "https://testnet.mintickt.com/#/events/burn"
-Vue.prototype.$event_page = 'https://testnet.mintickt.com/#/events/'
+Vue.prototype.$event_page = 'http://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"

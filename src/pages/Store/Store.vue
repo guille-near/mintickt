@@ -333,12 +333,13 @@ export default {
       this.data = [];
       this.dataTableMobile = [];
       var metadata_id = this.$route.query.thingid.toLowerCase();
+      //console.log(metadata_id);
       this.$apollo
         .watchQuery({
           query: your_events,
           variables: {
             store: this.$store_mintbase,
-            metadata_id: metadata_id,
+            metadata_id: metadata_id.split("/")[0],
           },
           pollInterval: 10000, // 10 seconds in milliseconds
         })
@@ -410,6 +411,7 @@ export default {
             Object.entries(value).forEach(([i, value1]) => {
               //Getting the minted nft
               //Tokens aggregate and earnings by metadata id
+              // console.log(value1.id);
               this.$apollo
                   .watchQuery({
                     query: mb_views_nft_tokens_aggregate,
@@ -650,7 +652,7 @@ export default {
         .query({
           query: main_image,
           variables: {
-            _iregex: thingid,
+            _iregex: thingid.split("/")[0],
           },
           client: "mintickClient",
         })

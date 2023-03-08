@@ -37,7 +37,7 @@
       <template v-slot:[`item.name`]="{ item }">
         <v-btn
           class="btnWithoutStyles"
-          :href="$store_site + item.thingid"
+          :href="$store_site + item.thingid + '/register:' + item.ticket_type"
           target="_blank"
           >{{ item.name }}</v-btn
         >
@@ -333,6 +333,7 @@ export default {
                     sold: data.nft_earnings_aggregate.aggregate.count,
                     listed: value1.listings_aggregate.aggregate.count,
                     thingid: value1.id,
+                    ticket_type: value1.reference_blob.extra[11].value,
                     show: false,
                     key: i,
                   };
