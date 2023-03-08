@@ -1807,7 +1807,7 @@ export default {
               backgroundColor: null,
               allowTaint: true,
               removeContainer: true,
-              scale: 10,
+              scale: 5,
               quality: 1 // Set the maximum quality
             };
             html2canvas(container, options).then((canvas) => {

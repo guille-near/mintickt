@@ -37,7 +37,7 @@
       <template v-slot:[`item.name`]="{ item }">
         <v-btn
           class="btnWithoutStyles"
-          :href="$store_site + item.thingid + '/register:' + item.ticket_type"
+          :href="$store_site + item.thingid + '/' + item.ticket_type"
           target="_blank"
           >{{ item.name }}</v-btn
         >
