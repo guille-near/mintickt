@@ -1875,6 +1875,7 @@
         border-radius: 4px;
       }
       .v-input__append-inner {display: none}
+      .v-input__slot {box-shadow: inset -1px -1px 2px hsl(0, 0%, 0%, .1) !important}
       &:nth-of-type(1) {
         width: 85.3%;
         height: 68.7%;
@@ -2257,17 +2258,28 @@ body:has(#createTickets) {
       border: none !important;
     }
 
-    .ticket-wrapper[data-ticket].cinema .v-input {
-      top: 10.5% !important;
-      width: 85.5% !important; // original in png 88.1%
-      height: 79.1% !important;
-      .v-input__slot {border-radius: 7px !important}
+    .ticket-wrapper[data-ticket].cinema {
+      width: 252.39px !important;
+      height: 471px !important;
+      .v-input {
+        top: 10.5% !important;
+        // width: 85.5% !important; // original in png 88.1%
+        // height: 79.1% !important;
+        width: 225px !important;
+        height: 373px !important;
+        .v-input__slot {border-radius: 7px !important;}
+      }
     }
-    .ticket-wrapper[data-ticket].con .v-input {
-      top: 9.58% !important; // original in png 9.58%
-      width: 86.5% !important;
-      height: 85.9% !important; // original in png 85.9%
-      .v-input__slot {border-radius: 7px !important}
+    .ticket-wrapper[data-ticket].con {
+      height: 471px !important;
+      .v-input {
+        top: 9.58% !important; // original in png 9.58%
+        // width: 86.5% !important;
+        // height: 85.9% !important; // original in png 85.9%
+        width: 272px !important;
+        height: 405px !important;
+        .v-input__slot {border-radius: 7px !important}
+      }
     }
   }
 
