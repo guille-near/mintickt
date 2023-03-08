@@ -1794,7 +1794,7 @@ export default {
         this.dates
       ) {
         //this.loading = true;
-        this.overlay_ticket = true;
+        
         this.editorRules = false;
         this.comboboxRules = false;
         let datos = JSON.parse(
@@ -1802,6 +1802,7 @@ export default {
         );
         const user = datos.accountId;
         if (!this.$session.get("canvas")) {
+            this.overlay_ticket = true;
             var container = this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
             const options = {
               backgroundColor: null,
