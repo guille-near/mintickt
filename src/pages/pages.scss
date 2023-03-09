@@ -2286,17 +2286,16 @@ body:has(#createTickets) {
 #createTickets.registerDashboard {
   .ticket-wrapper.custom {
     --width: 314px; // 305.5px
-    --height: 565.05px; // 496px
-    max-width: max-content !important;
-    max-height: max-content !important;
+    --height: 506.83px; // 496px
+    width: var(--width) !important;
+    height: var(--height) !important;
     position: relative !important;
-    margin-bottom: auto;
-    position: relative;
+    margin-block: auto;
 
     .ticket {
-      width: var(--width) !important;
-      height: var(--height) !important;
-      object-fit: contain !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
     }
 
     .image-ticket-event-empty {
@@ -2311,10 +2310,10 @@ body:has(#createTickets) {
     .v-input {
       position: absolute;
       margin: auto;
-      top: 5%;
+      top: 0;
       left: 0;
       right: 0;
-      height: 88.6%;
+      height: var(--height) !important;
       border-radius: 4px !important;
       * {
         cursor: pointer;
@@ -2333,7 +2332,7 @@ body:has(#createTickets) {
           height: 100% !important;
           position: relative;
           // ? changes 06/3/23 👇
-          object-fit: contain;
+          object-fit: cover;
           // &::after {
           //   content: "";
           //   position: absolute;

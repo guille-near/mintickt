@@ -1049,23 +1049,22 @@ export default {
     &.con {
       --width: 272px;
       --height: 405px;
-      width: min(90%, 272px) !important
+      --sum: 42px;
     }
     &.cinema {
       --width: 225px;
       --height: 373px;
-      width: min(90%, 225px) !important
+      --sum: 89px;
     }
     &.event {
       --width: 314px;
       --height: 565px;
-      width: min(90%, 319.08px) !important
     }
     &.custom {
       --width: 314px;
       --height: 565.05px;
-      width: min(90%, 314px) !important
     }
+    width: min(90%, var(--width) + var(--sum, 0)) !important;
     @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {
       width: 80% !important;
@@ -1095,8 +1094,8 @@ export default {
     &:not(.custom) .ticket {
       width: 100% !important;
       @media (min-width: 880px) {
-        width: var(--width) !important;
-        height: var(--height) !important;
+        width: calc(var(--width) + var(--sum, 0)) !important;
+        height: calc(var(--height) + var(--sum, 0)) !important;
       }
       // @include mq(max, small) {
       //   width: 100% !important;
@@ -1105,8 +1104,9 @@ export default {
     // * custome ticket
     &:not(.con, .cinema, .event) .ticket {
       width: 100% !important;
+      object-fit: cover !important;
       @media (min-width: 880px) {
-        width: var(--width) !important;
+        max-width: var(--width) !important;
         max-height: var(--height) !important;
       }
     }
