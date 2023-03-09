@@ -421,7 +421,7 @@
 
       <v-window-item :value="2">
         <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" :class="ticketType">
             <img
               class="ticket"
               :class="ticketType"
@@ -536,7 +536,7 @@
 
       <v-window-item :value="3">
         <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" :class="ticketType">
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
@@ -698,7 +698,7 @@
 
       <v-window-item :value="4">
         <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" :class="ticketType">
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
@@ -807,7 +807,7 @@
 
       <v-window-item :value="5">
         <section class="jcenter divwrap">
-          <div class="ticket-wrapper">
+          <div class="ticket-wrapper" :class="ticketType">
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">

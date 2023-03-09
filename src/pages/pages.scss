@@ -2258,7 +2258,7 @@ body:has(#createTickets) {
       border: none !important;
     }
 
-    .ticket-wrapper[data-ticket].cinema {
+    .ticket-wrapper.cinema {
       width: 252.39px !important;
       height: 471px !important;
       .v-input {
@@ -2270,7 +2270,7 @@ body:has(#createTickets) {
         .v-input__slot {border-radius: 7px !important;}
       }
     }
-    .ticket-wrapper[data-ticket].con {
+    .ticket-wrapper.con {
       height: 471px !important;
       .v-input {
         top: 9.58% !important; // original in png 9.58%

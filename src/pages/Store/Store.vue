@@ -88,7 +88,7 @@
 				</aside>
 			</div>
 
-			<article class="divcol acenter" v-intersect="onIntersect">
+			<article class="divcol acenter" :class="ticketType" v-intersect="onIntersect">
 				<img class="ticket" :src="ticket_img" alt="Ticket" />
 				<div id="buy" class="contenedor_aside divcol fill-w">
 					<aside class="divrow">
@@ -319,6 +319,11 @@ export default {
         location.href.split("?")[0],
         "/#/store/?thingid="+this.$session.get('eventid')
       );
+    }
+  },
+  computed: {
+    ticketType() {
+      return this.$route.query.thingid.toLowerCase().split("/")[1];
     }
   },
   methods: {
@@ -1040,7 +1045,27 @@ export default {
     color: white !important;
     gap: 2em;
     z-index: 3;
-    width: min(90%, 319.08px) !important;
+    // * when ticket type is
+    &.con {
+      --width: 272px;
+      --height: 405px;
+      width: min(90%, 272px) !important
+    }
+    &.cinema {
+      --width: 225px;
+      --height: 373px;
+      width: min(90%, 225px) !important
+    }
+    &.event {
+      --width: 314px;
+      --height: 565px;
+      width: min(90%, 319.08px) !important
+    }
+    &.custom {
+      --width: 314px;
+      --height: 565.05px;
+      width: min(90%, 314px) !important
+    }
     @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {
       width: 80% !important;
@@ -1065,15 +1090,25 @@ export default {
     //     width: calc(clamp(2em, 6vw, 6em) * 2 + 150px) !important;
     //   }
     // }
-    .ticket {
+
+    // * default tickets
+    &:not(.custom) .ticket {
       width: 100% !important;
       @media (min-width: 880px) {
-        width: 314px !important;
-        max-height: 565px !important;
+        width: var(--width) !important;
+        height: var(--height) !important;
       }
       // @include mq(max, small) {
       //   width: 100% !important;
       // }
+    }
+    // * custome ticket
+    &:not(.con, .cinema, .event) .ticket {
+      width: 100% !important;
+      @media (min-width: 880px) {
+        width: var(--width) !important;
+        max-height: var(--height) !important;
+      }
     }
 
     .contenedor_aside {
