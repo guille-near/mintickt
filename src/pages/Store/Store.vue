@@ -1047,24 +1047,22 @@ export default {
     z-index: 3;
     // * when ticket type is
     &.con {
-      --width: 272px;
-      --height: 405px;
-      --sum: 42px;
+      --width: 314px;
+      --height: 471px;
     }
     &.cinema {
-      --width: 225px;
-      --height: 373px;
-      --sum: 89px;
+      --width: 252.39px;
+      --height: 471px;
     }
     &.event {
       --width: 314px;
-      --height: 565px;
+      --height: 565.05px;
     }
     &.custom {
       --width: 314px;
-      --height: 565.05px;
+      --height: 506.83px;
     }
-    width: min(90%, var(--width) + var(--sum, 0)) !important;
+    width: min(90%, var(--width)) !important;
     @media (min-width: 880px) {transform: translateY(-250px) !important}
     @media (max-width: 880px) {
       width: 80% !important;
@@ -1094,8 +1092,8 @@ export default {
     &:not(.custom) .ticket {
       width: 100% !important;
       @media (min-width: 880px) {
-        width: calc(var(--width) + var(--sum, 0)) !important;
-        height: calc(var(--height) + var(--sum, 0)) !important;
+        width: var(--width) !important;
+        height: var(--height) !important;
       }
       // @include mq(max, small) {
       //   width: 100% !important;
