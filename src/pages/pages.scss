@@ -929,7 +929,9 @@
       font-size: clamp(1.5em, 2.5vw, 2.5em) !important;
     }
   }
-  .ticket {
+
+  // ! changed
+  .ticket:not(.custom) {
     width: min(var(--margin), 22rem);
     // height: 35em;
     aspect-ratio: 1 / 2;
@@ -942,7 +944,7 @@
       // min-width: min(var(--margin), 20em) !important;
       // max-width: min(var(--margin), 20em) !important;
     }
-    
+
     &--actions {
       padding-right: 21px;
       @media (max-width: 880px) {
@@ -966,9 +968,9 @@
         // background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
         background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, .6) 382.27%);
         filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
-        
+
         &.mint {background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%) !important}
-        
+
         // backdrop-filter: blur(14px);
         border-radius: 8px;
         text-transform: capitalize !important;
@@ -1565,7 +1567,7 @@
       }
     }
   }
-  
+
   .v-data-table {
     @media (max-width: 880px) {
       background: transparent !important;
@@ -1731,7 +1733,7 @@
     pointer-events: none;
   }
 
- 
+
   .v-input {
     .v-input__append-inner {
       gap: .4em;
@@ -1880,7 +1882,7 @@
         width: 85.3%;
         height: 68.7%;
         // aspect-ratio: 1.4 / 2 !important;
-        
+
         top: 4.4%;
         left: 0;
         right: 0;
@@ -1888,7 +1890,7 @@
       &:nth-of-type(2) {
         width: 33.4%;
         height: 11.8%;
-        
+
         bottom: 4.4% !important;
         left: 7.5%;
         right: auto;
@@ -1896,7 +1898,7 @@
       &:nth-of-type(3) {
         width: 33.4%;
         height: 11.8%;
-        
+
         bottom: 4.4% !important;
         left: auto;
         right: 7.5%;
@@ -2023,7 +2025,7 @@
   gap: clamp(3em, 4vw, 4em);
   padding: clamp(1em, 2vw, 4em);
   border-radius: inherit;
-  
+
   border-left: 1.5px solid hsl(97, 97%, 86%, .7) !important;
   border-right: 1.5px solid hsla(306, 100%, 50%, 0.7) !important;
   background-image:
@@ -2048,12 +2050,12 @@
     padding: 17px;
     width: min(90%, 21.6875em);
     height: 2.625em;
-    
+
     background: linear-gradient(183.61deg, #000000 49.78%, rgba(0, 0, 0, 0) 225.35%);
     border: 1px solid rgba(255, 255, 255, 0.3);
     filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
     backdrop-filter: blur(14px);
-    
+
     border-radius: 8px;
     span {color: #fff}
   }
@@ -2071,7 +2073,7 @@
   gap: clamp(3em, 4vw, 4em);
   padding: clamp(1em, 2vw, 4em);
   border-radius: inherit;
-  
+
   border-left: 1.5px solid hsl(97, 97%, 86%, .7);
   border-right: 1.5px solid hsl(306, 100%, 50%, .7);
   background-image:
@@ -2088,12 +2090,12 @@
   .v-btn {
     width: min(90%, 21.6875em);
     height: 2.625em;
-    
+
     background: linear-gradient(183.61deg, #000000 49.78%, rgba(0, 0, 0, 0) 225.35%);
     border: 1px solid rgba(255, 255, 255, 0.3);
     filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
     backdrop-filter: blur(14px);
-    
+
     border-radius: 8px;
     span {color: #fff}
   }
@@ -2107,9 +2109,9 @@
   height: calc(var(--size) + 66px) !important;
   min-height: calc(var(--size) + 66px) !important;
   max-height: calc(var(--size) + 66px) !important;
-  
+
   .v-picker__title__btn, span {font-size: 0.875em !important}
-  
+
   .v-time-picker-title .v-time-picker-title__time {
     .v-picker__title__btn, span {
       --height: 30px;
@@ -2210,7 +2212,7 @@ body:has(#createTickets) {
   overflow: auto;
   // transition: none !important;
   // transform: translateY(280px);
-  
+
   * {
     border-color: #292929 !important;
   }
@@ -2229,7 +2231,7 @@ body:has(#createTickets) {
       &:hover, &.active {color: #cc00b7}
     }
   }
-    
+
   // @layer layout {
   //   :active {
   //     background-color: #cc00b7 !important;
@@ -2291,11 +2293,13 @@ body:has(#createTickets) {
     height: var(--height) !important;
     position: relative !important;
     margin-block: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .ticket {
+    .ticket.custom {
       width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
+      object-fit: contain !important;
     }
 
     .image-ticket-event-empty {
@@ -2332,7 +2336,7 @@ body:has(#createTickets) {
           height: 100% !important;
           position: relative;
           // ? changes 06/3/23 👇
-          object-fit: cover;
+          object-fit: contain;
           // &::after {
           //   content: "";
           //   position: absolute;
