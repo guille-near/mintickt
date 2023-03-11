@@ -45,13 +45,18 @@
             >
               <template v-slot:selection>
               <img
-                id="ticket_custom"
                 :src="dataTicket[0].url"
                 class="image-ticket-event"
               />
               <!-- :style="`--bg-image: url(${dataTicket[0].url})`" -->
             </template>
             </v-file-input>
+            <img
+                id="ticket_custom"
+                v-if="ticket_custom"
+                :src="dataTicket[0].url"
+                class="image-ticket-event"
+              />
           </div>
 
           <!-- // * normal tickets -->
@@ -932,7 +937,7 @@
       </v-window-item>
     </v-window>
     <div class="text-center">
-      <v-overlay :value="overlay">
+      <v-overlay  :value="overlay">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Minting in progress...</h3>
         <h3 ref="tminted">{{ show_total_minted }}</h3>
@@ -941,7 +946,7 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Building event be pacient...</h3>
       </v-overlay>
-      <v-overlay :value="overlay_ticket">
+      <v-overlay :opacity="overlay_opacity" :value="overlay_ticket">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Building ticket be pacient...</h3>
       </v-overlay>
@@ -1235,6 +1240,8 @@ export default {
           : parseInt(this.$session.get("mint_amount")),
       open: false,
       i: null,
+      ticket_custom: false,
+      overlay_opacity: 0.5
     };
   },
   watch: {
@@ -1531,7 +1538,7 @@ export default {
           },
           {
             trait_type: "ticket_type",
-            value: this.$session.get("ticketval"),
+            value: this.$session.get("ticketval") === "custom" ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size") : this.$session.get("ticketval"),
           },
         ];
         let store = this.$store_mintbase;
@@ -1802,54 +1809,66 @@ export default {
         );
         const user = datos.accountId;
         if (!this.$session.get("canvas")) {
+            this.ticket_custom = true;
+            this.$session.get("ticketval") === "custom" ? this.overlay_opacity = 1 : this.overlay_opacity = 0.5;
             this.overlay_ticket = true;
-            var container = this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
-            const options = {
-              backgroundColor: null,
-              allowTaint: true,
-              removeContainer: true,
-              scale: 3,
-              quality: 1 // Set the maximum quality
-            };
-            html2canvas(container, options).then((canvas) => {
-              this.axios
-                .post(this.$node_url + "/uploads", {
-                  name: user + "-" + this.dataTickets.name,
-                  data: canvas.toDataURL("image/png", 1),
-                })
-                .then((response) => {
-                  //console.log(response.data);
-                  this.timepickerStartRules = false;
-                  this.timepickerEndRules = false;
-                  //Store all form data
-                  this.$session.set("dataFormName", this.dataTickets.name);
-                  this.$session.set(
-                    "dataFormPromoter",
-                    this.dataTickets.promoter
-                  );
-                  this.$session.set(
-                    "dataFormDescription",
-                    this.dataTickets.description
-                  );
-                  this.$session.set("dataFormDate", this.dates);
-                  this.$session.set("dataFormTimeStart", this.startTime);
-                  this.$session.set("dataFormTimeEnd", this.endTime);
-                  this.$session.set("canvas", true);
-                  //this.canvas = response.data;
-                  this.$session.set("step", 2);
-                  this.step = this.$session.get("step");
-                  //this.loading = false;
-                  this.overlay_ticket = false;
-                  this.getBase64FromUrl(this.burn_ticket_image)
-                  canvas.remove();
-                  container.parentNode.removeChild(container);
-                  setTimeout(() => this.getCanvas(), 800);
-                  //console.log(response.data);
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            });
+            // this.ticket_custom = true;
+            setTimeout(() => {        
+              var container = this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
+              const options = {
+                backgroundColor: null,
+                allowTaint: true,
+                removeContainer: true,
+                scale: 3,
+              };
+              html2canvas(container, options).then((canvas) => {
+                this.axios
+                  .post(this.$node_url + "/uploads", {
+                    name: user + "-" + this.dataTickets.name,
+                    data: canvas.toDataURL("image/png", 1),
+                  })
+                  .then((response) => {
+                    if(this.$session.get("ticketval") === "custom"){
+                      const img = new Image();
+                      img.src = document.getElementById('ticket_custom').src;
+                      let realWidth = img.naturalWidth;
+                      let realHeight = img.naturalHeight;
+                      // console.log("Original width=" + realWidth + ", " + "Original height=" + realHeight);
+                      this.$session.set("ticket_custom_size", realWidth+"_"+realHeight);
+                    }
+                    this.ticket_custom = false;
+                    this.timepickerStartRules = false;
+                    this.timepickerEndRules = false;
+                    //Store all form data
+                    this.$session.set("dataFormName", this.dataTickets.name);
+                    this.$session.set(
+                      "dataFormPromoter",
+                      this.dataTickets.promoter
+                    );
+                    this.$session.set(
+                      "dataFormDescription",
+                      this.dataTickets.description
+                    );
+                    this.$session.set("dataFormDate", this.dates);
+                    this.$session.set("dataFormTimeStart", this.startTime);
+                    this.$session.set("dataFormTimeEnd", this.endTime);
+                    this.$session.set("canvas", true);
+                    //this.canvas = response.data;
+                    this.$session.set("step", 2);
+                    this.step = this.$session.get("step");
+                    //this.loading = false;
+                    this.overlay_ticket = false;
+                    this.getBase64FromUrl(this.burn_ticket_image)
+                    canvas.remove();
+                    container.parentNode.removeChild(container);
+                    setTimeout(() => this.getCanvas(), 800);
+                    //console.log(response.data);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              });
+          }, 1500);
         } else {
           this.$session.set("step", 2);
           this.step = this.$session.get("step");

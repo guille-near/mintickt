@@ -338,7 +338,7 @@ export default {
                     key: i,
                   };
                   this.data.push(rows);
-                  this.data.sort((a, b) => (a.key > b.key ? -1 : 1));
+                  this.data.sort((a, b) => (a.key > b.key ? 1 : -1));
                   this.dataTableMobile.push(rows);
                   this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
                 });
