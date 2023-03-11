@@ -88,7 +88,11 @@
 				</aside>
 			</div>
 
-			<article class="divcol acenter" :class="ticketType" v-intersect="onIntersect">
+			<article
+        class="divcol acenter" :class="ticketType" v-intersect="onIntersect"
+        :style="ticketSize ? `--w: ${ticketSize.split('_')[0]}px; --h: ${ticketSize.split('_')[1]}px` : ''"
+      >
+      <!-- added here to original size-->
 				<img class="ticket" :src="ticket_img" alt="Ticket" />
 				<div id="buy" class="contenedor_aside divcol fill-w">
 					<aside class="divrow">
@@ -324,6 +328,9 @@ export default {
   computed: {
     ticketType() {
       return this.$route.query.thingid.toLowerCase().split("/")[1];
+    },
+    ticketSize() {
+      return this.$route.query.thingid.toLowerCase().split("/")[2];
     }
   },
   methods: {
@@ -1059,8 +1066,8 @@ export default {
       --height: 565.05px;
     }
     &.custom {
-      --width: 314px;
-      --height: 506.83px;
+      --width: var(--w);
+      --height: var(--h);
     }
     width: min(90%, var(--width)) !important;
     @media (min-width: 880px) {transform: translateY(-250px) !important}
@@ -1104,8 +1111,9 @@ export default {
       width: 100% !important;
       object-fit: cover !important;
       @media (min-width: 880px) {
-        max-width: var(--width) !important;
-        max-height: var(--height) !important;
+        width: var(--width) !important;
+        height: var(--height) !important;
+        // ? before im using max-width and max-height
       }
     }
 

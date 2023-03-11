@@ -2297,7 +2297,7 @@ body:has(#createTickets) {
     align-items: center;
     justify-content: center;
 
-    .ticket.custom {
+    .ticket {
       width: 100% !important;
       object-fit: contain !important;
     }

@@ -429,7 +429,6 @@
           <div class="ticket-wrapper" :class="ticketType">
             <img
               class="ticket"
-              :class="ticketType"
               :src="canvas"
               alt="Ticket image"
             />
