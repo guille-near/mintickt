@@ -336,11 +336,12 @@ export default {
                     ticket_type: value1.reference_blob.extra[11].value,
                     show: false,
                     key: i,
+                    date1:  value1.reference_blob.extra[6].value
                   };
                   this.data.push(rows);
-                  this.data.sort((a, b) => (a.key > b.key ? 1 : -1));
+                  this.data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
                   this.dataTableMobile.push(rows);
-                  this.dataTableMobile.sort((a, b) => (a.key > b.key ? -1 : 1));
+                  this.dataTableMobile.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
                 });
             });
           });
