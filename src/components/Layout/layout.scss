@@ -121,7 +121,7 @@
     padding: 12px 13px 12px 20px !important;
     backdrop-filter: blur(3px);
     background-color: transparent;
-    @include borderGradient();
+    @include borderGradientTransparent();
   }
 
 

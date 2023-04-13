@@ -51,13 +51,13 @@
             :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
 
-            <!-- <v-btn
+            <v-btn
               class="createEventBtn h9-em"
               v-show="routePath !== '/events/register' && routeName !== 'Store'"
               @click="goToEvent"
             >
               <span>create an event</span>
-            </v-btn> -->
+            </v-btn>
 
             <v-menu bottom offset-y>
               <template #activator="{on, attrs}">
@@ -72,8 +72,7 @@
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
                 </v-btn> -->
 
-                <!--  atributes used before changes -->
-
+                <!--  atributes used before changes 👇 -->
                 <!-- text
                 rounded
                 color="white" -->

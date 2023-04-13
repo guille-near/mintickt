@@ -1,7 +1,9 @@
 <template>
   <div id="profile">
     <section id="profile-header">
-      <img src="@/assets/profile/user.svg" alt="user img">
+      <div class="container-avatar">
+        <img src="@/assets/profile/user.svg" alt="user img">
+      </div>
     </section>
 
     <section id="profile-content">

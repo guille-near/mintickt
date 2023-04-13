@@ -219,7 +219,7 @@ $breakpoints: (
 
                     /* other adjusts */
 
-@mixin borderGradient() {
+@mixin borderGradientTransparent() {
   border-left: 1.5px solid hsl(97, 97%, 86%, .7);
   border-right: 1.5px solid hsl(306, 100%, 50%, .7);
   background-image:
@@ -227,4 +227,35 @@ $breakpoints: (
     linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
   background-size: 100% 1px;
   background-position: 0 0, 0 100%;
+}
+
+@mixin borderGradient() {
+  position: relative;
+  background: linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
+  &::before {
+    content: "";
+    opacity: 1 !important;
+    display: block !important;
+    position: absolute !important;
+    inset: 1px !important;
+    background: var(--bg);
+  }
+}
+
+@mixin borderGradientAvatar() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  height: max-content;
+  border-radius: 50%;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
+    z-index: -1;
+    border-radius: inherit;
+  }
 }

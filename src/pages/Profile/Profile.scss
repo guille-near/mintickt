@@ -35,12 +35,15 @@
     border-radius: 13px 13px 0 0;
     position: relative;
 
-    img {
+    .container-avatar {
       position: absolute;
       bottom: calc(var(--avatarSize) / 2.5 * -1);
       left: var(--margination);
-      width: var(--avatarSize);
-      height: var(--avatarSize);
+      // @include borderGradientAvatar(); // ? disabled for while - image have a native border gradient
+      img {
+        width: var(--avatarSize);
+        height: var(--avatarSize);
+      }
     }
   }
 
@@ -200,15 +203,11 @@
       }
       .btn-bordered {
         padding: 17px 6px;
-        background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
         filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
         backdrop-filter: blur(7px);
         border-radius: 8px;
-        // border-image: url(../../assets/landing/cron_logo_light-p-500.png);
-        // background: linear-gradient(#2AD0CA, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6);
-        border-image-slice: 1;
-        border-width: 2.5px;
-        border-style: solid;
+        --bg: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
+        @include borderGradient();
         @include mq(max, small) {order: 1}
       }
       .btn-filled {
