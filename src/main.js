@@ -44,7 +44,7 @@ Vue.prototype.$event_page = 'http://testnet.mintickt.com/#/events/'
 Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
-Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w"
+Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
 
 // 3d carousel
 Vue.use(Carousel3d);
