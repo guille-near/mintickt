@@ -219,3 +219,12 @@ $breakpoints: (
 
                     /* other adjusts */
 
+@mixin borderGradient() {
+  border-left: 1.5px solid hsl(97, 97%, 86%, .7);
+  border-right: 1.5px solid hsl(306, 100%, 50%, .7);
+  background-image:
+    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)),
+    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
+  background-size: 100% 1px;
+  background-position: 0 0, 0 100%;
+}

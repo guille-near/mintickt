@@ -33,6 +33,16 @@ export default new Router({
          component: () => import('@/pages/Landing/Landing'),
         },
         {
+          path: '/profile',
+          name: 'Profile',
+          component: () => import('@/pages/Profile/Profile'),
+        },
+        {
+          path: '/profile-ticket-details/:id?',
+          name: 'ProfileTicketDetails',
+          component: () => import('@/pages/Profile/ProfileTicketDetails'),
+        },
+        {
           path: '/store',
           name: 'Store',
           component: () => import('@/pages/Store/Store'),

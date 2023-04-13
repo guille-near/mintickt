@@ -3,7 +3,7 @@
     <Header v-if="renderHeader" style="z-index: 10" ref="header" />
     <v-main
       class="content"
-      :class="{events: $router.currentRoute.path.includes('events')}"
+      :class="{events: $router.currentRoute.path.includes('events') || $router.currentRoute.path.includes('profile')}"
       style="overflow: hidden"
     >
       <router-view @renderHeader="RenderHeader"></router-view>

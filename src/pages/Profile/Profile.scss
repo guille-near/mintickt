@@ -1,0 +1,234 @@
+@import "../../styles/app.scss";
+
+#profile {
+  --avatarSize: 151px;
+  --margination: 2.5em;
+  @include mq(max, small) {
+    --margination: clamp(1em, 4vw, 4em);
+    --avatarSize: 120px;
+    &:not(.details) {padding-top: 0 !important}
+  }
+  --spacing: 20px;
+  padding-top: 160px;
+  border-radius: 13px 13px 0 0;
+  position: relative;
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: -140px;
+  //   width: 100vw;
+  //   margin-inline: calc(50% - 50vw);
+  //   inset: 0;
+  //   background-color: rgba(0,0,0,.2);
+  //   pointer-events: none;
+  // }
+
+  &-header {
+    background: center no-repeat url(../../assets/profile/bg-profile.jpg);
+    @include mq(max, small) {
+      background: linear-gradient(180deg, #000000 -13.88%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 100%),
+      url(../../assets/profile/bg-profile.jpg);
+    }
+    background-size: cover;
+    width: 100%;
+    height: 319px;
+    border-radius: 13px 13px 0 0;
+    position: relative;
+
+    img {
+      position: absolute;
+      bottom: calc(var(--avatarSize) / 2.5 * -1);
+      left: var(--margination);
+      width: var(--avatarSize);
+      height: var(--avatarSize);
+    }
+  }
+
+  &-content {
+    padding-top: calc((var(--avatarSize) / 2) + (var(--spacing) / 2));
+    padding-bottom: 80px;
+    padding-inline: calc(var(--margination) * 2);
+    background: rgba(217, 217, 217, 0.13);
+
+    .title-tabs {
+      font-family: 'Proxima Nova', 'SF Pro', sans-serif;
+      font-weight: 600;
+      font-size: 25px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+      margin-bottom: calc(var(--spacing) / 1.5);
+    }
+
+    .v-tabs {
+      &-bar__content {
+        border-bottom: 1px solid rgba(217, 217, 217, 0.5);
+        padding-bottom: var(--spacing);
+        @include mq(max, small) {padding-bottom: calc(var(--spacing) / 2)}
+        gap: 25px;
+      }
+      .v-tab {
+        min-width: max-content;
+        padding: 0;
+        color: rgba(217, 217, 217, 0.25);
+        text-transform: none;
+        font-family: 'Proxima Nova', 'SF Pro', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        @media (max-width: 880px) {font-size: 16px}
+        letter-spacing: -0.03em;
+        &::before {display: none !important}
+        &--active {color: #fff}
+      }
+      &-slider {
+        background-color: #fff;
+      }
+
+
+      &-items {
+        margin-top: var(--spacing);
+        background-color: transparent;
+
+        .v-window-item--active {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--imageSize)), 1fr));
+          // row-gap: var(--spacing);
+          // column-gap: calc(var(--spacing) * 2.5);
+          gap: var(--spacing);
+          min-height: 300px;
+
+          .v-card {
+            width: max-content;
+            height: max-content;
+            display: flex;
+            flex-direction: column;
+            // gap: calc(var(--spacing) * 2);
+            gap: 10px;
+            border-radius: 13px;
+
+            img {
+              width: var(--imageSize);
+              height: var(--imageSize);
+              border-radius: 9px;
+            }
+            span:first-of-type {
+              font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+              font-weight: 590;
+              font-size: 15px;
+              color: #FFFFFF;
+            }
+            span:first-of-type + span {
+              font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 14px;
+              color: #D9D9D9;
+            }
+          }
+        }
+      }
+    }
+
+
+    // * Profile tikcet details
+    article {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: var(--spacing);
+      @include mq(max, small) {gap: calc(var(--spacing) * 2)}
+      width: max-content;
+
+      .container-ticket {
+        @include mq(min, small) {
+          display: contents;
+          *:not(img) {display: none}
+        }
+        @include mq(max, small) {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+        img {
+          width: 222px;
+          height: 333px;
+          @include mq(max, small) {
+            width: 227px;
+            height: 340px;
+          }
+        }
+        span {
+          max-width: 265px;
+        }
+        span:first-of-type {
+          font-family: 'Proxima Nova', 'SF Pro', sans-serif;
+          font-weight: 600;
+          font-size: 25px;
+          text-align: center;
+          letter-spacing: -0.03em;
+        }
+        span:first-of-type + span {
+          font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+          font-weight: 400;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      .v-btn {
+        width: 251px;
+        height: 38px;
+        &__content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+        }
+        * {
+          font-family: 'Proxima Nova', 'SF Pro', sans-serif;
+          font-weight: 700;
+          font-size: 12px;
+          text-align: center;
+          letter-spacing: -0.03em;
+          color: #FFFFFF;
+        }
+      }
+      .btn-bordered {
+        padding: 17px 6px;
+        background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
+        filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
+        backdrop-filter: blur(7px);
+        border-radius: 8px;
+        // border-image: url(../../assets/landing/cron_logo_light-p-500.png);
+        // background: linear-gradient(#2AD0CA, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6);
+        border-image-slice: 1;
+        border-width: 2.5px;
+        border-style: solid;
+        @include mq(max, small) {order: 1}
+      }
+      .btn-filled {
+        padding: 12px 20px;
+        background: linear-gradient(0deg, #000000 -42.31%, rgba(0, 0, 0, 0) 50%), #CC00B7;
+        border-radius: 10px;
+        @include mq(max, small) {order: 0}
+      }
+    }
+  }
+
+  &.details {
+    #profile-header {
+      @include mq(max, small) {display: none !important}
+    }
+    #profile-content {
+      padding-top: calc((var(--avatarSize) / 3)) !important;
+      @include mq(max, small) {
+        background-color: transparent !important;
+      }
+    }
+  }
+}

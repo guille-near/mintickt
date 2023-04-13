@@ -7,8 +7,9 @@
       absolute
       :class="{
         events:
-          routeName == 'Landing' ||
-          routePath.includes('events'),
+          routeName == 'Landing'  ||
+          routePath.includes('events') ||
+          routePath.includes('profile'),
         register: routePath === '/events/register'
       }"
     >
@@ -16,14 +17,15 @@
         class="align"
         :class="{
           limiter:
-            routeName == 'Landing' ||
-            !routePath.includes('events')
+            routeName == 'Landing' || 
+            !routePath.includes('events') ||
+            !routePath.includes('profile')
         }"
       >
         <v-col
           class="space"
           :style="
-            routePath.includes('events') || routeName == 'Landing'
+            routePath.includes('events') || routePath.includes('profile') ||  routeName == 'Landing'
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -49,13 +51,13 @@
             :style="routePath !== '/events/register' ? '' : 'display:contents'"
           >
 
-            <v-btn
+            <!-- <v-btn
               class="createEventBtn h9-em"
               v-show="routePath !== '/events/register' && routeName !== 'Store'"
               @click="goToEvent"
             >
               <span>create an event</span>
-            </v-btn>
+            </v-btn> -->
 
             <v-menu bottom offset-y>
               <template #activator="{on, attrs}">
@@ -70,10 +72,14 @@
                   <img src="@/assets/logo/near-black.svg" alt="near logo" />
                 </v-btn> -->
 
+                <!--  atributes used before changes -->
+
+                <!-- text
+                rounded
+                color="white" -->
+
                 <v-btn
-                  text 
-                  color="white"
-                  rounded
+                  class="buttonProfile"
                   v-on="nearid ? on : undefined"
                   v-bind="nearid ? attrs : undefined"
                   @click="nearid ? undefined : connect()"
@@ -90,6 +96,9 @@
                 </v-list-item> -->
                 <v-list-item :to="'/events'">
                   <v-list-item-title style="color: #fff">Events</v-list-item-title>
+                </v-list-item>
+                <v-list-item :to="'/profile'">
+                  <v-list-item-title style="color: #fff">Profile</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="logOut">
                   <v-list-item-title style="color: #fff">Log out</v-list-item-title>
