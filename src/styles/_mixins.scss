@@ -229,7 +229,7 @@ $breakpoints: (
   background-position: 0 0, 0 100%;
 }
 
-@mixin borderGradient() {
+@mixin borderGradient($bg) {
   position: relative;
   background: linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7));
   &::before {
@@ -238,7 +238,7 @@ $breakpoints: (
     display: block !important;
     position: absolute !important;
     inset: 1px !important;
-    background: var(--bg);
+    background: $bg;
   }
 }
 
