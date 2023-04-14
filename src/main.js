@@ -4,6 +4,7 @@ import initI18n from "@/plugins/i18n";
 import router from "./Routes";
 import store from "./store/index";
 import vuetify from "./plugins/vuetify";
+import ramper from "./services/ramper-api";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import VueAnimateOnScroll from "vue-animate-onscroll";
@@ -46,6 +47,7 @@ Vue.prototype.$owner_split = "3"
 Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
 Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
 
+Vue.use(ramper)
 // 3d carousel
 Vue.use(Carousel3d);
 
@@ -161,6 +163,7 @@ if (!String.prototype.cutString) {
 
 
 new Vue({
+  ramper,
   vuetify,
   apolloProvider,
   router,

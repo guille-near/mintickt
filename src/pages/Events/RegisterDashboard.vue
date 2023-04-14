@@ -1280,10 +1280,23 @@ export default {
       this.back();
     }
   },
-  mounted() {
+  async mounted() {
     this.checkoutTicketType();
     // this.hideScroll(this.$route)
-    this.revisar();
+    // this.revisar();
+    if (!this.$ramper.getUser()) {
+      const login = await this.$ramper.signIn()
+      if (login) {
+        if (login.user) {
+          // this.$router.go()
+          location.reload()
+        } else {
+          this.$router.push("/")
+        }
+      } else {
+        this.$router.push("/")
+      }
+    }
     if (this.step === 1) {
       this.listenerEditor();
     }
@@ -1291,8 +1304,8 @@ export default {
       this.$session.start();
     }
     this.grantMinter();
-    let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-    const user = datos.accountId;
+    // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+    const user = this.$ramper.getAccountId();
     this.getData();
     this.pollData();
     if (this.$session.get("dataFormName")) {

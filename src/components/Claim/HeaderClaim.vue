@@ -63,7 +63,29 @@ export default {
   },
   methods: {
   
-  async  connect() {
+  async  connectOLD() {
+  let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
+  const { data: walletData } = await new Wallet().init({
+    networkName: Network.mainnet,
+    chain: Chain.near,
+    apiKey: API_KEY,
+  })
+   const { wallet, isConnected } = walletData
+    if (this.nearid === false){
+      console.log("user")
+      wallet.connect({ requestSignIn: true }).then
+      this.nearid = true
+      const { data: details } = await wallet.details()
+      this.user = details.accountId
+    }else if (this.nearid === true){
+      wallet.disconnect()
+      localStorage.clear()
+      this.$router.go()
+      this.nearid = false
+      this.user = "Login with NEAR"
+    }
+},
+async  connectRamper() {
   let API_KEY = "c45bd9f9-b880-4e1e-9ecb-c71309348a7d"
   const { data: walletData } = await new Wallet().init({
     networkName: Network.mainnet,

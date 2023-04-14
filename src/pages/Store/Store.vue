@@ -517,7 +517,7 @@ export default {
     async buy() {
       //Generate the reference for the burned image let me in
       //Grant the minter if does not exist
-      this.revisar();
+      // this.revisar();
       this.grantMinter();
      
       //
