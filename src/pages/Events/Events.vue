@@ -233,12 +233,26 @@ export default {
       return filter;
     },
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$session.start();
     }
+
+    if (!this.$ramper.getUser()) {
+      const login = await this.$ramper.signIn()
+      if (login) {
+        if (login.user) {
+          // this.$router.go()
+          location.reload()
+        } else {
+          this.$router.push("/")
+        }
+      } else {
+        this.$router.push("/")
+      }
+    }
     this.scanListener();
-    this.revisar();
+    // this.revisar();
     this.getData();
     this.pollData();
     this.mainImg();
