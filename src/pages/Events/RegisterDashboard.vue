@@ -1320,7 +1320,7 @@ export default {
     if (!this.$session.exists()) {
       this.$session.start();
     }
-    this.grantMinter();
+
     // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = this.$ramper.getAccountId();
     this.getData();
@@ -1433,60 +1433,49 @@ export default {
       }
       this.createImage(file);
     },
-    async grantMinter() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      this.$apollo
-        .query({
-          query: minter,
-          variables: {
-            store: this.$store_mintbase,
-            user: user,
-          },
-        })
-        .then((response) => {
-          //console.log(response.data.mb_store_minters.length)
-          //If the user is not minter just give grant to him/her
-          if (response.data.mb_store_minters.length == 0) {
-            const url = this.$node_url + "/minter";
-            let item = {
-              account_id: user,
-            };
-            this.axios
-              .post(url, item)
-              .then(() => {
-                console.log("Hash up");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    },
+    // async grantMinter() {
+    //   let datos = JSON.parse(
+    //     localStorage.getItem("Mintbase.js_wallet_auth_key")
+    //   );
+    //   const user = datos.accountId;
+    //   this.$apollo
+    //     .query({
+    //       query: minter,
+    //       variables: {
+    //         store: this.$store_mintbase,
+    //         user: user,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       //console.log(response.data.mb_store_minters.length)
+    //       //If the user is not minter just give grant to him/her
+    //       if (response.data.mb_store_minters.length == 0) {
+    //         const url = this.$node_url + "/minter";
+    //         let item = {
+    //           account_id: user,
+    //         };
+    //         this.axios
+    //           .post(url, item)
+    //           .then(() => {
+    //             console.log("Hash up");
+    //           })
+    //           .catch((error) => {
+    //             console.log(error);
+    //           });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
     async mint() {
       if (this.$refs.form2.validate()) {
         this.$session.set("step", 4);
         this.loading = true;
         this.disable = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
-        //Api key an data
-        let API_KEY = this.$dev_key.toString();
-        let networkName = this.$networkName.toString();
-        const { data: walletData } = await new Wallet().init({
-          networkName: networkName,
-          chain: Chain.near,
-          apiKey: API_KEY,
-        });
-        const { wallet } = walletData;
-        //Loading image
+
+        const user = this.$ramper.getAccountId();
+
         try {
           this.getCanvas();
           var image = new Image();
@@ -1506,16 +1495,6 @@ export default {
           console.error(error);
           // TODO: handle error
         }
-
-        const random = (length = 8) => {
-          this.$session.set(
-            "tempid",
-            Math.random().toString(16).substr(2, length)
-          );
-          return Math.random().toString(16).substr(2, length);
-        };
-
-        random(14);
 
         //Estra data location , dates, place id
         let extra = [
@@ -1570,19 +1549,14 @@ export default {
             value: this.$session.get("ticketval") === "custom" ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size") : this.$session.get("ticketval"),
           },
         ];
-        let store = this.$store_mintbase;
         let category = "ticketing";
 
         //Metadata Object
         const metadata = {
           title: this.dataTickets.name,
           description: this.dataTickets.description,
-          extra,
-          store,
-          type: "NEP171",
-          category,
-        };
-        await wallet.minter.setMetadata(metadata, true);
+          extra
+        }
         // console.log(metadata);
 
         this.$session.set("mint_tittle", this.dataTickets.name);
@@ -1644,17 +1618,7 @@ export default {
           "control_mint_appoval",
           parseInt(this.dataTickets.mint_amount)
         );
-        await wallet.mint(
-          parseInt(this.dataTickets.mint_amount),
-          store.toString(),
-          JSON.stringify(royalties) === "{}" ? null : royalties,
-          JSON.stringify(splits) === "{}" ? null : splits,
-          category,
-          {
-            meta: "mint",
-            royaltyPercentage: this.counter * 100,
-          }
-        );
+        // llamado de ramper
       }
     },
     async mintGoodie() {
@@ -1833,10 +1797,8 @@ export default {
         
         this.editorRules = false;
         this.comboboxRules = false;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
+   
+        const user = this.$ramper.getAccountId();
         if (!this.$session.get("canvas")) {
             this.ticket_custom = true;
             this.$session.get("ticketval") === "custom" ? this.overlay_opacity = 1 : this.overlay_opacity = 0.5;
@@ -1910,10 +1872,7 @@ export default {
       if (!this.endTime) this.timepickerEndRules = true;
     },
     async getCanvas() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+      const user = this.$ramper.getAccountId();
       await this.axios
         .post(this.$node_url + "/get-uploads", {
           name: user + "-" + this.$session.get("dataFormName"),
@@ -1930,7 +1889,7 @@ export default {
       let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
-      const user = datos.accountId;
+      const user = this.$ramper.getAccountId();
       await this.axios
         .post(this.$node_url + "/del-uploads", {
           name: user + "-" + this.$session.get("dataFormName"),
@@ -2126,10 +2085,8 @@ export default {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+
+      const user = this.$ramper.getAccountId();
       for (const prop in this.dataSplit) {
         if (user != this.dataSplit[prop].account) {
           this.arr.push(parseInt(this.dataSplit[prop].percentage));
@@ -2424,12 +2381,9 @@ export default {
               //console.log(this.txs)
             });
 
-            let datos = JSON.parse(
-              localStorage.getItem("Mintbase.js_wallet_auth_key")
-            );
-            const user = datos.accountId;
+            const user = this.$ramper.getAccountId();
             const owners = {};
-            owners[datos.accountId] = 9000;
+            owners[this.$ramper.getAccountId()] = 9000;
             owners[this.$value_user_mint] = 1000;
 
             // This is the let me in
@@ -2686,10 +2640,7 @@ export default {
       }
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        this.user = datos.accountId;
+        this.user = this.$ramper.getAccountId();
       }
     },
     onlyNumberKey(evt) {
