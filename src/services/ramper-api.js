@@ -4,19 +4,20 @@ import Vue from 'vue'
 
 export default function RamperApi() {
   init({
-    appName: 'Music Feast',
+    appName: 'Mintickt',
     chainName: CHAIN.NEAR,
     walletProviders: [],
     theme: THEME.DARK,
     network: process.env.NETWORK,
-    logoURI: "https://testnet.musicfeast.io/img/logo.fb7d246.svg",
+    logoURI: "https://www.mintickt.com/images/logom.6dc78695.svg",
     authProviders: [
       AUTH_PROVIDER.GOOGLE,
       AUTH_PROVIDER.FACEBOOK,
       AUTH_PROVIDER.EMAIL,
       AUTH_PROVIDER.TWITTER,
       AUTH_PROVIDER.APPLE,
-    ]
+    ],
+    walletProviders: [WALLET_PROVIDER.NEAR_WALLET],
   })
 
   const user = getUser()
