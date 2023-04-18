@@ -480,14 +480,13 @@
                   How many tickets you would like have for your event?
                   <span style="color: red">*</span>
                 </h3>
-                <p>You can always mint/list more NFT tickets later.</p>
+                <p>You can always add more NFT tickets later.</p>
 
                 <v-text-field
                   v-model="dataTickets.mint_amount"
                   id="amount_list"
                   solo
                   :rules="rules.required"
-                  v-debounce:800ms="checkMintAmount"
                   type="number"
                   hide-spin-buttons
                 >
@@ -500,12 +499,30 @@
                     >
                     <v-btn
                       class="btn-control"
-                      :disabled="dataTickets.mint_amount == 20"
                       @click="dataTickets.mint_amount++"
                       >+</v-btn
                     >
                   </template>
                 </v-text-field>
+
+                <div class="divcol">
+                  <label for="price"
+                    >Price (USD)<span style="color: red">*</span></label
+                  >
+                  <div class="divcol">
+                    <v-text-field
+                      v-model="price"
+                      id="price"
+                      solo
+                      v-debounce:300ms="priceNEAR"
+                      min="0"
+                      :rules="rules.required"
+                      type="number"
+                    ></v-text-field>
+                    <span class="conversion">~ {{ usd }} NEAR</span>
+                  </div>
+                </div>
+
               </div>
             </v-form>
 
@@ -672,7 +689,7 @@
                 :disabled="disable"
                 class="mint"
               >
-                Mint<v-icon style="color: #ffffff !important" small
+                Approve<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
               </v-btn>
@@ -2617,14 +2634,14 @@ export default {
       if (model) return (this.timepickerEndRules = false);
       this.timepickerEndRules = true;
     },
-    checkMintAmount() {
-      parseInt(this.dataTickets.mint_amount) > 20
-        ? (this.dataTickets.mint_amount = 20)
-        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
-      parseInt(this.dataTickets.mint_amount) < 0
-        ? (this.dataTickets.mint_amount = 0)
-        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
-    },
+    // checkMintAmount() {
+    //   parseInt(this.dataTickets.mint_amount) > 20
+    //     ? (this.dataTickets.mint_amount = 20)
+    //     : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
+    //   parseInt(this.dataTickets.mint_amount) < 0
+    //     ? (this.dataTickets.mint_amount = 0)
+    //     : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
+    // },
     checkListAmount() {
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
