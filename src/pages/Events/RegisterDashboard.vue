@@ -1476,27 +1476,10 @@ export default {
 
         const user = this.$ramper.getAccountId();
 
-        try {
-          this.getCanvas();
-          var image = new Image();
-          image.src = this.canvas;
-          this.image = image;
+         //Juan esta es la imagen del evento
+         const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
 
-          const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
-          // localStorage.setItem("file", file);
-          if (fileError) {
-            throw new Error(fileError);
-          } else {
-            console.log(fileUploadResult);
-          }
-        } catch (error) {
-          console.error(error);
-          // TODO: handle error
-        }
-
-        //Estra data location , dates, place id
+         //Estra data location , dates, place id
         let extra = [
           {
             trait_type: "location",
@@ -1852,7 +1835,9 @@ export default {
                     this.getBase64FromUrl(this.burn_ticket_image)
                     canvas.remove();
                     container.parentNode.removeChild(container);
-                    setTimeout(() => this.getCanvas(), 800);
+                    setTimeout(() => this.getCanvas().then(()=> { this.ipfsTicketDesign()}), 800);
+                    //generate the hash of the ticket design
+                    //setTimeout(() => this.ipfsTicketDesign(), 1600);
                     //console.log(response.data);
                   })
                   .catch((error) => {
@@ -1879,7 +1864,7 @@ export default {
         })
         .then((response) => {
           this.canvas = response.data;
-          console.log(this.canvas);
+          //console.log(this.canvas);
         })
         .catch((error) => {
           console.error(error);
@@ -1970,6 +1955,17 @@ export default {
     // },
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    dataURLtoFileTicketDesig(dataurl, filename) {
+      var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
@@ -2503,6 +2499,23 @@ export default {
       await this.axios.post(this.$ipfs, formData).then((res) => {
         //console.log('res', res.data)
         this.$session.set("IpfsHash", res.data.IpfsHash);
+      });
+    },
+    async ipfsTicketDesign() {
+      const formData = new FormData();
+      //Get the base 64 image from session variable and convert it to file
+      //this.getCanvas();
+      const user = this.$ramper.getAccountId();
+      //console.log('image', this.canvas)
+      const file = this.dataURLtoFileTicketDesig(this.canvas, "mint.png");
+      
+      formData.append("uploaded_file", file);
+      formData.append("name", user + "-" + this.$session.get("dataFormName"));
+      console.log('formData', formData)
+      //console.log(this.$ipfs)
+      await this.axios.post(this.$ipfs, formData).then((res) => {
+        //console.log('res', res.data)
+        this.$session.set("IpfsHashTicketDesign", res.data.IpfsHash);
       });
     },
     async completeIpfs() {
