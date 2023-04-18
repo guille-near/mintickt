@@ -1477,7 +1477,7 @@ export default {
         const user = this.$ramper.getAccountId();
 
          //Juan esta es la imagen del evento
-         const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
+         //const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
 
          //Estra data location , dates, place id
         let extra = [
@@ -1534,12 +1534,21 @@ export default {
         ];
         let category = "ticketing";
 
-        //Metadata Object
-        const metadata = {
-          title: this.dataTickets.name,
-          description: this.dataTickets.description,
-          extra
+        event_metadata:  {
+            title = this.dataTickets.name,
+            description = this.dataTickets.description,
+            media = this.$pinata_gateway,
+            media_hash = this.$session.get("IpfsHashTicketDesign"), 
+            copies = this.dataTickets.mint_amount,
+            issued_at = this.startTime,
+            expires_at = this.endTime,
+            starts_at = this.startTime,
+            updated_at = this.endTime,
+            extra = JSON.stringify(extra), 
+            reference = this.$pinata_gateway,
+            reference_hash = "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
         }
+
         // console.log(metadata);
 
         this.$session.set("mint_tittle", this.dataTickets.name);
@@ -1548,7 +1557,7 @@ export default {
 
         //handle royalties
         const royalties = {};
-        const multiplied = 10000;
+        const multiplied = 1000;
         var counter = this.counter;
         const multiplier = multiplied / counter;
         //console.log(multiplier)
@@ -1557,7 +1566,8 @@ export default {
             element.percentage * multiplier
           );
         });
-
+        
+        
         //handle splits
         const splits = {};
         var counter1 = this.counter1;
@@ -1587,21 +1597,13 @@ export default {
         }
         //end split
 
-        //LocalStora Mint amount
-        this.$session.set(
-          "mint_amount",
-          parseInt(this.dataTickets.mint_amount)
-        );
-        this.$session.set(
-          "total_minted",
-          parseInt(this.dataTickets.mint_amount)
-        );
-        //Control goodies and let me in for approval
-        this.$session.set(
-          "control_mint_appoval",
-          parseInt(this.dataTickets.mint_amount)
-        );
         // llamado de ramper
+                // nft_event(
+        // event_metadata: event_metadata,
+        // price: this.price,
+        // royalty: {this.dataRoyalties},
+        // royalty_buy: {this.dataSplit},
+        //  )
       }
     },
     async mintGoodie() {
