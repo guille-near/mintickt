@@ -7,7 +7,7 @@
     </section>
 
     <section id="profile-content">
-      <h2 class="title-tabs vermobile" v-show="tab === 0">My tickets</h2>
+      <h2 class="title-tabs vermobile">My tickets</h2>
 
       <v-tabs v-model="tab" background-color="transparent">
         <v-tab v-for="item in dataTabs" :key="item" v-ripple="false">{{item.title}}</v-tab>

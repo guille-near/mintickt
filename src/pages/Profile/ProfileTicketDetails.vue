@@ -7,6 +7,13 @@
     </section>
 
     <section id="profile-content" class="center">
+      <div class="container-title">
+        <v-btn icon @click="$router.go(-1)">
+          <v-icon color="#fff">mdi-arrow-left</v-icon>
+        </v-btn>
+        <h2 class="title-tabs p">My Tickets / {{"Nearcon"}}</h2>
+      </div>
+
       <article>
         <div class="container-ticket">
           <img src="@/assets/profile/ticket-test.svg" alt="tikcet test">
@@ -19,16 +26,19 @@
 
 
 
-        <div class="divcol" style="gap: 10px">
-          <v-btn class="btn-bordered vermobile">
-            <img src="@/assets/profile/discord.svg" alt="discord" width="15px">
+        <div class="container-btn">
+          <v-btn class="btn-bordered">
+            <img src="@/assets/profile/transfer.svg" alt="transfer" width="15px" height="15px">
+            <span>Transfer</span>
+          </v-btn>
+          <v-btn class="btn-bordered">
+            <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px">
+            <span>Burn</span>
+          </v-btn>
+          <v-btn class="btn-filled">
+            <img src="@/assets/profile/discord.svg" alt="discord" width="15px" height="15px">
             <span>Unlock your invitation</span>
           </v-btn>
-          <v-btn class="btn-bordered" @click="$router.go(-1)">
-            <v-icon>mdi-arrow-left</v-icon>
-            <span>Back</span>
-          </v-btn>
-          <v-btn class="btn-filled">Burn it</v-btn>
         </div>
       </article>
     </section>
