@@ -1534,26 +1534,24 @@ export default {
         ];
         let category = "ticketing";
 
-        event_metadata:  {
-            title = this.dataTickets.name,
-            description = this.dataTickets.description,
-            media = this.$pinata_gateway,
-            media_hash = this.$session.get("IpfsHashTicketDesign"), 
-            copies = this.dataTickets.mint_amount,
-            issued_at = this.startTime,
-            expires_at = this.endTime,
-            starts_at = this.startTime,
-            updated_at = this.endTime,
-            extra = JSON.stringify(extra), 
-            reference = this.$pinata_gateway,
-            reference_hash = "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
+        const event_metadata =  {
+            title: this.dataTickets.name,
+            description: this.dataTickets.description,
+            media: this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign"),
+            copies: this.dataTickets.mint_amount,
+            issued_at: this.startTime,
+            expires_at: this.endTime,
+            starts_at: this.startTime,
+            updated_at: this.endTime,
+            extra: JSON.stringify(extra), 
+            reference: this.$session.get("IpfsHashTicketDesign"),
         }
 
         // console.log(metadata);
 
         this.$session.set("mint_tittle", this.dataTickets.name);
         //LocalStorage Metadata
-        this.$session.set("metadata", JSON.stringify(metadata));
+        // this.$session.set("metadata", JSON.stringify(metadata));
 
         //handle royalties
         const royalties = {};
@@ -1604,6 +1602,33 @@ export default {
         // royalty: {this.dataRoyalties},
         // royalty_buy: {this.dataSplit},
         //  )
+        console.log("LLEGO")
+        if (this.$ramper.getUser()) {
+          const action = [this.$ramper.functionCall(
+            "nft_event",       
+            {
+              event_metadata: event_metadata,
+              price: this.price,
+              royalty: this.dataRoyalties,
+              royalty_buy: this.dataSplit,
+            }, 
+            '300000000000000', 
+            "20000000000000000000000"
+          )]
+          console.log(action)
+          console.log(process.env.VUE_APP_NETWORK)
+          console.log(process.env.VUE_APP_CONTRACT_NFT)
+          const resTx = await this.$ramper.sendTransaction({
+            transactionActions: [
+              {
+                receiverId: process.env.VUE_APP_CONTRACT_NFT,
+                actions: action,
+              },
+            ],
+            network: process.env.VUE_APP_NETWORK,
+          })
+          console.log("RESULTT!!!", resTx)
+        }
       }
     },
     async mintGoodie() {
