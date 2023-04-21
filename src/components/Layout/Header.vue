@@ -79,13 +79,13 @@
 
                 <v-btn
                   class="buttonProfile"
-                  v-on="nearid ? on : undefined"
-                  v-bind="nearid ? attrs : undefined"
-                  @click="nearid ? undefined : connectRamper()"
+                  v-on="user ? on : undefined"
+                  v-bind="user ? attrs : undefined"
+                  @click="user ? undefined : connectRamper()"
                   :title="user"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
-                  <span>{{ limitStr(user, 25) }}</span>
+                  <span>{{ limitStr(user || "Log In", 25) }}</span>
                   <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
                 </v-btn>
               </template>
@@ -113,7 +113,6 @@
 </template>
 
 <script>
-import { Wallet, Chain, Network } from "mintbase";
 // let ubicacionPrincipal = window.pageYOffset;
 // let resizeTimeout;
 // function resizeThrottler(actualResizeHandler) {
@@ -154,23 +153,22 @@ export default {
   data() {
     return {
       // themeButton: true,
-      nearid: false,
-      user: "Log In",
+      user: undefined,
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,
       routeName: this.$router.currentRoute.name,
     };
   },
   mounted() {
-    if (this.$ramper.getUser()) {
-      this.user = this.$ramper.getAccountId()
-    }
     this.revisar();
+
+
+      // * styles
     this.responsive();
     window.onresize = () => {
       this.responsive();
     };
-    
+
     const header = document.getElementById("headerApp")
     // console.log(this.$route.path);
     if (this.$route.path === "/events/liveData" || this.$route.path == "/events/options") {
@@ -207,34 +205,11 @@ export default {
         this.responsiveActions = false;
       }
     },
-    async connectOld() {
-      let API_KEY = this.$dev_key;
-      let networkName = this.$networkName.toString();
-      const { data: walletData } = await new Wallet().init({
-        networkName: networkName,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
-      const { wallet, isConnected } = walletData;
-      if (this.nearid === false) {
-        wallet.connect({ requestSignIn: true }).then;
-        this.nearid = true;
-        const { data: details } = await wallet.details();dev_key
-        this.user = details.accountId;
-      } else if (this.nearid === true) {
-        wallet.disconnect();
-        localStorage.clear();
-        this.$router.go();
-        this.nearid = false;
-        this.user = "Log In";
-      }
-    },
     async connectRamper() {
       if (this.$ramper.getUser()) {
         this.$ramper.signOut()
         this.$router.push("/");
-        this.nearid = false;
-        this.user = "Log In";
+        this.user = undefined;
       } else {
         const login = await this.$ramper.signIn()
         if (login) {
@@ -244,8 +219,8 @@ export default {
           }
         }
       }
-      
-      // console.log("RAMPER", this.$ramper, this.$dev_key)
+    },
+    async revisar() {
       // let API_KEY = this.$dev_key;
       // let networkName = this.$networkName.toString();
       // const { data: walletData } = await new Wallet().init({
@@ -254,52 +229,11 @@ export default {
       //   apiKey: API_KEY,
       // });
       // const { wallet, isConnected } = walletData;
-      // if (this.nearid === false) {
-      //   wallet.connect({ requestSignIn: true }).then;
-      //   this.nearid = true;
-      //   const { data: details } = await wallet.details();
-      //   this.user = details.accountId;
-      // } else if (this.nearid === true) {
-      //   wallet.disconnect();
-      //   localStorage.clear();
-      //   this.$router.go();
-      //   this.nearid = false;
-      //   this.user = "Login with NEAR";
-      // }
-    },
-    async revisar() {
-      let API_KEY = this.$dev_key;
-      let networkName = this.$networkName.toString();
-      const { data: walletData } = await new Wallet().init({
-        networkName: networkName,
-        chain: Chain.near,
-        apiKey: API_KEY,
-      });
-      const { wallet, isConnected } = walletData;
-      // console.info(isConnected)
-      // if (!isConnected) {
-      //   //console.info("user")
-      //   if (this.nearid === false) {
-      //     wallet.connect({ requestSignIn: true }).then;
-      //     this.nearid = true;
-      //     const { data: details } = await wallet.details();
-      //     this.user = details.accountId;
-      //   } else if (this.nearid === true) {
-      //     wallet.disconnect();
-      //     localStorage.clear();
-      //     this.$router.go();
-      //     this.nearid = false;
-      //     this.user = "Login with NEAR";
-      //   }
-      // }
-      if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
-        this.nearid = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        this.user = datos.accountId;
-        
-      } 
+      
+      if (this.$ramper.getUser()) this.user = this.$ramper.getAccountId()
+
+      // this.user = localStorage.getItem("Mintbase.js_wallet_auth_key");
+      // console.log(localStorage.getItem("Mintbase.js_wallet_auth_key"), 2);
     },
     async logOut() {
       // let API_KEY = this.$dev_key;
@@ -312,12 +246,10 @@ export default {
       // walletData.wallet.disconnect();
       // localStorage.clear();
       this.$ramper.signOut()
-      this.$router.go();
-      this.nearid = false;
-      this.user = "Log In";
+      this.user = undefined;
+      // this.$router.go();
     },
     goToEvent(){
-
       this.$session.clear();
       localStorage.setItem('step', 1);
       this.$router.push('/events/register')
