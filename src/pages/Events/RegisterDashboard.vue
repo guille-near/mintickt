@@ -480,14 +480,13 @@
                   How many tickets you would like have for your event?
                   <span style="color: red">*</span>
                 </h3>
-                <p>You can always mint/list more NFT tickets later.</p>
+                <p>You can always add more NFT tickets later.</p>
 
                 <v-text-field
                   v-model="dataTickets.mint_amount"
                   id="amount_list"
                   solo
                   :rules="rules.required"
-                  v-debounce:800ms="checkMintAmount"
                   type="number"
                   hide-spin-buttons
                 >
@@ -500,12 +499,30 @@
                     >
                     <v-btn
                       class="btn-control"
-                      :disabled="dataTickets.mint_amount == 20"
                       @click="dataTickets.mint_amount++"
                       >+</v-btn
                     >
                   </template>
                 </v-text-field>
+
+                <div class="divcol">
+                  <label for="price"
+                    >Price (USD)<span style="color: red">*</span></label
+                  >
+                  <div class="divcol">
+                    <v-text-field
+                      v-model="price"
+                      id="price"
+                      solo
+                      v-debounce:300ms="priceNEAR"
+                      min="0"
+                      :rules="rules.required"
+                      type="number"
+                    ></v-text-field>
+                    <span class="conversion">~ {{ usd }} NEAR</span>
+                  </div>
+                </div>
+
               </div>
             </v-form>
 
@@ -672,7 +689,7 @@
                 :disabled="disable"
                 class="mint"
               >
-                Mint<v-icon style="color: #ffffff !important" small
+                Approve<v-icon style="color: #ffffff !important" small
                   >mdi-arrow-right</v-icon
                 >
               </v-btn>
@@ -1303,7 +1320,7 @@ export default {
     if (!this.$session.exists()) {
       this.$session.start();
     }
-    this.grantMinter();
+
     // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = this.$ramper.getAccountId();
     this.getData();
@@ -1416,91 +1433,53 @@ export default {
       }
       this.createImage(file);
     },
-    async grantMinter() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      this.$apollo
-        .query({
-          query: minter,
-          variables: {
-            store: this.$store_mintbase,
-            user: user,
-          },
-        })
-        .then((response) => {
-          //console.log(response.data.mb_store_minters.length)
-          //If the user is not minter just give grant to him/her
-          if (response.data.mb_store_minters.length == 0) {
-            const url = this.$node_url + "/minter";
-            let item = {
-              account_id: user,
-            };
-            this.axios
-              .post(url, item)
-              .then(() => {
-                console.log("Hash up");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    },
+    // async grantMinter() {
+    //   let datos = JSON.parse(
+    //     localStorage.getItem("Mintbase.js_wallet_auth_key")
+    //   );
+    //   const user = datos.accountId;
+    //   this.$apollo
+    //     .query({
+    //       query: minter,
+    //       variables: {
+    //         store: this.$store_mintbase,
+    //         user: user,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       //console.log(response.data.mb_store_minters.length)
+    //       //If the user is not minter just give grant to him/her
+    //       if (response.data.mb_store_minters.length == 0) {
+    //         const url = this.$node_url + "/minter";
+    //         let item = {
+    //           account_id: user,
+    //         };
+    //         this.axios
+    //           .post(url, item)
+    //           .then(() => {
+    //             console.log("Hash up");
+    //           })
+    //           .catch((error) => {
+    //             console.log(error);
+    //           });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
     async mint() {
       if (this.$refs.form2.validate()) {
         this.$session.set("step", 4);
         this.loading = true;
         this.disable = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
-        //Api key an data
-        let API_KEY = this.$dev_key.toString();
-        let networkName = this.$networkName.toString();
-        const { data: walletData } = await new Wallet().init({
-          networkName: networkName,
-          chain: Chain.near,
-          apiKey: API_KEY,
-        });
-        const { wallet } = walletData;
-        //Loading image
-        try {
-          this.getCanvas();
-          var image = new Image();
-          image.src = this.canvas;
-          this.image = image;
 
-          const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
-          // localStorage.setItem("file", file);
-          if (fileError) {
-            throw new Error(fileError);
-          } else {
-            console.log(fileUploadResult);
-          }
-        } catch (error) {
-          console.error(error);
-          // TODO: handle error
-        }
+        const user = this.$ramper.getAccountId();
 
-        const random = (length = 8) => {
-          this.$session.set(
-            "tempid",
-            Math.random().toString(16).substr(2, length)
-          );
-          return Math.random().toString(16).substr(2, length);
-        };
+         //Juan esta es la imagen del evento
+         //const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
 
-        random(14);
-
-        //Estra data location , dates, place id
+         //Estra data location , dates, place id
         let extra = [
           {
             trait_type: "location",
@@ -1553,28 +1532,30 @@ export default {
             value: this.$session.get("ticketval") === "custom" ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size") : this.$session.get("ticketval"),
           },
         ];
-        let store = this.$store_mintbase;
         let category = "ticketing";
 
-        //Metadata Object
-        const metadata = {
-          title: this.dataTickets.name,
-          description: this.dataTickets.description,
-          extra,
-          store,
-          type: "NEP171",
-          category,
-        };
-        await wallet.minter.setMetadata(metadata, true);
+        const event_metadata =  {
+            title: this.dataTickets.name,
+            description: this.dataTickets.description,
+            media: this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign"),
+            copies: this.dataTickets.mint_amount,
+            issued_at: this.startTime,
+            expires_at: this.endTime,
+            starts_at: this.startTime,
+            updated_at: this.endTime,
+            extra: JSON.stringify(extra), 
+            reference: this.$session.get("IpfsHashTicketDesign"),
+        }
+
         // console.log(metadata);
 
         this.$session.set("mint_tittle", this.dataTickets.name);
         //LocalStorage Metadata
-        this.$session.set("metadata", JSON.stringify(metadata));
+        // this.$session.set("metadata", JSON.stringify(metadata));
 
         //handle royalties
         const royalties = {};
-        const multiplied = 10000;
+        const multiplied = 1000;
         var counter = this.counter;
         const multiplier = multiplied / counter;
         //console.log(multiplier)
@@ -1583,7 +1564,8 @@ export default {
             element.percentage * multiplier
           );
         });
-
+        
+        
         //handle splits
         const splits = {};
         var counter1 = this.counter1;
@@ -1613,31 +1595,40 @@ export default {
         }
         //end split
 
-        //LocalStora Mint amount
-        this.$session.set(
-          "mint_amount",
-          parseInt(this.dataTickets.mint_amount)
-        );
-        this.$session.set(
-          "total_minted",
-          parseInt(this.dataTickets.mint_amount)
-        );
-        //Control goodies and let me in for approval
-        this.$session.set(
-          "control_mint_appoval",
-          parseInt(this.dataTickets.mint_amount)
-        );
-        await wallet.mint(
-          parseInt(this.dataTickets.mint_amount),
-          store.toString(),
-          JSON.stringify(royalties) === "{}" ? null : royalties,
-          JSON.stringify(splits) === "{}" ? null : splits,
-          category,
-          {
-            meta: "mint",
-            royaltyPercentage: this.counter * 100,
-          }
-        );
+        // llamado de ramper
+                // nft_event(
+        // event_metadata: event_metadata,
+        // price: this.price,
+        // royalty: {this.dataRoyalties},
+        // royalty_buy: {this.dataSplit},
+        //  )
+        console.log("LLEGO")
+        if (this.$ramper.getUser()) {
+          const action = [this.$ramper.functionCall(
+            "nft_event",       
+            {
+              event_metadata: event_metadata,
+              price: this.price,
+              royalty: this.dataRoyalties,
+              royalty_buy: this.dataSplit,
+            }, 
+            '300000000000000', 
+            "20000000000000000000000"
+          )]
+          console.log(action)
+          console.log(process.env.VUE_APP_NETWORK)
+          console.log(process.env.VUE_APP_CONTRACT_NFT)
+          const resTx = await this.$ramper.sendTransaction({
+            transactionActions: [
+              {
+                receiverId: process.env.VUE_APP_CONTRACT_NFT,
+                actions: action,
+              },
+            ],
+            network: process.env.VUE_APP_NETWORK,
+          })
+          console.log("RESULTT!!!", resTx)
+        }
       }
     },
     async mintGoodie() {
@@ -1816,10 +1807,8 @@ export default {
         
         this.editorRules = false;
         this.comboboxRules = false;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
+   
+        const user = this.$ramper.getAccountId();
         if (!this.$session.get("canvas")) {
             this.ticket_custom = true;
             this.$session.get("ticketval") === "custom" ? this.overlay_opacity = 1 : this.overlay_opacity = 0.5;
@@ -1873,7 +1862,9 @@ export default {
                     this.getBase64FromUrl(this.burn_ticket_image)
                     canvas.remove();
                     container.parentNode.removeChild(container);
-                    setTimeout(() => this.getCanvas(), 800);
+                    setTimeout(() => this.getCanvas().then(()=> { this.ipfsTicketDesign()}), 800);
+                    //generate the hash of the ticket design
+                    //setTimeout(() => this.ipfsTicketDesign(), 1600);
                     //console.log(response.data);
                   })
                   .catch((error) => {
@@ -1893,17 +1884,14 @@ export default {
       if (!this.endTime) this.timepickerEndRules = true;
     },
     async getCanvas() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+      const user = this.$ramper.getAccountId();
       await this.axios
         .post(this.$node_url + "/get-uploads", {
           name: user + "-" + this.$session.get("dataFormName"),
         })
         .then((response) => {
           this.canvas = response.data;
-          console.log(this.canvas);
+          //console.log(this.canvas);
         })
         .catch((error) => {
           console.error(error);
@@ -1913,7 +1901,7 @@ export default {
       let datos = JSON.parse(
         localStorage.getItem("Mintbase.js_wallet_auth_key")
       );
-      const user = datos.accountId;
+      const user = this.$ramper.getAccountId();
       await this.axios
         .post(this.$node_url + "/del-uploads", {
           name: user + "-" + this.$session.get("dataFormName"),
@@ -1994,6 +1982,17 @@ export default {
     // },
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+    dataURLtoFileTicketDesig(dataurl, filename) {
+      var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
@@ -2109,10 +2108,8 @@ export default {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
       this.arr = [];
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+
+      const user = this.$ramper.getAccountId();
       for (const prop in this.dataSplit) {
         if (user != this.dataSplit[prop].account) {
           this.arr.push(parseInt(this.dataSplit[prop].percentage));
@@ -2407,12 +2404,9 @@ export default {
               //console.log(this.txs)
             });
 
-            let datos = JSON.parse(
-              localStorage.getItem("Mintbase.js_wallet_auth_key")
-            );
-            const user = datos.accountId;
+            const user = this.$ramper.getAccountId();
             const owners = {};
-            owners[datos.accountId] = 9000;
+            owners[this.$ramper.getAccountId()] = 9000;
             owners[this.$value_user_mint] = 1000;
 
             // This is the let me in
@@ -2534,6 +2528,23 @@ export default {
         this.$session.set("IpfsHash", res.data.IpfsHash);
       });
     },
+    async ipfsTicketDesign() {
+      const formData = new FormData();
+      //Get the base 64 image from session variable and convert it to file
+      //this.getCanvas();
+      const user = this.$ramper.getAccountId();
+      //console.log('image', this.canvas)
+      const file = this.dataURLtoFileTicketDesig(this.canvas, "mint.png");
+      
+      formData.append("uploaded_file", file);
+      formData.append("name", user + "-" + this.$session.get("dataFormName"));
+      console.log('formData', formData)
+      //console.log(this.$ipfs)
+      await this.axios.post(this.$ipfs, formData).then((res) => {
+        //console.log('res', res.data)
+        this.$session.set("IpfsHashTicketDesign", res.data.IpfsHash);
+      });
+    },
     async completeIpfs() {
       //this.ipfs();
       if (
@@ -2617,14 +2628,14 @@ export default {
       if (model) return (this.timepickerEndRules = false);
       this.timepickerEndRules = true;
     },
-    checkMintAmount() {
-      parseInt(this.dataTickets.mint_amount) > 20
-        ? (this.dataTickets.mint_amount = 20)
-        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
-      parseInt(this.dataTickets.mint_amount) < 0
-        ? (this.dataTickets.mint_amount = 0)
-        : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
-    },
+    // checkMintAmount() {
+    //   parseInt(this.dataTickets.mint_amount) > 20
+    //     ? (this.dataTickets.mint_amount = 20)
+    //     : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
+    //   parseInt(this.dataTickets.mint_amount) < 0
+    //     ? (this.dataTickets.mint_amount = 0)
+    //     : (this.dataTickets.mint_amount = this.dataTickets.mint_amount);
+    // },
     checkListAmount() {
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
@@ -2669,10 +2680,7 @@ export default {
       }
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        this.user = datos.accountId;
+        this.user = this.$ramper.getAccountId();
       }
     },
     onlyNumberKey(evt) {

@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import Vue from "vue";
 import App from "./App.vue";
 import initI18n from "@/plugins/i18n";

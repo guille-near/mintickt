@@ -206,12 +206,15 @@ export default {
       }
     },
     async connectRamper() {
+      console.log("ASD")
       if (this.$ramper.getUser()) {
         this.$ramper.signOut()
         this.$router.push("/");
-        this.user = undefined;
+        this.nearid = false;
+        this.user = "Log In";
       } else {
         const login = await this.$ramper.signIn()
+        console.log(login)
         if (login) {
           if (login.user) {
             // this.$router.go()
