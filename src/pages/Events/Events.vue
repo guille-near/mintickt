@@ -27,30 +27,17 @@
     >
       <template v-slot:[`item.image`]="{ item }">
         <!-- <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket"> -->
-        <img
-          id="bgTicket-image"
-          :src="getIpfs(item.thingid)"
-          alt="event image"
-        />
+        <img id="bgTicket-image" :src="item.media || hola" alt="event image" />
       </template>
 
       <template v-slot:[`item.name`]="{ item }">
-        <v-btn
-          class="btnWithoutStyles"
-          :href="$store_site + item.thingid + '/' + item.ticket_type"
-          target="_blank"
-          >{{ item.name }}</v-btn
-        >
+        <v-btn class="btnWithoutStyles" :href="$store_site + item.thingid + '/' + item.ticket_type" target="_blank">{{ item.name }}</v-btn>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
         <div class="cont_buttons" style="gap: 6px">
-          <v-btn @click="goLiveData(item.name, item.thingid)"
-            >Go to live data</v-btn
-          >
-          <v-btn @click="goOptions(item.name, item.thingid)"
-            ><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn
-          >
+          <v-btn @click="goLiveData(item.name, item.thingid)">Go to live data</v-btn>
+          <v-btn @click="goOptions(item.name, item.thingid)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
           <!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
             {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
@@ -63,21 +50,10 @@
     </v-data-table>
 
     <section class="vermobile">
-      <v-card
-        v-for="(item, i) in filter_dataTableMobile"
-        :key="i"
-        class="up divcol"
-        style="display: flex"
-      >
+      <v-card v-for="(item, i) in filter_dataTableMobile" :key="i" class="up divcol" style="display: flex">
         <section class="acenter">
           <span class="eventName">
-            <v-btn
-              style="color: white; padding: 0"
-              text
-              :href="$store_site + item.thingid"
-              target="_blank"
-              >{{ item.name.ellipsisRange(14) }}</v-btn
-            >
+            <v-btn style="color: white; padding: 0" text :href="$store_site + item.thingid" target="_blank">{{ item.name.ellipsisRange(14) }}</v-btn>
           </span>
           <span>{{ item.date }}</span>
 
@@ -121,10 +97,10 @@
             <span>{{ item.sold }}</span>
           </div>
 
-          <div class="divcol">
+          <!-- <div class="divcol">
             <h3>TICKETS LISTED</h3>
             <span>{{ item.listed }}</span>
-          </div>
+          </div> -->
         </aside>
       </v-card>
 
@@ -144,46 +120,41 @@
 </template>
 
 <script>
+import moment from "moment";
 import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
 const your_events = gql`
-  query MyQuery($store: String!, $user: String!) {
-    mb_views_nft_metadata(
-      where: {
-        nft_contract_id: { _eq: $store }
-        listings: { price: { _is_null: false }, minter: { _eq: $user } }
-      }
-    ) {
+  query MyQuery($user: String!) {
+    series(where: { creator_id: $user, typetoken_id: "1" }) {
       title
-      reference_blob
+      nftsold
+      supply
+      copies
+      creator_id
+      description
+      expires_at
+      extra
+      fecha
       id
-      listings_aggregate {
-        aggregate {
-          count
-        }
-      }
-      nft_contract_owner_id
+      issued_at
+      media
+      price
+      price_near
+      reference
+      starts_at
+      typetoken_id
+      updated_at
     }
   }
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $user: String!, $metadata_id: String!) {
-    nft_tokens_aggregate(
-      where: {
-        nft_contract_id: { _eq: $store }
-        metadata_id: { _eq: $metadata_id }
-      }
-    ) {
+    nft_tokens_aggregate(where: { nft_contract_id: { _eq: $store }, metadata_id: { _eq: $metadata_id } }) {
       aggregate {
         count
       }
     }
-    nft_earnings_aggregate(
-      where: {
-        receiver_id: { _eq: $user }
-        nft_token: { metadata_id: { _eq: $metadata_id } }
-      }
-    ) {
+    nft_earnings_aggregate(where: { receiver_id: { _eq: $user }, nft_token: { metadata_id: { _eq: $metadata_id } } }) {
       aggregate {
         count
       }
@@ -208,7 +179,7 @@ export default {
         { text: "DATE", align: "start", value: "date" },
         { text: "TICKETS MINTED", align: "start", value: "minted" },
         { text: "TICKETS SOLD", align: "start", value: "sold" },
-        { text: "TICKETS LISTED", align: "start", value: "listed" },
+        // { text: "TICKETS LISTED", align: "start", value: "listed" },
         { sortable: false, align: "end", value: "actions" },
       ],
       data: [],
@@ -227,8 +198,7 @@ export default {
     filter_dataTableMobile() {
       let filter = this.dataTableMobile;
 
-      if (this.search)
-        filter = filter.filter((data) => data.name.includes(this.search));
+      if (this.search) filter = filter.filter((data) => data.name.includes(this.search));
 
       return filter;
     },
@@ -239,128 +209,105 @@ export default {
     }
 
     if (!this.$ramper.getUser()) {
-      const login = await this.$ramper.signIn()
+      const login = await this.$ramper.signIn();
       if (login) {
         if (login.user) {
           // this.$router.go()
-          location.reload()
+          location.reload();
         } else {
-          this.$router.push("/")
+          this.$router.push("/");
         }
       } else {
-        this.$router.push("/")
+        this.$router.push("/");
       }
     }
     this.scanListener();
     // this.revisar();
     this.getData();
-    this.pollData();
-    this.mainImg();
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    if (urlParams.get("transactionHashes") !== null) {
-      history.replaceState(null, location.href.split("?")[0], "/#/events");
-    }
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "approve"
-    ) {
-      history.replaceState(null, location.href.split("?")[0], "/#/events");
-    }
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "goodies"
-    ) {
-      history.replaceState(null, location.href.split("?")[0], "/#/events");
-    }
-    if (urlParams.get("errorCode") !== null) {
-      history.replaceState(null, location.href.split("?")[0], "/#/events");
-    }
+    // this.pollData();
+    // this.mainImg();
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // if (urlParams.get("transactionHashes") !== null) {
+    //   history.replaceState(null, location.href.split("?")[0], "/#/events");
+    // }
+    // if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "approve") {
+    //   history.replaceState(null, location.href.split("?")[0], "/#/events");
+    // }
+    // if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "goodies") {
+    //   history.replaceState(null, location.href.split("?")[0], "/#/events");
+    // }
+    // if (urlParams.get("errorCode") !== null) {
+    //   history.replaceState(null, location.href.split("?")[0], "/#/events");
+    // }
   },
   methods: {
-    customSort: function(items, index, isDesc) {
+    customSort: function (items, index, isDesc) {
       items.sort((a, b) => {
-          if (index[0]=='date') {
+        if (index[0] == "date") {
+          if (!isDesc[0]) {
+            return new Date(b[index]) - new Date(a[index]);
+          } else {
+            return new Date(a[index]) - new Date(b[index]);
+          }
+        } else {
+          if (typeof a[index] !== "undefined") {
             if (!isDesc[0]) {
-                return new Date(b[index]) - new Date(a[index]);
+              return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
             } else {
-                return new Date(a[index]) - new Date(b[index]);
+              return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
             }
           }
-          else {
-            if(typeof a[index] !== 'undefined'){
-              if (!isDesc[0]) {
-                 return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
-              }
-              else {
-                  return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
-              }
-            }
-          }
+        }
       });
       return items;
     },
     async getData() {
       this.progress = true;
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
+      const user = this.$ramper.getAccountId();
       var rows = [];
       this.$apollo
         .watchQuery({
           query: your_events,
           variables: {
-            store: this.$store_mintbase,
             user: user,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          let dataSeries = data.series;
+          console.log("DATAAAAAA", data);
           this.data = [];
           this.dataTableMobile = [];
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
-          //Map the objectvalue
-          Object.entries(data).forEach(([key, value]) => {
-            // inner object entries
-            Object.entries(value).forEach(([i, value1]) => {
-              //Getting the minted nft
-              //Tokens aggregate and earnings by metadata id
-              this.$apollo
-                .watchQuery({
-                  query: mb_views_nft_tokens_aggregate,
-                  variables: {
-                    store: this.$store_mintbase,
-                    user: user,
-                    metadata_id: value1.id,
-                  },
-                  pollInterval: 10000, // 10 seconds in milliseconds
-                })
-                .subscribe(({ data }) => {
-                  rows = {
-                    name: value1.title,
-                    date: new Date(
-                      value1.reference_blob.extra[6].value * 1000
-                    ).toLocaleDateString("en-US", options),
-                    location: value1.reference_blob.extra[0].value,
-                    minted: data.nft_tokens_aggregate.aggregate.count,
-                    sold: data.nft_earnings_aggregate.aggregate.count,
-                    listed: value1.listings_aggregate.aggregate.count,
-                    thingid: value1.id,
-                    ticket_type: value1.reference_blob.extra[11].value,
-                    show: false,
-                    key: i,
-                    date1:  value1.reference_blob.extra[6].value
-                  };
-                  this.data.push(rows);
-                  this.data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
-                  this.dataTableMobile.push(rows);
-                  this.dataTableMobile.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
-                });
-            });
-          });
+
+          for (let i = 0; i < dataSeries.length; i++) {
+            const extra = JSON.parse(dataSeries[i].extra);
+            const startDate = extra.find((element) => element.trait_type === "Start Date");
+            console.log(extra);
+            rows = {
+              name: dataSeries[i].title,
+              date: this.convertDate(startDate.value * 1000), // new Date(value1.reference_blob.extra[6].value * 1000).toLocaleDateString("en-US", options),
+              location: dataSeries[i].title,
+              minted: dataSeries[i].supply,
+              sold: dataSeries[i].nftsold,
+              thingid: dataSeries[i].reference,
+              ticket_type: dataSeries[i].title,
+              show: false,
+              key: i,
+              date1: dataSeries[i].title,
+              media: dataSeries[i].media,
+            };
+            this.data.push(rows);
+            this.data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
+            this.dataTableMobile.push(rows);
+          }
         });
-        this.loading = false
+      this.loading = false;
+    },
+    convertDate(item) {
+      console.log(item);
+      return moment(item).format("LL");
     },
     pollData() {
       this.polling = setInterval(() => {
@@ -385,8 +332,7 @@ export default {
       this.$session.get("event_name", pevent);
     },
     fetch() {
-      const BINANCE_NEAR =
-        "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
+      const BINANCE_NEAR = "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
       var request = new XMLHttpRequest();
       request.open("GET", BINANCE_NEAR);
       request.send();
@@ -421,9 +367,7 @@ export default {
       }
       if (localStorage.getItem("Mintbase.js_wallet_auth_key") !== null) {
         this.nearid = true;
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
+        let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
         this.user = datos.accountId;
       }
     },
@@ -443,10 +387,7 @@ export default {
     },
     scanListener() {
       if (this.$router.currentRoute.path.includes(":user-scan")) {
-        let datos = JSON.parse(
-          localStorage.getItem("Mintbase.js_wallet_auth_key")
-        );
-        const user = datos.accountId;
+        const user = this.$ramper.getAccountId();
         this.search = user;
       } else {
         this.search = "";
@@ -472,16 +413,10 @@ export default {
         });
     },
     getIpfs(value) {
-      if (
-        this.src.filter((thingid) => thingid.thingid == value)[0] === undefined
-      ) {
-        return (
-          this.$pinata_gateway +
-          "QmT26Az6EsepW3U5NpYtP3g78NwL4biEfNPECowPiNt5wm"
-        );
+      if (this.src.filter((thingid) => thingid.thingid == value)[0] === undefined) {
+        return this.$pinata_gateway + "QmT26Az6EsepW3U5NpYtP3g78NwL4biEfNPECowPiNt5wm";
       } else {
-        var src = this.src.filter((thingid) => thingid.thingid == value)[0]
-          .tokenid;
+        var src = this.src.filter((thingid) => thingid.thingid == value)[0].tokenid;
         return this.$pinata_gateway + src;
       }
     },

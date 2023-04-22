@@ -96,13 +96,13 @@ const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://interop-mainnet.hasura.app/v1/graphql" : "https://interop-mainnet.hasura.app/v1/graphql",
+  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet" : "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet",
   cache,
 });
 const mintickClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend" : "https://api.thegraph.com/subgraphs/name/hrpalencia/mintickbackend",
+  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet" : "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet",
 });
 
 const apolloProvider = new VueApollo({

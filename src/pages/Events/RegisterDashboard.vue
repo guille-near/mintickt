@@ -2,30 +2,19 @@
   <section id="createTickets" class="registerDashboard divcol gap align">
     <ModalSuccess ref="modal"></ModalSuccess>
 
-    <h2
-      class="eliminarmobile align"
-      v-if="step == 1"
-      style="text-align: center"
-    >
-      Let's create your event!
-    </h2>
+    <h2 class="eliminarmobile align" v-if="step == 1" style="text-align: center">Let's create your event!</h2>
 
     <v-window v-model="step" to touchless>
       <v-window-item :value="1">
         <section class="center divwrap">
-          <h2 class="vermobile align" style="text-align: center">
-            Let's create your NFT for your event!
-          </h2>
+          <h2 class="vermobile align" style="text-align: center">Let's create your NFT for your event!</h2>
           <!-- // * canvas ticket -->
           <div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
 
           <!-- // * custome ticket -->
-          <div
-            v-if="imagecanvas1 && ticketType === 'custom'"
-            class="ticket-wrapper custom"
-          >
+          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
             <img
               src="@/assets/ticket-selection/ticket-custom-upload.svg"
               alt="custom ticket"
@@ -44,37 +33,16 @@
               :class="{ active: dataTicket[0].img }"
             >
               <template v-slot:selection>
-              <img
-                :src="dataTicket[0].url"
-                class="image-ticket-event"
-              />
-              <!-- :style="`--bg-image: url(${dataTicket[0].url})`" -->
-            </template>
+                <img :src="dataTicket[0].url" class="image-ticket-event" />
+                <!-- :style="`--bg-image: url(${dataTicket[0].url})`" -->
+              </template>
             </v-file-input>
-            <img
-                id="ticket_custom"
-                v-if="ticket_custom"
-                :src="dataTicket[0].url"
-                class="image-ticket-event"
-              />
+            <img id="ticket_custom" v-if="ticket_custom" :src="dataTicket[0].url" class="image-ticket-event" />
           </div>
 
           <!-- // * normal tickets -->
-          <div
-            class="ticket-wrapper"
-            v-else-if="imagecanvas1 && ticketType"
-            id="my-node"
-            data-ticket
-            :class="ticketType"
-          >
-            <img
-              class="ticket"
-              id="ticket-design"
-              :src="
-                require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)
-              "
-              alt="Ticket image"
-            />
+          <div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket :class="ticketType">
+            <img class="ticket" id="ticket-design" :src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)" alt="Ticket image" />
 
             <v-file-input
               v-for="(ticket, i) in dataTicket"
@@ -88,64 +56,33 @@
             >
               <template v-slot:selection>
                 <!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-                <div
-                  class="image-ticket-event"
-                  :style="`--bg-image: url(${ticket.url})`"
-                />
+                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
               </template>
             </v-file-input>
           </div>
 
           <div class="container-content divcol" style="gap: 20px">
-            <v-form
-              ref="form"
-              v-model="valid"
-              @submit.prevent="next()"
-              class="divcol"
-            >
+            <v-form ref="form" v-model="valid" @submit.prevent="next()" class="divcol">
               <h3>Basic Information</h3>
               <p>
-                Choose a name for your event and tell attendees why you think
-                they will have a great time. Add details that highlight why your
-                event is unique.
+                Choose a name for your event and tell attendees why you think they will have a great time. Add details that highlight why your event
+                is unique.
               </p>
 
               <div class="divcol">
-                <label for="name"
-                  >Event name <span style="color: red">*</span></label
-                >
-                <v-text-field
-                  v-model="dataTickets.name"
-                  id="name"
-                  :rules="rules.required"
-                  solo
-                ></v-text-field>
+                <label for="name">Event name <span style="color: red">*</span></label>
+                <v-text-field v-model="dataTickets.name" id="name" :rules="rules.required" solo></v-text-field>
               </div>
 
               <div class="divcol">
-                <label for="promoter"
-                  >Promoter / Organizer name
-                  <span style="color: red">*</span></label
-                >
-                <v-text-field
-                  v-model="dataTickets.promoter"
-                  :rules="rules.required"
-                  id="promoter"
-                  solo
-                ></v-text-field>
+                <label for="promoter">Promoter / Organizer name <span style="color: red">*</span></label>
+                <v-text-field v-model="dataTickets.promoter" :rules="rules.required" id="promoter" solo></v-text-field>
               </div>
 
               <h3>Description <span style="color: red">*</span></h3>
-              <p>
-                Add more details of your event, such as program, sponsors or
-                featured guests.
-              </p>
+              <p>Add more details of your event, such as program, sponsors or featured guests.</p>
 
-              <vue-editor
-                v-model="dataTickets.description"
-                class="editor"
-                :class="{ rules: editorRules }"
-              />
+              <vue-editor v-model="dataTickets.description" class="editor" :class="{ rules: editorRules }" />
               <!--<v-textarea
                 v-model="dataTickets.description"
                 solo
@@ -154,10 +91,7 @@
               ></v-textarea>-->
 
               <h3>Location <span style="color: red">*</span></h3>
-              <p>
-                Help people in the area discover your event and let attendees
-                know where to show up.
-              </p>
+              <p>Help people in the area discover your event and let attendees know where to show up.</p>
 
               <vuetify-google-autocomplete
                 id="map"
@@ -180,10 +114,7 @@
               </vuetify-google-autocomplete>
 
               <h3>Date and time <span style="color: red">*</span></h3>
-              <p>
-                Tell event-goers when your event starts and ends so they can
-                make plans to attend.
-              </p>
+              <p>Tell event-goers when your event starts and ends so they can make plans to attend.</p>
 
               <!-- full date -->
               <div class="divcol" style="gap: 6px">
@@ -200,15 +131,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <label for="date">
-                      <v-text-field
-                        id="date"
-                        v-model="dateRangeText"
-                        readonly
-                        solo
-                        v-on="on"
-                        v-bind="attrs"
-                        :rules="rules.required"
-                      ></v-text-field>
+                      <v-text-field id="date" v-model="dateRangeText" readonly solo v-on="on" v-bind="attrs" :rules="rules.required"></v-text-field>
                     </label>
                     <!-- <label for="date" class="mb-5">
                       <v-combobox
@@ -228,22 +151,9 @@
                       ></v-combobox>
                     </label> -->
                   </template>
-                  <v-date-picker
-                    v-model="dates"
-                    no-title
-                    scrollable
-                    range
-                    color="hsl(306, 100%, 50%)"
-                    dark
-                  >
+                  <v-date-picker v-model="dates" no-title scrollable range color="hsl(306, 100%, 50%)" dark>
                     <v-spacer></v-spacer>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs['menu-date'].save(dates)"
-                    >
-                      OK
-                    </v-btn>
+                    <v-btn text color="primary" @click="$refs['menu-date'].save(dates)"> OK </v-btn>
                   </v-date-picker>
                 </v-menu>
               </div>
@@ -393,16 +303,12 @@
 
             <div class="container-content--actions center gap eliminarmobile">
               <v-btn @click="design">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >
+                <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>
                 Back
               </v-btn>
               <v-btn :loading="loading" @click="next">
                 Next
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                >
+                <v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
               </v-btn>
             </div>
           </div>
@@ -410,16 +316,12 @@
 
         <div class="container-content--actions center gap vermobile">
           <v-btn disabled>
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon
-            >
+            <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>
             Back
           </v-btn>
           <v-btn @click="next">
             Next
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-right</v-icon
-            >
+            <v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
           </v-btn>
         </div>
       </v-window-item>
@@ -427,27 +329,13 @@
       <v-window-item :value="2">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper" :class="ticketType">
-            <img
-              class="ticket"
-              :src="canvas"
-              alt="Ticket image"
-            />
+            <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
-            <v-form
-              ref="form1"
-              v-model="valid"
-              enctype="multipart/form-data"
-              @submit.prevent="next1()"
-              class="divcol"
-              style="min-height: 100%"
-            >
+            <v-form ref="form1" v-model="valid" enctype="multipart/form-data" @submit.prevent="next1()" class="divcol" style="min-height: 100%">
               <div class="divcol">
                 <h3>Main event image <span style="color: red">*</span></h3>
-                <p>
-                  This is the first image attendees will see at the top of your
-                  event page.
-                </p>
+                <p>This is the first image attendees will see at the top of your event page.</p>
 
                 <v-file-input
                   v-model="dataTickets.img_main"
@@ -460,20 +348,12 @@
                   class="input-unique"
                 >
                   <template v-slot:selection>
-                    <img
-                      class="imagePreview"
-                      :src="url"
-                      alt="Image preview"
-                      style="object-fit: cover"
-                    />
+                    <img class="imagePreview" :src="url" alt="Image preview" style="object-fit: cover" />
                   </template>
 
                   <template v-slot:label>
                     <img src="@/assets/icons/link.svg" alt="drag icon" />
-                    <p class="p">
-                      Drag and drop or click here to upload your main event
-                      image
-                    </p>
+                    <p class="p">Drag and drop or click here to upload your main event image</p>
                   </template>
                 </v-file-input>
                 <h3>
@@ -482,33 +362,15 @@
                 </h3>
                 <p>You can always add more NFT tickets later.</p>
 
-                <v-text-field
-                  v-model="dataTickets.mint_amount"
-                  id="amount_list"
-                  solo
-                  :rules="rules.required"
-                  type="number"
-                  hide-spin-buttons
-                >
+                <v-text-field v-model="dataTickets.mint_amount" id="amount_list" solo :rules="rules.required" type="number" hide-spin-buttons>
                   <template v-slot:append>
-                    <v-btn
-                      class="btn-control"
-                      :disabled="dataTickets.mint_amount == 0"
-                      @click="dataTickets.mint_amount--"
-                      >-</v-btn
-                    >
-                    <v-btn
-                      class="btn-control"
-                      @click="dataTickets.mint_amount++"
-                      >+</v-btn
-                    >
+                    <v-btn class="btn-control" :disabled="dataTickets.mint_amount == 0" @click="dataTickets.mint_amount--">-</v-btn>
+                    <v-btn class="btn-control" @click="dataTickets.mint_amount++">+</v-btn>
                   </template>
                 </v-text-field>
 
                 <div class="divcol">
-                  <label for="price"
-                    >Price (USD)<span style="color: red">*</span></label
-                  >
+                  <label for="price">Price (USD)<span style="color: red">*</span></label>
                   <div class="divcol">
                     <v-text-field
                       v-model="price"
@@ -522,36 +384,19 @@
                     <span class="conversion">~ {{ usd }} NEAR</span>
                   </div>
                 </div>
-
               </div>
             </v-form>
 
             <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn @click="next1">
-                Next<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                >
-              </v-btn>
+              <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+              <v-btn @click="next1"> Next<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon> </v-btn>
             </div>
           </div>
         </section>
 
         <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back">
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon
-            >Back
-          </v-btn>
-          <v-btn @click="next1">
-            Next<v-icon style="color: #ffffff !important" small
-              >mdi-arrow-right</v-icon
-            >
-          </v-btn>
+          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+          <v-btn @click="next1"> Next<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon> </v-btn>
         </div>
       </v-window-item>
 
@@ -562,27 +407,13 @@
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <aside class="divcol gap" style="min-height: 100%">
-              <v-form
-                ref="form2"
-                v-model="valid"
-                @submit.prevent="mint()"
-                class="divcol"
-                style="min-height: 100%"
-              >
+              <v-form ref="form2" v-model="valid" @submit.prevent="mint()" class="divcol" style="min-height: 100%">
                 <div class="divcol">
                   <h3>Royalties</h3>
-                  <p>
-                    Royalties are perpetual. You can add royalties up to 50%
-                    across 25 accounts.
-                  </p>
+                  <p>Royalties are perpetual. You can add royalties up to 50% across 25 accounts.</p>
 
-                  <v-btn
-                    @click="dataRoyalties.push({ account: '', percentage: 0 })"
-                    >Add royalties</v-btn
-                  >
-                  <p class="p" style="margin-top: 1em">
-                    Avalilable {{ available }} %
-                  </p>
+                  <v-btn @click="dataRoyalties.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add royalties</v-btn>
+                  <p class="p" style="margin-top: 1em">Avalilable {{ available }} %</p>
                 </div>
 
                 <section class="container-inputs">
@@ -624,17 +455,12 @@
                 <div class="divcol" style="margin-top: 30px">
                   <h3>Split Revenue</h3>
                   <p>
-                    Split revenue clears after each sale. Needs at least two
-                    wallet addresses. The minter will receive 100% of split
-                    revenue unless splits are added.
+                    Split revenue clears after each sale. Needs at least two wallet addresses. The minter will receive 100% of split revenue unless
+                    splits are added.
                   </p>
 
-                  <v-btn @click="dataSplit.push({ account: '', percentage: 0 })"
-                    >Add split</v-btn
-                  >
-                  <p class="p" style="margin-top: 1em">
-                    Avalilable {{ available1 }} %
-                  </p>
+                  <v-btn @click="dataSplit.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add split</v-btn>
+                  <p class="p" style="margin-top: 1em">Avalilable {{ available1 }} %</p>
                 </div>
 
                 <section class="container-inputs">
@@ -677,42 +503,18 @@
             </aside>
 
             <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn
-                type="submit"
-                @click="mint()"
-                :loading="loading"
-                :disabled="disable"
-                class="mint"
-              >
-                Approve<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                >
+              <v-btn @click="back" :disabled="disabledBtn"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+              <v-btn type="submit" @click="mint()" :loading="loading" :disabled="disable" class="mint">
+                Approve<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
               </v-btn>
             </div>
           </div>
         </section>
 
         <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back">
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon
-            >Back
-          </v-btn>
-          <v-btn
-            type="submit"
-            @click="mint"
-            :loading="loading"
-            :disabled="disable"
-            class="mint"
-          >
-            Mint<v-icon style="color: #ffffff !important" small
-              >mdi-arrow-right</v-icon
-            >
+          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+          <v-btn type="submit" @click="mint" :loading="loading" :disabled="disable" class="mint">
+            Mint<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
           </v-btn>
         </div>
       </v-window-item>
@@ -723,21 +525,12 @@
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
-            <v-form
-              ref="form3"
-              v-model="valid"
-              @submit.prevent="list()"
-              class="divcol"
-              style="min-height: 100%"
-            >
+            <v-form ref="form3" v-model="valid" @submit.prevent="list()" class="divcol" style="min-height: 100%">
               <div class="divcol">
                 <h3>List NFT For Sale <span style="color: red">*</span></h3>
 
                 <div class="divcol">
-                  <label for="amount_list"
-                    >Amount to list Max ( {{ show_total_minted }} )
-                    <span style="color: red">*</span></label
-                  >
+                  <label for="amount_list">Amount to list Max ( {{ show_total_minted }} ) <span style="color: red">*</span></label>
                   <div class="divcol">
                     <v-text-field
                       v-model="amount_list"
@@ -750,27 +543,15 @@
                       hide-spin-buttons
                     >
                       <template v-slot:append>
-                        <v-btn
-                          class="btn-control"
-                          :disabled="amount_list == 0"
-                          @click="substract"
-                          >-</v-btn
-                        >
-                        <v-btn
-                          class="btn-control"
-                          :disabled="amount_list == total_minted"
-                          @click="add"
-                          >+</v-btn
-                        >
+                        <v-btn class="btn-control" :disabled="amount_list == 0" @click="substract">-</v-btn>
+                        <v-btn class="btn-control" :disabled="amount_list == total_minted" @click="add">+</v-btn>
                       </template>
                     </v-text-field>
                   </div>
                 </div>
 
                 <div class="divcol">
-                  <label for="price"
-                    >Price (NEAR)<span style="color: red">*</span></label
-                  >
+                  <label for="price">Price (NEAR)<span style="color: red">*</span></label>
                   <div class="divcol">
                     <v-text-field
                       v-model="price"
@@ -788,40 +569,18 @@
             </v-form>
 
             <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
-              <v-btn
-                type="submit"
-                @click="list()"
-                :loading="loading"
-                :disabled="disable"
-              >
-                List<v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-right</v-icon
-                >
+              <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+              <v-btn type="submit" @click="list()" :loading="loading" :disabled="disable">
+                List<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
               </v-btn>
             </div>
           </div>
         </section>
 
         <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back">
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon
-            >Back
-          </v-btn>
-          <v-btn
-            type="submit"
-            @click="list"
-            :loading="loading"
-            :disabled="disable"
-          >
-            List<v-icon style="color: #ffffff !important" small
-              >mdi-arrow-right</v-icon
-            >
+          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
+          <v-btn type="submit" @click="list" :loading="loading" :disabled="disable">
+            List<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
           </v-btn>
         </div>
       </v-window-item>
@@ -832,68 +591,30 @@
             <img class="ticket" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
-            <v-form
-              ref="form4"
-              v-model="valid"
-              @submit.prevent="mintGoodie()"
-              class="divcol"
-              style="min-height: 100%"
-            >
+            <v-form ref="form4" v-model="valid" @submit.prevent="mintGoodie()" class="divcol" style="min-height: 100%">
               <aside class="divcol" style="min-height: 100%">
                 <div class="divcol">
-                  <h3>
-                    Would you like to give a physical goodie with your ticket?
-                    (Drink, popcorn...)
-                  </h3>
-                  <p>
-                    We will transfer this NFT once your attendes get inside the
-                    venue so they can redeem it to get a real good.
-                  </p>
+                  <h3>Would you like to give a physical goodie with your ticket? (Drink, popcorn...)</h3>
+                  <p>We will transfer this NFT once your attendes get inside the venue so they can redeem it to get a real good.</p>
 
                   <div id="container-actions" class="gap">
                     <v-btn @click="goodie = true">Yes</v-btn>
-                    <v-btn @click="showModal" :disabled="goodie">No</v-btn>
+                    <v-btn @click="showModal" :disabled="disabledNo">No</v-btn>
                   </div>
                 </div>
 
                 <template v-if="goodie">
                   <div class="divcol" style="margin-top: 1.5em">
-                    <label for="attendees" class="sf-pro"
-                      >What are attendees going to receive with the NFT
-                      ticket?</label
-                    >
-                    <v-text-field
-                      v-model="dataTickets.attendees"
-                      :rules="rules.required"
-                      id="attendees"
-                      solo
-                    ></v-text-field>
+                    <label for="attendees" class="sf-pro">What are attendees going to receive with the NFT ticket?</label>
+                    <v-text-field v-model="dataTickets.attendees" :rules="rules.required" id="attendees" solo></v-text-field>
                   </div>
 
                   <div class="divcol" style="display: none">
-                    <label for="goodies" class="sf-pro"
-                      >How much goodies for each attendee per ticket?</label
-                    >
-                    <v-text-field
-                      v-model="dataTickets.goodies"
-                      id="goodies"
-                      solo
-                      :rules="rules.required"
-                      type="number"
-                      min="0"
-                      hide-spin-buttons
-                    >
+                    <label for="goodies" class="sf-pro">How much goodies for each attendee per ticket?</label>
+                    <v-text-field v-model="dataTickets.goodies" id="goodies" solo :rules="rules.required" type="number" min="0" hide-spin-buttons>
                       <template v-slot:append>
-                        <v-btn
-                          class="btn-control"
-                          @click="dataTickets.goodies--"
-                          >-</v-btn
-                        >
-                        <v-btn
-                          class="btn-control"
-                          @click="dataTickets.goodies++"
-                          >+</v-btn
-                        >
+                        <v-btn class="btn-control" @click="dataTickets.goodies--">-</v-btn>
+                        <v-btn class="btn-control" @click="dataTickets.goodies++">+</v-btn>
                       </template>
                     </v-text-field>
                   </div>
@@ -902,50 +623,30 @@
             </v-form>
 
             <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back">
-                <v-icon style="color: #ffffff !important" small
-                  >mdi-arrow-left</v-icon
-                >Back
-              </v-btn>
+              <!-- <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn> -->
               <v-btn
                 v-show="goodie"
                 type="submit"
                 @click="mintGoodie"
                 :loading="loading"
                 :disabled="disable"
-                style="
-                  background: linear-gradient(
-                    183.61deg,
-                    #cc00b7 49.78%,
-                    rgba(0, 0, 0, 0) 225.35%
-                  );
-                "
+                style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
               >
-                Mint
+                Submit
               </v-btn>
             </div>
           </div>
         </section>
 
         <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back">
-            <v-icon style="color: #ffffff !important" small
-              >mdi-arrow-left</v-icon
-            >Back
-          </v-btn>
+          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
           <v-btn
             v-show="goodie"
             type="submit"
             @click="mintGoodie"
             :loading="loading"
             :disabled="disable"
-            style="
-              background: linear-gradient(
-                183.61deg,
-                #cc00b7 49.78%,
-                rgba(0, 0, 0, 0) 225.35%
-              );
-            "
+            style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
           >
             Mint
           </v-btn>
@@ -953,7 +654,7 @@
       </v-window-item>
     </v-window>
     <div class="text-center">
-      <v-overlay  :value="overlay">
+      <v-overlay :value="overlay">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Minting in progress...</h3>
         <h3 ref="tminted">{{ show_total_minted }}</h3>
@@ -986,11 +687,7 @@ import "vue2-datepicker/index.css";
 const nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $tittle: String!, $_iregex: String!) {
     nft_metadata(
-      where: {
-        title: { _eq: $tittle }
-        nft_contract_id: { _eq: $store }
-        reference_blob: { _cast: { String: { _iregex: $_iregex } } }
-      }
+      where: { title: { _eq: $tittle }, nft_contract_id: { _eq: $store }, reference_blob: { _cast: { String: { _iregex: $_iregex } } } }
       order_by: { nft_contracts: { created_at: desc } }
     ) {
       id
@@ -1014,10 +711,7 @@ const mb_views_nft_tokens = gql`
 `;
 const tokens_id = gql`
   query MyQuery($metadata_id: String) {
-    nft_tokens_aggregate(
-      where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
-      order_by: { token_id: asc }
-    ) {
+    nft_tokens_aggregate(where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }, order_by: { token_id: asc }) {
       nodes {
         token_id
       }
@@ -1034,9 +728,7 @@ const ipfs = gql`
 
 const minted = gql`
   query MyQuery($metadata_id: String) {
-    nft_tokens_aggregate(
-      where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }
-    ) {
+    nft_tokens_aggregate(where: { nft_contract_id: {}, metadata_id: { _eq: $metadata_id } }) {
       aggregate {
         count
       }
@@ -1045,9 +737,7 @@ const minted = gql`
 `;
 const minter = gql`
   query MyQuery($store: String!, $user: String!) {
-    mb_store_minters(
-      where: { nft_contract_id: { _eq: $store }, minter_id: { _eq: $user } }
-    ) {
+    mb_store_minters(where: { nft_contract_id: { _eq: $store }, minter_id: { _eq: $user } }) {
       minter_id
     }
   }
@@ -1062,17 +752,13 @@ export default {
   },
   data() {
     return {
-      step:
-        this.$session.get("step") === undefined ? 1 : this.$session.get("step"),
+      tokenSeriesId: null,
+      disabledBtn: false,
+      disabledNo: false,
+      step: this.$session.get("step") === undefined ? 1 : this.$session.get("step"),
       dataTickets: {
-        name:
-          this.$session.get("dataFormName") === undefined
-            ? ""
-            : this.$session.get("dataFormName"),
-        promoter:
-          this.$session.get("dataFormPromoter") === undefined
-            ? ""
-            : this.$session.get("dataFormPromoter"),
+        name: this.$session.get("dataFormName") === undefined ? "" : this.$session.get("dataFormName"),
+        promoter: this.$session.get("dataFormPromoter") === undefined ? "" : this.$session.get("dataFormPromoter"),
         img: "",
         // this.$session.get("canvas") === undefined
         //   ? ""
@@ -1081,18 +767,9 @@ export default {
         // this.$session.get("canvas_main_image") === undefined
         //   ? undefined
         //   : this.$session.get("canvas_main_image"),
-        description:
-          this.$session.get("dataFormDescription") === undefined
-            ? ""
-            : this.$session.get("dataFormDescription"),
-        mint_amount:
-          this.$session.get("dataFormMintAmount") === undefined
-            ? ""
-            : this.$session.get("dataFormMintAmount"),
-        attendees:
-          this.$session.get("dataFormAttendees") === undefined
-            ? ""
-            : this.$session.get("dataFormAttendees"),
+        description: this.$session.get("dataFormDescription") === undefined ? "" : this.$session.get("dataFormDescription"),
+        mint_amount: this.$session.get("dataFormMintAmount") === undefined ? "" : this.$session.get("dataFormMintAmount"),
+        attendees: this.$session.get("dataFormAttendees") === undefined ? "" : this.$session.get("dataFormAttendees"),
         goodies: "1", // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
       url: "",
@@ -1109,36 +786,15 @@ export default {
       model: null,
       search: null,
       address: "",
-      place_id:
-        this.$session.get("dataFormPlaceId") === undefined
-          ? ""
-          : this.$session.get("dataFormPlaceId"),
-      latitude:
-        this.$session.get("dataFormLatitud") === undefined
-          ? ""
-          : this.$session.get("dataFormLatitud"),
-      longitude:
-        this.$session.get("dataFormLongitud") === undefined
-          ? ""
-          : this.$session.get("dataFormLongitud"),
-      location:
-        this.$session.get("dataFormLocation") === undefined
-          ? ""
-          : this.$session.get("dataFormLocation"),
+      place_id: this.$session.get("dataFormPlaceId") === undefined ? "" : this.$session.get("dataFormPlaceId"),
+      latitude: this.$session.get("dataFormLatitud") === undefined ? "" : this.$session.get("dataFormLatitud"),
+      longitude: this.$session.get("dataFormLongitud") === undefined ? "" : this.$session.get("dataFormLongitud"),
+      location: this.$session.get("dataFormLocation") === undefined ? "" : this.$session.get("dataFormLocation"),
       address: "1234",
-      amount_list:
-        this.$session.get("amount_list") === undefined
-          ? 0
-          : this.$session.get("amount_list"),
-      price:
-        this.$session.get("price") === undefined
-          ? 0
-          : this.$session.get("price"),
+      amount_list: this.$session.get("amount_list") === undefined ? 0 : this.$session.get("amount_list"),
+      price: this.$session.get("price") === undefined ? 0 : this.$session.get("price"),
       menu: "",
-      time:
-        this.$session.get("dataFormTime") === undefined
-          ? ""
-          : this.$session.get("dataFormTime"),
+      time: this.$session.get("dataFormTime") === undefined ? "" : this.$session.get("dataFormTime"),
       menu2: false,
       dataTicket: [
         {
@@ -1155,20 +811,11 @@ export default {
         },
       ],
       MenuDates: false,
-      dates:
-        this.$session.get("dataFormDate") === undefined
-          ? undefined
-          : this.$session.get("dataFormDate"),
+      dates: this.$session.get("dataFormDate") === undefined ? undefined : this.$session.get("dataFormDate"),
       menuStartTime: false,
-      startTime:
-        this.$session.get("dataFormTimeStart") === undefined
-          ? ""
-          : new Date(this.$session.get("dataFormTimeStart")),
+      startTime: this.$session.get("dataFormTimeStart") === undefined ? "" : new Date(this.$session.get("dataFormTimeStart")),
       menuEndTime: "",
-      endTime:
-        this.$session.get("dataFormTimeEnd") === undefined
-          ? ""
-          : new Date(this.$session.get("dataFormTimeEnd")),
+      endTime: this.$session.get("dataFormTimeEnd") === undefined ? "" : new Date(this.$session.get("dataFormTimeEnd")),
       // dates: [
       //   {
       //     id: 1,
@@ -1185,11 +832,7 @@ export default {
       // ],
       rules: {
         required: [(v) => !!v || "Field required"],
-        percentage_split: [
-          (v) => !!v || "Field required",
-          () =>
-            this.currentPercentage_split > 50 ? "must be 50% or less" : null,
-        ],
+        percentage_split: [(v) => !!v || "Field required", () => (this.currentPercentage_split > 50 ? "must be 50% or less" : null)],
       },
       valid: false,
       dataRoyalties: [],
@@ -1211,53 +854,31 @@ export default {
       disable: false,
       txs: [],
       usd: 0,
-      canvas:
-        this.$session.get("canvas") === undefined
-          ? "@/assets/ticket-selection/ticket-custom-upload.svg"
-          : "",
-      canvas_burn:
-        this.$session.get("canvas_burn") === undefined
-          ? ""
-          : this.$session.get("canvas_burn"),
-      canvas_goodie:
-        this.$session.get("canvas_goodie") === undefined
-          ? ""
-          : this.$session.get("canvas_goodie"),
+      canvas: this.$session.get("canvas") === undefined ? "@/assets/ticket-selection/ticket-custom-upload.svg" : "",
+      canvas_burn: this.$session.get("canvas_burn") === undefined ? "" : this.$session.get("canvas_burn"),
+      canvas_goodie: this.$session.get("canvas_goodie") === undefined ? "" : this.$session.get("canvas_goodie"),
       editorRules: false,
       timepickerStartRules: false,
       timepickerEndRules: false,
       comboboxRules: false,
-      total_minted: parseInt(
-        this.$session.get("total_minted") === undefined
-          ? 0
-          : this.$session.get("total_minted")
-      ),
+      total_minted: parseInt(this.$session.get("total_minted") === undefined ? 0 : this.$session.get("total_minted")),
       nearid: false,
-      burn_ticket_image:
-        this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
-      burn_goodie_image:
-        this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
+      burn_ticket_image: this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
+      burn_goodie_image: this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
+      burn_hash: "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
       imagecanvas: this.$session.get("canvas") === undefined ? false : true,
       imagecanvas1: this.$session.get("canvas") === undefined ? true : false,
-      imagegoodie:
-        this.$session.get("canvas_goodie") === undefined ? false : true,
-      imagegoodie1:
-        this.$session.get("canvas_goodie") === undefined ? true : false,
-      show_total_minted:
-        this.$session.get("total_minted") === undefined
-          ? "0"
-          : this.$session.get("total_minted"),
+      imagegoodie: this.$session.get("canvas_goodie") === undefined ? false : true,
+      imagegoodie1: this.$session.get("canvas_goodie") === undefined ? true : false,
+      show_total_minted: this.$session.get("total_minted") === undefined ? "0" : this.$session.get("total_minted"),
       overlay: false,
       overlay_building: false,
       overlay_ticket: false,
-      mint_amount:
-        this.$session.get("mint_amount") === undefined
-          ? 0
-          : parseInt(this.$session.get("mint_amount")),
+      mint_amount: this.$session.get("mint_amount") === undefined ? 0 : parseInt(this.$session.get("mint_amount")),
       open: false,
       i: null,
       ticket_custom: false,
-      overlay_opacity: 0.5
+      overlay_opacity: 0.5,
     };
   },
   watch: {
@@ -1278,22 +899,13 @@ export default {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     //
-    if (
-      urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "mint"
-    ) {
+    if (urlParams.get("errorCode") === "userRejected" && urlParams.get("signMeta") === "mint") {
       this.back();
     }
-    if (
-      urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "list"
-    ) {
+    if (urlParams.get("errorCode") === "userRejected" && urlParams.get("signMeta") === "list") {
       this.back();
     }
-    if (
-      urlParams.get("errorCode") === "userRejected" &&
-      urlParams.get("signMeta") === "goodies"
-    ) {
+    if (urlParams.get("errorCode") === "userRejected" && urlParams.get("signMeta") === "goodies") {
       this.back();
     }
   },
@@ -1302,16 +914,16 @@ export default {
     // this.hideScroll(this.$route)
     // this.revisar();
     if (!this.$ramper.getUser()) {
-      const login = await this.$ramper.signIn()
+      const login = await this.$ramper.signIn();
       if (login) {
         if (login.user) {
           // this.$router.go()
-          location.reload()
+          location.reload();
         } else {
-          this.$router.push("/")
+          this.$router.push("/");
         }
       } else {
-        this.$router.push("/")
+        this.$router.push("/");
       }
     }
     if (this.step === 1) {
@@ -1331,42 +943,25 @@ export default {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     ///Mint option
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "mint"
-    ) {
+    if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "mint") {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 4;
       this.getData();
       this.$session.set("step", 4);
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register:" + this.$session.get("ticketval")
-      );
+      history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
     //List option
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "list"
-    ) {
+    if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "list") {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 5;
       this.$session.set("step", this.step);
       this.$session.remove("canvas_burn");
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register:" + this.$session.get("ticketval")
-      );
+      history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
     //goodies option
-    if (
-      urlParams.get("transactionHashes") !== null &&
-      urlParams.get("signMeta") === "goodies"
-    ) {
+    if (urlParams.get("transactionHashes") !== null && urlParams.get("signMeta") === "goodies") {
       this.getMinted();
       this.polling = setInterval(() => {
         this.getMinted();
@@ -1376,20 +971,12 @@ export default {
       }, 5000);
       this.$session.remove("canvas_goodie");
       this.gotToEvents();
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register:" + this.$session.get("ticketval")
-      );
+      history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
     //
     if (urlParams.get("errorCode") === "userRejected") {
       this.$refs.modal.modalSuccess = false;
-      history.replaceState(
-        null,
-        location.href.split("?")[0],
-        "/#/events/register:" + this.$session.get("ticketval")
-      );
+      history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
   },
   computed: {
@@ -1470,16 +1057,17 @@ export default {
     // },
     async mint() {
       if (this.$refs.form2.validate()) {
-        this.$session.set("step", 4);
+        this.$session.set("step", 5);
+        this.disabledBtn = true;
         this.loading = true;
         this.disable = true;
 
         const user = this.$ramper.getAccountId();
 
-         //Juan esta es la imagen del evento
-         //const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
+        //Juan esta es la imagen del evento
+        //const ticketDesign = this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign");
 
-         //Estra data location , dates, place id
+        //Estra data location , dates, place id
         let extra = [
           {
             trait_type: "location",
@@ -1529,23 +1117,26 @@ export default {
           },
           {
             trait_type: "ticket_type",
-            value: this.$session.get("ticketval") === "custom" ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size") : this.$session.get("ticketval"),
+            value:
+              this.$session.get("ticketval") === "custom"
+                ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size")
+                : this.$session.get("ticketval"),
           },
         ];
         let category = "ticketing";
 
-        const event_metadata =  {
-            title: this.dataTickets.name,
-            description: this.dataTickets.description,
-            media: this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign"),
-            copies: this.dataTickets.mint_amount,
-            issued_at: this.startTime,
-            expires_at: this.endTime,
-            starts_at: this.startTime,
-            updated_at: this.endTime,
-            extra: JSON.stringify(extra), 
-            reference: this.$session.get("IpfsHashTicketDesign"),
-        }
+        const event_metadata = {
+          title: this.dataTickets.name,
+          description: this.dataTickets.description,
+          media: this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign"),
+          copies: this.dataTickets.mint_amount,
+          issued_at: this.startTime,
+          expires_at: this.endTime,
+          starts_at: this.startTime,
+          updated_at: this.endTime,
+          extra: JSON.stringify(extra),
+          reference: this.$session.get("IpfsHashTicketDesign"),
+        };
 
         // console.log(metadata);
 
@@ -1560,12 +1151,9 @@ export default {
         const multiplier = multiplied / counter;
         //console.log(multiplier)
         this.dataRoyalties.forEach((element) => {
-          royalties[element.account] = parseInt(
-            element.percentage * multiplier
-          );
+          royalties[element.account] = parseInt(element.percentage * multiplier);
         });
-        
-        
+
         //handle splits
         const splits = {};
         var counter1 = this.counter1;
@@ -1582,9 +1170,7 @@ export default {
         });
         //Add split for owner
         if (user != this.$owner) {
-          splits[this.$owner] = parseInt(
-            parseInt(this.$owner_split) * 100 + royaltie_for_owner
-          );
+          splits[this.$owner] = parseInt(parseInt(this.$owner_split) * 100 + royaltie_for_owner);
           counter1 = counter1 + parseInt(this.$owner_split);
         }
         //Add the rest for minter
@@ -1596,28 +1182,34 @@ export default {
         //end split
 
         // llamado de ramper
-                // nft_event(
+        // nft_event(
         // event_metadata: event_metadata,
         // price: this.price,
         // royalty: {this.dataRoyalties},
         // royalty_buy: {this.dataSplit},
         //  )
-        console.log("LLEGO")
+        let dataRoyalties = {};
+        let dataSplit = {};
+        for (let i = 0; i < this.dataRoyalties.length; i++) {
+          dataRoyalties[this.dataRoyalties[i].account] = this.dataRoyalties[i].percentage * 100;
+        }
+        for (let i = 0; i < this.dataSplit.length; i++) {
+          dataSplit[this.dataSplit[i].account] = this.dataSplit[i].percentage * 100;
+        }
         if (this.$ramper.getUser()) {
-          const action = [this.$ramper.functionCall(
-            "nft_event",       
-            {
-              event_metadata: event_metadata,
-              price: this.price,
-              royalty: this.dataRoyalties,
-              royalty_buy: this.dataSplit,
-            }, 
-            '300000000000000', 
-            "20000000000000000000000"
-          )]
-          console.log(action)
-          console.log(process.env.VUE_APP_NETWORK)
-          console.log(process.env.VUE_APP_CONTRACT_NFT)
+          const action = [
+            this.$ramper.functionCall(
+              "nft_event",
+              {
+                event_metadata: event_metadata,
+                price: Number(this.price),
+                royalty: dataRoyalties,
+                royalty_buy: dataSplit,
+              },
+              "300000000000000",
+              "50000000000000000000000"
+            ),
+          ];
           const resTx = await this.$ramper.sendTransaction({
             transactionActions: [
               {
@@ -1626,17 +1218,74 @@ export default {
               },
             ],
             network: process.env.VUE_APP_NETWORK,
-          })
-          console.log("RESULTT!!!", resTx)
+          });
+          console.log("RESULTT!!!", resTx);
+          if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
+            this.disabledBtn = false;
+            const dataResult = JSON.parse(resTx.result[0]?.receipts_outcome[0]?.outcome.logs[0]);
+
+            this.tokenSeriesId = dataResult.params?.token_series_id;
+
+            this.$refs.modal.modalSuccess = true;
+            this.$refs.modal.url = this.$explorer + "/accounts/" + user;
+            this.loading = false;
+            this.disable = false;
+            this.step = 5;
+            this.getData();
+            this.$session.set("step", 5);
+            history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
+          } else {
+            console.log("ERROR SEND");
+            this.loading = false;
+            this.disable = false;
+            this.disabledBtn = false;
+          }
         }
       }
     },
     async mintGoodie() {
       if (this.$refs.form4.validate()) {
-        this.getBase64FromUrlGoodie(this.burn_goodie_image);
-        setTimeout(() => {
-          this.mintGoodieProccess();
-        }, 1500);
+        this.loading = true;
+        this.disable = true;
+        this.disabledNo = true;
+
+        const event_metadata = {
+          title: this.dataTickets.attendees,
+          description: this.dataTickets.attendees,
+          media: this.burn_goodie_image,
+          reference: this.burn_hash,
+        };
+
+        const action = [
+          this.$ramper.functionCall(
+            "nft_objects",
+            {
+              token_metadata: event_metadata,
+              token_series_id_assignment: this.tokenSeriesId,
+            },
+            "300000000000000",
+            "20000000000000000000000"
+          ),
+        ];
+        const resTx = await this.$ramper.sendTransaction({
+          transactionActions: [
+            {
+              receiverId: process.env.VUE_APP_CONTRACT_NFT,
+              actions: action,
+            },
+          ],
+          network: process.env.VUE_APP_NETWORK,
+        });
+        console.log("OBJECTS", resTx);
+
+        if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
+          this.gotToEvents();
+        } else {
+          console.log("ERROR SEND");
+          this.loading = false;
+          this.disable = false;
+          this.disabledNo = false;
+        }
       }
     },
     async mintGoodieProccess() {
@@ -1663,8 +1312,7 @@ export default {
           this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
+          const { data: fileUploadResult, error: fileError } = await wallet.minter.uploadField(MetadataField.Media, file);
           // localStorage.setItem("file", file);
           if (fileError) {
             throw new Error(fileError);
@@ -1713,10 +1361,7 @@ export default {
             display_type: "date",
           },
           {
-            trait_type:
-              this.$session.get("metadata_id").split(":")[1] === undefined
-                ? ""
-                : this.$session.get("metadata_id").split(":")[1],
+            trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
             value: this.dataTickets.attendees,
           },
           {
@@ -1772,105 +1417,83 @@ export default {
      * @param {String} id Input container ID
      */
     getAddressData: function (addressData, placeResultData, id) {
-      this.address =
-        this.$session.get("dataFormPlaceId") === undefined
-          ? addressData
-          : this.$session.get("dataFormPlaceId");
-      this.place_id =
-        this.$session.get("dataFormPlaceId") === undefined
-          ? addressData.place_id
-          : this.$session.get("dataFormPlaceId");
-      this.location =
-        this.$session.get("dataFormLocation") === undefined
-          ? placeResultData.formatted_address
-          : this.$session.get("dataFormLocation");
-      this.latitude =
-        this.$session.get("dataFormLatitud") === undefined
-          ? addressData.latitude
-          : this.$session.get("dataFormLatitud");
-      this.longitude =
-        this.$session.get("dataFormLatitud") === undefined
-          ? addressData.longitude
-          : this.$session.get("dataFormLatitud");
+      this.address = this.$session.get("dataFormPlaceId") === undefined ? addressData : this.$session.get("dataFormPlaceId");
+      this.place_id = this.$session.get("dataFormPlaceId") === undefined ? addressData.place_id : this.$session.get("dataFormPlaceId");
+      this.location = this.$session.get("dataFormLocation") === undefined ? placeResultData.formatted_address : this.$session.get("dataFormLocation");
+      this.latitude = this.$session.get("dataFormLatitud") === undefined ? addressData.latitude : this.$session.get("dataFormLatitud");
+      this.longitude = this.$session.get("dataFormLatitud") === undefined ? addressData.longitude : this.$session.get("dataFormLatitud");
       this.$session.set("dataFormPlaceId", addressData.place_id);
       this.$session.set("dataFormLocation", placeResultData.formatted_address);
       this.$session.set("dataFormLatitude", addressData.latitude);
       this.$session.set("dataFormLongitude", addressData.longitude);
     },
     next() {
-      if (
-        this.$refs.form.validate() &&
-        this.dataTickets.description &&
-        this.dates
-      ) {
+      if (this.$refs.form.validate() && this.dataTickets.description && this.dates) {
         //this.loading = true;
-        
+
         this.editorRules = false;
         this.comboboxRules = false;
-   
+
         const user = this.$ramper.getAccountId();
         if (!this.$session.get("canvas")) {
-            this.ticket_custom = true;
-            this.$session.get("ticketval") === "custom" ? this.overlay_opacity = 1 : this.overlay_opacity = 0.5;
-            this.overlay_ticket = true;
-            // this.ticket_custom = true;
-            setTimeout(() => {        
-              var container = this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
-              const options = {
-                backgroundColor: null,
-                allowTaint: true,
-                removeContainer: true,
-                scale: 3,
-              };
-              html2canvas(container, options).then((canvas) => {
-                this.axios
-                  .post(this.$node_url + "/uploads", {
-                    name: user + "-" + this.dataTickets.name,
-                    data: canvas.toDataURL("image/png", 1),
-                  })
-                  .then((response) => {
-                    if(this.$session.get("ticketval") === "custom"){
-                      const img = new Image();
-                      img.src = document.getElementById('ticket_custom').src;
-                      let realWidth = img.naturalWidth;
-                      let realHeight = img.naturalHeight;
-                      // console.log("Original width=" + realWidth + ", " + "Original height=" + realHeight);
-                      this.$session.set("ticket_custom_size", realWidth+"_"+realHeight);
-                    }
-                    this.ticket_custom = false;
-                    this.timepickerStartRules = false;
-                    this.timepickerEndRules = false;
-                    //Store all form data
-                    this.$session.set("dataFormName", this.dataTickets.name);
-                    this.$session.set(
-                      "dataFormPromoter",
-                      this.dataTickets.promoter
-                    );
-                    this.$session.set(
-                      "dataFormDescription",
-                      this.dataTickets.description
-                    );
-                    this.$session.set("dataFormDate", this.dates);
-                    this.$session.set("dataFormTimeStart", this.startTime);
-                    this.$session.set("dataFormTimeEnd", this.endTime);
-                    this.$session.set("canvas", true);
-                    //this.canvas = response.data;
-                    this.$session.set("step", 2);
-                    this.step = this.$session.get("step");
-                    //this.loading = false;
-                    this.overlay_ticket = false;
-                    this.getBase64FromUrl(this.burn_ticket_image)
-                    canvas.remove();
-                    container.parentNode.removeChild(container);
-                    setTimeout(() => this.getCanvas().then(()=> { this.ipfsTicketDesign()}), 800);
-                    //generate the hash of the ticket design
-                    //setTimeout(() => this.ipfsTicketDesign(), 1600);
-                    //console.log(response.data);
-                  })
-                  .catch((error) => {
-                    console.error(error);
+          this.ticket_custom = true;
+          this.$session.get("ticketval") === "custom" ? (this.overlay_opacity = 1) : (this.overlay_opacity = 0.5);
+          this.overlay_ticket = true;
+          // this.ticket_custom = true;
+          setTimeout(() => {
+            var container =
+              this.$session.get("ticketval") === "custom" ? document.getElementById("ticket_custom") : document.getElementById("my-node");
+            const options = {
+              backgroundColor: null,
+              allowTaint: true,
+              removeContainer: true,
+              scale: 3,
+            };
+            html2canvas(container, options).then((canvas) => {
+              this.axios
+                .post(this.$node_url + "/uploads", {
+                  name: user + "-" + this.dataTickets.name,
+                  data: canvas.toDataURL("image/png", 1),
+                })
+                .then((response) => {
+                  if (this.$session.get("ticketval") === "custom") {
+                    const img = new Image();
+                    img.src = document.getElementById("ticket_custom").src;
+                    let realWidth = img.naturalWidth;
+                    let realHeight = img.naturalHeight;
+                    // console.log("Original width=" + realWidth + ", " + "Original height=" + realHeight);
+                    this.$session.set("ticket_custom_size", realWidth + "_" + realHeight);
+                  }
+                  this.ticket_custom = false;
+                  this.timepickerStartRules = false;
+                  this.timepickerEndRules = false;
+                  //Store all form data
+                  this.$session.set("dataFormName", this.dataTickets.name);
+                  this.$session.set("dataFormPromoter", this.dataTickets.promoter);
+                  this.$session.set("dataFormDescription", this.dataTickets.description);
+                  this.$session.set("dataFormDate", this.dates);
+                  this.$session.set("dataFormTimeStart", this.startTime);
+                  this.$session.set("dataFormTimeEnd", this.endTime);
+                  this.$session.set("canvas", true);
+                  //this.canvas = response.data;
+                  this.$session.set("step", 2);
+                  this.step = this.$session.get("step");
+                  //this.loading = false;
+                  this.getBase64FromUrl(this.burn_ticket_image);
+                  canvas.remove();
+                  container.parentNode.removeChild(container);
+
+                  this.getCanvas().then(() => {
+                    this.ipfsTicketDesign();
                   });
-              });
+                  //generate the hash of the ticket design
+                  //setTimeout(() => this.ipfsTicketDesign(), 1600);
+                  //console.log(response.data);
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            });
           }, 1500);
         } else {
           this.$session.set("step", 2);
@@ -1898,9 +1521,7 @@ export default {
         });
     },
     async delCanvas() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
+      let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
       const user = this.$ramper.getAccountId();
       await this.axios
         .post(this.$node_url + "/del-uploads", {
@@ -2027,9 +1648,7 @@ export default {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
 
-      const near = await connect(
-        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
-      );
+      const near = await connect(CONFIG(new keyStores.BrowserLocalStorageKeyStore()));
       const account = await near.account(val);
       await account
         .state()
@@ -2050,9 +1669,7 @@ export default {
     async validateNearId1(val, e) {
       //get the position from target, declaring the input name and poisition split |
       var pos = parseInt(e.target.id.split("|")[1]);
-      const near = await connect(
-        CONFIG(new keyStores.BrowserLocalStorageKeyStore())
-      );
+      const near = await connect(CONFIG(new keyStores.BrowserLocalStorageKeyStore()));
       const account = await near.account(val);
       await account
         .state()
@@ -2091,9 +1708,7 @@ export default {
         this.disable = false;
         this.errorPercentaje[pos] = null;
       }
-      if (
-        Number.isInteger(parseInt(this.dataRoyalties[pos].percentage)) === false
-      ) {
+      if (Number.isInteger(parseInt(this.dataRoyalties[pos].percentage)) === false) {
         this.disable = true;
         this.available = 0;
         this.errorPercentaje[pos] = "Only int";
@@ -2123,15 +1738,12 @@ export default {
       if (this.counter1 > parseInt(100 - this.$owner_split)) {
         this.disable = true;
         this.available1 = 0;
-        this.errorPercentaje1[pos] =
-          "≤" + parseInt(97 - this.$owner_split) + "%";
+        this.errorPercentaje1[pos] = "≤" + parseInt(97 - this.$owner_split) + "%";
       } else {
         this.disable = false;
         this.errorPercentaje1[pos] = null;
       }
-      if (
-        Number.isInteger(parseInt(this.dataSplit[pos].percentage)) === false
-      ) {
+      if (Number.isInteger(parseInt(this.dataSplit[pos].percentage)) === false) {
         this.disable = true;
         this.available1 = 0;
         this.errorPercentaje1[pos] = "Only int";
@@ -2183,14 +1795,8 @@ export default {
           mutation: nft_tokens_aggregate,
           variables: {
             store: this.$store_mintbase,
-            tittle:
-              this.$session.get("mint_tittle") === undefined
-                ? ""
-                : this.$session.get("mint_tittle"),
-            _iregex:
-              this.$session.get("tempid") === undefined
-                ? ""
-                : this.$session.get("tempid"),
+            tittle: this.$session.get("mint_tittle") === undefined ? "" : this.$session.get("mint_tittle"),
+            _iregex: this.$session.get("tempid") === undefined ? "" : this.$session.get("tempid"),
           },
         })
         .then((response) => {
@@ -2215,10 +1821,7 @@ export default {
                 })
                 .then((response) => {
                   //console.log(response.data.nft_tokens_aggregate.aggregate.count);
-                  this.$session.set(
-                    "total_minted",
-                    response.data.nft_tokens_aggregate.aggregate.count
-                  );
+                  this.$session.set("total_minted", response.data.nft_tokens_aggregate.aggregate.count);
                   this.show_total_minted = this.$session.get("total_minted");
                 })
                 .catch((err) => {
@@ -2236,15 +1839,11 @@ export default {
         .mutate({
           mutation: mb_views_nft_tokens,
           variables: {
-            _iregex:
-              this.$session.get("metadata_id").split(":")[1] === undefined
-                ? ""
-                : this.$session.get("metadata_id").split(":")[1],
+            _iregex: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
           },
         })
         .then((response) => {
-          var counter =
-            response.data.mb_views_nft_tokens_aggregate.aggregate.count;
+          var counter = response.data.mb_views_nft_tokens_aggregate.aggregate.count;
           //console.log(counter)
           if (counter >= parseInt(this.$session.get("control_mint_appoval"))) {
             this.overlay_building = false;
@@ -2271,7 +1870,7 @@ export default {
         this.getData();
         this.loading = true;
         this.disable = true;
-        // this.completeIpfs();
+        this.completeIpfs();
         const mintbase_marketplace = this.$mintbase_marketplace;
         let store = this.$store_mintbase;
         let API_KEY = this.$dev_key.toString();
@@ -2290,8 +1889,7 @@ export default {
           image.src = this.$session.get("canvas_burn");
           this.image = image;
           const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } =
-            await wallet.minter.uploadField(MetadataField.Media, file);
+          const { data: fileUploadResult, error: fileError } = await wallet.minter.uploadField(MetadataField.Media, file);
           // localStorage.setItem("file", file);
           if (fileError) {
             throw new Error(fileError);
@@ -2338,10 +1936,7 @@ export default {
         //Metadata Object
         const metadata = JSON.parse(this.$session.get("metadata"));
         metadata.extra.push({
-          trait_type:
-            this.$session.get("metadata_id").split(":")[1] === undefined
-              ? ""
-              : this.$session.get("metadata_id").split(":")[1],
+          trait_type: this.$session.get("metadata_id").split(":")[1] === undefined ? "" : this.$session.get("metadata_id").split(":")[1],
           value: "BurnTicket",
         });
         await wallet.minter.setMetadata(metadata, true);
@@ -2367,9 +1962,7 @@ export default {
                   receiverId: mintbase_marketplace,
                   gas: "200000000000000",
                   args: {},
-                  deposit: utils.format.parseNearAmount(
-                    (0.0108 * this.amount_list).toString()
-                  ),
+                  deposit: utils.format.parseNearAmount((0.0108 * this.amount_list).toString()),
                 },
               ],
             });
@@ -2393,9 +1986,7 @@ export default {
                             autotransfer: true,
                           }),
                         },
-                        deposit: utils.format.parseNearAmount(
-                          (0.0008).toString()
-                        ),
+                        deposit: utils.format.parseNearAmount((0.0008).toString()),
                       },
                     ],
                   });
@@ -2461,10 +2052,7 @@ export default {
     },
     async completeIpfs() {
       //this.ipfs();
-      if (
-        this.$session.get("metadata_id") != undefined &&
-        this.$session.get("IpfsHash") != undefined
-      ) {
+      if (this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined) {
         this.$apollo
           .query({
             query: ipfs,
@@ -2511,9 +2099,7 @@ export default {
       request.send();
       this.price < 0 ? (this.price = 0) : this.price;
       request.onload = () => {
-        this.usd = (
-          parseFloat(JSON.parse(request.responseText).lastPrice) * this.price
-        ).toFixed(4);
+        this.usd = (parseFloat(JSON.parse(request.responseText).lastPrice) * this.price).toFixed(4);
       };
       this.$session.set("price", this.price);
     },
@@ -2535,22 +2121,20 @@ export default {
       const user = this.$ramper.getAccountId();
       //console.log('image', this.canvas)
       const file = this.dataURLtoFileTicketDesig(this.canvas, "mint.png");
-      
+
       formData.append("uploaded_file", file);
       formData.append("name", user + "-" + this.$session.get("dataFormName"));
-      console.log('formData', formData)
+      console.log("formData", formData);
       //console.log(this.$ipfs)
       await this.axios.post(this.$ipfs, formData).then((res) => {
         //console.log('res', res.data)
         this.$session.set("IpfsHashTicketDesign", res.data.IpfsHash);
+        this.$session.get("IpfsHashTicketDesign") === undefined ? (this.overlay_ticket = true) : (this.overlay_ticket = false);
       });
     },
     async completeIpfs() {
       //this.ipfs();
-      if (
-        this.$session.get("metadata_id") != undefined &&
-        this.$session.get("IpfsHash") != undefined
-      ) {
+      if (this.$session.get("metadata_id") != undefined && this.$session.get("IpfsHash") != undefined) {
         this.$apollo
           .query({
             query: ipfs,
@@ -2607,9 +2191,7 @@ export default {
     listenerEditor() {
       setTimeout(() => {
         const editor = document.querySelector(".editor .ql-editor");
-        editor?.addEventListener("keyup", () =>
-          this.validator(this.dataTickets.description)
-        );
+        editor?.addEventListener("keyup", () => this.validator(this.dataTickets.description));
       }, 400);
     },
     validator(model) {
@@ -2639,12 +2221,8 @@ export default {
     checkListAmount() {
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted
-        ? (this.amount_list = total_minted)
-        : (this.amount_list = this.amount_list);
-      parseInt(this.amount_list) < 0
-        ? (this.amount_list = 0)
-        : (this.amount_list = this.amount_list);
+      parseInt(this.amount_list) > total_minted ? (this.amount_list = total_minted) : (this.amount_list = this.amount_list);
+      parseInt(this.amount_list) < 0 ? (this.amount_list = 0) : (this.amount_list = this.amount_list);
       this.$session.set("amount_list", this.amount_list);
     },
     checkGoodiesAmount() {
@@ -2709,17 +2287,13 @@ export default {
       this.amount_list++;
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted
-        ? (this.amount_list = total_minted)
-        : (this.amount_list = this.amount_list);
+      parseInt(this.amount_list) > total_minted ? (this.amount_list = total_minted) : (this.amount_list = this.amount_list);
     },
     async substract() {
       this.amount_list--;
       //this.getData();
       var total_minted = parseInt(this.$session.get("total_minted"));
-      parseInt(this.amount_list) > total_minted
-        ? (this.amount_list = total_minted)
-        : (this.amount_list = this.amount_list);
+      parseInt(this.amount_list) > total_minted ? (this.amount_list = total_minted) : (this.amount_list = this.amount_list);
     },
     // hideScroll(curr) {
     //   if (curr.path === "/events/register" && window.innerHeight >= 950) {
@@ -2731,11 +2305,7 @@ export default {
     checkoutTicketType() {
       if (!this.ticketType) return this.$router.push("/events/select-ticket");
 
-      if (
-        this.ticketType === "con" ||
-        this.ticketType === "cinema" ||
-        this.ticketType === "custom"
-      ) {
+      if (this.ticketType === "con" || this.ticketType === "cinema" || this.ticketType === "custom") {
         this.dataTicket.shift();
         this.dataTicket.shift();
         this.addTicketClass();
