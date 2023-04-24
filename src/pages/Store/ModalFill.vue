@@ -1,14 +1,13 @@
 <template>
-  <v-dialog v-model="modalBuy" max-width="420px" persistent>
+  <v-dialog v-model="modalFill" max-width="420px" persistent>
     <v-card id="modalSucess">
       <div class="divcol center">
-        <h3 class="p">Select payment option</h3>
+        <h3 class="p">Insufficient Balance</h3>
+        <p class="p">You don't have enough balance to cover this transaction, please go to your NEAR wallet and add funds</p>
       </div>
       <div class="divcol center">
-        <v-btn @click="fiat" style="margin-bottom: 3px;">Pay with USD</v-btn>
-        <v-btn @click="buy()">Pay with NEAR</v-btn>
         <a class="acenter" style="gap: 0.3em">
-          <span @click="modalBuy = false" class="p">Close</span>
+          <span @click="modalFill = false" class="p">Close</span>
         </a>
       </div>
     </v-card>
@@ -17,10 +16,10 @@
 
 <script>
 export default {
-  name: "modalBuy",
+  name: "modalFill",
   data() {
     return {
-      modalBuy: false,
+      modalFill: false,
       url: "",
     };
   },
