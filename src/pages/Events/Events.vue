@@ -31,13 +31,13 @@
       </template>
 
       <template v-slot:[`item.name`]="{ item }">
-        <v-btn class="btnWithoutStyles" :href="$store_site + item.thingid + '/' + item.ticket_type" target="_blank">{{ item.name }}</v-btn>
+        <v-btn @click="goEventData(item.id)" class="btnWithoutStyles" target="_blank">{{ item.name }}</v-btn>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
         <div class="cont_buttons" style="gap: 6px">
-          <v-btn @click="goLiveData(item.name, item.thingid)">Go to live data</v-btn>
-          <v-btn @click="goOptions(item.name, item.thingid)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
+          <v-btn @click="goLiveData(item.name, item.id)">Go to live data</v-btn>
+          <v-btn @click="goOptions(item.name, item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
           <!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
             {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
@@ -53,7 +53,7 @@
       <v-card v-for="(item, i) in filter_dataTableMobile" :key="i" class="up divcol" style="display: flex">
         <section class="acenter">
           <span class="eventName">
-            <v-btn style="color: white; padding: 0" text :href="$store_site + item.thingid" target="_blank">{{ item.name.ellipsisRange(14) }}</v-btn>
+            <v-btn @click="goEventData(item.id)" style="color: white; padding: 0" text>{{ item.name.ellipsisRange(14) }}</v-btn>
           </span>
           <span>{{ item.date }}</span>
 
@@ -276,7 +276,6 @@ export default {
         })
         .subscribe(({ data }) => {
           let dataSeries = data.series;
-          console.log("DATAAAAAA", data);
           this.data = [];
           this.dataTableMobile = [];
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
@@ -286,6 +285,7 @@ export default {
             const startDate = extra.find((element) => element.trait_type === "Start Date");
             console.log(extra);
             rows = {
+              id: dataSeries[i].id,
               name: dataSeries[i].title,
               date: this.convertDate(startDate.value * 1000), // new Date(value1.reference_blob.extra[6].value * 1000).toLocaleDateString("en-US", options),
               location: dataSeries[i].title,
@@ -322,6 +322,14 @@ export default {
       });
       this.$session.get("eventid", pthingid);
       this.$session.get("event_name", pevent);
+    },
+    goEventData(eventId) {
+      this.$router.push({
+        path: "/store",
+        query: { id: eventId },
+      });
+      this.$session.set("eventid", eventId);
+      // this.$session.get("event_name", pevent);
     },
     goOptions(pevent, pthingid) {
       this.$router.push({

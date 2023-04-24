@@ -174,28 +174,28 @@ import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
 const { utils } = nearAPI;
 const your_events = gql`
-  query MyQuery($store: String!, $metadata_id: String!) {
-    mb_views_nft_metadata(
-      where: {
-        nft_contract_id: { _eq: $store }
-        listings: { price: { _is_null: false } }
-        id: { _eq: $metadata_id }
-      }
-    ) {
-      title
-      reference_blob
+  query MyQuery($event_id: String!) {
+    serie(id: $event_id) {
+      copies
+      creator_id
+      description
+      expires_at
+      extra
+      fecha
       id
-      listings_aggregate {
-        aggregate {
-          count
-        }
-        nodes {
-          price
-          reference
-          token_id
-          minter
-        }
-      }
+      issued_at
+      media
+      nftsold
+      price
+      price_near
+      redeemerevents
+      redeemerobjects
+      reference
+      starts_at
+      supply
+      title
+      typetoken_id
+      updated_at
     }
   }
 `;
@@ -257,6 +257,7 @@ export default {
         location: "",
         details: [],
       },
+      eventId: null,
       metadata: null,
       tokens_minted: null,
       isIntersecting: false,
@@ -288,49 +289,28 @@ export default {
     if (!this.$session.exists()) {
       this.$session.start()
     }
+
+    this.eventId = this.$route.query.id
+    this.$session.set('eventid', this.eventId)
     
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
+    console.log("AQUI VA")
+
     this.$emit("renderHeader");
     this.getData();
     this.fetch();
-    this.mainImg();
-    this.$session.set('eventid', this.$route.query.thingid.toLowerCase())
-
-    // 
-    // this.quantity == 0 ? (this.disable = true) : (this.disable = false);
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    urlParams.get("transactionHashes");
-    if (urlParams.get("transactionHashes") !== null) {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      this.$refs.modal.modalSuccess = true;
-      this.$refs.modal.url =
-      this.$explorer+"/accounts/"+user
-      history.replaceState(
-        "",
-        location.href.split("?")[0],
-        "/#/store/?thingid="+this.$session.get('eventid')
-      );
-    }
-    if (urlParams.get("errorCode") !== null) {
-     history.replaceState(
-        "",
-        location.href.split("?")[0],
-        "/#/store/?thingid="+this.$session.get('eventid')
-      );
-    }
+    // this.mainImg();
   },
   computed: {
     ticketType() {
-      return this.$route.query.thingid.toLowerCase().split("/")[1];
+      return this.$route.query.id
+      // return this.$route.query.thingid.toLowerCase().split("/")[1];
     },
     ticketSize() {
-      return this.$route.query.thingid.toLowerCase().split("/")[2];
+      return this.$route.query.id
+      // return this.$route.query.thingid.toLowerCase().split("/")[2];
     }
   },
   methods: {
@@ -344,76 +324,90 @@ export default {
       this.loading = true;
       this.data = [];
       this.dataTableMobile = [];
-      var metadata_id = this.$route.query.thingid.toLowerCase();
-      //console.log(metadata_id);
+      console.log(this.eventId);
       this.$apollo
         .watchQuery({
           query: your_events,
           variables: {
-            store: this.$store_mintbase,
-            metadata_id: metadata_id.split("/")[0],
+            event_id: this.eventId,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          const dataEvent = data.serie
+          console.log(dataEvent);
+          if (!dataEvent) return
+
           var options = { month: "short" }; //Format data
           var options_start = { day: "numeric" }; //Format data
           var options_end = { day: "numeric" }; //Format data
           var year = { year: "numeric" }; //Format data
-          //Map the objectvalue
-          Object.entries(data).forEach(([key, value]) => {
-            // inner object entries
-            //Dates
-            this.date = new Date(
-              value[0].reference_blob.extra[6].value * 1000
-            ).toLocaleDateString("en-US", options);
-            this.date_start = new Date(
-              value[0].reference_blob.extra[6].value * 1000
-            ).toLocaleDateString("en-US", options_start);
-            this.date_end = new Date(
-              value[0].reference_blob.extra[7].value * 1000
-            ).toLocaleDateString("en-US", options_end);
-            this.time_start = new Date(value[0].reference_blob.extra[9].value).toLocaleTimeString('en-US', { hour12: false, hour: "2-digit", minute: "2-digit" });
-            this.time_end = new Date(value[0].reference_blob.extra[10].value).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
-            //
-            this.tsformart = new Date(
-              value[0].reference_blob.extra[6].value * 1000
-            ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_start + ' h';
-            this.tsendformat = new Date(
-              value[0].reference_blob.extra[7].value * 1000
-            ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_end + ' h';
-            //Tittle
-            this.tittle = value[0].title;
-            this.$session.set("tittle", this.tittle)
-            //Ticket image
-            this.ticket_img = value[0].reference_blob.media;
-            //Html description
-            this.Datos.about.event.text = value[0].reference_blob.description;
-            //Location
-            this.Datos.location = value[0].reference_blob.extra[0].value;
-            //Google map location
-            this.googlemap =
+
+          const extra = JSON.parse(dataEvent.extra);
+          const startDate = extra.find((element) => element.trait_type === "Start Date");
+          const endDate = extra.find((element) => element.trait_type === "End Date");
+
+          this.date = new Date(
+            startDate.value * 1000
+          ).toLocaleDateString("en-US", options);
+
+          this.date_start = new Date(
+            startDate.value * 1000
+          ).toLocaleDateString("en-US", options_start);
+
+          this.date_end = new Date(
+            endDate.value * 1000
+          ).toLocaleDateString("en-US", options_end);
+
+          const startTime = extra.find((element) => element.trait_type === "start_time");
+          const endTime = extra.find((element) => element.trait_type === "end_time");
+
+          this.time_start = new Date(startTime.value).toLocaleTimeString('en-US', { hour12: false, hour: "2-digit", minute: "2-digit" });
+          this.time_end = new Date(endTime.value).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
+
+
+          this.tsformart = new Date(
+            startDate.value * 1000
+          ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_start + ' h';
+          this.tsendformat = new Date(
+            endDate.value * 1000
+          ).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"}) + ' ' + this.time_end + ' h';
+
+          this.tittle = dataEvent.title;
+          this.$session.set("tittle", this.tittle)
+
+          //Ticket image
+          this.ticket_img = dataEvent.media;
+          //Html description
+          this.Datos.about.event.text = dataEvent.description;
+          //Location
+          this.Datos.location = extra.find((element) => element.trait_type === "location")?.value;
+          //Google map location
+          this.googlemap =
               "https://www.google.com/maps/embed/v1/place?key="+this.$key+"&q=" +
               this.Datos.location;
-            //Extra data
-            this.Datos.details = [
-              {
-                titlesDetails: "Storage Gateaway",
-                textDetails: "https://arweave.net",
-              },
-              {
-                titlesDetails: "Transactions ID",
-                textDetails: value[0].listings_aggregate.nodes[0].reference,
-              },
-              {
-                titlesDetails: "Contract",
-                textDetails: value[0].reference_blob.store,
-              },
-              {
-                titlesDetails: "Thing ID",
-                textDetails: value[0].id,
-              },
-            ];
+
+          this.Datos.details = [
+            // {
+            //   titlesDetails: "Storage Gateaway",
+            //   textDetails: "https://arweave.net",
+            // },
+            // {
+            //   titlesDetails: "Transactions ID",
+            //   textDetails: value[0].listings_aggregate.nodes[0].reference,
+            // },
+            {
+              titlesDetails: "Contract",
+              textDetails: process.env.VUE_APP_CONTRACT_NFT,
+            },
+            // {
+            //   titlesDetails: "Thing ID",
+            //   textDetails: value[0].id,
+            // },
+          ];
+          
+          Object.entries(data).forEach(([key, value]) => {
+       
             //Last price
             this.price_near =
               value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
