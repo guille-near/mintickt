@@ -376,12 +376,12 @@
                       v-model="price"
                       id="price"
                       solo
-                      v-debounce:300ms="priceNEAR"
                       min="0"
                       :rules="rules.required"
                       type="number"
+                      @input="convertNear(price)"
                     ></v-text-field>
-                    <span class="conversion">~ {{ usd }} NEAR</span>
+                    <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span>
                   </div>
                 </div>
               </div>
@@ -557,12 +557,12 @@
                       v-model="price"
                       id="price"
                       solo
-                      v-debounce:300ms="priceNEAR"
                       min="0"
                       :rules="rules.required"
                       type="number"
+                      @input="convertNear(price)"
                     ></v-text-field>
-                    <span class="conversion">~ {{ usd }} USD</span>
+                    <span class="conversion">~ {{ usd.toFixed(4) }} USD</span>
                   </div>
                 </div>
               </div>
@@ -988,6 +988,9 @@ export default {
     },
   },
   methods: {
+    convertNear(price) {
+      this.usd = price / this.$session.get("nearPrice") || 0;
+    },
     uploadImg(item) {
       if (item.img) {
         item.url = URL.createObjectURL(item.img);
