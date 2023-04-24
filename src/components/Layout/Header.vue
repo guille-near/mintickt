@@ -6,61 +6,36 @@
       height="140px"
       absolute
       :class="{
-        events:
-          routeName == 'Landing'  ||
-          routePath.includes('events') ||
-          routePath.includes('profile'),
-        register: routePath === '/events/register'
+        events: routeName == 'Landing' || routePath.includes('events') || routePath.includes('profile'),
+        register: routePath === '/events/register',
       }"
     >
       <v-row
         class="align"
         :class="{
-          limiter:
-            routeName == 'Landing' || 
-            !routePath.includes('events') ||
-            !routePath.includes('profile')
+          limiter: routeName == 'Landing' || !routePath.includes('events') || !routePath.includes('profile'),
         }"
       >
         <v-col
           class="space"
           :style="
-            routePath.includes('events') || routePath.includes('profile') ||  routeName == 'Landing'
+            routePath.includes('events') || routePath.includes('profile') || routeName == 'Landing'
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
         >
           <a class="center" href="/#/">
-            <img
-              v-if="responsiveActions"
-              class="logoHeaderEvents"
-              src="@/assets/logo/logo-mobile.svg"
-              alt="logo"
-            />
-            <img
-              v-else
-              class="logoHeader"
-              src="@/assets/logo/logom.svg"
-              alt="logo"
-            />
+            <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/logo-mobile.svg" alt="logo" />
+            <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo" />
           </a>
 
-          <aside
-            class="container-buttons-header center"
-            style="gap: 20px"
-            :style="routePath !== '/events/register' ? '' : 'display:contents'"
-          >
-
-            <v-btn
-              class="createEventBtn h9-em"
-              v-show="routePath !== '/events/register' && routeName !== 'Store'"
-              @click="goToEvent"
-            >
+          <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
+            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
               <span>create an event</span>
             </v-btn>
 
             <v-menu bottom offset-y>
-              <template #activator="{on, attrs}">
+              <template #activator="{ on, attrs }">
                 <!-- <v-btn
                   v-if="responsiveActions"
                   color="white"
@@ -113,6 +88,8 @@
 </template>
 
 <script>
+import * as nearAPI from "near-api-js";
+const { Contract } = nearAPI;
 // let ubicacionPrincipal = window.pageYOffset;
 // let resizeTimeout;
 // function resizeThrottler(actualResizeHandler) {
@@ -160,43 +137,71 @@ export default {
     };
   },
   mounted() {
+    this.getNearPrice();
     this.revisar();
 
-
-      // * styles
+    // * styles
     this.responsive();
     window.onresize = () => {
       this.responsive();
     };
 
-    const header = document.getElementById("headerApp")
+    const header = document.getElementById("headerApp");
     // console.log(this.$route.path);
     if (this.$route.path === "/events/liveData" || this.$route.path == "/events/options") {
-      header.classList.add("delpaddlivedata")
+      header.classList.add("delpaddlivedata");
     } else {
-      header.classList.remove("delpaddlivedata")
+      header.classList.remove("delpaddlivedata");
     }
   },
   watch: {
     $route(current) {
-      const header = document.getElementById("headerApp")
-      this.routePath = current.path,
-      this.routeName = current.name
+      const header = document.getElementById("headerApp");
+      (this.routePath = current.path), (this.routeName = current.name);
       if (current.path === "/events/liveData" || current.path == "/events/options") {
-        header.classList.add("delpaddlivedata")
+        header.classList.add("delpaddlivedata");
       } else {
-        header.classList.remove("delpaddlivedata")
+        header.classList.remove("delpaddlivedata");
       }
-    }
+    },
   },
   methods: {
+    // async getNearPrice() {
+    //   try {
+    //     const nearPrice = await this.axios.get("https://api.coingecko.com/api/v3/simple/price?ids=NEAR&vs_currencies=USD");
+
+    //     if (!nearPrice.data.near.usd) throw new Error("Error near usd");
+    //     // return nearPrice.data.near.usd;
+    //     this.$session.set("nearPrice", nearPrice.data.near.usd);
+    //   } catch (error) {
+    //     const nearPrice = await this.axios.get("https://nearblocks.io/api/near-price");
+    //     if (!nearPrice.data.usd) throw new Error("Error near usd");
+    //     // return nearPrice.data.usd;
+    //     this.$session.set("nearPrice", nearPrice.data.usd);
+    //   }
+    // },
+    async getNearPrice() {
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+        viewMethods: ["get_tasa"],
+        sender: account,
+      });
+
+      const price = await contract.get_tasa();
+      console.log(price);
+      console.log(price);
+      console.log(price);
+      console.log(price);
+      console.log(price);
+      this.$session.set("nearPrice", price);
+    },
     limitStr(item, num) {
       if (item) {
         if (item.length > num) {
-          return item.substring(0, num) + "..."
+          return item.substring(0, num) + "...";
         }
       }
-      return item
+      return item;
     },
     responsive() {
       if (window.innerWidth <= 880) {
@@ -207,15 +212,15 @@ export default {
     },
     async connectRamper() {
       if (this.$ramper.getUser()) {
-        this.$ramper.signOut()
+        this.$ramper.signOut();
         this.$router.push("/");
         this.user = undefined;
       } else {
-        const login = await this.$ramper.signIn()
+        const login = await this.$ramper.signIn();
         if (login) {
           if (login.user) {
             // this.$router.go()
-            location.reload()
+            location.reload();
           }
         }
       }
@@ -229,8 +234,8 @@ export default {
       //   apiKey: API_KEY,
       // });
       // const { wallet, isConnected } = walletData;
-      
-      if (this.$ramper.getUser()) this.user = this.$ramper.getAccountId()
+
+      if (this.$ramper.getUser()) this.user = this.$ramper.getAccountId();
 
       // this.user = localStorage.getItem("Mintbase.js_wallet_auth_key");
       // console.log(localStorage.getItem("Mintbase.js_wallet_auth_key"), 2);
@@ -245,15 +250,15 @@ export default {
       // });
       // walletData.wallet.disconnect();
       // localStorage.clear();
-      this.$ramper.signOut()
+      this.$ramper.signOut();
       this.user = undefined;
       // this.$router.go();
     },
-    goToEvent(){
+    goToEvent() {
       this.$session.clear();
-      localStorage.setItem('step', 1);
-      this.$router.push('/events/register')
-    }
+      localStorage.setItem("step", 1);
+      this.$router.push("/events/register");
+    },
   },
 };
 </script>
