@@ -83,6 +83,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+            <modal-fill ref="modalfill"></modal-fill>
           </aside>
         </v-col>
       </v-row>
@@ -92,6 +93,7 @@
 
 <script>
 import * as nearAPI from "near-api-js";
+import modalFill from "../../pages/Store/ModalFill.vue"
 const { Contract } = nearAPI;
 // let ubicacionPrincipal = window.pageYOffset;
 // let resizeTimeout;
@@ -116,6 +118,9 @@ const { Contract } = nearAPI;
 // });
 export default {
   name: "Header",
+  components: {
+    modalFill
+  },
   i18n: require("./i18n"),
   // created() {
   //   this.element = document.getElementById("theme");

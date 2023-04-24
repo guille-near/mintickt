@@ -132,7 +132,6 @@
       <alert></alert>
     </aside>
     <modalSuccess ref="modal"></modalSuccess>
-    <modal-fill ref="modalfill"></modal-fill>
     <modal-buy v-on:eventBuy="buy" v-on:eventFiat="fiat" ref="modalbuy"></modal-buy>
   </section>
 </template>
@@ -141,7 +140,6 @@
 import gql from "graphql-tag";
 import modalSuccess from "./ModalSuccess.vue";
 import modalBuy from "./ModalBuy.vue";
-import modalFill from "./ModalFill.vue"
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
 const { utils } = nearAPI;
@@ -205,8 +203,7 @@ export default {
   name: "Tienda",
   components: {
     modalSuccess,
-    modalBuy,
-    modalFill
+    modalBuy
   },
   data() {
     return {

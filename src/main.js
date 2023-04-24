@@ -31,24 +31,24 @@ import Carousel3d from 'vue-carousel-3d';
 
 //Global Variables
 Vue.config.productionTip = false
-Vue.prototype.$networkName= (Vue.config.productionTip) ? 'testnet' : 'testnet';
-Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'testingmintickt.mintspace2.testnet' : 'testingmintickt.mintspace2.testnet';
-Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
-Vue.prototype.$dev_key= 'mintickt.key'; // '2077ba62-21fd-4457-b3f5-13e6d376d026';
-Vue.prototype.$explorer= (Vue.config.productionTip) ? 'https://explorer.testnet.near.org/' : 'https://explorer.testnet.near.org/';
-Vue.prototype.$ipfs= (Vue.config.productionTip) ? 'https://mintickt.com:3070/api/ipfs/' : 'https://mintickt.com:3070/api/ipfs/';
-Vue.prototype.$binance= 'https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT';
-Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:3090/api/v1/mintickt' : 'https://mintickt.com:3090/api/v1/mintickt'
-Vue.prototype.$pinata_gateway = "https://mintickt.mypinata.cloud/ipfs/"
-Vue.prototype.$value_user_mint = "kamargo1.testnet"
-Vue.prototype.$burn_page_ticket = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/events/burn" : "https://testnet.mintickt.com/#/events/burn"
-Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/store/?thingid=" : "https://testnet.mintickt.com/#/store/?thingid="
-Vue.prototype.$burn_page_goodies = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/events/burn" : "https://testnet.mintickt.com/#/events/burn"
-Vue.prototype.$event_page = 'http://testnet.mintickt.com/#/events/'
-Vue.prototype.$owner = "probando.testnet"
-Vue.prototype.$owner_split = "3"
-Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
-Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
+Vue.prototype.$networkName= process.env.VUE_APP_NETWORK;
+//Vue.prototype.$store_mintbase= (Vue.config.productionTip) ? 'testingmintickt.mintspace2.testnet' : 'testingmintickt.mintspace2.testnet';
+//Vue.prototype.$mintbase_marketplace= (Vue.config.productionTip) ? 'market-v2-beta.mintspace2.testnet' : 'market-v2-beta.mintspace2.testnet';
+//Vue.prototype.$dev_key= 'mintickt.key'; // '2077ba62-21fd-4457-b3f5-13e6d376d026';
+Vue.prototype.$explorer= process.env.VUE_APP_API_BASE_URL_EXPLORER;
+Vue.prototype.$ipfs= process.env.VUE_APP_API_BASE_URL_IPFS;
+Vue.prototype.$binance= process.env.VUE_APP_API_BASE_URL_NEAR_PRICE;
+//Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:3090/api/v1/mintickt' : 'https://mintickt.com:3090/api/v1/mintickt'
+Vue.prototype.$pinata_gateway = process.env.VUE_APP_API_BASE_URL_PINATA;
+//Vue.prototype.$value_user_mint = "kamargo1.testnet"
+Vue.prototype.$burn_page_ticket = process.env.VUE_APP_API_BASE_URL_BURN;
+//Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/store/?thingid=" : "https://testnet.mintickt.com/#/store/?thingid="
+Vue.prototype.$burn_page_goodies = process.env.VUE_APP_API_BASE_URL_BURN;
+//Vue.prototype.$event_page = 'http://testnet.mintickt.com/#/events/'
+//Vue.prototype.$owner = "probando.testnet"
+//Vue.prototype.$owner_split = "3"
+//Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
+//Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
 
 Vue.use(ramper)
 Vue.use(near)
