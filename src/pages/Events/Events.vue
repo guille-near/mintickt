@@ -31,7 +31,7 @@
       </template>
 
       <template v-slot:[`item.name`]="{ item }">
-        <v-btn @click="goEventData(item.id, item.ticket_type)" class="btnWithoutStyles" target="_blank">{{ item.name }}</v-btn>
+        <v-btn @click="goEventData(item.id)" class="btnWithoutStyles" :href="'#/store?id=' + item.id" target="_blank">{{ item.name }}</v-btn>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
@@ -325,10 +325,10 @@ export default {
       this.$session.get("event_name", pevent);
     },
     goEventData(eventId, ticketType) {
-      this.$router.push({
-        path: "/store",
-        query: { id: eventId },
-      });
+      // this.$router.push({
+      //   path: "/store",
+      //   query: { id: eventId },
+      // });
       this.$session.set("eventid", eventId);
       // this.$session.get("event_name", pevent);
     },

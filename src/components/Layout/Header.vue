@@ -139,8 +139,8 @@ export default {
       routeName: this.$router.currentRoute.name,
     };
   },
-  mounted() {
-    this.getNearPrice();
+  async mounted() {
+    await this.getNearPrice();
     this.revisar();
 
     // * styles

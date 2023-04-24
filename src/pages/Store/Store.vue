@@ -344,7 +344,7 @@ export default {
       return amountInYocto.toString();
     },
     dollarConversion(price) {
-      return (Number(price) / this.nearPrice).toFixed(2);
+      return (Number(price) / this.nearPrice || 0).toFixed(2);
     },
     async getData() {
       this.loading = true;
