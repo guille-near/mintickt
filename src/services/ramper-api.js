@@ -8,7 +8,7 @@ export default function RamperApi() {
     chainName: CHAIN.NEAR,
     walletProviders: [],
     theme: THEME.DARK,
-    network: process.env.NETWORK,
+    network: process.env.VUE_APP_NETWORK,
     logoURI: "https://www.mintickt.com/images/logom.6dc78695.svg",
     authProviders: [
       AUTH_PROVIDER.GOOGLE,

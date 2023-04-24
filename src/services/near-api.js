@@ -5,7 +5,7 @@ export default async function NearApi() {
   const{ connect, keyStores, WalletConnection, utils, Contract } = nearAPI,
   keyStore = new keyStores.BrowserLocalStorageKeyStore()
   let config
-  if (process.env.NETWORK === "mainnet") {
+  if (process.env.VUE_APP_NETWORK === "mainnet") {
     config = {
       networkId: "mainnet",
       nodeUrl: "https://rpc.mainnet.near.org",
