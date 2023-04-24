@@ -72,6 +72,9 @@
                 <v-list-item :to="'/events'">
                   <v-list-item-title style="color: #fff">Events</v-list-item-title>
                 </v-list-item>
+                <v-list-item @click="$ramper.openWallet()">
+                  <v-list-item-title style="color: #fff">Open Wallet</v-list-item-title>
+                </v-list-item>
                 <v-list-item :to="'/profile'">
                   <v-list-item-title style="color: #fff">Profile</v-list-item-title>
                 </v-list-item>

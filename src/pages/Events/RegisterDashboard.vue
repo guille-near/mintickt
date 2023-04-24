@@ -1132,7 +1132,7 @@ export default {
           title: this.dataTickets.name,
           description: this.dataTickets.description,
           media: this.$pinata_gateway + this.$session.get("IpfsHashTicketDesign"),
-          copies: this.dataTickets.mint_amount,
+          copies: parseInt(this.dataTickets.mint_amount),
           issued_at: this.startTime,
           expires_at: this.endTime,
           starts_at: this.startTime,
