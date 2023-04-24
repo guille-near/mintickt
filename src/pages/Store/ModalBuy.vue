@@ -8,8 +8,8 @@
       <div class="divcol center">
         <v-btn @click="fiat">Pay with Fiat</v-btn>
         <v-btn @click="buy()">Pay with NEAR</v-btn>
-        <a class="acenter" style="gap:.3em">
-          <span @click="modalBuy=false" class="p">Close</span>
+        <a class="acenter" style="gap: 0.3em">
+          <span @click="modalBuy = false" class="p">Close</span>
         </a>
       </div>
     </v-card>
@@ -22,18 +22,17 @@ export default {
   data() {
     return {
       modalBuy: false,
-      url: '',
+      url: "",
     };
   },
   methods: {
-    buy(){
-        this.$emit("eventBuy")
+    buy() {
+      this.$emit("eventBuy");
     },
-    fiat(){
-        this.$emit("eventFiat")
-    }
-
-  }  
+    fiat() {
+      this.$emit("eventFiat");
+    },
+  },
 };
 </script>
 
