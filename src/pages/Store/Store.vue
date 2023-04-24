@@ -9,7 +9,9 @@
         <!-- <v-chip color="rgba(0, 0, 0, 0.3)">
           {{ date }} {{ date_start }}-{{ this.date_end }} {{ time }}
         </v-chip> -->
-        <v-chip color="rgba(0, 0, 0, 0.3)"> {{ date }}. {{ date_start }}, {{ time_start }} h. </v-chip>
+        <v-chip color="rgba(0, 0, 0, 0.3)">
+          {{ date }}. {{ date_start }}, {{ time_start }} h.
+        </v-chip>
         <h2>{{ tittle }}</h2>
         <!-- <span>{{ tittle }}</span> -->
       </div>
@@ -34,7 +36,11 @@
           <h3 class="h7-em p">When</h3>
 
           <div class="acenter" style="gap: 10px">
-            <img src="@/assets/icons/calendar.svg" alt="calendar icon" style="width: 20px" />
+            <img
+              src="@/assets/icons/calendar.svg"
+              alt="calendar icon"
+              style="width: 20px"
+            />
 
             <div class="divcol" style="gap: 4px">
               <p class="p">
@@ -52,17 +58,29 @@
 
         <aside class="contLocation divcol">
           <h3 class="h7-em">Where</h3>
-          <p class="h8-em mb-4" style="display: flex; align-items: flex-end; gap: 0.5em">
+          <p
+            class="h8-em mb-4"
+            style="display: flex; align-items: flex-end; gap: 0.5em"
+          >
             <img src="@/assets/logo/Marker.svg" alt="marker icon" />
             {{ Datos.location }}
           </p>
-          <iframe referrerpolicy="no-referrer-when-downgrade" :src="googlemap" allowfullscreen> </iframe>
+          <iframe
+            referrerpolicy="no-referrer-when-downgrade"
+            :src="googlemap"
+            allowfullscreen
+          >
+          </iframe>
         </aside>
 
         <aside class="divcol">
           <h3 class="h7-em">Details</h3>
           <aside class="contDetails">
-            <p v-for="(item, i) in Datos.details" :key="i" class="h8-em tittles">
+            <p
+              v-for="(item, i) in Datos.details"
+              :key="i"
+              class="h8-em tittles"
+            >
               <strong>{{ item.titlesDetails }}</strong>
               <br />{{ item.textDetails }}
             </p>
@@ -74,18 +92,33 @@
         class="divcol acenter"
         :class="ticketType"
         v-intersect="onIntersect"
-        :style="ticketSize ? `--w: ${ticketSize.split('_')[0]}px; --h: ${ticketSize.split('_')[1]}px` : ''"
+        :style="
+          ticketSize
+            ? `--w: ${ticketSize.split('_')[0]}px; --h: ${
+                ticketSize.split('_')[1]
+              }px`
+            : ''
+        "
       >
         <!-- added here to original size-->
         <img class="ticket" :src="ticket_img" alt="Ticket" />
         <div id="buy" class="contenedor_aside divcol fill-w">
           <aside class="divrow">
             <span class="h8-em space" style="width: 100%; gap: 0.5em">
-              <strong class="number">{{ tokens_listed }}</strong> of <strong class="number">{{ tokens_minted }}</strong> available
+              <strong class="number">{{ tokens_listed }}</strong> of
+              <strong class="number">{{ tokens_minted }}</strong> available
             </span>
           </aside>
           <aside class="relative">
-            <v-text-field disabled type="number" hide-spin-buttons :hide-details="true" solo v-model="quantity"> </v-text-field>
+            <v-text-field
+              disabled
+              type="number"
+              hide-spin-buttons
+              :hide-details="true"
+              solo
+              v-model="quantity"
+            >
+            </v-text-field>
             <div class="contenedor_botones">
               <v-btn color=" #C4C4C4" @click="controlAmount('less')">
                 <v-icon color="black"> mdi-minus </v-icon>
@@ -106,14 +139,23 @@
           </aside>
         </div>
         <div style="gap: 1em" class="divcol fill-w">
-          <v-btn @click="buy" :loading="loading" :disabled="disable" class="paywallet h8-em"> Pay with NEAR </v-btn>
+          <v-btn
+            @click="buySelecction"
+            :loading="loading"
+            :disabled="disable"
+            class="paywallet h8-em"
+          >
+            Buy
+          </v-btn>
           <!-- <v-btn @click="batchtransfer" class="paycard h8-em"> Pay with card </v-btn> -->
         </div>
       </article>
 
       <v-dialog v-model="dialog" width="500">
         <v-card>
-          <v-card-title class="text-h5 grey lighten-2"> View transaction in explorer </v-card-title>
+          <v-card-title class="text-h5 grey lighten-2">
+            View transaction in explorer
+          </v-card-title>
 
           <v-card-text>
             <center style="margin-top: 2.5em">
@@ -131,12 +173,14 @@
       </v-dialog>
     </aside>
     <modalSuccess ref="modal"></modalSuccess>
+    <modal-buy v-on:eventBuy="buy" v-on:eventFiat="fiat"  ref="modalbuy"></modal-buy>
   </section>
 </template>
 
 <script>
 import gql from "graphql-tag";
 import modalSuccess from "./ModalSuccess.vue";
+import modalBuy from "./ModalBuy.vue";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
 const { utils } = nearAPI;
@@ -168,12 +212,19 @@ const your_events = gql`
 `;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $metadata_id: String!) {
-    nft_tokens_aggregate(where: { nft_contract_id: { _eq: $store }, metadata_id: { _eq: $metadata_id } }) {
+    nft_tokens_aggregate(
+      where: {
+        nft_contract_id: { _eq: $store }
+        metadata_id: { _eq: $metadata_id }
+      }
+    ) {
       aggregate {
         count
       }
     }
-    nft_earnings_aggregate(where: { nft_token: { metadata_id: { _eq: $metadata_id } } }) {
+    nft_earnings_aggregate(
+      where: { nft_token: { metadata_id: { _eq: $metadata_id } } }
+    ) {
       aggregate {
         count
       }
@@ -190,7 +241,9 @@ const main_image = gql`
 
 const minter = gql`
   query MyQuery($store: String!, $user: String!) {
-    mb_store_minters(where: { nft_contract_id: { _eq: $store }, minter_id: { _eq: $user } }) {
+    mb_store_minters(
+      where: { nft_contract_id: { _eq: $store }, minter_id: { _eq: $user } }
+    ) {
       minter_id
     }
   }
@@ -200,6 +253,7 @@ export default {
   name: "Tienda",
   components: {
     modalSuccess,
+    modalBuy,
   },
   data() {
     return {
@@ -245,7 +299,8 @@ export default {
       time_end: "",
       tsformart: "",
       tsendformat: "",
-      burn_ticket_image: this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
+      burn_ticket_image:
+        this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       nearPrice: 0,
       price_usd: 0,
     };
@@ -315,31 +370,64 @@ export default {
           var year = { year: "numeric" }; //Format data
 
           const extra = JSON.parse(dataEvent.extra);
-          const startDate = extra.find((element) => element.trait_type === "Start Date");
-          const endDate = extra.find((element) => element.trait_type === "End Date");
-          const ticketType = extra.find((element) => element.trait_type === "ticket_type");
+          const startDate = extra.find(
+            (element) => element.trait_type === "Start Date"
+          );
+          const endDate = extra.find(
+            (element) => element.trait_type === "End Date"
+          );
+          const ticketType = extra.find(
+            (element) => element.trait_type === "ticket_type"
+          );
           this.ticket_Type = ticketType.value;
 
-          this.date = new Date(startDate.value * 1000).toLocaleDateString("en-US", options);
+          this.date = new Date(startDate.value * 1000).toLocaleDateString(
+            "en-US",
+            options
+          );
 
           this.price_usd = Number(dataEvent.price).toFixed(2);
           this.price_near = this.dollarConversion(this.price_usd);
 
-          this.date_end = new Date(endDate.value * 1000).toLocaleDateString("en-US", options_end);
+          this.date_end = new Date(endDate.value * 1000).toLocaleDateString(
+            "en-US",
+            options_end
+          );
 
-          const startTime = extra.find((element) => element.trait_type === "start_time");
-          const endTime = extra.find((element) => element.trait_type === "end_time");
+          const startTime = extra.find(
+            (element) => element.trait_type === "start_time"
+          );
+          const endTime = extra.find(
+            (element) => element.trait_type === "end_time"
+          );
 
-          this.time_start = new Date(startTime.value).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
-          this.time_end = new Date(endTime.value).toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
+          this.time_start = new Date(startTime.value).toLocaleTimeString(
+            "en-US",
+            { hour12: false, hour: "2-digit", minute: "2-digit" }
+          );
+          this.time_end = new Date(endTime.value).toLocaleTimeString("en-US", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
           this.tsformart =
-            new Date(startDate.value * 1000).toLocaleDateString("en-us", { weekday: "short", year: "numeric", month: "short", day: "numeric" }) +
+            new Date(startDate.value * 1000).toLocaleDateString("en-us", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }) +
             " " +
             this.time_start +
             " h";
           this.tsendformat =
-            new Date(endDate.value * 1000).toLocaleDateString("en-us", { weekday: "short", year: "numeric", month: "short", day: "numeric" }) +
+            new Date(endDate.value * 1000).toLocaleDateString("en-us", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }) +
             " " +
             this.time_end +
             " h";
@@ -354,9 +442,15 @@ export default {
           //Html description
           this.Datos.about.event.text = dataEvent.description;
           //Location
-          this.Datos.location = extra.find((element) => element.trait_type === "location")?.value;
+          this.Datos.location = extra.find(
+            (element) => element.trait_type === "location"
+          )?.value;
           //Google map location
-          this.googlemap = "https://www.google.com/maps/embed/v1/place?key=" + this.$key + "&q=" + this.Datos.location;
+          this.googlemap =
+            "https://www.google.com/maps/embed/v1/place?key=" +
+            this.$key +
+            "&q=" +
+            this.Datos.location;
 
           this.Datos.details = [
             // {
@@ -415,10 +509,17 @@ export default {
     },
     fetch() {
       this.lastPrice = JSON.parse(request.responseText).lastPrice;
-      this.price_token_usd = parseFloat(this.lastPrice) * parseFloat(this.price_near) * parseInt(this.quantity);
+      this.price_token_usd =
+        parseFloat(this.lastPrice) *
+        parseFloat(this.price_near) *
+        parseInt(this.quantity);
     },
     formatPrice(price) {
-      return Number(utils.format.formatNearAmount(price.toLocaleString("fullwide", { useGrouping: false })));
+      return Number(
+        utils.format.formatNearAmount(
+          price.toLocaleString("fullwide", { useGrouping: false })
+        )
+      );
     },
     controlAmount(item) {
       var quantity_tokens = 0;
@@ -430,7 +531,10 @@ export default {
         //this.fetch();
         this.tokens_buy = [];
         this.tokens.forEach((element) => {
-          if (!this.tokens_buy.includes(element.token_id) && quantity_tokens < this.quantity) {
+          if (
+            !this.tokens_buy.includes(element.token_id) &&
+            quantity_tokens < this.quantity
+          ) {
             quantity_tokens++;
             this.tokens_buy.push(element.token_id);
             this.quantity == 0 ? (this.disable = true) : (this.disable = false);
@@ -445,7 +549,10 @@ export default {
         //this.fetch();
         this.tokens_buy = [];
         this.tokens.forEach((element) => {
-          if (!this.tokens_buy.includes(element.token_id) && quantity_tokens <= this.quantity) {
+          if (
+            !this.tokens_buy.includes(element.token_id) &&
+            quantity_tokens <= this.quantity
+          ) {
             quantity_tokens++;
             this.tokens_buy.push(element.token_id);
             this.quantity == 0 ? (this.disable = true) : (this.disable = false);
@@ -459,13 +566,20 @@ export default {
     padWithZero(num, targetLength) {
       return String(num).padEnd(targetLength, "0");
     },
+    buySelecction() {
+      this.$refs.modalbuy.modalBuy = true;
+    },
+    async fiat() {
+      this.$refs.modalbuy.modalBuy = false;
+    },
     async buy() {
       //Generate the reference for the burned image let me in
       //Grant the minter if does not exist
       // this.revisar();
-      this.grantMinter();
+      //this.grantMinter();
 
       //
+      this.$refs.modalbuy.modalBuy = false;
       this.quantity == 0 ? (this.disable = true) : (this.disable = false);
       this.loading = true;
       const mintbase_marketplace = this.$mintbase_marketplace;
@@ -514,7 +628,8 @@ export default {
           this.image = image;
 
           const file = this.dataURLtoFile(this.image, "mint.png");
-          const { data: fileUploadResult, error: fileError } = await wallet.minter.uploadField(MetadataField.Media, file);
+          const { data: fileUploadResult, error: fileError } =
+            await wallet.minter.uploadField(MetadataField.Media, file);
           // localStorage.setItem("file", file);
           if (fileError) {
             throw new Error(fileError);
@@ -552,7 +667,9 @@ export default {
         //this.$session.set("metadata_reference", metadataId);
         //console.log("metadata_reference", metadataId);
 
-        let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+        let datos = JSON.parse(
+          localStorage.getItem("Mintbase.js_wallet_auth_key")
+        );
         const user = datos.accountId;
         // This is the let me in
 
@@ -644,39 +761,39 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
-    async grantMinter() {
-      let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
-      const user = datos.accountId;
-      this.$apollo
-        .query({
-          query: minter,
-          variables: {
-            store: this.$store_mintbase,
-            user: user,
-          },
-        })
-        .then((response) => {
-          //console.log(response.data.mb_store_minters.length)
-          //If the user is not minter just give grant to him/her
-          if (response.data.mb_store_minters.length == 0) {
-            const url = this.$node_url + "/minter";
-            let item = {
-              account_id: user,
-            };
-            this.axios
-              .post(url, item)
-              .then(() => {
-                console.log("Hash up");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    },
+    // async grantMinter() {
+    //   let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
+    //   const user = datos.accountId;
+    //   this.$apollo
+    //     .query({
+    //       query: minter,
+    //       variables: {
+    //         store: this.$store_mintbase,
+    //         user: user,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       //console.log(response.data.mb_store_minters.length)
+    //       //If the user is not minter just give grant to him/her
+    //       if (response.data.mb_store_minters.length == 0) {
+    //         const url = this.$node_url + "/minter";
+    //         let item = {
+    //           account_id: user,
+    //         };
+    //         this.axios
+    //           .post(url, item)
+    //           .then(() => {
+    //             console.log("Hash up");
+    //           })
+    //           .catch((error) => {
+    //             console.log(error);
+    //           });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error", err);
+    //     });
+    // },
     scrollTo() {
       var top = $("#buy").position().top;
       $(window).scrollTop(top);
@@ -758,7 +875,11 @@ export default {
       margin-inline: auto;
       width: 100%;
       height: 30%;
-      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.51) 30%, rgba(0, 0, 0, 0) 100%);
+      background-image: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.51) 30%,
+        rgba(0, 0, 0, 0) 100%
+      );
       z-index: 1;
     }
     &:after {
@@ -770,7 +891,13 @@ export default {
       margin-inline: auto;
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.318) 1.36%, rgba(0, 0, 0, 0) 35.95%, rgba(3, 3, 3, 0) 63.16%, rgba(5, 5, 5, 0.366) 87.25%);
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.318) 1.36%,
+        rgba(0, 0, 0, 0) 35.95%,
+        rgba(3, 3, 3, 0) 63.16%,
+        rgba(5, 5, 5, 0.366) 87.25%
+      );
     }
     & > img {
       position: absolute;
@@ -1000,13 +1127,22 @@ export default {
         margin-inline: calc(-50vw + 50%);
         height: 100%;
         padding-block: 4.5em;
-        background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.51) 54.84%, rgba(0, 0, 0, 0) 100%);
+        background: linear-gradient(
+          180deg,
+          #000000 0%,
+          rgba(0, 0, 0, 0.51) 54.84%,
+          rgba(0, 0, 0, 0) 100%
+        );
         transform: matrix(1, 0, 0, -1, 0, 0);
       }
       .v-btn {
         padding: 17px 20px;
         height: 52px;
-        background: linear-gradient(165.96deg, #ffffff 68.48%, rgba(211, 254, 184, 0.35) 128.14%);
+        background: linear-gradient(
+          165.96deg,
+          #ffffff 68.48%,
+          rgba(211, 254, 184, 0.35) 128.14%
+        );
         box-shadow: 0px 4px 19px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(14px);
         border-radius: 13px;
@@ -1158,7 +1294,11 @@ export default {
       position: relative;
       isolation: isolate;
       .v-btn__content {
-        background: linear-gradient(165.96deg, #ffffff 68.48%, rgba(211, 254, 184, 0.35) 128.14%);
+        background: linear-gradient(
+          165.96deg,
+          #ffffff 68.48%,
+          rgba(211, 254, 184, 0.35) 128.14%
+        );
         border-radius: 13px;
         width: 100%;
         height: 100%;
@@ -1175,7 +1315,11 @@ export default {
       /* Auto layout */
       padding: 17px 20px;
       height: 52px;
-      background: linear-gradient(165.96deg, #ffffff 68.48%, rgba(211, 254, 184, 0.35) 128.14%);
+      background: linear-gradient(
+        165.96deg,
+        #ffffff 68.48%,
+        rgba(211, 254, 184, 0.35) 128.14%
+      );
       box-shadow: 0px 4px 19px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(14px);
       border-radius: 13px;
@@ -1191,7 +1335,11 @@ export default {
       /* Auto layout */
       padding: 17px 20px;
       height: 52px;
-      background: linear-gradient(165.96deg, rgba(196, 196, 196, 0.06) 68.48%, rgba(211, 254, 184, 0.35) 128.14%);
+      background: linear-gradient(
+        165.96deg,
+        rgba(196, 196, 196, 0.06) 68.48%,
+        rgba(211, 254, 184, 0.35) 128.14%
+      );
       box-shadow: 0px 4px 19px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(14px);
       border-radius: 13px;
