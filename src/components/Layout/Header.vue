@@ -188,11 +188,6 @@ export default {
       });
 
       const price = await contract.get_tasa();
-      console.log(price);
-      console.log(price);
-      console.log(price);
-      console.log(price);
-      console.log(price);
       this.$session.set("nearPrice", price);
     },
     limitStr(item, num) {

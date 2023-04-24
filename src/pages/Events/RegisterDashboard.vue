@@ -1135,7 +1135,7 @@ export default {
           starts_at: this.startTime,
           updated_at: this.endTime,
           extra: JSON.stringify(extra),
-          reference: this.$session.get("IpfsHashTicketDesign"),
+          reference: this.$pinata_gateway + this.$session.get("IpfsHash"),
         };
 
         // console.log(metadata);
@@ -1625,8 +1625,9 @@ export default {
     },
     async next1() {
       if (this.$refs.form1.validate()) {
-        this.$session.set("step", 3);
-        this.step = this.$session.get("step");
+        this.overlay_ticket = true;
+        // this.$session.set("step", 3);
+        // this.step = this.$session.get("step");
         this.ipfs();
         this.$session.set("dataFormMintAmount", this.dataTickets.mint_amount);
       }
@@ -2112,6 +2113,9 @@ export default {
       await this.axios.post(this.$ipfs, formData).then((res) => {
         //console.log('res', res.data)
         this.$session.set("IpfsHash", res.data.IpfsHash);
+        this.$session.set("step", 3);
+        this.step = this.$session.get("step");
+        this.overlay_ticket = false;
       });
     },
     async ipfsTicketDesign() {

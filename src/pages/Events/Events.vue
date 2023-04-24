@@ -31,7 +31,7 @@
       </template>
 
       <template v-slot:[`item.name`]="{ item }">
-        <v-btn @click="goEventData(item.id)" class="btnWithoutStyles" target="_blank">{{ item.name }}</v-btn>
+        <v-btn @click="goEventData(item.id, item.ticket_type)" class="btnWithoutStyles" target="_blank">{{ item.name }}</v-btn>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
@@ -283,6 +283,7 @@ export default {
           for (let i = 0; i < dataSeries.length; i++) {
             const extra = JSON.parse(dataSeries[i].extra);
             const startDate = extra.find((element) => element.trait_type === "Start Date");
+            const ticketType = extra.find((element) => element.trait_type === "ticket_type");
             console.log(extra);
             rows = {
               id: dataSeries[i].id,
@@ -292,11 +293,11 @@ export default {
               minted: dataSeries[i].supply,
               sold: dataSeries[i].nftsold,
               thingid: dataSeries[i].reference,
-              ticket_type: dataSeries[i].title,
+              ticket_type: ticketType.value,
               show: false,
               key: i,
               date1: dataSeries[i].title,
-              media: dataSeries[i].media,
+              media: dataSeries[i].reference,
             };
             this.data.push(rows);
             this.data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
@@ -323,7 +324,7 @@ export default {
       this.$session.get("eventid", pthingid);
       this.$session.get("event_name", pevent);
     },
-    goEventData(eventId) {
+    goEventData(eventId, ticketType) {
       this.$router.push({
         path: "/store",
         query: { id: eventId },
@@ -340,13 +341,7 @@ export default {
       this.$session.get("event_name", pevent);
     },
     fetch() {
-      const BINANCE_NEAR = "https://api.binance.com/api/v3/ticker/24hr?symbol=NEARUSDT";
-      var request = new XMLHttpRequest();
-      request.open("GET", BINANCE_NEAR);
-      request.send();
-      request.onload = () => {
-        this.lastPrice = JSON.parse(request.responseText);
-      };
+      this.lastPrice = this.$session.get("nearPrice");
     },
     async revisar() {
       let API_KEY = this.$dev_key;
