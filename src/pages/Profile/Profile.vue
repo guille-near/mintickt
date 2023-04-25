@@ -4,13 +4,13 @@
       <div class="container-avatar">
         <img  :src="avatar" alt="user img">
       </div>
-
-      <!-- <v-btn class="btn-social" text>
-        <span style="margin-block">NEAR Social</span>
-        <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
-      </v-btn> -->
     </section>
-
+    <div>
+      <v-btn class="btn-social" :href="near_social" target="_blank" text>
+          <span style="margin-block">NEAR Social</span>
+          <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
+      </v-btn> 
+  </div>
     <section id="profile-content">
       <h2 class="title-tabs vermobile">My tickets</h2>
 
@@ -67,6 +67,7 @@ export default {
       tab: 0,
       avatar: undefined,
       bg_profile: undefined,
+      near_social: process.env.VUE_APP_API_BASE_URL_SOCIAL_SITE,
       dataTabs: [
         {
           title: "Events",
