@@ -141,10 +141,10 @@
 import gql from "graphql-tag";
 import modalSuccess from "./ModalSuccess.vue";
 import modalBuy from "./ModalBuy.vue";
-import modalFill from "./ModalFill.vue"
+import modalFill from "./ModalFill.vue";
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import * as nearAPI from "near-api-js";
-const { utils } = nearAPI;
+const { utils, Contract } = nearAPI;
 const your_events = gql`
   query MyQuery($event_id: String!) {
     serie(id: $event_id) {
@@ -206,7 +206,7 @@ export default {
   components: {
     modalSuccess,
     modalBuy,
-    modalFill
+    modalFill,
   },
   data() {
     return {
@@ -256,12 +256,11 @@ export default {
       burn_ticket_image: this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       nearPrice: 0,
       price_usd: 0,
-      amountDeposit: 0.01
+      amountDeposit: 0.01,
     };
   },
 
   async mounted() {
-    
     if (!this.$session.exists()) {
       this.$session.start();
     }
@@ -269,7 +268,7 @@ export default {
     this.eventId = this.$route.query.id;
     this.$session.set("eventid", this.eventId);
 
-    this.nearPrice = this.$session.get("nearPrice");
+    await this.getNearPrice();
 
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
@@ -292,9 +291,17 @@ export default {
     },
   },
   methods: {
-    buy() {
+    async getNearPrice() {
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+        viewMethods: ["get_tasa"],
+        sender: account,
+      });
 
+      const price = await contract.get_tasa();
+      this.nearPrice = price || 0;
     },
+    buy() {},
     NEARyoctoNEAR: function (NEARyocto) {
       const { utils } = nearAPI;
       const amountInYocto = utils.format.parseNearAmount(NEARyocto);
@@ -333,7 +340,7 @@ export default {
           const ticketType = extra.find((element) => element.trait_type === "ticket_type");
           this.ticket_Type = ticketType.value;
 
-          this.token_id = dataEvent.id
+          this.token_id = dataEvent.id;
 
           this.date = new Date(startDate.value * 1000).toLocaleDateString("en-US", options);
 
@@ -490,7 +497,7 @@ export default {
       return String(num).padEnd(targetLength, "0");
     },
     buySelecction() {
-      this.$session.set("tokenId", this.token_id)
+      this.$session.set("tokenId", this.token_id);
       this.$refs.modalbuy.modalBuy = true;
     },
     async fiat() {

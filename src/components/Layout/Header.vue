@@ -93,7 +93,7 @@
 
 <script>
 import * as nearAPI from "near-api-js";
-import modalFill from "../../pages/Store/ModalFill.vue"
+import modalFill from "../../pages/Store/ModalFill.vue";
 const { Contract } = nearAPI;
 // let ubicacionPrincipal = window.pageYOffset;
 // let resizeTimeout;
@@ -119,7 +119,7 @@ const { Contract } = nearAPI;
 export default {
   name: "Header",
   components: {
-    modalFill
+    modalFill,
   },
   i18n: require("./i18n"),
   // created() {
@@ -189,7 +189,6 @@ export default {
     //   }
     // },
     async getNearPrice() {
-      
       const account = await this.$near.account(this.$ramper.getAccountId());
       const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
         viewMethods: ["get_tasa"],
@@ -215,50 +214,46 @@ export default {
       }
     },
     async connectRamper() {
-      if (this.$ramper.getUser()) {
-        this.$ramper.signOut();
-        setTimeout(() => this.$router.go(0), 100)
-        this.$router.push(this.localePath('/'))
-        this.$router.push("/");
-        this.user = undefined;
-      } else {
-        const login = await this.$ramper.signIn();
-        if (login) {
-          if (login.user) {
-            // this.$router.go()
-            location.reload();
-          }
+      const login = await this.$ramper.signIn();
+      if (login) {
+        console.log(login);
+        if (login.user) {
+          this.user = this.$ramper.getAccountId();
+          this.revisar();
+          location.reload();
         }
+        location.reload();
       }
     },
     async revisar() {
       const account = await this.$near.account(this.$ramper.getAccountId());
-      if(this.$session.get("nearSocialName")===undefined){
+      if (this.$session.get("nearSocialName") === undefined) {
         const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
           viewMethods: ["get"],
           sender: account,
         });
-        
-        const myArray = [account.accountId + '/profile/**'];  
+
+        const myArray = [account.accountId + "/profile/**"];
         //console.log(myArray)
         const social = await contract.get({
-            keys: myArray
-          });
-        
+          keys: myArray,
+        });
+
         //console.log(social)
         Object.entries(social).forEach(([key, value]) => {
-            this.$session.set("nearSocialName", value.profile.name);
-            this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+          this.$session.set("nearSocialName", value.profile.name);
+          this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+          if (value.profile.backgroundImage?.ipfs_cid) {
             this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
+          }
         });
-      }  
-       
-      if(this.$session.get("nearSocialName")!==undefined){
-        this.user = this.$session.get("nearSocialName")
-      } else if(this.$ramper.getUser()){
+      }
+
+      if (this.$session.get("nearSocialName") !== undefined) {
+        this.user = this.$session.get("nearSocialName");
+      } else {
         this.user = this.$ramper.getAccountId();
       }
-      
     },
     async logOut() {
       // let API_KEY = this.$dev_key;
@@ -271,39 +266,38 @@ export default {
       // walletData.wallet.disconnect();
       // localStorage.clear();
       this.$ramper.signOut();
-      setTimeout(() => this.$router.go(0), 100)
-      this.$router.push("/")
+      setTimeout(() => this.$router.go(0), 100);
+      this.$router.push("/");
       this.user = undefined;
-      this.$session.clear()
+      this.$session.clear();
 
       // this.$router.go();
     },
     async goToEvent() {
-      const balance = await this.getBalance()
+      const balance = await this.getBalance();
       if (balance < 0.05) {
         this.$refs.modalfill.modalFill = true;
-        return
+        return;
       }
 
       this.$session.clear();
       localStorage.setItem("step", 1);
       this.$router.push("/events/register");
     },
-    async getBalance () {
+    async getBalance() {
       try {
         if (this.$ramper.getUser()) {
           const account = await this.$near.account(this.$ramper.getAccountId());
           const response = await account.state();
-          const valueStorage = Math.pow(10, 19)
-          const valueYocto = Math.pow(10, 24)
+          const valueStorage = Math.pow(10, 19);
+          const valueYocto = Math.pow(10, 24);
 
-          const storage = (response.storage_usage * valueStorage) / valueYocto 
-          return ((response.amount / valueYocto) - storage).toFixed(2)
+          const storage = (response.storage_usage * valueStorage) / valueYocto;
+          return (response.amount / valueYocto - storage).toFixed(2);
         }
       } catch (error) {
-        return "0"
+        return "0";
       }
-      
     },
   },
 };
