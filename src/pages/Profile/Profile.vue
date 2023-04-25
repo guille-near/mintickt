@@ -40,8 +40,12 @@
 </template>
 
 <script>
+import * as nearAPI from 'near-api-js'
 import gql from "graphql-tag";
 import moment from "moment";
+import { CONFIG } from '@/services/api'
+
+const { connect, transactions, keyStores, WalletConnection, Contract, utils } = nearAPI
 
 const your_nfts = gql`
   query MyQuery($user: String!) {
@@ -87,17 +91,20 @@ export default {
         {
           title: "Collectibles",
           content: [
-            {
-              img: require("@/assets/profile/img-test.png"),
-              name: "Nearcon",
-            },
+            // {
+            //   img: require("@/assets/profile/img-test.png"),
+            //   name: "Nearcon",
+            // },
           ],
         },
       ],
+      dataNftsAux: [],
+      dataNfts: []
     }
   },
   mounted() {
     this.getData()
+    this.getNFTContractsByAccount()
     //console.log(this.src)
   },
   methods: {
@@ -123,7 +130,6 @@ export default {
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
-          console.log("DATAAAA", data)
           let dataNfts = data.nfts;
           const dataEvents = [];
           const dataPast = [];
@@ -144,8 +150,58 @@ export default {
           }
           this.dataTabs[0].content = dataEvents
           this.dataTabs[1].content = dataPast
-
         });
+    },
+    async getNFTContractsByAccount() {
+      if (this.$ramper.getUser()) {
+        let accountId = this.$ramper.getAccountId();
+        console.log(accountId)
+        const serviceUrl = `https://api.kitwallet.app/account/${accountId}/likelyNFTs`;
+        const result = await this.axios.get(serviceUrl);
+        for (var i = 0; i < result.data.length; i++) {
+          if (result.data[i] !== process.env.VUE_APP_CONTRACT_NFT) {
+            await this.getNFTByContract(result.data[i], accountId)
+          }
+        }
+        this.dataNfts = this.dataNftsAux
+        //console.log(this.indexMore)
+      }
+    },
+    async getNFTByContract(contract_id, owner_account_id) {
+      try {
+        const near = await connect(config);
+        const wallet = new WalletConnection(near)
+        const contract = new Contract(wallet.account(), contract_id, {
+          viewMethods: ["nft_tokens_for_owner", "nft_metadata"],
+          sender: wallet.account(),
+        });
+        const result = await contract.nft_tokens_for_owner({
+          account_id: owner_account_id,
+          from_index: "0",
+          limit: 100
+        });
+        const metadata = await contract.nft_metadata();
+        for (var i = 0; i < result.length; i++) {
+          let collection = {
+            img: await this.buildMediaUrl(result[i].metadata.media, metadata.base_uri),
+            name: result[i].metadata.title || result[i].token_id,
+          }
+            
+          this.dataNftsAux.push(collection)
+        }
+      } catch (err) {
+        //console.log("err", contract_id);
+        return [];
+      }
+    },
+    buildMediaUrl (media, base_uri) {
+      if (!media || media.includes('://') || media.startsWith('data:image')) {
+          return media;
+      }
+      if (base_uri) {
+          return `${base_uri}/${media}`;
+      }
+      return `https://cloudflare-ipfs.com/ipfs/${media}`;
     },
   }
 }
