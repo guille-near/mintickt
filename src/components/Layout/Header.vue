@@ -249,6 +249,7 @@ export default {
         Object.entries(social).forEach(([key, value]) => {
             this.$session.set("nearSocialName", value.profile.name);
             this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+            this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
         });
       }  
        
