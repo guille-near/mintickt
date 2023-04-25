@@ -667,12 +667,14 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
         <h3 class="mt-3">Building ticket be pacient...</h3>
       </v-overlay>
+      <modal-fill ref="modalfill"></modal-fill>
     </div>
   </section>
 </template>
 
 <script>
 import ModalSuccess from "./ModalSuccess";
+import modalFill from "../Store/ModalFill.vue"
 import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { CONFIG } from "@/services/api";
@@ -748,7 +750,8 @@ export default {
   components: {
     VueEditor,
     ModalSuccess,
-    DatePicker
+    DatePicker,
+    modalFill
   },
   data() {
     return {
@@ -910,6 +913,7 @@ export default {
     }
   },
   async mounted() {
+    
     this.checkoutTicketType();
     // this.hideScroll(this.$route)
     // this.revisar();
