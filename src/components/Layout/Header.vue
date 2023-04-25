@@ -257,10 +257,32 @@ export default {
       this.user = undefined;
       // this.$router.go();
     },
-    goToEvent() {
+    async goToEvent() {
+      const balance = await this.getBalance()
+      if (balance > Number(0.02)) {
+        this.$refs.modalfill.modalFill = true;
+        return
+      }
+
       this.$session.clear();
       localStorage.setItem("step", 1);
       this.$router.push("/events/register");
+    },
+    async getBalance () {
+      try {
+        if (this.$ramper.getUser()) {
+          const account = await this.$near.account(this.$ramper.getAccountId());
+          const response = await account.state();
+          const valueStorage = Math.pow(10, 19)
+          const valueYocto = Math.pow(10, 24)
+
+          const storage = (response.storage_usage * valueStorage) / valueYocto 
+          return ((response.amount / valueYocto) - storage).toFixed(2)
+        }
+      } catch (error) {
+        return "0"
+      }
+      
     },
   },
 };

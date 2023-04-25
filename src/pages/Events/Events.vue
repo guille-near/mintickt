@@ -122,7 +122,6 @@
 <script>
 import moment from "moment";
 import gql from "graphql-tag";
-import { Wallet, Chain } from "mintbase";
 const your_events = gql`
   query MyQuery($user: String!) {
     series(where: { creator_id: $user, typetoken_id: "1" }) {
