@@ -35,6 +35,21 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
+
+const your_nfts = gql`
+  query MyQuery($user: String!) {
+    nfts(where: {owner_id: $user}) {
+      id
+      fecha
+      owner_id
+      serie_id
+      title
+      typetoken_id
+    }
+  }
+`;
+
 export default {
   name: "Profile",
   data() {
@@ -122,13 +137,6 @@ export default {
           ],
         },
       ],
-    }
-  },
-  mounted(){
-    if(this.$session.get("nearSocialProfileImage") === undefined || this.$session.get("nearSocialProfileImage") === ""){
-      this.src = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr";
-    } else {
-      this.src = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage");
     }
   }
 }

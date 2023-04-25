@@ -229,6 +229,7 @@ export default {
         details: [],
       },
       eventId: null,
+      token_id: null,
       metadata: null,
       tokens_minted: null,
       isIntersecting: false,
@@ -255,6 +256,7 @@ export default {
       burn_ticket_image: this.$pinata_gateway + "QmdW7LfjTfHWmpRadqk2o5oUUFutPuqUx2dZj3C4CH2Jjr",
       nearPrice: 0,
       price_usd: 0,
+      amountDeposit: 0.01
     };
   },
 
@@ -290,6 +292,9 @@ export default {
     },
   },
   methods: {
+    buy() {
+
+    },
     NEARyoctoNEAR: function (NEARyocto) {
       const { utils } = nearAPI;
       const amountInYocto = utils.format.parseNearAmount(NEARyocto);
@@ -327,6 +332,8 @@ export default {
           const endDate = extra.find((element) => element.trait_type === "End Date");
           const ticketType = extra.find((element) => element.trait_type === "ticket_type");
           this.ticket_Type = ticketType.value;
+
+          this.token_id = dataEvent.id
 
           this.date = new Date(startDate.value * 1000).toLocaleDateString("en-US", options);
 
@@ -483,6 +490,7 @@ export default {
       return String(num).padEnd(targetLength, "0");
     },
     buySelecction() {
+      this.$session.set("tokenId", this.token_id)
       this.$refs.modalbuy.modalBuy = true;
     },
     async fiat() {
