@@ -62,7 +62,7 @@ export default {
     return {
       tab: 0,
       avatar: undefined,
-
+      bg_profile: undefined,
       dataTabs: [
         {
           title: "Events",
@@ -102,6 +102,10 @@ export default {
   },
   methods: {
     async getData() {
+      //HErian porfa aqu para el babackground del profile la misma condición, estas son las urls
+      //Cuando no lo consigue this.bg_profile = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
+      //Cuando si la consigue this.bg_profile = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
+      
       if(!this.$session.get("nearSocialProfileImage")){
         this.avatar = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
         document.querySelector(".container-avatar").classList.add("default-avatar")
