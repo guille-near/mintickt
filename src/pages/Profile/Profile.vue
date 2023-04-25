@@ -112,12 +112,20 @@ export default {
   },
   methods: {
     async getData() {
+      // * avatar
       if(!this.$session.get("nearSocialProfileImage")) {
         this.avatar = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
         this.banner = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
         document.querySelector(".container-avatar").classList.add("default-avatar")
       } else {
         this.avatar = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
+        this.banner = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
+      }
+
+      // * banner
+      if(!this.$session.get("nearSocialProfileBackgroundImage")) {
+        this.banner = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
+      } else {
         this.banner = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
       }
 
