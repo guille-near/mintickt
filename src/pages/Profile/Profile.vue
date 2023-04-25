@@ -2,7 +2,7 @@
   <div id="profile">
     <section id="profile-header">
       <div class="container-avatar">
-        <img src="@/assets/profile/user.svg" alt="user img">
+        <img  :src="src" alt="user img">
       </div>
     </section>
 
@@ -43,6 +43,7 @@ export default {
       dataTabs: [
         {
           title: "Events",
+          src: null,
           content: [
             {
               img: require("@/assets/profile/img-test.png"),
@@ -121,6 +122,13 @@ export default {
           ],
         },
       ],
+    }
+  },
+  mounted(){
+    if(this.$session.get("nearSocialProfileImage") === undefined || this.$session.get("nearSocialProfileImage") === ""){
+      this.src = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr";
+    } else {
+      this.src = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage");
     }
   }
 }
