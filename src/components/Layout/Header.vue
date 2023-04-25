@@ -145,6 +145,7 @@ export default {
     };
   },
   async mounted() {
+    
     await this.getNearPrice();
     this.revisar();
 
@@ -189,6 +190,7 @@ export default {
     //   }
     // },
     async getNearPrice() {
+      
       const account = await this.$near.account(this.$ramper.getAccountId());
       const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
         viewMethods: ["get_tasa"],
@@ -197,6 +199,21 @@ export default {
 
       const price = await contract.get_tasa();
       this.$session.set("nearPrice", price);
+    },
+    async getNearSocial() {
+      console.log('social')
+      // const account = await this.$near.account(this.$ramper.getAccountId());
+      // const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
+      //   viewMethods: ["get"],
+      //   sender: account,
+      // });
+
+      // const social = await contract.get({
+      //     keys: '["' + account.accountId + '/profile/**' + '"]'
+      //   });
+      // console.log('["' + account.accountId + '/profile/**' + '"]')  
+      // console.log(social)
+      // this.$session.set("nearSocial", social);
     },
     limitStr(item, num) {
       if (item) {
@@ -237,9 +254,9 @@ export default {
       //   apiKey: API_KEY,
       // });
       // const { wallet, isConnected } = walletData;
-
+      
       if (this.$ramper.getUser()) this.user = this.$ramper.getAccountId();
-
+      this.getNearSocial();
       // this.user = localStorage.getItem("Mintbase.js_wallet_auth_key");
       // console.log(localStorage.getItem("Mintbase.js_wallet_auth_key"), 2);
     },
