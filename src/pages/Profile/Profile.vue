@@ -138,6 +138,14 @@ export default {
         },
       ],
     }
+  },
+  mounted(){
+    if(this.$session.get("nearSocialProfileImage") === undefined || this.$session.get("nearSocialProfileImage") === ""){
+      this.src = string.valueOf(process.env.VUE_APP_CONTRACT_SOCIAL + this.$session.get("nearSocialProfileImage"))
+    } else {
+      this.src = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
+    }
+    console.log(this.src)
   }
 }
 </script>
