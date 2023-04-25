@@ -217,6 +217,8 @@ export default {
     async connectRamper() {
       if (this.$ramper.getUser()) {
         this.$ramper.signOut();
+        setTimeout(() => this.$router.go(0), 100)
+        this.$router.push(this.localePath('/'))
         this.$router.push("/");
         this.user = undefined;
       } else {
@@ -268,6 +270,8 @@ export default {
       // walletData.wallet.disconnect();
       // localStorage.clear();
       this.$ramper.signOut();
+      setTimeout(() => this.$router.go(0), 100)
+      this.$router.push("/")
       this.user = undefined;
       this.$session.clear()
 
