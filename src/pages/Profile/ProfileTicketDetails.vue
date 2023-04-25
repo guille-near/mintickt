@@ -1,9 +1,14 @@
 <template>
   <div id="profile" class="details">
-    <section id="profile-header">
+    <section id="profile-header" :style="`--bg-image: url(${banner})`">
       <div class="container-avatar">
-        <img src="@/assets/profile/user.svg" alt="user img">
+        <img :src="avatar" alt="user img">
       </div>
+
+      <v-btn class="btn-social" v-ripple="false" :href="near_social" target="_blank" text>
+        <span style="margin-block">NEAR Social</span>
+        <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
+      </v-btn> 
     </section>
 
     <section id="profile-content" class="center">
@@ -50,8 +55,33 @@ export default {
   name: "ProfileTicketDetails",
   data() {
     return {
+      avatar: undefined,
+      banner: undefined,
     }
-  }
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    async getData() {
+      // * avatar
+      if(!this.$session.get("nearSocialProfileImage")) {
+        this.avatar = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
+        this.banner = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
+        document.querySelector(".container-avatar").classList.add("default-avatar")
+      } else {
+        this.avatar = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
+        this.banner = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
+      }
+
+      // * banner
+      if(!this.$session.get("nearSocialProfileBackgroundImage")) {
+        this.banner = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
+      } else {
+        this.banner = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
+      }
+    },
+  },
 }
 </script>
 
