@@ -1,8 +1,8 @@
 <template>
   <div id="profile">
-    <section id="profile-header">
+    <section id="profile-header" :style="`--bg-image: url(${banner})`">
       <div class="container-avatar">
-        <img  :src="avatar" alt="user img">
+        <img :src="avatar" alt="user img">
         <div style="position: absolute;">
           <v-btn class="btn-social" :href="near_social" target="_blank" text>
             <span style="margin-block">NEAR Social</span>
@@ -67,6 +67,7 @@ export default {
     return {
       tab: 0,
       avatar: undefined,
+      banner: undefined,
       bg_profile: undefined,
       near_social: process.env.VUE_APP_API_BASE_URL_SOCIAL_SITE,
       dataTabs: [
@@ -111,15 +112,13 @@ export default {
   },
   methods: {
     async getData() {
-      //HErian porfa aqu para el babackground del profile la misma condición, estas son las urls
-      //Cuando no lo consigue this.bg_profile = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
-      //Cuando si la consigue this.bg_profile = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
-      
-      if(!this.$session.get("nearSocialProfileImage")){
+      if(!this.$session.get("nearSocialProfileImage")) {
         this.avatar = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
+        this.banner = process.env.VUE_APP_API_BASE_URL_PINATA + "QmbV4rGbzD8ss7DAUkjg1fbR3RudfUHCDD4QC5XTF8pBHE"
         document.querySelector(".container-avatar").classList.add("default-avatar")
       } else {
         this.avatar = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
+        this.banner = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileBackgroundImage")
       }
 
       const user = this.$ramper.getAccountId();

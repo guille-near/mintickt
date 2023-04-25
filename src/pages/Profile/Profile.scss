@@ -24,10 +24,9 @@
   // }
 
   &-header {
-    background: center no-repeat url(../../assets/profile/bg-profile.jpg);
+    background: center no-repeat var(--bg-image);
     @include mq(max, small) {
-      background: linear-gradient(180deg, #000000 -13.88%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 100%),
-      url(../../assets/profile/bg-profile.jpg);
+      background: linear-gradient(180deg, #000000 -13.88%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 100%), var(--bg-image);
     }
     background-size: cover;
     width: 100%;
