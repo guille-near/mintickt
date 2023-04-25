@@ -6,7 +6,7 @@
           <h3 class="p">Select payment option</h3>
         </div>
         <div class="divcol center">
-          <v-btn @click="fiat" style="margin-bottom: 3px">Pay with USD</v-btn>
+          <v-btn @click="fiat()" style="margin-bottom: 3px">Pay with USD</v-btn>
           <v-btn @click="buy()">Pay with NEAR</v-btn>
           <a class="acenter" style="gap: 0.3em">
             <span @click="modalBuy = false" class="p">Close</span>
@@ -123,7 +123,31 @@ export default {
       this.modalSuccess = false;
     },
     fiat() {
-      this.$emit("eventFiat");
+      const tokenId = this.$session.get("tokenId");
+      console.log(
+        "https://checkout.ramper.xyz/buy?contract_address=" +
+          process.env.VUE_APP_CONTRACT_NFT +
+          "&network=" +
+          process.env.VUE_APP_NETWORK +
+          "&redirect_url= " +
+          process.env.VUE_APP_REDIRECT_URL +
+          "&user_wallet_address=" +
+          (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +
+          "&token_series_id=" +
+          tokenId
+      );
+      window.open(
+        "https://checkout.ramper.xyz/buy?contract_address=" +
+          process.env.VUE_APP_CONTRACT_NFT +
+          "&network=" +
+          process.env.VUE_APP_NETWORK +
+          "&redirect_url= " +
+          process.env.VUE_APP_REDIRECT_URL +
+          "&user_wallet_address=" +
+          (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +
+          "&token_series_id=" +
+          tokenId
+      );
     },
   },
 };
