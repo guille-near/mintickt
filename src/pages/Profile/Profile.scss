@@ -39,10 +39,22 @@
       position: absolute;
       bottom: calc(var(--avatarSize) / 2.5 * -1);
       left: var(--margination);
-      // @include borderGradientAvatar(); // ? disabled for while - image have a native border gradient
+      &:not(.default-avatar) {
+        @include borderGradientAvatar(); // ? disabled for while - image have a native border gradient
+      }
       img {
         width: var(--avatarSize);
         height: var(--avatarSize);
+        border-radius: 50%;
+      }
+    }
+
+    .btn-social {
+      .v-btn__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
       }
     }
   }

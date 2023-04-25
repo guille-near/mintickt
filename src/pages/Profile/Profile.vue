@@ -2,8 +2,13 @@
   <div id="profile">
     <section id="profile-header">
       <div class="container-avatar">
-        <img  :src="src" alt="user img">
+        <img  :src="avatar" alt="user img">
       </div>
+
+      <!-- <v-btn class="btn-social" text>
+        <span style="margin-block">NEAR Social</span>
+        <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
+      </v-btn> -->
     </section>
 
     <section id="profile-content">
@@ -35,31 +40,32 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import moment from "moment";
+// import gql from "graphql-tag";
+// import moment from "moment";
 
-const your_nfts = gql`
-  query MyQuery($user: String!) {
-    nfts(where: {owner_id: $user}) {
-      id
-      fecha
-      owner_id
-      serie_id
-      title
-      typetoken_id
-    }
-  }
-`;
+// const your_nfts = gql`
+//   query MyQuery($user: String!) {
+//     nfts(where: {owner_id: $user}) {
+//       id
+//       fecha
+//       owner_id
+//       serie_id
+//       title
+//       typetoken_id
+//     }
+//   }
+// `;
 
 export default {
   name: "Profile",
   data() {
     return {
       tab: 0,
+      avatar: undefined,
+
       dataTabs: [
         {
           title: "Events",
-          src: null,
           content: [
             // {
             //   img: require("@/assets/profile/img-test.png"),
@@ -81,59 +87,61 @@ export default {
         {
           title: "Collectibles",
           content: [
-            {
-              img: require("@/assets/profile/img-test.png"),
-              name: "Nearcon",
-            },
+            // {
+            //   img: require("@/assets/profile/img-test.png"),
+            //   name: "Nearcon",
+            // },
           ],
         },
       ],
     }
   },
-  mounted(){
+  mounted() {
     this.getData()
-    if(this.$session.get("nearSocialProfileImage") === undefined || this.$session.get("nearSocialProfileImage") === ""){
-      this.src = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
-    } else {
-      this.src = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
-    }
     //console.log(this.src)
   },
   methods: {
     async getData() {
-      const user = this.$ramper.getAccountId();
-      this.$apollo
-        .watchQuery({
-          query: your_nfts,
-          variables: {
-            user: user,
-          },
-          pollInterval: 10000, // 10 seconds in milliseconds
-        })
-        .subscribe(({ data }) => {
-          console.log("DATAAAA", data)
-          let dataNfts = data.nfts;
-          const dataEvents = [];
-          const dataPast = [];
-          const dateNow = Date.now();
+      if(!this.$session.get("nearSocialProfileImage")){
+        this.avatar = process.env.VUE_APP_API_BASE_URL_PINATA + "QmQDtJ4TEdsQZZssAYtL61ZJ645XvtszUggfqbmHpee1fr"
+        document.querySelector(".container-avatar").classList.add("default-avatar")
+      } else {
+        this.avatar = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
+      }
 
-          for (let i = 0; i < dataNfts.length; i++) {
-            const dateNft = parseInt(dataNfts[i].fecha / 1000000)
-            const item = {
-              img: require("@/assets/profile/img-test.png"),
-              name: dataNfts[i].title,
-              date: moment(dateNft).format('ll'),
-            }
-            if (dateNft < dateNow) {
-              dataPast.push(item);
-            } else {
-              dataEvents.push(item);
-            }
-          }
-          this.dataTabs[0].content = dataEvents
-          this.dataTabs[1].content = dataPast
+      // const user = this.$ramper.getAccountId();
+      // this.$apollo
+      //   .watchQuery({
+      //     query: your_nfts,
+      //     variables: {
+      //       user: user,
+      //     },
+      //     pollInterval: 10000, // 10 seconds in milliseconds
+      //   })
+      //   .subscribe(({ data }) => {
+      //     console.log("DATAAAA", data)
+      //     let dataNfts = data.nfts;
+      //     const dataEvents = [];
+      //     const dataPast = [];
+      //     const dateNow = Date.now();
 
-        });
+      //     for (let i = 0; i < dataNfts.length; i++) {
+      //       const dateNft = parseInt(dataNfts[i].fecha / 1000000)
+      //       const item = {
+      //         img: require("@/assets/profile/img-test.png"),
+      //         name: dataNfts[i].title,
+      //         date: moment(dateNft).format('ll'),
+      //       }
+      //       if (dateNft < dateNow) {
+      //         dataPast.push(item);
+      //       } else {
+      //         dataEvents.push(item);
+      //       }
+      //     }
+      //     this.dataTabs[0].content = dataEvents
+      //     this.dataTabs[1].content = dataPast
+
+      //   });
     },
   }
 }
