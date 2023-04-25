@@ -37,27 +37,15 @@
 <script>
 import gql from "graphql-tag";
 
-const your_events = gql`
+const your_nfts = gql`
   query MyQuery($user: String!) {
-    series(where: { creator_id: $user, typetoken_id: "1" }) {
-      title
-      nftsold
-      supply
-      copies
-      creator_id
-      description
-      expires_at
-      extra
-      fecha
+    nfts(where: {owner_id: $user}) {
       id
-      issued_at
-      media
-      price
-      price_near
-      reference
-      starts_at
+      fecha
+      owner_id
+      serie_id
+      title
       typetoken_id
-      updated_at
     }
   }
 `;
@@ -159,13 +147,14 @@ export default {
       var rows = [];
       this.$apollo
         .watchQuery({
-          query: your_events,
+          query: your_nfts,
           variables: {
             user: user,
           },
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          console.log("DATAAAA", data)
           let dataSeries = data.series;
           this.data = [];
           this.dataTableMobile = [];

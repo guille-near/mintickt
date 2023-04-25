@@ -276,7 +276,7 @@ export default {
     },
     async goToEvent() {
       const balance = await this.getBalance()
-      if (balance > Number(0.02)) {
+      if (balance < 0.05) {
         this.$refs.modalfill.modalFill = true;
         return
       }
