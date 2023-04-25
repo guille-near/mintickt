@@ -152,30 +152,40 @@ export default {
       if (this.$ramper.getUser()) {
         let accountId = this.$ramper.getAccountId();
         console.log(accountId)
-        const serviceUrl = `https://api.kitwallet.app/account/${accountId}/likelyNFTs`;
+        let serviceUrl
+        if (process.env.VUE_APP_NETWORK === "mainnet") {
+          serviceUrl = `https://api.kitwallet.app/account/${accountId}/likelyNFTs`;
+        } else {
+          serviceUrl = `https://preflight-api.kitwallet.app/account/${accountId}/likelyNFTs`;
+        }
+        
         const result = await this.axios.get(serviceUrl);
+  
         for (var i = 0; i < result.data.length; i++) {
           if (result.data[i] !== process.env.VUE_APP_CONTRACT_NFT) {
             await this.getNFTByContract(result.data[i], accountId)
           }
         }
-        this.dataNfts = this.dataNftsAux
+        this.dataTabs[2].content = this.dataNftsAux
         //console.log(this.indexMore)
       }
     },
     async getNFTByContract(contract_id, owner_account_id) {
       try {
-        const near = await connect(config);
+        console.log("ENETRA")
+        const near = await connect(CONFIG(new keyStores.BrowserLocalStorageKeyStore()));
         const wallet = new WalletConnection(near)
         const contract = new Contract(wallet.account(), contract_id, {
           viewMethods: ["nft_tokens_for_owner", "nft_metadata"],
           sender: wallet.account(),
         });
+        console.log(contract)
         const result = await contract.nft_tokens_for_owner({
           account_id: owner_account_id,
           from_index: "0",
           limit: 100
         });
+        console.log(result)
         const metadata = await contract.nft_metadata();
         for (var i = 0; i < result.length; i++) {
           let collection = {
