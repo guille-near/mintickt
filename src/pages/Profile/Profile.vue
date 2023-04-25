@@ -40,21 +40,21 @@
 </template>
 
 <script>
-// import gql from "graphql-tag";
-// import moment from "moment";
+import gql from "graphql-tag";
+import moment from "moment";
 
-// const your_nfts = gql`
-//   query MyQuery($user: String!) {
-//     nfts(where: {owner_id: $user}) {
-//       id
-//       fecha
-//       owner_id
-//       serie_id
-//       title
-//       typetoken_id
-//     }
-//   }
-// `;
+const your_nfts = gql`
+  query MyQuery($user: String!) {
+    nfts(where: {owner_id: $user}) {
+      id
+      fecha
+      owner_id
+      serie_id
+      title
+      typetoken_id
+    }
+  }
+`;
 
 export default {
   name: "Profile",
@@ -87,10 +87,10 @@ export default {
         {
           title: "Collectibles",
           content: [
-            // {
-            //   img: require("@/assets/profile/img-test.png"),
-            //   name: "Nearcon",
-            // },
+            {
+              img: require("@/assets/profile/img-test.png"),
+              name: "Nearcon",
+            },
           ],
         },
       ],
@@ -109,39 +109,39 @@ export default {
         this.avatar = process.env.VUE_APP_API_BASE_URL_SOCIAL + this.$session.get("nearSocialProfileImage")
       }
 
-      // const user = this.$ramper.getAccountId();
-      // this.$apollo
-      //   .watchQuery({
-      //     query: your_nfts,
-      //     variables: {
-      //       user: user,
-      //     },
-      //     pollInterval: 10000, // 10 seconds in milliseconds
-      //   })
-      //   .subscribe(({ data }) => {
-      //     console.log("DATAAAA", data)
-      //     let dataNfts = data.nfts;
-      //     const dataEvents = [];
-      //     const dataPast = [];
-      //     const dateNow = Date.now();
+      const user = this.$ramper.getAccountId();
+      this.$apollo
+        .watchQuery({
+          query: your_nfts,
+          variables: {
+            user: user,
+          },
+          pollInterval: 10000, // 10 seconds in milliseconds
+        })
+        .subscribe(({ data }) => {
+          console.log("DATAAAA", data)
+          let dataNfts = data.nfts;
+          const dataEvents = [];
+          const dataPast = [];
+          const dateNow = Date.now();
 
-      //     for (let i = 0; i < dataNfts.length; i++) {
-      //       const dateNft = parseInt(dataNfts[i].fecha / 1000000)
-      //       const item = {
-      //         img: require("@/assets/profile/img-test.png"),
-      //         name: dataNfts[i].title,
-      //         date: moment(dateNft).format('ll'),
-      //       }
-      //       if (dateNft < dateNow) {
-      //         dataPast.push(item);
-      //       } else {
-      //         dataEvents.push(item);
-      //       }
-      //     }
-      //     this.dataTabs[0].content = dataEvents
-      //     this.dataTabs[1].content = dataPast
+          for (let i = 0; i < dataNfts.length; i++) {
+            const dateNft = parseInt(dataNfts[i].fecha / 1000000)
+            const item = {
+              img: require("@/assets/profile/img-test.png"),
+              name: dataNfts[i].title,
+              date: moment(dateNft).format('ll'),
+            }
+            if (dateNft < dateNow) {
+              dataPast.push(item);
+            } else {
+              dataEvents.push(item);
+            }
+          }
+          this.dataTabs[0].content = dataEvents
+          this.dataTabs[1].content = dataPast
 
-      //   });
+        });
     },
   }
 }
