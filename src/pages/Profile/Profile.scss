@@ -51,9 +51,13 @@
 
     .btn-social {
       .v-btn__content {
+        font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
+        bottom: calc(var(--avatarSize) / 3.5 * -1);
+        left: var(--margination);
+        margin-left: 15em;
         gap: 3px;
       }
     }

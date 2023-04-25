@@ -3,14 +3,15 @@
     <section id="profile-header">
       <div class="container-avatar">
         <img  :src="avatar" alt="user img">
+        <div style="position: absolute;">
+          <v-btn class="btn-social" :href="near_social" target="_blank" text>
+            <span style="margin-block">NEAR Social</span>
+            <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
+          </v-btn> 
+        </div>
       </div>
     </section>
-    <div>
-      <v-btn class="btn-social" :href="near_social" target="_blank" text>
-          <span style="margin-block">NEAR Social</span>
-          <v-icon color="#fff" size="16px">mdi-open-in-new</v-icon>
-      </v-btn> 
-  </div>
+    
     <section id="profile-content">
       <h2 class="title-tabs vermobile">My tickets</h2>
 
