@@ -38,8 +38,8 @@ Vue.prototype.$networkName= process.env.VUE_APP_NETWORK;
 Vue.prototype.$explorer= process.env.VUE_APP_API_BASE_URL_EXPLORER;
 Vue.prototype.$ipfs= process.env.VUE_APP_API_BASE_URL_IPFS;
 Vue.prototype.$binance= process.env.VUE_APP_API_BASE_URL_NEAR_PRICE;
-//Vue.prototype.$node_url = (Vue.config.productionTip) ? 'https://mintickt.com:3090/api/v1/mintickt' : 'https://mintickt.com:3090/api/v1/mintickt'
-Vue.prototype.$pinata_gateway = process.env.VUE_APP_API_BASE_URL_PINATA;
+Vue.prototype.$node_url = process.env.VUE_APP_API_BASE_URL_NEAR_PRICE;
+Vue.prototype.$pinata_gateway = process.env.VUE_APP_API_NODE_URL;
 //Vue.prototype.$value_user_mint = "kamargo1.testnet"
 Vue.prototype.$burn_page_ticket = process.env.VUE_APP_API_BASE_URL_BURN;
 //Vue.prototype.$store_site = (Vue.config.productionTip) ? "https://testnet.mintickt.com/#/store/?thingid=" : "https://testnet.mintickt.com/#/store/?thingid="
