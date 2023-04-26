@@ -30,9 +30,9 @@
           </a>
 
           <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
-            <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
+            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
               <span>create an event</span>
-            </v-btn> -->
+            </v-btn>
 
             <v-menu v-model="menuLogin" bottom offset-y content-class="menuButtonProfile">
               <template #activator="{ on, attrs }">
@@ -82,7 +82,13 @@
                     <span>Open Wallet</span>
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item v-show="!routePath.includes('events') || (routePath === '/events/register' || routePath === '/events/select-ticket')" to="/events">
+                <v-list-item to="/events">
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/building.svg" alt="profile">
+                    <span>Events</span>
+                  </v-list-item-title>
+                </v-list-item>
+                <!-- <v-list-item v-show="!routePath.includes('events') || (routePath === '/events/register' || routePath === '/events/select-ticket')" to="/events">
                   <v-list-item-title style="color: #fff">
                     <img src="@/assets/icons/building.svg" alt="profile">
                     <span>Events</span>
@@ -93,7 +99,7 @@
                     <img src="@/assets/icons/building.svg" alt="profile">
                     <span>Create event</span>
                   </v-list-item-title>
-                </v-list-item>
+                </v-list-item> -->
                 <v-list-item @click="logOut">
                   <v-list-item-title style="color: #fff">
                     <img src="@/assets/icons/log-out.svg" alt="logout">
