@@ -70,9 +70,9 @@
                 <!-- <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
                   <v-list-item-title style="color: #000">{{user}}</v-list-item-title>
                 </v-list-item> -->
-                <v-list-item :to="'/events'">
+                <v-list-item :to="'/profile'">
                   <v-list-item-title style="color: #fff">
-                    <img src="@/assets/icons/ticket.svg" alt="events">
+                    <img src="@/assets/icons/ticket.svg" alt="profile">
                     <span>My tickets</span>
                   </v-list-item-title>
                 </v-list-item>
@@ -80,12 +80,6 @@
                   <v-list-item-title style="color: #fff">
                     <img src="@/assets/icons/wallet.svg" alt="wallet">
                     <span>Open Wallet</span>
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item :to="'/profile'">
-                  <v-list-item-title style="color: #fff">
-                    <img src="@/assets/icons/wallet.svg" alt="wallet">
-                    <span>Profile</span>
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="goToEvent()">
