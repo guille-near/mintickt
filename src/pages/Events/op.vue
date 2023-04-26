@@ -52,16 +52,11 @@
 
       <div class="space">
         <div class="divcol">
-          <label>Tickets price</label>
-          <span>{{ ticketPrice }}$</span>
+          <label>Tickets listed</label>
+          <span>{{ listed }}</span>
         </div>
 
         <v-btn @click="modalListMore = true">List more</v-btn>
-      </div>
-
-      <div class="space">
-        <div class="divcol"></div>
-        <v-btn color="red" @click="modalListMore = true">Delete Event</v-btn>
       </div>
     </aside>
 
@@ -181,7 +176,7 @@ import * as nearAPI from "near-api-js";
 const { connect, keyStores, utils } = nearAPI;
 const your_event = gql`
   query MyQuery($eventId: String!) {
-    serie(id: $eventId) {
+    serie(id: $eventId)
       title
       nftsold
       supply
@@ -299,7 +294,6 @@ export default {
       modalQR: false,
       minted: 0,
       listed: 0,
-      ticketPrice: null,
       usd: 0,
       name: "",
       price_list: 0,
@@ -361,14 +355,30 @@ export default {
         })
         .subscribe(({ data }) => {
           console.log("DATAAAA", data);
-          const dataSerie = data.serie;
-
-          this.name = dataSerie.title;
-          this.minted = dataSerie.copies;
-          this.listed = dataSerie.supply;
-          this.ticketPrice = dataSerie.price;
-
-          this.available_to_list = this.minted - this.listed;
+          //Map the objectvalue
+          Object.entries(data).forEach(([key, value]) => {
+            // inner object entries
+            Object.entries(value).forEach(([i, value1]) => {
+              //Getting the minted nft
+              //Tokens aggregate and earnings by metadata id
+              this.$apollo
+                .watchQuery({
+                  query: mb_views_nft_tokens_aggregate,
+                  variables: {
+                    store: this.$store_mintbase,
+                    user: user,
+                    metadata_id: this.$route.query.thingid.toLowerCase(),
+                  },
+                  pollInterval: 3000, // 10 seconds in milliseconds
+                })
+                .subscribe(({ data }) => {
+                  (this.name = this.$route.query.event),
+                    (this.minted = data.nft_tokens_aggregate.aggregate.count),
+                    (this.listed = value1.listings_aggregate.aggregate.count);
+                  this.available_to_list = this.minted - this.listed;
+                });
+            });
+          });
         });
       this.loading = false;
     },

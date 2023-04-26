@@ -37,7 +37,7 @@
       <template v-slot:[`item.actions`]="{ item }">
         <div class="cont_buttons" style="gap: 6px">
           <v-btn @click="goLiveData(item.name, item.id)">Go to live data</v-btn>
-          <v-btn @click="goOptions(item.name, item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
+          <v-btn @click="goOptions(item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
           <!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
             {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
@@ -62,7 +62,7 @@
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
             </v-btn>
 
-            <v-btn class="icon" @click="goOptions(item.name, item.thingid)">
+            <v-btn class="icon" @click="goOptions(item.id)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
             </v-btn>
 
@@ -331,13 +331,12 @@ export default {
       this.$session.set("eventid", eventId);
       // this.$session.get("event_name", pevent);
     },
-    goOptions(pevent, pthingid) {
+    goOptions(event_id) {
+      console.log("ENTRO");
+      this.$session.set("event_id_op", event_id);
       this.$router.push({
         path: "/events/options",
-        query: { event: pevent, thingid: pthingid },
       });
-      this.$session.get("eventid", pthingid);
-      this.$session.get("event_name", pevent);
     },
     fetch() {
       this.lastPrice = this.$session.get("nearPrice");

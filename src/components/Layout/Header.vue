@@ -93,7 +93,7 @@
 
 <script>
 import * as nearAPI from "near-api-js";
-import modalFill from "../../pages/Store/ModalFill.vue"
+import modalFill from "../../pages/Store/ModalFill.vue";
 const { Contract } = nearAPI;
 // let ubicacionPrincipal = window.pageYOffset;
 // let resizeTimeout;
@@ -119,7 +119,7 @@ const { Contract } = nearAPI;
 export default {
   name: "Header",
   components: {
-    modalFill
+    modalFill,
   },
   i18n: require("./i18n"),
   // created() {
@@ -214,13 +214,13 @@ export default {
       }
     },
     async connectRamper() {
-      if (this.$ramper.getUser()) {
-        this.$ramper.signOut();
-        location.reload();
-      } else {
-        const login = await this.$ramper.signIn();
-        if (login && login.user) location.reload();
-      }
+      if (this.$ramper.getUser()) return this.$ramper.signOut();
+
+      const login = await this.$ramper.signIn()
+      if (login && login.user) location.reload();
+
+      setTimeout(() => location.reload(), 200)
+      this.$router.push("/");
     },
     async revisar() {
       const account = await this.$near.account(this.$ramper.getAccountId());
@@ -229,19 +229,21 @@ export default {
           viewMethods: ["get"],
           sender: account,
         });
-        
-        const myArray = [account.accountId + '/profile/**'];  
+
+        const myArray = [account.accountId + "/profile/**"];
         //console.log(myArray)
         const social = await contract.get({
             keys: myArray
           });
         
         Object.entries(social).forEach(([key, value]) => {
-            this.$session.set("nearSocialName", value.profile.name);
-            this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+          this.$session.set("nearSocialName", value.profile.name);
+          this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+          if (value.profile.backgroundImage?.ipfs_cid) {
             this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
+          }
         });
-      }  
+      }
 
       setTimeout(() => {
         if (this.$session.get("nearSocialName")) {
@@ -253,35 +255,35 @@ export default {
     },
     async logOut() {
       this.$ramper.signOut();
-      location.reload();
       this.$session.clear()
+      setTimeout(() => location.reload(), 200)
+      this.$router.push("/");
     },
     async goToEvent() {
-      const balance = await this.getBalance()
+      const balance = await this.getBalance();
       if (balance < 0.05) {
         this.$refs.modalfill.modalFill = true;
-        return
+        return;
       }
 
       this.$session.clear();
       localStorage.setItem("step", 1);
       this.$router.push("/events/register");
     },
-    async getBalance () {
+    async getBalance() {
       try {
         if (this.$ramper.getUser()) {
           const account = await this.$near.account(this.$ramper.getAccountId());
           const response = await account.state();
-          const valueStorage = Math.pow(10, 19)
-          const valueYocto = Math.pow(10, 24)
+          const valueStorage = Math.pow(10, 19);
+          const valueYocto = Math.pow(10, 24);
 
-          const storage = (response.storage_usage * valueStorage) / valueYocto 
-          return ((response.amount / valueYocto) - storage).toFixed(2)
+          const storage = (response.storage_usage * valueStorage) / valueYocto;
+          return (response.amount / valueYocto - storage).toFixed(2);
         }
       } catch (error) {
-        return "0"
+        return "0";
       }
-      
     },
   },
 };
