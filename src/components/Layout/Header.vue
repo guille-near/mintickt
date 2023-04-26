@@ -82,13 +82,13 @@
                     <span>Open Wallet</span>
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item to="/events">
+                <v-list-item v-show="!routePath.includes('events') || (routePath === '/events/register' || routePath === '/events/select-ticket')" to="/events">
                   <v-list-item-title style="color: #fff">
                     <img src="@/assets/icons/building.svg" alt="profile">
                     <span>Events</span>
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item @click="goToEvent()">
+                <v-list-item v-show="routePath.includes('events') && (routePath !== '/events/register' && routePath !== '/events/select-ticket')" @click="goToEvent()">
                   <v-list-item-title style="color: #fff">
                     <img src="@/assets/icons/building.svg" alt="profile">
                     <span>Create event</span>
