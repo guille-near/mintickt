@@ -23,7 +23,7 @@
           <v-card
             v-for="(item2,i) in item.content" :key="i" color="transparent"
             v-ripple="false"
-            @click="$router.push(`/profile-ticket-details/:${item2.name}`)"
+            @click="goToDetails(item2)"
           >
             <img :src="item2.img" :alt="`${item2.name} image`">
 
