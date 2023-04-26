@@ -30,11 +30,11 @@
           </a>
 
           <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
-            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
+            <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
               <span>create an event</span>
-            </v-btn>
+            </v-btn> -->
 
-            <v-menu bottom offset-y>
+            <v-menu v-model="menuLogin" bottom offset-y content-class="menuButtonProfile">
               <template #activator="{ on, attrs }">
                 <!-- <v-btn
                   v-if="responsiveActions"
@@ -56,30 +56,49 @@
                   class="buttonProfile"
                   v-on="user ? on : undefined"
                   v-bind="user ? attrs : undefined"
-                  @click="user ? undefined : connectRamper()"
+                  @click="user ? menuOpened = !menuOpened : connectRamper()"
                   :title="user"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ limitStr(user || "Log In", 25) }}</span>
+                  <v-icon v-if="user" color="#fff" :style="menuLogin ? 'transform: rotate(180deg)' : null">mdi-chevron-down</v-icon>
                   <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
                 </v-btn>
               </template>
 
-              <v-list color="rgb(0 0 0 / .6)">
+              <v-list color="transparent">
                 <!-- <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
                   <v-list-item-title style="color: #000">{{user}}</v-list-item-title>
                 </v-list-item> -->
                 <v-list-item :to="'/events'">
-                  <v-list-item-title style="color: #fff">Events</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/ticket.svg" alt="events">
+                    <span>My tickets</span>
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="$ramper.openWallet()">
-                  <v-list-item-title style="color: #fff">Open Wallet</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/wallet.svg" alt="wallet">
+                    <span>Open Wallet</span>
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item :to="'/profile'">
-                  <v-list-item-title style="color: #fff">Profile</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/wallet.svg" alt="wallet">
+                    <span>Profile</span>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="goToEvent()">
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/building.svg" alt="profile">
+                    <span>Create event</span>
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="logOut">
-                  <v-list-item-title style="color: #fff">Log out</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/log-out.svg" alt="logout">
+                    <span>Log out</span>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -138,6 +157,7 @@ export default {
   data() {
     return {
       // themeButton: true,
+      menuLogin: false,
       user: undefined,
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,

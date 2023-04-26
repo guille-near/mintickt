@@ -39,7 +39,11 @@
       bottom: calc(var(--avatarSize) / 2.5 * -1);
       left: var(--margination);
       &:not(.default-avatar) {
-        @include borderGradientAvatar(); // ? disabled for while - image have a native border gradient
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 6px solid #fff;
       }
       img {
         width: var(--avatarSize);
