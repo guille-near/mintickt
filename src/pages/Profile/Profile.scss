@@ -132,6 +132,7 @@
           min-height: 300px;
 
           .v-card {
+            --lines: 1;
             width: max-content;
             height: max-content;
             display: flex;
@@ -144,12 +145,18 @@
               width: var(--imageSize);
               height: var(--imageSize);
               border-radius: 9px;
+              object-fit: cover;
             }
             span:first-of-type {
               font-family: 'SF Pro', 'Proxima Nova', sans-serif;
               font-weight: 590;
               font-size: 15px;
               color: #FFFFFF;
+
+              display: -webkit-box;
+              -webkit-line-clamp: var(--lines);
+              -webkit-box-orient: vertical;
+              overflow: hidden;
             }
             span:first-of-type + span {
               font-family: 'SF Pro', 'Proxima Nova', sans-serif;
@@ -157,6 +164,11 @@
               font-size: 12px;
               line-height: 14px;
               color: #D9D9D9;
+
+              display: -webkit-box;
+              -webkit-line-clamp: var(--lines);
+              -webkit-box-orient: vertical;
+              overflow: hidden;
             }
           }
         }

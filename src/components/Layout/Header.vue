@@ -189,7 +189,6 @@ export default {
     //   }
     // },
     async getNearPrice() {
-      
       const account = await this.$near.account(this.$ramper.getAccountId());
       const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
         viewMethods: ["get_tasa"],
@@ -217,23 +216,15 @@ export default {
     async connectRamper() {
       if (this.$ramper.getUser()) {
         this.$ramper.signOut();
-        setTimeout(() => this.$router.go(0), 100)
-        this.$router.push(this.localePath('/'))
-        this.$router.push("/");
-        this.user = undefined;
+        location.reload();
       } else {
         const login = await this.$ramper.signIn();
-        if (login) {
-          if (login.user) {
-            // this.$router.go()
-            location.reload();
-          }
-        }
+        if (login && login.user) location.reload();
       }
     },
     async revisar() {
       const account = await this.$near.account(this.$ramper.getAccountId());
-      if(this.$session.get("nearSocialName")===undefined){
+      if (!this.$session.get("nearSocialName")) {
         const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
           viewMethods: ["get"],
           sender: account,
@@ -245,38 +236,25 @@ export default {
             keys: myArray
           });
         
-        //console.log(social)
         Object.entries(social).forEach(([key, value]) => {
             this.$session.set("nearSocialName", value.profile.name);
             this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
             this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
         });
       }  
-       
-      if(this.$session.get("nearSocialName")!==undefined){
-        this.user = this.$session.get("nearSocialName")
-      } else if(this.$ramper.getUser()){
-        this.user = this.$ramper.getAccountId();
-      }
-      
+
+      setTimeout(() => {
+        if (this.$session.get("nearSocialName")) {
+          this.user = this.$session.get("nearSocialName")
+        } else if(this.$ramper.getUser()){
+          this.user = this.$ramper.getAccountId();
+        }
+      }, 200)
     },
     async logOut() {
-      // let API_KEY = this.$dev_key;
-      // let networkName = this.$networkName.toString();
-      // const { data: walletData } = await new Wallet().init({
-      //   networkName: networkName,
-      //   chain: Chain.near,
-      //   apiKey: API_KEY,
-      // });
-      // walletData.wallet.disconnect();
-      // localStorage.clear();
       this.$ramper.signOut();
-      setTimeout(() => this.$router.go(0), 100)
-      this.$router.push("/")
-      this.user = undefined;
+      location.reload();
       this.$session.clear()
-
-      // this.$router.go();
     },
     async goToEvent() {
       const balance = await this.getBalance()
