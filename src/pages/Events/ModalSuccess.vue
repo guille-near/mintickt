@@ -8,7 +8,7 @@
 
       <div class="divcol center">
         <v-btn @click="modalSuccess=false">Ok</v-btn>
-        <a class="acenter" style="gap:.3em" :href="url" target="_blank">
+        <a class="acenter" style="gap:.3em" :href="urlTx" target="_blank">
           <span class="p">See transaction</span>
           <img src="@/assets/icons/transaction.svg" alt="link icon">
         </a>
@@ -17,15 +17,18 @@
   </v-dialog>
 </template>
 
+
 <script>
 export default {
   name: "ModalSuccess",
   data() {
     return {
       modalSuccess: false,
-      url: '',
+      urlTx: '',
     };
   },
+  mounted() {
+  }
 };
 </script>
 

@@ -116,6 +116,22 @@
         </div>
       </section> -->
     </section>
+    <v-dialog v-model="modalSuccess" max-width="420px">
+      <v-card id="modalSucess">
+        <div class="divcol center">
+          <h3 class="p">Success!</h3>
+          <p class="p">Your transaction was succesful.</p>
+        </div>
+
+        <div class="divcol center">
+          <v-btn @click="modalSuccess=false">Ok</v-btn>
+          <a class="acenter" style="gap:.3em" :href="urlTx" target="_blank">
+            <span class="p">See transaction</span>
+            <img src="@/assets/icons/transaction.svg" alt="link icon">
+          </a>
+        </div>
+      </v-card>
+    </v-dialog>
   </section>
 </template>
 
@@ -132,6 +148,7 @@ const your_events = gql`
       creator_id
       description
       expires_at
+      is_mintable
       extra
       fecha
       id
@@ -172,6 +189,8 @@ export default {
   name: "Events",
   data() {
     return {
+      modalSuccess: false,
+      urlTx: false,
       headers: [
         { align: "start", value: "image", sortable: false },
         { text: "NAME", align: "start", value: "name" },
@@ -205,6 +224,16 @@ export default {
   async mounted() {
     if (!this.$session.exists()) {
       this.$session.start();
+    }
+
+    if (this.$session.get("hashSuccess")) {
+      if (process.env.VUE_APP_NETWORK === "mainnet") {
+        this.urlTx = "https://explorer.near.org/transactions/" + this.$session.get("hashSuccess");
+      } else {
+        this.urlTx = "https://explorer.testnet.near.org/transactions/" + this.$session.get("hashSuccess");
+      }
+      this.modalSuccess = true
+      this.$session.destroy("hashSuccess");
     }
 
     if (!this.$ramper.getUser()) {
