@@ -46,7 +46,7 @@
           <span>{{ listed }} / {{ minted }}</span>
         </div>
         <div id="container-actions" class="gap">
-          <v-btn @click="modalMintMore = true">Mint more</v-btn>
+          <v-btn @click="modalMintMore = true">Add tickets</v-btn>
         </div>
       </div>
 
@@ -56,12 +56,12 @@
           <span>{{ ticketPrice }}$</span>
         </div>
 
-        <v-btn @click="modalListMore = true">List more</v-btn>
+        <v-btn @click="modalListMore = true">Change price</v-btn>
       </div>
 
       <div class="space">
         <div class="divcol"></div>
-        <v-btn color="red" @click="modalListMore = true">Delete Event</v-btn>
+        <v-btn color="red" @click="deleteEvent()">Stop Event</v-btn>
       </div>
     </aside>
 
@@ -84,14 +84,14 @@
             </v-btn>
           </template>
         </v-text-field>
-        <v-btn style="margin-top: 2em" @click="mint" :loading="loading">Mint More</v-btn>
+        <v-btn style="margin-top: 2em" @click="addTickets()" :disabled="btnDisabled">Add tickets</v-btn>
       </v-card>
     </v-dialog>
 
     <!-- modal list more -->
     <v-dialog v-model="modalListMore" width="300px">
       <v-card class="modalMore divcol">
-        <div class="divcol">
+        <!-- <div class="divcol">
           <label for="amount">Amount</label>
           <v-text-field id="amount" v-model="amount_list" type="number" v-debounce:800ms="checkListAmount" hide-spin-buttons hide-details solo>
             <template v-slot:append>
@@ -103,11 +103,11 @@
               </v-btn>
             </template>
           </v-text-field>
-        </div>
+        </div> -->
 
         <div class="divcol" style="margin-top: 2em">
-          <label for="amount">Price (NEAR)</label>
-          <v-text-field id="amount" v-model="price_list" type="number" v-debounce:300ms="priceNEAR" hide-spin-buttons hide-details solo>
+          <label for="amount">Price (USD)</label>
+          <v-text-field id="amount" v-model="price_list" type="number" hide-spin-buttons hide-details solo>
             <template v-slot:append>
               <v-btn color=" #C4C4C4" @click="controlPrice('less')">
                 <v-icon color="black"> mdi-minus </v-icon>
@@ -117,9 +117,9 @@
               </v-btn>
             </template>
           </v-text-field>
-          <span class="conversion">~ {{ usd }} USD</span>
+          <span class="conversion">~ {{ dollarConversion(price_list) }} N</span>
         </div>
-        <v-btn @click="list" :loading="loading" :disabled="disable">List</v-btn>
+        <v-btn @click="changePrice()" :disabled="btnDisabled">Change price</v-btn>
       </v-card>
     </v-dialog>
 
@@ -156,6 +156,23 @@
         </div>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="modalSuccess" max-width="420px">
+      <v-card id="modalSucess">
+        <div class="divcol center">
+          <h3 class="p">Success!</h3>
+          <p class="p">Your transaction was succesful.</p>
+        </div>
+
+        <div class="divcol center">
+          <v-btn @click="modalSuccess=false">Ok</v-btn>
+          <a class="acenter" style="gap:.3em" :href="urlTx" target="_blank">
+            <span class="p">See transaction</span>
+            <img src="@/assets/icons/transaction.svg" alt="link icon">
+          </a>
+        </div>
+      </v-card>
+    </v-dialog>
     <div class="text-center">
       <v-overlay :value="false">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -178,7 +195,8 @@ import gql from "graphql-tag";
 import { Wallet, Chain } from "mintbase";
 import html2canvas from "html2canvas";
 import * as nearAPI from "near-api-js";
-const { connect, keyStores, utils } = nearAPI;
+
+const { connect, keyStores, utils, Contract } = nearAPI;
 const your_event = gql`
   query MyQuery($eventId: String!) {
     serie(id: $eventId) {
@@ -293,6 +311,7 @@ export default {
   components: { StreamBarcodeReader, ModalSuccess },
   data() {
     return {
+      modalSuccess: false,
       modalMintMore: false,
       modalListMore: false,
       mint_amount: 1,
@@ -310,31 +329,166 @@ export default {
       loading_goodies: false,
       loading_tickets_qr: false,
       loading_goodies_qr: false,
+      btnDisabled: false,
       txs: [],
       counter: 0,
       message_ticket: "Copy url",
       message_goodies: "Copy url",
       modalTicket: false,
       modalGoodie: false,
-      // urlgoodies: this.$burn_page_ticket + "?extra=redeemed&_iregex=" + this.$route.query.thingid.toLowerCase().split(":")[1],
-      // urltickets: this.$burn_page_ticket + "?extra=ticketing&_iregex=" + this.$route.query.thingid.toLowerCase().split(":")[1],
+      urlgoodies: this.$burn_page_ticket + "?extra=redeemed&id=",
+      urltickets: this.$burn_page_ticket + "?extra=ticketing&id=",
       show_total_minted: this.$session.get("total_minted"),
       available_to_list: 0,
       overlay: false,
       new_minted: 0,
       overlay_building: false,
       eventId: null,
+      nearPrice: 0,
+      urlTx: ""
     };
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$session.start();
     }
+
     this.eventId = this.$session.get("event_id_op");
+    await this.getNearPrice()
     this.getData();
     // this.getTotalMinted();
   },
   methods: {
+    dollarConversion(price) {
+      return (Number(price) / this.nearPrice || 0).toFixed(4);
+    },
+    async getNearPrice() {
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+        viewMethods: ["get_tasa"],
+        sender: account,
+      });
+
+      const price = await contract.get_tasa();
+      this.nearPrice = price || 0;
+    },
+    async addTickets() {
+      this.btnDisabled = true;
+      if (this.$ramper.getUser()) {
+        const action = [
+          this.$ramper.functionCall(
+            "update_nft_event",
+            {
+              token_event_id: this.tokenId,
+              copies: this.mint_amount,
+            },
+            "300000000000000",
+            "1"
+          ),
+        ];
+
+        const res = await this.$ramper.sendTransaction({
+          transactionActions: [
+            {
+              receiverId: process.env.VUE_APP_CONTRACT_NFT,
+              actions: action,
+            },
+          ],
+          network: process.env.VUE_APP_NETWORK,
+        });
+        console.log(res);
+        this.btnDisabled = false;
+        this.mint_amount = false
+        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+          this.modalMintMore = false;
+          if (process.env.VUE_APP_NETWORK === "mainnet") {
+            this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
+          } else {
+            this.urlTx = "https://explorer.testnet.near.org/transactions/" + res.txHashes[0];
+          }
+          this.modalSuccess = true;
+        } else {
+          console.log("ERRROR",res)
+        }
+      }
+      this.btnDisabled = false;
+    },
+    async changePrice() {
+      this.btnDisabled = true;
+      if (this.$ramper.getUser()) {
+        const action = [
+          this.$ramper.functionCall(
+            "update_nft_event",
+            {
+              token_event_id: this.tokenId,
+              price: this.price_list,
+            },
+            "300000000000000",
+            "1"
+          ),
+        ];
+
+        const res = await this.$ramper.sendTransaction({
+          transactionActions: [
+            {
+              receiverId: process.env.VUE_APP_CONTRACT_NFT,
+              actions: action,
+            },
+          ],
+          network: process.env.VUE_APP_NETWORK,
+        });
+        console.log(res);
+        this.btnDisabled = false;
+        this.price_list = 0
+        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+          this.modalListMore = false;
+          if (process.env.VUE_APP_NETWORK === "mainnet") {
+            this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
+          } else {
+            this.urlTx = "https://explorer.testnet.near.org/transactions/" + res.txHashes[0];
+          }
+          this.modalSuccess = true;
+        } else {
+          console.log("ERRROR",res)
+        }
+      }
+      this.btnDisabled = false;
+    },
+    async deleteEvent() {
+      this.btnDisabled = true;
+      if (this.$ramper.getUser()) {
+        const action = [
+          this.$ramper.functionCall(
+            "update_nft_event",
+            {
+              token_event_id: this.tokenId,
+              is_mintable: false,
+            },
+            "300000000000000",
+            "1"
+          ),
+        ];
+
+        const res = await this.$ramper.sendTransaction({
+          transactionActions: [
+            {
+              receiverId: process.env.VUE_APP_CONTRACT_NFT,
+              actions: action,
+            },
+          ],
+          network: process.env.VUE_APP_NETWORK,
+        });
+        console.log(res);
+        this.btnDisabled = false;
+        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+          this.$session.set("hashSuccess", res.txHashes[0]);
+          this.$router.push("/events")
+        } else {
+          console.log("ERRROR",res)
+        }
+      }
+      this.btnDisabled = false;
+    },
     onDecode(text) {
       console.log(`Decode text from QR code is ${text}`);
     },
@@ -360,9 +514,9 @@ export default {
           pollInterval: 3000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
-          console.log("DATAAAA", data);
           const dataSerie = data.serie;
 
+          this.tokenId = dataSerie.id
           this.name = dataSerie.title;
           this.minted = dataSerie.copies;
           this.listed = dataSerie.supply;
@@ -631,7 +785,7 @@ export default {
         this.price_list--;
       }
       this.price_list === 0 ? (this.disable = true) : (this.disable = false);
-      this.priceNEAR();
+      //this.priceNEAR();
     },
     nearToYocto: function (nearToYocto) {
       const amountInYocto = utils.format.parseNearAmount(nearToYocto);
@@ -650,30 +804,40 @@ export default {
       };
     },
     copyTicket() {
-      this.loading = true;
-      this.$copyText(this.urltickets).then(
-        function (e) {
-          console.log(e);
-        },
-        function (e) {
-          console.log(e);
-        }
-      );
-      this.message_ticket = "Copied!";
+      this.loading_tickets = true;
+      if (this.tokenId) {
+        this.$copyText(this.urltickets + this.eventId).then(
+          function (e) {
+            console.log(e);
+          },
+          function (e) {
+            console.log(e);
+          }
+        );
+        this.message_ticket = "Copied!";
+        setTimeout(() => {
+          this.message_ticket = "Copy url"
+        }, 2000);
+      }
       this.loading_tickets = false;
       this.$forceUpdate();
     },
     copyGoodies() {
-      this.loading = true;
-      this.$copyText(this.urlgoodies).then(
-        function (e) {
-          console.log(e);
-        },
-        function (e) {
-          console.log(e);
-        }
-      );
-      this.message_goodies = "Copied!";
+      this.loading_goodies = true;
+      if (this.tokenId) {
+        this.$copyText(this.urlgoodies + this.eventId).then(
+          function (e) {
+            console.log(e);
+          },
+          function (e) {
+            console.log(e);
+          }
+        );
+        this.message_goodies = "Copied!";
+        setTimeout(() => {
+          this.message_goodies = "Copy url"
+        }, 2000);
+      }
       this.loading_goodies = false;
       this.$forceUpdate();
     },
