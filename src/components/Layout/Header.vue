@@ -30,11 +30,11 @@
           </a>
 
           <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
-            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
+            <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
               <span>create an event</span>
-            </v-btn>
+            </v-btn> -->
 
-            <v-menu bottom offset-y>
+            <v-menu v-model="menuLogin" bottom offset-y content-class="menuButtonProfile">
               <template #activator="{ on, attrs }">
                 <!-- <v-btn
                   v-if="responsiveActions"
@@ -56,30 +56,43 @@
                   class="buttonProfile"
                   v-on="user ? on : undefined"
                   v-bind="user ? attrs : undefined"
-                  @click="user ? undefined : connectRamper()"
+                  @click="user ? menuOpened = !menuOpened : connectRamper()"
                   :title="user"
                 >
                   <img src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ limitStr(user || "Log In", 25) }}</span>
+                  <v-icon v-if="user" color="#fff" :style="menuLogin ? 'transform: rotate(180deg)' : null">mdi-chevron-down</v-icon>
                   <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
                 </v-btn>
               </template>
 
-              <v-list color="rgb(0 0 0 / .6)">
+              <v-list color="transparent">
                 <!-- <v-list-item v-show="responsiveActions" disabled style="background-color: #FFF !important; border-radius: 5px">
                   <v-list-item-title style="color: #000">{{user}}</v-list-item-title>
                 </v-list-item> -->
-                <v-list-item :to="'/events'">
-                  <v-list-item-title style="color: #fff">Events</v-list-item-title>
+                <v-list-item :to="'/profile'">
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/ticket.svg" alt="profile">
+                    <span>My tickets</span>
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="$ramper.openWallet()">
-                  <v-list-item-title style="color: #fff">Open Wallet</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/wallet.svg" alt="wallet">
+                    <span>Open Wallet</span>
+                  </v-list-item-title>
                 </v-list-item>
-                <v-list-item :to="'/profile'">
-                  <v-list-item-title style="color: #fff">Profile</v-list-item-title>
+                <v-list-item @click="goToEvent()">
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/building.svg" alt="profile">
+                    <span>Create event</span>
+                  </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="logOut">
-                  <v-list-item-title style="color: #fff">Log out</v-list-item-title>
+                  <v-list-item-title style="color: #fff">
+                    <img src="@/assets/icons/log-out.svg" alt="logout">
+                    <span>Log out</span>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -138,6 +151,7 @@ export default {
   data() {
     return {
       // themeButton: true,
+      menuLogin: false,
       user: undefined,
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,
@@ -214,20 +228,17 @@ export default {
       }
     },
     async connectRamper() {
-      const login = await this.$ramper.signIn();
-      if (login) {
-        console.log(login);
-        if (login.user) {
-          this.user = this.$ramper.getAccountId();
-          this.revisar();
-          location.reload();
-        }
-        location.reload();
-      }
+      if (this.$ramper.getUser()) return this.$ramper.signOut();
+
+      const login = await this.$ramper.signIn()
+      if (login && login.user) location.reload();
+
+      setTimeout(() => location.reload(), 200)
+      this.$router.push("/");
     },
     async revisar() {
       const account = await this.$near.account(this.$ramper.getAccountId());
-      if (this.$session.get("nearSocialName") === undefined) {
+      if (!this.$session.get("nearSocialName")) {
         const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
           viewMethods: ["get"],
           sender: account,
@@ -236,10 +247,9 @@ export default {
         const myArray = [account.accountId + "/profile/**"];
         //console.log(myArray)
         const social = await contract.get({
-          keys: myArray,
-        });
-
-        //console.log(social)
+            keys: myArray
+          });
+        
         Object.entries(social).forEach(([key, value]) => {
           this.$session.set("nearSocialName", value.profile.name);
           this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
@@ -249,29 +259,19 @@ export default {
         });
       }
 
-      if (this.$session.get("nearSocialName") !== undefined) {
-        this.user = this.$session.get("nearSocialName");
-      } else {
-        this.user = this.$ramper.getAccountId();
-      }
+      setTimeout(() => {
+        if (this.$session.get("nearSocialName")) {
+          this.user = this.$session.get("nearSocialName")
+        } else if(this.$ramper.getUser()){
+          this.user = this.$ramper.getAccountId();
+        }
+      }, 200)
     },
     async logOut() {
-      // let API_KEY = this.$dev_key;
-      // let networkName = this.$networkName.toString();
-      // const { data: walletData } = await new Wallet().init({
-      //   networkName: networkName,
-      //   chain: Chain.near,
-      //   apiKey: API_KEY,
-      // });
-      // walletData.wallet.disconnect();
-      // localStorage.clear();
       this.$ramper.signOut();
-      setTimeout(() => this.$router.go(0), 100);
+      this.$session.clear()
+      setTimeout(() => location.reload(), 200)
       this.$router.push("/");
-      this.user = undefined;
-      this.$session.clear();
-
-      // this.$router.go();
     },
     async goToEvent() {
       const balance = await this.getBalance();

@@ -119,9 +119,15 @@
   .buttonProfile {
     border-radius: 10px;
     padding: 12px 13px 12px 20px !important;
-    backdrop-filter: blur(3px);
-    background-color: transparent;
-    @include borderGradientTransparent();
+    max-width: 184px !important;
+    @include borderGradientImage();
+    * {font-family: 'SF Pro', "Proxima Nova", sans-serif;}
+    span {
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
 
@@ -313,4 +319,33 @@
 
 .container-buttons-header {
   transform: translateX(10px);
+}
+
+
+.menuButtonProfile {
+  @include borderGradientImageMenu();
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  margin-top: 10px;
+  .v-list-item {
+    min-height: 35px;
+  }
+  .v-list-item__title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  span {
+    font-family: 'SF Pro', "Proxima Nova", sans-serif !important;
+    font-weight: 510 !important;
+    font-size: 15px !important;
+  }
+  img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 2px;
+  }
 }

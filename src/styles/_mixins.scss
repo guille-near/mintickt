@@ -219,6 +219,20 @@ $breakpoints: (
 
                     /* other adjusts */
 
+@mixin borderGradientImage() {
+  backdrop-filter: blur(3px) !important;
+  background-color: transparent !important;
+  background-image: url(../../assets/profile/border-background.png) !important;
+  background-size: 100% 100% !important;
+}
+
+@mixin borderGradientImageMenu() {
+  backdrop-filter: blur(3px) !important;
+  background-color: transparent !important;
+  background-image: url(../../assets/profile/border-background-menu.png) !important;
+  background-size: 100% 100% !important;
+}
+
 @mixin borderGradientTransparent() {
   border-left: 1.5px solid hsl(97, 97%, 86%, .7);
   border-right: 1.5px solid hsl(306, 100%, 50%, .7);
