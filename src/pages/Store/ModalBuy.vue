@@ -129,7 +129,7 @@ export default {
           process.env.VUE_APP_CONTRACT_NFT +
           "&network=" +
           process.env.VUE_APP_NETWORK +
-          "&redirect_url= " +
+          "&redirect_url=" +
           process.env.VUE_APP_REDIRECT_URL +
           "&user_wallet_address=" +
           (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +
@@ -141,7 +141,7 @@ export default {
           process.env.VUE_APP_CONTRACT_NFT +
           "&network=" +
           process.env.VUE_APP_NETWORK +
-          "&redirect_url= " +
+          "&redirect_url=" +
           process.env.VUE_APP_REDIRECT_URL +
           "&user_wallet_address=" +
           (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +

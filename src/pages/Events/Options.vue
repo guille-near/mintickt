@@ -9,7 +9,7 @@
       <h2 class="p" style="margin: 0">{{ name }} / Settings</h2>
     </div>
 
-    <aside class="container-actions divcol">
+    <aside v-if="itemTickets.id" class="container-actions divcol">
       <span>Burn a ticket</span>
       <label>(Access Control)</label>
       <div class="space">
@@ -24,7 +24,7 @@
       </div>
     </aside>
 
-    <aside class="container-actions divcol">
+    <aside v-if="itemGoodies.id" class="container-actions divcol">
       <span>Burn a goodie</span>
       <label>(Goodies)</label>
       <div class="space">
@@ -131,7 +131,7 @@
         </div>
         <center>
           <div id="my-node-ticket">
-            <qr-code :text="urltickets" error-level="L"> </qr-code>
+            <qr-code :text="qrtickets" error-level="L"> </qr-code>
           </div>
         </center>
         <div class="divcol center">
@@ -148,7 +148,7 @@
         </div>
         <center>
           <div id="my-node-goodies">
-            <qr-code :text="urlgoodies" error-level="L"> </qr-code>
+            <qr-code :text="qrgoodies" error-level="L"> </qr-code>
           </div>
         </center>
         <div class="divcol center">
@@ -165,10 +165,10 @@
         </div>
 
         <div class="divcol center">
-          <v-btn @click="modalSuccess=false">Ok</v-btn>
-          <a class="acenter" style="gap:.3em" :href="urlTx" target="_blank">
+          <v-btn @click="modalSuccess = false">Ok</v-btn>
+          <a class="acenter" style="gap: 0.3em" :href="urlTx" target="_blank">
             <span class="p">See transaction</span>
-            <img src="@/assets/icons/transaction.svg" alt="link icon">
+            <img src="@/assets/icons/transaction.svg" alt="link icon" />
           </a>
         </div>
       </v-card>
@@ -213,6 +213,32 @@ const your_event = gql`
       issued_at
       media
       price
+      price_near
+      reference
+      starts_at
+      typetoken_id
+      updated_at
+    }
+  }
+`;
+
+const eventsObjects = gql`
+  query MyQuery($eventId: String!) {
+    series(where: { reference: $eventId }) {
+      title
+      nftsold
+      supply
+      copies
+      creator_id
+      description
+      expires_at
+      extra
+      fecha
+      id
+      issued_at
+      media
+      price
+      object_event
       price_near
       reference
       starts_at
@@ -336,16 +362,20 @@ export default {
       message_goodies: "Copy url",
       modalTicket: false,
       modalGoodie: false,
-      urlgoodies: this.$burn_page_ticket + "?extra=redeemed&id=",
-      urltickets: this.$burn_page_ticket + "?extra=ticketing&id=",
+      urlgoodies: this.$burn_page_ticket + "?id=",
+      urltickets: this.$burn_page_ticket + "?id=",
+      qrgoodies: "",
+      qrtickets: "",
       show_total_minted: this.$session.get("total_minted"),
+      itemTickets: {},
+      itemGoodies: {},
       available_to_list: 0,
       overlay: false,
       new_minted: 0,
       overlay_building: false,
       eventId: null,
       nearPrice: 0,
-      urlTx: ""
+      urlTx: "",
     };
   },
   async mounted() {
@@ -354,7 +384,7 @@ export default {
     }
 
     this.eventId = this.$session.get("event_id_op");
-    await this.getNearPrice()
+    await this.getNearPrice();
     this.getData();
     // this.getTotalMinted();
   },
@@ -381,6 +411,7 @@ export default {
             {
               token_event_id: this.tokenId,
               copies: this.mint_amount,
+              is_mintable: true,
             },
             "300000000000000",
             "1"
@@ -398,7 +429,7 @@ export default {
         });
         console.log(res);
         this.btnDisabled = false;
-        this.mint_amount = false
+        this.mint_amount = false;
         if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
           this.modalMintMore = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
@@ -408,7 +439,7 @@ export default {
           }
           this.modalSuccess = true;
         } else {
-          console.log("ERRROR",res)
+          console.log("ERRROR", res);
         }
       }
       this.btnDisabled = false;
@@ -421,7 +452,7 @@ export default {
             "update_nft_event",
             {
               token_event_id: this.tokenId,
-              price: this.price_list,
+              price: Number(this.price_list),
             },
             "300000000000000",
             "1"
@@ -439,7 +470,7 @@ export default {
         });
         console.log(res);
         this.btnDisabled = false;
-        this.price_list = 0
+        this.price_list = 0;
         if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
           this.modalListMore = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
@@ -449,7 +480,7 @@ export default {
           }
           this.modalSuccess = true;
         } else {
-          console.log("ERRROR",res)
+          console.log("ERRROR", res);
         }
       }
       this.btnDisabled = false;
@@ -482,9 +513,9 @@ export default {
         this.btnDisabled = false;
         if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
           this.$session.set("hashSuccess", res.txHashes[0]);
-          this.$router.push("/events")
+          this.$router.push("/events");
         } else {
-          console.log("ERRROR",res)
+          console.log("ERRROR", res);
         }
       }
       this.btnDisabled = false;
@@ -516,13 +547,35 @@ export default {
         .subscribe(({ data }) => {
           const dataSerie = data.serie;
 
-          this.tokenId = dataSerie.id
+          this.tokenId = dataSerie.id;
           this.name = dataSerie.title;
           this.minted = dataSerie.copies;
           this.listed = dataSerie.supply;
           this.ticketPrice = dataSerie.price;
 
           this.available_to_list = this.minted - this.listed;
+
+          this.$apollo
+            .watchQuery({
+              query: eventsObjects,
+              variables: {
+                eventId: this.eventId,
+              },
+              pollInterval: 3000, // 10 seconds in milliseconds
+            })
+            .subscribe((response) => {
+              const dataEvents = response.data.series;
+
+              for (let i = 0; i < dataEvents.length; i++) {
+                if (dataEvents[i].object_event) {
+                  this.itemTickets = dataEvents[i];
+                  this.qrtickets = this.urltickets + this.itemTickets.id;
+                } else if (dataEvents[i].object_event === false) {
+                  this.itemGoodies = dataEvents[i];
+                  this.qrgoodies = this.urlgoodies + this.itemGoodies.id;
+                }
+              }
+            });
         });
       this.loading = false;
     },
@@ -806,7 +859,7 @@ export default {
     copyTicket() {
       this.loading_tickets = true;
       if (this.tokenId) {
-        this.$copyText(this.urltickets + this.eventId).then(
+        this.$copyText(this.urltickets + this.itemTickets.id).then(
           function (e) {
             console.log(e);
           },
@@ -816,7 +869,7 @@ export default {
         );
         this.message_ticket = "Copied!";
         setTimeout(() => {
-          this.message_ticket = "Copy url"
+          this.message_ticket = "Copy url";
         }, 2000);
       }
       this.loading_tickets = false;
@@ -825,7 +878,7 @@ export default {
     copyGoodies() {
       this.loading_goodies = true;
       if (this.tokenId) {
-        this.$copyText(this.urlgoodies + this.eventId).then(
+        this.$copyText(this.urlgoodies + this.itemGoodies.id).then(
           function (e) {
             console.log(e);
           },
@@ -835,14 +888,13 @@ export default {
         );
         this.message_goodies = "Copied!";
         setTimeout(() => {
-          this.message_goodies = "Copy url"
+          this.message_goodies = "Copy url";
         }, 2000);
       }
       this.loading_goodies = false;
       this.$forceUpdate();
     },
     downloadQrTicket() {
-      this.modalSuccess = true;
       this.loading_tickets_qr = true;
       var container = document.getElementById("my-node-ticket"); /* full page */
       html2canvas(container, {
