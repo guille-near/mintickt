@@ -21,7 +21,7 @@
         <span>{{ incomes.toFixed(2) }} N</span>
       </div>
       <label style="margin-top: auto"
-        >≈ USD {{ (lastPrice.lastPrice * incomes).toFixed(2) }}</label
+        >≈ {{ (nearPrice * incomes).toFixed(2) }} $USD</label
       >
     </aside>
 
@@ -410,6 +410,9 @@
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import moment from "moment";
 import gql from "graphql-tag";
+import * as nearAPI from "near-api-js";
+
+const { connect, keyStores, utils, Contract } = nearAPI;
 const mb_views_nft_tokens_aggregate = gql`
   query MyQuery($user: String!, $metadata_id: String!) {
     nft_earnings_aggregate(
@@ -427,12 +430,75 @@ const mb_views_nft_tokens_aggregate = gql`
     }
   }
 `;
-//Extra smart contract to handle tokens burned
-//Burned tokens, apply for wainting in line and peopel inside
-const burned_tokens_aggregate = gql`
-  query MyQuery($_iregex: String!) {
-    fansinsides(where: { thingid: $_iregex }) {
-      tokenid
+
+const get_data_serie = gql`
+  query MyQuery($user: String!, $eventId: String!) {
+    series(where: { id: $eventId, creator_id: $user }) {
+      updated_at
+      typetoken_id
+      title
+      supply
+      starts_at
+      reference
+      redeemerobjects
+      redeemerevents
+      price_near
+      price
+      object_event
+      nft_amount_sold
+      nftsold
+      media
+      issued_at
+      is_mintable
+      id
+      fecha
+      extra
+      expires_at
+      description
+      creator_id
+      copies
+      aproved_objects
+      aproved_event
+    }
+  }
+`;
+
+const eventsObjects = gql`
+  query MyQuery($eventId: String!) {
+    series(where: { reference: $eventId }) {
+      title
+      nftsold
+      supply
+      copies
+      creator_id
+      description
+      expires_at
+      extra
+      fecha
+      id
+      issued_at
+      media
+      price
+      object_event
+      price_near
+      reference
+      starts_at
+      typetoken_id
+      updated_at
+    }
+  }
+`;
+
+const get_data_objects = gql`
+  query MyQuery($objectId: String!) {
+    controlaforos(where: {token_object_id: $objectId}) {
+      user_burn
+      token_object_id
+      owner_id
+      id
+      fecha
+      event_id
+      aproved
     }
   }
 `;
@@ -651,17 +717,24 @@ export default {
       modalQR: false,
       owner: "%",
       goodie_title: "",
+      nearPrice: 0,
+      eventId: null,
+      objectId: null
     };
   },
-  mounted() {
+  async mounted() {
     if (!this.$session.exists()) {
       this.$session.start();
     }
+    this.eventId = this.$session.get("event_id");
+    await this.getNearPrice();
+
     this.IsMobile();
     window.addEventListener("resize", this.IsMobile);
     this.responsive();
-    this.fetch();
+    // this.fetch();
     this.getData();
+    this.getDataGeneral()
     //this.pollData();
   },
   beforeDestroy() {
@@ -694,6 +767,16 @@ export default {
     },
   },
   methods: {
+    async getNearPrice() {
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+        viewMethods: ["get_tasa"],
+        sender: account,
+      });
+
+      const price = await contract.get_tasa();
+      this.nearPrice = price || 0;
+    },
     IsMobile() {
       if (window.innerWidth <= 880) {
         this.isMobile = true;
@@ -717,41 +800,77 @@ export default {
       }
     },
     async getData() {
-      let datos = JSON.parse(
-        localStorage.getItem("Mintbase.js_wallet_auth_key")
-      );
-      const user = datos.accountId;
-      var metadata_id = this.$route.query.thingid.toLowerCase();
+      const user = this.$ramper.getAccountId()
+      console.log(user, this.eventId)
       this.$apollo
         .watchQuery({
-          query: mb_views_nft_tokens_aggregate,
+          query: get_data_serie,
           variables: {
             user: user,
-            metadata_id: metadata_id,
+            eventId: this.eventId,
           },
           pollInterval: 3000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
-          this.ticketsSold =
-            data.nft_earnings_aggregate.aggregate.count;
-          this.incomes =
-            data.nft_earnings_aggregate.aggregate.sum.amount /
-            Math.pow(10, 24);
+          if (data.series.length > 0) {
+            console.log("DATA", data.series[0])
+            this.ticketsSold = data.series[0].nftsold
+            this.incomes = data.series[0].nft_amount_sold / Math.pow(10, 24);
+          }
         });
-          this.get_tokens();
-          this.get_tokens_redeemed();
-          // setTimeout(() => {
-          //   this.get_waiting_in_line();
-          // }, 400);
-          // setTimeout(() => {
-          //   this.get_people_inside();
-          // }, 600);
-          // setTimeout(() => {
-          //   this.get_orders();
-          // }, 800);
-          // setTimeout(() => {
-          //   this.get_redeemed();
-          // }, 1000);
+          // this.get_tokens();
+          // this.get_tokens_redeemed();
+    },
+    async getDataGeneral() {
+      const user = this.$ramper.getAccountId()
+      console.log(user, this.eventId)
+      this.$apollo
+        .watchQuery({
+          query: eventsObjects,
+          variables: {
+            eventId: this.eventId,
+          },
+          pollInterval: 3000, // 10 seconds in milliseconds
+        })
+        .subscribe((response) => {
+          const dataEvents = response.data.series;
+
+          for (let i = 0; i < dataEvents.length; i++) {
+            if (dataEvents[i].object_event) {
+              this.itemTickets = dataEvents[i];
+              this.getDataTickets()
+            } else if (dataEvents[i].object_event === false) {
+              this.itemGoodies = dataEvents[i];
+            }
+          }
+        });
+    },
+    async getDataTickets() {
+      this.$apollo
+        .watchQuery({
+          query: get_data_objects,
+          variables: {
+            objectId: this.itemTickets.id,
+          },
+          pollInterval: 3000, // 10 seconds in milliseconds
+        })
+        .subscribe(({ data }) => {
+          console.log("OBEJCTTT", data)
+          const item = {
+              nft: "value.title",
+              signer: "value.owner",
+              quantity: 1,
+              created: "time2" + " " + "timedesc2",
+              transaction: "this.$explorer" + "?query=" + "receipe",
+              tokenid: "value.token_id",
+              loadingBtn: false,
+              show: false,
+              key: "key",
+            };
+            this.dataTable.push(item);
+        });
+          // this.get_tokens();
+          // this.get_tokens_redeemed();
     },
     //Get tokens
     async get_tokens() {

@@ -141,7 +141,7 @@ export default {
       if (this.$ramper.getUser()) {
         const action = [
           this.$ramper.functionCall(
-            "nft_burn",
+            "burn_object",
             {
               token_id: this.token,
             },
