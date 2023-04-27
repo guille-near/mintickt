@@ -2,19 +2,11 @@
   <section id="createTickets" class="registerDashboard divcol gap align">
     <ModalSuccess ref="modal"></ModalSuccess>
 
-    <h2 class="eliminarmobile align" v-if="step == 1" style="text-align: center">Let's create your event!</h2>
-
     <v-window v-model="step" to touchless>
       <v-window-item :value="1">
         <section class="center divwrap">
-          <h2 class="vermobile align" style="text-align: center" @click="$refs.modal.modalSuccess = true">Let's create your NFT for your event!</h2>
-          <!-- // * canvas ticket -->
-          <div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
-          </div>
-
           <!-- // * custome ticket -->
-          <div v-if="imagecanvas1 && ticketType === 'custom'" class="ticket-wrapper custom">
+          <div class="ticket-wrapper custom eliminarmobile" style="margin-top: 0">
             <img
               src="@/assets/ticket-selection/ticket-custom-upload.svg"
               alt="custom ticket"
@@ -40,619 +32,48 @@
             <img id="ticket_custom" v-if="ticket_custom" :src="dataTicket[0].url" class="image-ticket-event" />
           </div>
 
-          <!-- // * normal tickets -->
-          <div class="ticket-wrapper" v-else-if="imagecanvas1 && ticketType" id="my-node" data-ticket :class="ticketType">
-            <img class="ticket" id="ticket-design" :src="require(`@/assets/ticket-selection/ticket-${ticketType}-upload.svg`)" alt="Ticket image" />
-
-            <v-file-input
-              v-for="(ticket, i) in dataTicket"
-              :key="i"
-              v-model="ticket.img"
-              hide-details
-              solo
-              prepend-icon=""
-              @change="uploadImg(ticket)"
-              :class="{ active: ticket.img }"
-            >
-              <template v-slot:selection>
-                <!-- <img v-if="ticket.url" :src="ticket.url" /> -->
-                <div class="image-ticket-event" :style="`--bg-image: url(${ticket.url})`" />
-              </template>
-            </v-file-input>
-          </div>
 
           <div class="container-content divcol" style="gap: 20px">
             <v-form ref="form" v-model="valid" @submit.prevent="next()" class="divcol">
               <h3>Basic Information</h3>
-              <p>
-                Choose a name for your event and tell attendees why you think they will have a great time. Add details that highlight why your event
-                is unique.
-              </p>
-
               <div class="divcol">
-                <label for="name">Event name <span style="color: red">*</span></label>
+                <label for="name">Name</label>
+                <p class="mb-1">Choose a name for your digital collectible</p>
                 <v-text-field v-model="dataTickets.name" id="name" :rules="rules.required" solo></v-text-field>
               </div>
 
+
               <div class="divcol">
-                <label for="promoter">Promoter / Organizer name <span style="color: red">*</span></label>
-                <v-text-field v-model="dataTickets.promoter" :rules="rules.required" id="promoter" solo></v-text-field>
+                <label for="description">Descrpition</label>
+                <p class="mb-1">Add more details to your digital collectible, what it represents and its utility</p>
+                <v-textarea v-model="dataTickets.description" id="description" :rules="rules.required" solo no-resize></v-textarea>
               </div>
 
-              <h3>Description <span style="color: red">*</span></h3>
-              <p>Add more details of your event, such as program, sponsors or featured guests.</p>
 
-              <vue-editor v-model="dataTickets.description" class="editor" :class="{ rules: editorRules }" />
-              <!--<v-textarea
-                v-model="dataTickets.description"
-                solo
-                auto-grow
-                :rules="rules.required"
-              ></v-textarea>-->
-
-              <h3>Location <span style="color: red">*</span></h3>
-              <p>Help people in the area discover your event and let attendees know where to show up.</p>
-
-              <vuetify-google-autocomplete
-                id="map"
-                :loading="loading"
-                append-icon="search"
-                v-bind:disabled="false"
-                flat
-                v-model="location"
-                hide-no-data
-                hide-selected
-                placeholder="Search your location"
-                clearable
-                classname="form-control"
-                style="padding-bottom: 15px"
-                :enable-geolocation="false"
-                :rules="rules.required"
-                solo
-                v-on:placechanged="getAddressData"
-              >
-              </vuetify-google-autocomplete>
-
-              <h3>Date and time <span style="color: red">*</span></h3>
-              <p>Tell event-goers when your event starts and ends so they can make plans to attend.</p>
-
-              <!-- full date -->
-              <div class="divcol" style="gap: 6px">
-                <label for="date"> Full Date </label>
-                <v-menu
-                  ref="menu-date"
-                  v-model="MenuDates"
-                  :close-on-content-click="false"
-                  :return-value.sync="dates"
-                  :rules="rules.required"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <label for="date">
-                      <v-text-field id="date" v-model="dateRangeText" readonly solo v-on="on" v-bind="attrs" :rules="rules.required"></v-text-field>
-                    </label>
-                    <!-- <label for="date" class="mb-5">
-                      <v-combobox
-                        v-model="dates"
-                        id="date"
-                        solo
-                        multiple
-                        deletable-chips
-                        chips
-                        readonly
-                        clearable
-                        hide-details
-                        :class="{ rules: comboboxRules }"
-                        v-bind="attrs"
-                        v-on="on"
-                        :rules="rules.required"
-                      ></v-combobox>
-                    </label> -->
-                  </template>
-                  <v-date-picker v-model="dates" no-title scrollable range color="hsl(306, 100%, 50%)" dark>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="$refs['menu-date'].save(dates)"> OK </v-btn>
-                  </v-date-picker>
-                </v-menu>
-              </div>
-
-              <div class="space" style="gap: 20px">
-                <!-- start time -->
-                <div class="divcol" style="gap: 6px">
-                  <label for="start-time"> Start Time </label>
-
-                  <!-- <label for=""> -->
-                  <date-picker
-                    id="start-time"
-                    v-model="startTime"
-                    type="time"
-                    :time-picker-options="{
-                      start: '06:00',
-                      step: '00:30',
-                      end: '23:30',
-                    }"
-                    format="HH:mm"
-                    placeholder="hh:mm"
-                    :class="{ rules: timepickerStartRules }"
-                    :editable="false"
-                    @input="validatorStartTime(startTime)"
-                  >
-                  </date-picker>
-                  <!-- </label> -->
-                  <!-- <time-picker v-model="startTime" dialog minute-interval="15">
-										<template v-slot:activator="{ on }">
-                      <label for="start-time">
-                        <v-text-field
-                          v-model="startTime"
-                          id="start-time"
-                          readonly
-                          solo
-                          v-on="on"
-                          :rules="rules.required"
-                          style="pointer-events: none"
-                        ></v-text-field>
-                      </label>
-										</template>
-                  </time-picker> -->
-
-                  <!-- <v-menu
-										ref="menu-start-time"
-										v-model="menuStartTime"
-										:close-on-content-click="false"
-										:return-value.sync="startTime"
-										transition="scale-transition"
-										nudge-left="100%"
-									>
-										<template v-slot:activator="{ on, attrs }">
-											<v-text-field
-												v-model="startTime"
-												id="start-time"
-												readonly
-												solo
-												v-bind="attrs"
-												v-on="on"
-												:rules="rules.required"
-											></v-text-field>
-										</template>
-										<v-time-picker
-											v-if="menuStartTime"
-											v-model="startTime"
-											width="200px"
-											color="hsl(306, 100%, 50%)"
-											header-color="#1e1e1e"
-											dark
-											@click:minute="$refs[`menu-start-time`].save(startTime)"
-										></v-time-picker>
-									</v-menu> -->
-                </div>
-
-                <!-- end date -->
-                <div class="divcol" style="gap: 6px">
-                  <label for="end-time"> End Time </label>
-
-                  <date-picker
-                    v-model="endTime"
-                    type="time"
-                    :time-picker-options="{
-                      start: '06:00',
-                      step: '00:30',
-                      end: '23:30',
-                    }"
-                    :open.sync="open"
-                    format="HH:mm"
-                    placeholder="hh:mm"
-                    :class="{ rules: timepickerEndRules }"
-                    :editable="false"
-                    @input="validatorEndTime(endTime)"
-                  ></date-picker>
-
-                  <!-- <time-picker v-model="endTime" dialog minute-interval="15">
-										<template v-slot:activator="{ on }">
-                      <label for="end-time">
-                        <v-text-field
-                          v-model="endTime"
-                          id="end-time"
-                          readonly
-                          solo
-                          v-on="on"
-                          :rules="rules.required"
-                          style="pointer-events: none"
-                        ></v-text-field>
-                      </label>
-										</template>
-                  </time-picker> -->
-
-                  <!-- <v-menu
-										ref="menu-end-time"
-										v-model="menuEndTime"
-										:close-on-content-click="false"
-										:return-value.sync="endTime"
-										transition="scale-transition"
-										nudge-left="100%"
-									>
-										<template v-slot:activator="{ on, attrs }">
-											<v-text-field
-												v-model="endTime"
-												id="end-time"
-												readonly
-												solo
-												v-bind="attrs"
-												v-on="on"
-												:rules="rules.required"
-											></v-text-field>
-										</template>
-										<v-time-picker
-											v-if="menuEndTime"
-											v-model="endTime"
-											width="200px"
-											color="hsl(306, 100%, 50%)"
-											header-color="#1e1e1e"
-											dark
-											@click:minute="$refs[`menu-end-time`].save(endTime)"
-										></v-time-picker>
-									</v-menu> -->
-                </div>
-              </div>
-
-              <v-btn v-if="i > 0" icon @click="dates.splice(i, 1)">
-                <v-icon color="#868686">mdi-trash-can-outline</v-icon>
-              </v-btn>
-            </v-form>
-
-            <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="design">
-                <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>
-                Back
-              </v-btn>
-              <v-btn :loading="loading" @click="next">
-                Next
-                <v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </section>
-
-        <div class="container-content--actions center gap vermobile">
-          <v-btn disabled>
-            <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>
-            Back
-          </v-btn>
-          <v-btn @click="next">
-            Next
-            <v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-          </v-btn>
-        </div>
-      </v-window-item>
-
-      <v-window-item :value="2">
-        <section class="jcenter divwrap">
-          <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
-          </div>
-          <div class="container-content divcol" style="gap: 20px">
-            <v-form ref="form1" v-model="valid" enctype="multipart/form-data" @submit.prevent="next1()" class="divcol" style="min-height: 100%">
+              <h3>How about your incomes?</h3>
               <div class="divcol">
-                <h3>Main event image <span style="color: red">*</span></h3>
-                <p>This is the first image attendees will see at the top of your event page.</p>
-
-                <v-file-input
-                  v-model="dataTickets.img_main"
-                  solo
-                  prepend-icon
-                  name="uploaded_file"
-                  accept="image/*"
-                  :rules="rules.required"
-                  @change="ImagePreview"
-                  class="input-unique"
-                >
-                  <template v-slot:selection>
-                    <img class="imagePreview" :src="url" alt="Image preview" style="object-fit: cover" />
-                  </template>
-
-                  <template v-slot:label>
-                    <img src="@/assets/icons/link.svg" alt="drag icon" />
-                    <p class="p">Drag and drop or click here to upload your main event image</p>
-                  </template>
-                </v-file-input>
-                <h3>
-                  How many tickets you would like have for your event?
-                  <span style="color: red">*</span>
-                </h3>
-                <p>You can always add more NFT tickets later.</p>
-
-                <v-text-field v-model="dataTickets.mint_amount" id="amount_list" solo :rules="rules.required" type="number" hide-spin-buttons>
-                  <template v-slot:append>
-                    <v-btn class="btn-control" :disabled="dataTickets.mint_amount == 0" @click="dataTickets.mint_amount--">-</v-btn>
-                    <v-btn class="btn-control" @click="dataTickets.mint_amount++">+</v-btn>
-                  </template>
-                </v-text-field>
-
-                <div class="divcol">
-                  <label for="price">Price (USD)<span style="color: red">*</span></label>
-                  <div class="divcol">
-                    <v-text-field
-                      v-model="price"
-                      id="price"
-                      solo
-                      min="0"
-                      :rules="rules.required"
-                      type="number"
-                      @input="convertNear(price)"
-                    ></v-text-field>
-                    <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span>
-                  </div>
-                </div>
+                <label for="itemsForSale">Total number of items for sale</label>
+                <p class="mb-1">Choose a itemsForSale for your digital collectible</p>
+                <v-text-field
+                  v-model="dataTickets.itemsForSale" id="itemsForSale" :rules="rules.required" solo
+                  type="number"
+                ></v-text-field>
               </div>
             </v-form>
 
             <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-              <v-btn @click="next1"> Next<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon> </v-btn>
+              <v-btn class="borderGradient" :loading="loading">Mint</v-btn>
             </div>
           </div>
         </section>
 
         <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-          <v-btn @click="next1"> Next<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon> </v-btn>
-        </div>
-      </v-window-item>
-
-      <v-window-item :value="3">
-        <section class="jcenter divwrap">
-          <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
-          </div>
-          <div class="container-content divcol" style="gap: 20px">
-            <aside class="divcol gap" style="min-height: 100%">
-              <v-form ref="form2" v-model="valid" @submit.prevent="mint()" class="divcol" style="min-height: 100%">
-                <div class="divcol">
-                  <h3>Royalties</h3>
-                  <p>Royalties are perpetual. You can add royalties up to 50% across 25 accounts.</p>
-
-                  <v-btn @click="dataRoyalties.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add royalties</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available }} %</p>
-                </div>
-
-                <section class="container-inputs">
-                  <v-sheet v-for="(item, i) in dataRoyalties" :key="i">
-                    <div class="divcol">
-                      <label :for="`account${i}`">NEAR account</label>
-                      <v-text-field
-                        v-model="item.account"
-                        :id="`account|${i}`"
-                        label="account.near"
-                        v-debounce:800ms="validateNearId"
-                        :error-messages="errorAccount[i]"
-                        :success-messages="successAccount[i]"
-                        solo
-                      ></v-text-field>
-                    </div>
-
-                    <div class="divcol percentage">
-                      <label :for="`percentage${i}`">%</label>
-                      <v-text-field
-                        ref="numberField"
-                        v-model="item.percentage"
-                        :id="`percentage|${i}`"
-                        label="1 %"
-                        solo
-                        :rules="rules.required"
-                        min="0"
-                        v-debounce:300ms="chkPercentage"
-                        :error-messages="errorPercentaje[i]"
-                        type="number"
-                      ></v-text-field>
-                    </div>
-                    <v-btn icon @click="remove(i)">
-                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
-                    </v-btn>
-                  </v-sheet>
-                </section>
-
-                <div class="divcol" style="margin-top: 30px">
-                  <h3>Split Revenue</h3>
-                  <p>
-                    Split revenue clears after each sale. Needs at least two wallet addresses. The minter will receive 100% of split revenue unless
-                    splits are added.
-                  </p>
-
-                  <v-btn @click="dataSplit.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add split</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available1 }} %</p>
-                </div>
-
-                <section class="container-inputs">
-                  <v-sheet v-for="(item, i) in dataSplit" :key="i">
-                    <div class="divcol">
-                      <label :for="`account${i}`">NEAR account</label>
-                      <v-text-field
-                        v-model="item.account"
-                        :id="`account|${i}`"
-                        label="account.near"
-                        v-debounce:800ms="validateNearId1"
-                        :error-messages="errorAccount1[i]"
-                        :success-messages="successAccount1[i]"
-                        solo
-                      ></v-text-field>
-                    </div>
-
-                    <div class="divcol percentage">
-                      <label :for="`percentage${i}`">%</label>
-                      <v-text-field
-                        ref="numberField"
-                        v-model="item.percentage"
-                        :id="`percentage|${i}`"
-                        label="1 %"
-                        solo
-                        :rules="rules.required"
-                        min="0"
-                        v-debounce:300ms="chkPercentage1"
-                        :error-messages="errorPercentaje1[i]"
-                        type="number"
-                      ></v-text-field>
-                    </div>
-
-                    <v-btn icon @click="remove1(i)">
-                      <v-icon color="#868686">mdi-trash-can-outline</v-icon>
-                    </v-btn>
-                  </v-sheet>
-                </section>
-              </v-form>
-            </aside>
-
-            <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back" :disabled="disabledBtn"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-              <v-btn type="submit" @click="mint()" :loading="loading" :disabled="disable" class="mint">
-                Approve<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </section>
-
-        <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-          <v-btn type="submit" @click="mint" :loading="loading" :disabled="disable" class="mint">
-            Mint<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-          </v-btn>
-        </div>
-      </v-window-item>
-
-      <v-window-item :value="4">
-        <section class="jcenter divwrap">
-          <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
-          </div>
-          <div class="container-content divcol" style="gap: 20px">
-            <v-form ref="form3" v-model="valid" @submit.prevent="list()" class="divcol" style="min-height: 100%">
-              <div class="divcol">
-                <h3>List NFT For Sale <span style="color: red">*</span></h3>
-
-                <div class="divcol">
-                  <label for="amount_list">Amount to list Max ( {{ show_total_minted }} ) <span style="color: red">*</span></label>
-                  <div class="divcol">
-                    <v-text-field
-                      v-model="amount_list"
-                      id="amount_list"
-                      solo
-                      :rules="rules.required"
-                      min="0"
-                      v-debounce:800ms="checkListAmount"
-                      type="number"
-                      hide-spin-buttons
-                    >
-                      <template v-slot:append>
-                        <v-btn class="btn-control" :disabled="amount_list == 0" @click="substract">-</v-btn>
-                        <v-btn class="btn-control" :disabled="amount_list == total_minted" @click="add">+</v-btn>
-                      </template>
-                    </v-text-field>
-                  </div>
-                </div>
-
-                <div class="divcol">
-                  <label for="price">Price (NEAR)<span style="color: red">*</span></label>
-                  <div class="divcol">
-                    <v-text-field
-                      v-model="price"
-                      id="price"
-                      solo
-                      min="0"
-                      :rules="rules.required"
-                      type="number"
-                      @input="convertNear(price)"
-                    ></v-text-field>
-                    <span class="conversion">~ {{ usd.toFixed(4) }} USD</span>
-                  </div>
-                </div>
-              </div>
-            </v-form>
-
-            <div class="container-content--actions center gap eliminarmobile">
-              <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-              <v-btn type="submit" @click="list()" :loading="loading" :disabled="disable">
-                List<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </section>
-
-        <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-          <v-btn type="submit" @click="list" :loading="loading" :disabled="disable">
-            List<v-icon style="color: #ffffff !important" small>mdi-arrow-right</v-icon>
-          </v-btn>
-        </div>
-      </v-window-item>
-
-      <v-window-item :value="5">
-        <section class="jcenter divwrap">
-          <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
-          </div>
-          <div class="container-content divcol" style="gap: 20px">
-            <v-form ref="form4" v-model="valid" @submit.prevent="mintGoodie()" class="divcol" style="min-height: 100%">
-              <aside class="divcol" style="min-height: 100%">
-                <div class="divcol">
-                  <h3>Would you like to give a physical goodie with your ticket? (Drink, popcorn...)</h3>
-                  <p>We will transfer this NFT once your attendes get inside the venue so they can redeem it to get a real good.</p>
-
-                  <div id="container-actions" class="gap">
-                    <v-btn @click="goodie = true">Yes</v-btn>
-                    <v-btn @click="showModal" :disabled="disabledNo">No</v-btn>
-                  </div>
-                </div>
-
-                <template v-if="goodie">
-                  <div class="divcol" style="margin-top: 1.5em">
-                    <label for="attendees" class="sf-pro">What are attendees going to receive with the NFT ticket?</label>
-                    <v-text-field v-model="dataTickets.attendees" :rules="rules.required" id="attendees" solo></v-text-field>
-                  </div>
-
-                  <div class="divcol" style="display: none">
-                    <label for="goodies" class="sf-pro">How much goodies for each attendee per ticket?</label>
-                    <v-text-field v-model="dataTickets.goodies" id="goodies" solo :rules="rules.required" type="number" min="0" hide-spin-buttons>
-                      <template v-slot:append>
-                        <v-btn class="btn-control" @click="dataTickets.goodies--">-</v-btn>
-                        <v-btn class="btn-control" @click="dataTickets.goodies++">+</v-btn>
-                      </template>
-                    </v-text-field>
-                  </div>
-                </template>
-              </aside>
-            </v-form>
-
-            <div class="container-content--actions center gap eliminarmobile">
-              <!-- <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn> -->
-              <v-btn
-                v-show="goodie"
-                type="submit"
-                @click="mintGoodie"
-                :loading="loading"
-                :disabled="disable"
-                style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
-              >
-                Submit
-              </v-btn>
-            </div>
-          </div>
-        </section>
-
-        <div class="container-content--actions center gap vermobile">
-          <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn>
-          <v-btn
-            v-show="goodie"
-            type="submit"
-            @click="mintGoodie"
-            :loading="loading"
-            :disabled="disable"
-            style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
-          >
-            Mint
-          </v-btn>
+          <v-btn class="borderGradient" :loading="loading">Mint</v-btn>
         </div>
       </v-window-item>
     </v-window>
+
+
     <div class="text-center">
       <v-overlay :value="overlay">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -675,7 +96,6 @@
 <script>
 import ModalSuccess from "./ModalSuccess";
 import modalFill from "../Store/ModalFill.vue"
-import { VueEditor } from "vue2-editor";
 import moment from "moment";
 import { CONFIG } from "@/services/api";
 import * as nearAPI from "near-api-js";
@@ -683,8 +103,6 @@ const { connect, keyStores, utils } = nearAPI;
 import { Wallet, Chain, Network, MetadataField } from "mintbase";
 import html2canvas from "html2canvas";
 import gql from "graphql-tag";
-import DatePicker from "vue2-datepicker";
-import "vue2-datepicker/index.css";
 
 const nft_tokens_aggregate = gql`
   query MyQuery($store: String!, $tittle: String!, $_iregex: String!) {
@@ -746,11 +164,9 @@ const minter = gql`
 `;
 
 export default {
-  name: "RegisterDashboard",
+  name: "MintingCollectibles",
   components: {
-    VueEditor,
     ModalSuccess,
-    DatePicker,
     modalFill
   },
   data() {
@@ -758,22 +174,8 @@ export default {
       tokenSeriesId: null,
       disabledBtn: false,
       disabledNo: false,
-      step: this.$session.get("step") === undefined ? 1 : this.$session.get("step"),
+      step: 0,
       dataTickets: {
-        name: this.$session.get("dataFormName") === undefined ? "" : this.$session.get("dataFormName"),
-        promoter: this.$session.get("dataFormPromoter") === undefined ? "" : this.$session.get("dataFormPromoter"),
-        img: "",
-        // this.$session.get("canvas") === undefined
-        //   ? ""
-        //   : this.$session.get("canvas"),
-        img_main: this.url,
-        // this.$session.get("canvas_main_image") === undefined
-        //   ? undefined
-        //   : this.$session.get("canvas_main_image"),
-        description: this.$session.get("dataFormDescription") === undefined ? "" : this.$session.get("dataFormDescription"),
-        mint_amount: this.$session.get("dataFormMintAmount") === undefined ? "" : this.$session.get("dataFormMintAmount"),
-        attendees: this.$session.get("dataFormAttendees") === undefined ? "" : this.$session.get("dataFormAttendees"),
-        goodies: "1", // localStorage.getItem("dataFormGoodies") === null  ? "" : localStorage.getItem("dataFormGoodies"),
       },
       url: "",
       // this.$session.get("canvas_main_image") === undefined
@@ -913,8 +315,6 @@ export default {
     }
   },
   async mounted() {
-    
-    this.checkoutTicketType();
     // this.hideScroll(this.$route)
     // this.revisar();
     if (!this.$ramper.getUser()) {
@@ -983,14 +383,6 @@ export default {
       history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
   },
-  computed: {
-    dateRangeText() {
-      return this.dates?.join(" ~ ");
-    },
-    ticketType() {
-      return this.$route.params.type?.split(":")[1];
-    },
-  },
   methods: {
     convertNear(price) {
       this.usd = price / this.$session.get("nearPrice") || 0;
@@ -1027,41 +419,6 @@ export default {
       }
       this.createImage(file);
     },
-    // async grantMinter() {
-    //   let datos = JSON.parse(
-    //     localStorage.getItem("Mintbase.js_wallet_auth_key")
-    //   );
-    //   const user = datos.accountId;
-    //   this.$apollo
-    //     .query({
-    //       query: minter,
-    //       variables: {
-    //         store: this.$store_mintbase,
-    //         user: user,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       //console.log(response.data.mb_store_minters.length)
-    //       //If the user is not minter just give grant to him/her
-    //       if (response.data.mb_store_minters.length == 0) {
-    //         const url = this.$node_url + "/minter";
-    //         let item = {
-    //           account_id: user,
-    //         };
-    //         this.axios
-    //           .post(url, item)
-    //           .then(() => {
-    //             console.log("Hash up");
-    //           })
-    //           .catch((error) => {
-    //             console.log(error);
-    //           });
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log("Error", err);
-    //     });
-    // },
     async mint() {
       if (this.$refs.form2.validate()) {
         this.$session.set("step", 5);

@@ -118,8 +118,12 @@
         &::before {display: none !important}
         &--active {color: #fff}
       }
+      &-slider-wrapper {
+        height: 4px !important;
+      }
       &-slider {
-        background-color: #fff;
+        background-image: url(../../assets/profile/line.jpg);
+        background-size: cover;
       }
 
 

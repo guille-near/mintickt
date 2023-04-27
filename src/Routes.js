@@ -68,6 +68,11 @@ export default new Router({
           component: () => import('@/pages/Events/RegisterDashboard'),
         },
         {
+          path: '/events/minting-collectibles',
+          name: 'MintingCollectibles',
+          component: () => import('@/pages/Events/MintingCollectibles'),
+        },
+        {
           path: '/events/select-ticket',
           name: 'SelectTicket',
           component: () => import('@/pages/Events/SelectTicket'),

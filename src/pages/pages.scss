@@ -966,10 +966,14 @@
         width: 100% !important;
         height: 42px;
         // background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, 0) 382.27%);
-        background: linear-gradient(183.29deg, #000000 49.8%, rgba(211, 254, 184, .6) 382.27%);
+        background: linear-gradient(180deg, #000000 49.8%, rgba(211, 254, 184, .8) 382.27%) !important;
         filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
 
-        &.mint {background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%) !important}
+        &.mint {background: linear-gradient(180deg, #cc00b7 49.78%, rgba(0, 0, 0, .8) 225.35%) !important}
+        &.borderGradient {
+          @include backgroundBorderGradientImage(none);
+          background-image: url(../assets/backgrounds/border-gradient-btn-large.png) !important;
+        }
 
         // backdrop-filter: blur(14px);
         border-radius: 8px;
@@ -1014,8 +1018,13 @@
       }
       :is(label, input, textarea) {
         font-weight: 500;
-        font-size: 0.9375em;
+        font-size: 15px;
         color: #FFFFFF !important;
+      }
+      label {
+        font-weight: 590;
+        font-size: 15px;
+        font-family: "SF Pro", "Proxima Nova", sans-serif !important;
       }
       p {
         line-height: 1.2;
@@ -1907,7 +1916,7 @@
   }
   .v-btn:not(.v-btn--icon) {border: 1px solid rgba(255, 255, 255, 0.3);
     // TODO:  test
-    &::before {display: none !important;}
+    &:not(.borderGradient):before {display: none !important;}
   }
   section {
     & > aside.divcol, .v-form {
@@ -2017,22 +2026,23 @@
 #modalSucess {
   position: relative;
   isolation: isolate;
-  backdrop-filter: blur(11px);
-  background-color: rgba(0, 0, 0, 0.8);
 
   display: flex;
   flex-direction: column;
   gap: clamp(3em, 4vw, 4em);
   padding: clamp(1em, 2vw, 4em);
-  border-radius: inherit;
+  @include borderGradientImageCard(url(../assets/backgrounds/border-gradient-card-large.png));
+  border-radius: 11px !important;
+  backdrop-filter: blur(11px) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
 
-  border-left: 1.5px solid hsl(97, 97%, 86%, .7) !important;
-  border-right: 1.5px solid hsla(306, 100%, 50%, 0.7) !important;
-  background-image:
-    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)),
-    linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)) !important;
-  background-size: 100% 1px;
-  background-position: 0 0, 0 100%;
+  // border-left: 1.5px solid hsl(97, 97%, 86%, .7) !important;
+  // border-right: 1.5px solid hsla(306, 100%, 50%, 0.7) !important;
+  // background-image:
+  //   linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)),
+  //   linear-gradient(90deg, hsl(97, 97%, 86%, .7) 30%, hsl(306, 100%, 50%, .7)) !important;
+  // background-size: 100% 1px;
+  // background-position: 0 0, 0 100%;
   div.divcol.center {gap: .5em}
   h3 {
     font-weight: 700;
@@ -2040,7 +2050,7 @@
     letter-spacing: -0.03em;
     color: #FFFFFF;
   }
-  a, span.p {
+  a, span.p, p {
     font-weight: 400;
     font-size: 15px;
     color: #6D6D6D;
@@ -2050,13 +2060,13 @@
     padding: 17px;
     width: min(90%, 21.6875em);
     height: 2.625em;
+    @include backgroundBorderGradientImage(url(../assets/backgrounds/border-gradient-btn-large.png));
+    
+    backdrop-filter: blur(3px);
+    background-color: transparent;
+    background-size: 100% 100% !important;
+    background-image: url(../assets/backgrounds/border-gradient-btn-large.png) !important;
 
-    background: linear-gradient(183.61deg, #000000 49.78%, rgba(0, 0, 0, 0) 225.35%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    filter: drop-shadow(0px 4px 19px rgba(0, 0, 0, 0.1));
-    backdrop-filter: blur(14px);
-
-    border-radius: 8px;
     span {color: #fff}
   }
 }
