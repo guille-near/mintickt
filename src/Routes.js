@@ -14,7 +14,7 @@ export default new Router({
       scrollTo = savedPosition.y
     }
 
-    return goTo(scrollTo)
+    if (!to.path.includes("profile")) return goTo(scrollTo)
   },
   routes: [
     {

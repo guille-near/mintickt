@@ -15,7 +15,7 @@
       <h2 class="title-tabs vermobile">My tickets</h2>
 
       <v-tabs v-model="tab" background-color="transparent">
-        <v-tab v-for="item in dataTabs" :key="item" v-ripple="false">{{ item.title }}</v-tab>
+        <v-tab v-for="(item, i) in dataTabs" :key="i" v-ripple="false" @click.native.prevent.stop.capture="tab = i">{{ item.title }}</v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
@@ -85,7 +85,7 @@ export default {
     return {
       urlTx: "",
       modalSuccess: false,
-      tab: 0,
+      tab: undefined,
       avatar: undefined,
       banner: undefined,
       bg_profile: undefined,
@@ -125,6 +125,9 @@ export default {
       dataNfts: [],
     };
   },
+  beforeMount() {
+    this.tab = this.$store.state.indexTabProfile
+  },
   mounted() {
     if (this.$session.get("hashSuccess")) {
       if (process.env.VUE_APP_NETWORK === "mainnet") {
@@ -143,6 +146,7 @@ export default {
     goToDetails(item) {
       this.$session.set("ticketDetails", item);
       this.$router.push(`/profile-ticket-details/`);
+      this.$store.commit("changeTabProfile", this.tab)
     },
     async getData() {
       // * avatar

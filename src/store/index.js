@@ -9,11 +9,15 @@ export default new Vuex.Store({
   state: {
     baseURL: process.env.BASE_URL,
     theme: "light",
+    indexTabProfile: 0,
   },
   mutations: {
     CambiarTheme(state, theme) {
       state.theme = theme
-    }
+    },
+    changeTabProfile(state, tab) {
+      state.indexTabProfile = tab
+    },
   },
   actions: {
     CambiarTheme({state, commit}, {theme, element}) {
