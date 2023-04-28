@@ -417,6 +417,12 @@ export default {
           this.tokens_minted = dataEvent.copies;
           this.tokens_listed = dataEvent.copies - dataEvent.supply;
 
+          if (this.tokens_listed === 0) {
+            this.disable = true
+          }
+
+          
+
           // Object.entries(data).forEach(([key, value]) => {
           //   //Last price
           //   this.price_near = value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
