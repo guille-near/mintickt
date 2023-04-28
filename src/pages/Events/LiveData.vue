@@ -4,7 +4,7 @@
       <v-btn id="go-back" icon to="/events">
         <v-icon style="color: #ffffff !important">mdi-arrow-left</v-icon>
       </v-btn>
-      <h2 style="margin: 0">Event / {{ $route.query.event }}</h2>
+      <h2 style="margin: 0">Event / {{ title }}</h2>
     </div>
 
     <aside class="container-info acenter">
@@ -759,6 +759,7 @@ export default {
       objectId: null,
       btnDisabled: false,
       succesType: false,
+      title: ""
     };
   },
   async mounted() {
@@ -853,7 +854,9 @@ export default {
         .subscribe(({ data }) => {
           if (data.series.length > 0) {
             console.log("DATA", data.series[0])
+            this.title = data.series[0].title
             this.ticketsSold = data.series[0].nftsold
+
             this.incomes = data.series[0].nft_amount_sold / Math.pow(10, 24);
 
             this.dataFilters[0].value = (data.series[0].redeemerevents - data.series[0].aproved_event) + " / " + data.series[0].redeemerevents
