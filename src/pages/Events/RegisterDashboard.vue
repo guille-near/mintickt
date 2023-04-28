@@ -381,7 +381,7 @@
                       type="number"
                       @input="convertNear(price)"
                     ></v-text-field>
-                    <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span>
+                    <!-- <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span> -->
                   </div>
                 </div>
               </div>
@@ -413,7 +413,7 @@
                   <p>Royalties are perpetual. You can add royalties up to 50% across 25 accounts.</p>
 
                   <v-btn @click="dataRoyalties.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add royalties</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available }} %</p>
+                  <p class="p" style="margin-top: 1em">Available {{ available }} %</p>
                 </div>
 
                 <section class="container-inputs">
@@ -460,7 +460,7 @@
                   </p>
 
                   <v-btn @click="dataSplit.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add split</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available1 }} %</p>
+                  <p class="p" style="margin-top: 1em">Available {{ available1 }} %</p>
                 </div>
 
                 <section class="container-inputs">
