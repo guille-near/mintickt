@@ -107,7 +107,7 @@ export default {
           network: process.env.VUE_APP_NETWORK,
         });
 
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.modalBuy = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
             this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];

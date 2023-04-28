@@ -1256,10 +1256,67 @@ export default {
         this.disable = true;
         this.disabledNo = true;
 
+        let extra = [
+          {
+            trait_type: "location",
+            value: this.location,
+          },
+          {
+            trait_type: "latitude",
+            value: this.latitude,
+          },
+          {
+            trait_type: "longitude",
+            value: this.longitude,
+          },
+          {
+            trait_type: "place_id",
+            value: this.place_id,
+          },
+          {
+            trait_type: "zoom",
+            value: 9,
+          },
+          {
+            trait_type: "Promoter / Organizer name",
+            value: this.dataTickets.promoter,
+          },
+          {
+            trait_type: "Start Date",
+            value: moment(this.dates[0]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: "End Date",
+            value: moment(this.dates[1]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: this.$session.get("tempid"),
+            value: "NFT",
+          },
+          {
+            trait_type: "start_time",
+            value: this.startTime,
+          },
+          {
+            trait_type: "end_time",
+            value: this.endTime,
+          },
+          {
+            trait_type: "ticket_type",
+            value:
+              this.$session.get("ticketval") === "custom"
+                ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size")
+                : this.$session.get("ticketval"),
+          },
+        ];
+
         const event_metadata = {
           title: this.dataTickets.attendees,
           description: this.dataTickets.attendees,
           media: this.burn_goodie_image,
+          extra: JSON.stringify(extra),
           reference: this.burn_hash,
         };
 

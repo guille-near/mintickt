@@ -161,7 +161,7 @@ export default {
         });
         console.log(res);
         this.btnDisabled = false;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.nft = {};
           this.$session.set("hashSuccess", res.txHashes[0]);
           this.$router.push(`/profile`);

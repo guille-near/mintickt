@@ -430,7 +430,7 @@ export default {
         console.log(res);
         this.btnDisabled = false;
         this.mint_amount = false;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.modalMintMore = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
             this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
@@ -471,7 +471,7 @@ export default {
         console.log(res);
         this.btnDisabled = false;
         this.price_list = 0;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.modalListMore = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
             this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
@@ -511,7 +511,7 @@ export default {
         });
         console.log(res);
         this.btnDisabled = false;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.$session.set("hashSuccess", res.txHashes[0]);
           this.$router.push("/events");
         } else {

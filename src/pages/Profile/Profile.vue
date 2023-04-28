@@ -183,7 +183,10 @@ export default {
 
           for (let i = 0; i < dataNfts.length; i++) {
             const extra = JSON.parse(dataNfts[i].metadata.extra);
-            const startDate = extra.find((element) => element.trait_type === "Start Date");
+            let startDate = { value: 0 }
+            if (extra) {
+              startDate = extra.find((element) => element.trait_type === "Start Date");
+            }
 
             const dateNft = startDate.value * 1000;
             const item = {
