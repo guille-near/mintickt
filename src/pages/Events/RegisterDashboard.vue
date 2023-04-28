@@ -624,7 +624,7 @@
 
             <div class="container-content--actions center gap eliminarmobile">
               <!-- <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn> -->
-              <v-btn
+              <!-- <v-btn
                 v-show="goodie"
                 type="submit"
                 @click="mintGoodie"
@@ -633,6 +633,9 @@
                 style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
               >
                 Submit
+              </v-btn> -->
+              <v-btn v-show="goodie" type="submit" @click="mintGoodie" :loading="loading" :disabled="disable" class="mint">
+                Approve
               </v-btn>
             </div>
           </div>
