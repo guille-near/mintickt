@@ -48,7 +48,7 @@ Vue.prototype.$burn_page_goodies = process.env.VUE_APP_API_BASE_URL_BURN;
 //Vue.prototype.$owner = "probando.testnet"
 Vue.prototype.$owner_split = "3"
 //Vue.prototype.$baseUrl = "https://testnet.mintickt.com/#"
-//Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
+Vue.prototype.$key = "AIzaSyCEOUnBgw-3I8ffxi3zE85mV1QqIJdy08w" // 49cc71c9-d792-4ff1-b7c7-d4fd5b43ac13
 
 Vue.use(ramper)
 Vue.use(near)
