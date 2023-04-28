@@ -77,6 +77,7 @@ export default {
     },
     async buy() {
       const tokenId = this.$session.get("tokenId");
+      const quantity = this.$session.get("quantity") || 1;
       let priceSeries = await this.getSeriesPrice(tokenId);
       let price = parseFloat(priceSeries) + this.amountDeposit;
       const balance = await this.getBalance();
@@ -86,24 +87,26 @@ export default {
       }
 
       if (this.$ramper.getUser()) {
-        const action = [
-          this.$ramper.functionCall(
-            "nft_buy",
-            {
-              token_event_id: tokenId,
-              receiver_id: this.$ramper.getAccountId(),
-            },
-            "300000000000000",
-            this.$utils.format.parseNearAmount(String(price))
-          ),
-        ];
+        console.log(quantity)
+        const actions = []
+        for (let i = 0; i < quantity; i++) {
+          actions.push(
+            this.$ramper.functionCall(
+              "nft_buy",
+              {
+                token_event_id: tokenId,
+                receiver_id: this.$ramper.getAccountId(),
+              },
+              "50000000000000",
+              this.$utils.format.parseNearAmount(String(price))
+            ),
+          )
+        }
         const res = await this.$ramper.sendTransaction({
-          transactionActions: [
-            {
+          transactionActions: [{
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
-              actions: action,
-            },
-          ],
+              actions: actions,
+            }],
           network: process.env.VUE_APP_NETWORK,
         });
 
