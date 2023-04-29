@@ -21,7 +21,7 @@
         <span>{{ incomes.toFixed(2) }} N</span>
       </div>
       <label style="margin-top: auto"
-        >≈ {{ (nearPrice * incomes).toFixed(2) }} $USD</label
+        >≈ {{ (nearPrice * incomes).toFixed(2) }} USD</label
       >
     </aside>
 

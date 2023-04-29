@@ -98,7 +98,7 @@
 
           <aside class="space">
             <div class="divrow acenter">
-              <span class="h8-em number ml-3">{{ price_usd * quantity }}$USD</span>
+              <span class="h8-em number ml-3">{{ price_usd * quantity }} USD</span>
             </div>
             <span class="h8-em number ml-3">~</span>
             <img src="@/assets/logo/logonear.svg" alt="Logo near" />
@@ -481,9 +481,17 @@ export default {
     padWithZero(num, targetLength) {
       return String(num).padEnd(targetLength, "0");
     },
-    buySelecction() {
-      this.$session.set("tokenId", this.token_id);
-      this.$refs.modalbuy.modalBuy = true;
+    async buySelecction() {
+      if (this.$ramper.getUser()) {
+        this.$session.set("tokenId", this.token_id);
+        this.$refs.modalbuy.modalBuy = true;
+      } else {
+        const login = await this.$ramper.signIn()
+        if (login && login.user) location.reload();
+
+        setTimeout(() => location.reload(), 200)
+        this.$router.push("/");
+      }
     },
     async fiat() {
       this.$refs.modalbuy.modalBuy = false;

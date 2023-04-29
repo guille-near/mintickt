@@ -31,15 +31,20 @@
         </div>
       </v-card>
     </v-dialog>
+    <modal-fill ref="modalfill"></modal-fill>
   </section>
 </template>
 
 <script>
 import * as nearAPI from "near-api-js";
+import modalFill from "./ModalFill.vue";
 const { Contract } = nearAPI;
 
 export default {
   name: "modalBuy",
+  components: {
+    modalFill,
+  },
   data() {
     return {
       modalSuccess: false,
@@ -95,21 +100,24 @@ export default {
       let priceSeries = await this.getSeriesPrice(tokenId);
       
       let price = parseFloat(priceSeries) + this.amountDeposit;
+
+      console.log(price)
       const balance = await this.getBalance();
       if (balance < price) {
         this.$refs.modalfill.modalFill = true;
         return;
       }
 
+      console.log(this.$ramper.getUser())
+
       if (this.$ramper.getUser()) {
-        console.log(quantity)
         const actions = []
         for (let i = 0; i < quantity; i++) {
           actions.push(
             this.$ramper.functionCall(
               "nft_buy",
               {
-                token_event_id: tokenId,
+                token_series_id: tokenId,
                 receiver_id: this.$ramper.getAccountId(),
               },
               "50000000000000",
@@ -134,6 +142,8 @@ export default {
           }
           this.modalSuccess = true;
         }
+      } else {
+        this.$refs.modalfill.modalFill = true
       }
     },
     closeSuccess() {
