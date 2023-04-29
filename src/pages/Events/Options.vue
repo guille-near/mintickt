@@ -53,7 +53,7 @@
       <div class="space">
         <div class="divcol">
           <label>Tickets price</label>
-          <span>{{ ticketPrice }}$</span>
+          <span>{{ ticketPrice }} USD</span>
         </div>
 
         <v-btn @click="modalListMore = true">Change price</v-btn>

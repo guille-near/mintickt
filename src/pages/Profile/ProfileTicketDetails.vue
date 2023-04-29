@@ -36,7 +36,7 @@
           </v-btn>
           <v-btn color="red" :disabled="btnDisabled" @click="burnNft()" class="btn-bordered">
             <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px" />
-            <span>Burn</span>
+            <span>Delete</span>
           </v-btn>
           <v-btn :disabled="btnDisabled" class="btn-filled">
             <img src="@/assets/profile/discord.svg" alt="discord" width="15px" height="15px" />
