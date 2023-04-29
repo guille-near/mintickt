@@ -195,6 +195,7 @@ export default {
               img: dataNfts[i].metadata.media,
               name: dataNfts[i].title,
               date: moment(dateNft).format("ll"),
+              dc: true
             };
             if (dateNft < dateNow) {
               dataPast.push(item);
@@ -246,6 +247,7 @@ export default {
             contract_id: contract_id,
             img: await this.buildMediaUrl(result[i].metadata.media, metadata.base_uri),
             name: result[i].metadata.title || result[i].token_id,
+            dc: false
           };
 
           this.dataNftsAux.push(collection);
