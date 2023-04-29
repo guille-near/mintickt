@@ -673,6 +673,7 @@
     width: 100vw;
     margin-inline: calc(50% - 50vw);
     inset: 0;
+    pointer-events: none !important;
   // background-color: #000;
   background-image: url('../assets/landing/Landingback.png');
   background-position: 50% 50%;
@@ -683,6 +684,7 @@
   -webkit-text-fill-color: inherit;
   mix-blend-mode: normal;}
   padding-block: $margin-layout;
+  padding-inline: 20px;
   @media screen and (max-width: 991px) {background-position: 50% 50%}
   @media screen and (max-width: 479px) {
     display: block;

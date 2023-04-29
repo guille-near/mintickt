@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146" class="just-in-case">
+    <!-- <div data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146" class="just-in-case">
       <h3 class="heading-boxes">Just in case</h3>
       <div class="faq w-container">
         <div class="w-layout-grid grid">
@@ -64,7 +64,53 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <section class="divcol" data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146">
+      <h2 class="h2">Or hire someone.</h2>
+
+      <div class="slider" ref="slider" @mousemove.prevent="onDragging" @mousedown="startDragging" @mouseup="stopDragging" @mouseleave="stopDragging">
+        <v-card v-for="(item, i) in dataSlider" :key="i">
+          <img :src="item.headerImg" alt="slider-card-header-image">
+
+          <aside class="slider__content">
+            <span class="slider__content-title">{{item.title}}</span>
+
+            <div style="display: flex">
+              <img :src="item.avatar" alt="avatar">
+              <span class="avatar-name">{{item.name}}</span>
+            </div>
+
+            <ul>
+              <li v-for="(item2, i) in item.description" :key="i">{{item2}}</li>
+            </ul>
+
+            <div class="space">
+              <div class="divcol">
+                <span class="from-text">From</span>
+                <span class="from-price">{{item.price ? `$${item.price}USD` : ''}}</span>
+              </div>
+
+              <v-btn>
+                More info
+              </v-btn>
+            </div>
+          </aside>
+        </v-card>
+      </div>
+    </section>
+
+    <section class="container-steps" data-w-id="e756a33a-1b3e-1b5b-3631-23a5688bf0e2">
+      <v-card class="step-cards">
+        <span class="h2">Fill the webform</span>
+        <p>Fill the webform with all the details of your event including location, pricing and even drink deals or pre sale for your merch.</p>
+      </v-card>
+      
+      <v-card class="step-cards">
+        <span class="h2">Create your event</span>
+        <p>Fill the webform with all the details of your gig.</p>
+      </v-card>
+    </section>
   </section>
 </template>
 
@@ -73,6 +119,82 @@ export default {
   name: "Landing",
   data() {
     return {
+      dataSlider: [
+        {
+          headerImg: require("@/assets/landing/zombie-image-landing.jpg"),
+          title: "I will design a custom ticket design for your event.",
+          avatar: require("@/assets/landing/avatar.svg"),
+          name: "Pintamones",
+          description: [
+            "Unique and 100% original illustration",
+            "Source file (300 DPI - AI and PSD file)",
+            "All in common format such as JPG / PNG",
+            "Revision",
+            "Commercial use",
+          ],
+          price: 300,
+        },
+        {
+          headerImg: require("@/assets/landing/zombie-image-landing.jpg"),
+          title: "I will design a custom ticket design for your event.",
+          avatar: require("@/assets/landing/avatar.svg"),
+          name: "Pintamones",
+          description: [
+            "Unique and 100% original illustration",
+            "Source file (300 DPI - AI and PSD file)",
+            "All in common format such as JPG / PNG",
+            "Revision",
+            "Commercial use",
+          ],
+          price: 300,
+        },
+        {
+          headerImg: require("@/assets/landing/zombie-image-landing.jpg"),
+          title: "I will design a custom ticket design for your event.",
+          avatar: require("@/assets/landing/avatar.svg"),
+          name: "Pintamones",
+          description: [
+            "Unique and 100% original illustration",
+            "Source file (300 DPI - AI and PSD file)",
+            "All in common format such as JPG / PNG",
+            "Revision",
+            "Commercial use",
+          ],
+          price: 300,
+        },
+        {
+          headerImg: require("@/assets/landing/zombie-image-landing.jpg"),
+          title: "I will design a custom ticket design for your event.",
+          avatar: require("@/assets/landing/avatar.svg"),
+          name: "Pintamones",
+          description: [
+            "Unique and 100% original illustration",
+            "Source file (300 DPI - AI and PSD file)",
+            "All in common format such as JPG / PNG",
+            "Revision",
+            "Commercial use",
+          ],
+          price: 300,
+        },
+        {
+          headerImg: require("@/assets/landing/zombie-image-landing.jpg"),
+          title: "I will design a custom ticket design for your event.",
+          avatar: require("@/assets/landing/avatar.svg"),
+          name: "Pintamones",
+          description: [
+            "Unique and 100% original illustration",
+            "Source file (300 DPI - AI and PSD file)",
+            "All in common format such as JPG / PNG",
+            "Revision",
+            "Commercial use",
+          ],
+          price: 300,
+        },
+      ],
+      slider: 0,
+      mouseDown: false,
+      startX: undefined,
+      scrollLeft: undefined,
     };
   },
   mounted() {
@@ -95,9 +217,27 @@ export default {
     }
   },
   methods: {
+    startDragging(e) {
+      this.mouseDown = true;
+      this.startX = e.pageX - this.$refs.slider.offsetLeft;
+      this.scrollLeft = this.$refs.slider.scrollLeft;
+      console.log("start");
+    },
+    stopDragging() {
+      this.mouseDown = false;
+      console.log("stop");
+    },
+    onDragging(e) {
+      if(!this.mouseDown) { return; }
+      const x = e.pageX - this.$refs.slider.offsetLeft;
+      const scroll = x - this.startX;
+      this.$refs.slider.scrollLeft = this.scrollLeft - scroll;
+      console.log("dragging");
+    }
   }
 };
 </script>
 
 <style src="../pages.scss" lang="scss"></style>
 <style src="./Landing.scss" lang="scss"></style>
+<style src="./NewLanding.scss" lang="scss"></style>
