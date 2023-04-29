@@ -34,7 +34,7 @@
             <img src="@/assets/profile/transfer.svg" alt="transfer" width="15px" height="15px" />
             <span>Transfer</span>
           </v-btn>
-          <v-btn :disabled="btnDisabled" @click="burnNft()" class="btn-bordered">
+          <v-btn color="red" :disabled="btnDisabled" @click="burnNft()" class="btn-bordered">
             <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px" />
             <span>Burn</span>
           </v-btn>
@@ -150,7 +150,7 @@ export default {
         });
         console.log(res);
         this.btnDisabled = false;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.nft = {};
           this.$session.set("hashSuccess", res.txHashes[0]);
           this.$router.push(`/profile`);
@@ -216,7 +216,7 @@ export default {
         console.log(res);
         this.btnDisabled = false;
         this.btnTransfer = false;
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.nft = {};
           this.$session.set("hashSuccess", res.txHashes[0]);
           this.$router.push(`/profile`);

@@ -98,11 +98,11 @@
 
           <aside class="space">
             <div class="divrow acenter">
-              <span class="h8-em number ml-3">{{ price_usd }}$USD</span>
+              <span class="h8-em number ml-3">{{ price_usd * quantity }}$USD</span>
             </div>
             <span class="h8-em number ml-3">~</span>
             <img src="@/assets/logo/logonear.svg" alt="Logo near" />
-            <span class="tend">{{ price_near }}</span>
+            <span class="tend">{{ (price_near * quantity)? (price_near * quantity).toFixed(4) : "---"}}</span>
           </aside>
         </div>
         <div style="gap: 1em" class="divcol fill-w">
@@ -417,6 +417,12 @@ export default {
           this.tokens_minted = dataEvent.copies;
           this.tokens_listed = dataEvent.copies - dataEvent.supply;
 
+          if (this.tokens_listed === 0) {
+            this.disable = true
+          }
+
+          
+
           // Object.entries(data).forEach(([key, value]) => {
           //   //Last price
           //   this.price_near = value[0].listings_aggregate.nodes[0].price / Math.pow(10, 24);
@@ -445,7 +451,6 @@ export default {
           // control flow 1 toke by default
           if (this.quantity === 0) {
             this.quantity = 1;
-            this.tokens_buy.push(this.tokens[0].token_id);
           }
         });
       this.loading = false;
@@ -460,35 +465,15 @@ export default {
     controlAmount(item) {
       var quantity_tokens = 0;
       if (item == "more" && this.quantity < this.tokens_listed) {
-        this.quantity = this.quantity + 1;
-        this.$session.set("quantity", this.quantity);
-        // this.lastPrice = this.lastPrice.lastPrice * this.quantity * this.price_near
-        this.getData();
-        //this.fetch();
-        this.tokens_buy = [];
-        this.tokens.forEach((element) => {
-          if (!this.tokens_buy.includes(element.token_id) && quantity_tokens < this.quantity) {
-            quantity_tokens++;
-            this.tokens_buy.push(element.token_id);
-            this.quantity == 0 ? (this.disable = true) : (this.disable = false);
-            //console.log(this.tokens_buy);
-          }
-        });
+        if (this.quantity < 5) {
+          this.quantity = this.quantity + 1;
+        }
       }
       if (item == "less" && this.quantity > 1) {
         this.quantity--;
-        this.$session.set("quantity", this.quantity);
-        this.getData();
-        //this.fetch();
-        this.tokens_buy = [];
-        this.tokens.forEach((element) => {
-          if (!this.tokens_buy.includes(element.token_id) && quantity_tokens <= this.quantity) {
-            quantity_tokens++;
-            this.tokens_buy.push(element.token_id);
-            this.quantity == 0 ? (this.disable = true) : (this.disable = false);
-          }
-        });
       }
+
+      this.$session.set("quantity", this.quantity);
     },
     onIntersect(entries) {
       this.isIntersecting = entries[0].isIntersecting;

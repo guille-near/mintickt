@@ -36,7 +36,7 @@
 
       <template v-slot:[`item.actions`]="{ item }">
         <div class="cont_buttons" style="gap: 6px">
-          <v-btn @click="goLiveData(item.name, item.id)">Go to live data</v-btn>
+          <v-btn @click="goLiveData(item.id)">Go to live data</v-btn>
           <v-btn @click="goOptions(item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
           <!--
           <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
@@ -58,7 +58,7 @@
           <span>{{ item.date }}</span>
 
           <aside class="acenter" style="gap: 0.5em">
-            <v-btn class="icon" @click="goLiveData(item.name, item.thingid)">
+            <v-btn class="icon" @click="goLiveData(item.id)">
               <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
             </v-btn>
 
@@ -344,13 +344,11 @@ export default {
         this.$forceUpdate();
       }, 60000);
     },
-    goLiveData(pevent, pthingid) {
+    goLiveData(event_id) {
+      this.$session.set("event_id", event_id);
       this.$router.push({
         path: "/events/liveData",
-        query: { event: pevent, thingid: pthingid },
       });
-      this.$session.get("eventid", pthingid);
-      this.$session.get("event_name", pevent);
     },
     goEventData(eventId, ticketType) {
       // this.$router.push({
@@ -361,7 +359,6 @@ export default {
       // this.$session.get("event_name", pevent);
     },
     goOptions(event_id) {
-      console.log("ENTRO");
       this.$session.set("event_id_op", event_id);
       this.$router.push({
         path: "/events/options",

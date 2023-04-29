@@ -381,7 +381,7 @@
                       type="number"
                       @input="convertNear(price)"
                     ></v-text-field>
-                    <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span>
+                    <!-- <span class="conversion">~ {{ usd.toFixed(4) }} NEAR</span> -->
                   </div>
                 </div>
               </div>
@@ -413,7 +413,7 @@
                   <p>Royalties are perpetual. You can add royalties up to 50% across 25 accounts.</p>
 
                   <v-btn @click="dataRoyalties.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add royalties</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available }} %</p>
+                  <p class="p" style="margin-top: 1em">Available {{ available }} %</p>
                 </div>
 
                 <section class="container-inputs">
@@ -460,7 +460,7 @@
                   </p>
 
                   <v-btn @click="dataSplit.push({ account: '', percentage: 0 })" :disabled="disabledBtn">Add split</v-btn>
-                  <p class="p" style="margin-top: 1em">Avalilable {{ available1 }} %</p>
+                  <p class="p" style="margin-top: 1em">Available {{ available1 }} %</p>
                 </div>
 
                 <section class="container-inputs">
@@ -624,7 +624,7 @@
 
             <div class="container-content--actions center gap eliminarmobile">
               <!-- <v-btn @click="back"> <v-icon style="color: #ffffff !important" small>mdi-arrow-left</v-icon>Back </v-btn> -->
-              <v-btn
+              <!-- <v-btn
                 v-show="goodie"
                 type="submit"
                 @click="mintGoodie"
@@ -633,6 +633,9 @@
                 style="background: linear-gradient(183.61deg, #cc00b7 49.78%, rgba(0, 0, 0, 0) 225.35%)"
               >
                 Submit
+              </v-btn> -->
+              <v-btn v-show="goodie" type="submit" @click="mintGoodie" :loading="loading" :disabled="disable" class="mint">
+                Approve
               </v-btn>
             </div>
           </div>
@@ -1256,10 +1259,67 @@ export default {
         this.disable = true;
         this.disabledNo = true;
 
+        let extra = [
+          {
+            trait_type: "location",
+            value: this.location,
+          },
+          {
+            trait_type: "latitude",
+            value: this.latitude,
+          },
+          {
+            trait_type: "longitude",
+            value: this.longitude,
+          },
+          {
+            trait_type: "place_id",
+            value: this.place_id,
+          },
+          {
+            trait_type: "zoom",
+            value: 9,
+          },
+          {
+            trait_type: "Promoter / Organizer name",
+            value: this.dataTickets.promoter,
+          },
+          {
+            trait_type: "Start Date",
+            value: moment(this.dates[0]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: "End Date",
+            value: moment(this.dates[1]).unix(),
+            display_type: "date",
+          },
+          {
+            trait_type: this.$session.get("tempid"),
+            value: "NFT",
+          },
+          {
+            trait_type: "start_time",
+            value: this.startTime,
+          },
+          {
+            trait_type: "end_time",
+            value: this.endTime,
+          },
+          {
+            trait_type: "ticket_type",
+            value:
+              this.$session.get("ticketval") === "custom"
+                ? this.$session.get("ticketval") + "/" + this.$session.get("ticket_custom_size")
+                : this.$session.get("ticketval"),
+          },
+        ];
+
         const event_metadata = {
           title: this.dataTickets.attendees,
           description: this.dataTickets.attendees,
           media: this.burn_goodie_image,
+          extra: JSON.stringify(extra),
           reference: this.burn_hash,
         };
 

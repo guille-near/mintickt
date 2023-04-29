@@ -65,19 +65,35 @@ export default {
       }
     },
     async getSeriesPrice(seriesId) {
-      const account = await this.$near.account(this.$ramper.getAccountId());
-      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
-        viewMethods: ["nft_get_series_price"],
-        sender: account,
-      });
+      try {
+        const account = await this.$near.account(this.$ramper.getAccountId());
+        const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+          viewMethods: ["nft_get_series_price"],
+          sender: account,
+        });
 
-      const price = await contract.nft_get_series_price({ token_series_id: seriesId });
+        console.log(contract)
 
-      return this.$utils.format.formatNearAmount(price);
+        const price = await contract.nft_get_series_price({ token_series_id: seriesId });
+
+        if (price) {
+          return this.$utils.format.formatNearAmount(price);
+        } else {
+          return
+        }
+
+        
+      } catch (error) {
+        console.log(error)
+      }
+      
     },
     async buy() {
       const tokenId = this.$session.get("tokenId");
+      const quantity = this.$session.get("quantity") || 1;
+      console.log("LOG")
       let priceSeries = await this.getSeriesPrice(tokenId);
+      
       let price = parseFloat(priceSeries) + this.amountDeposit;
       const balance = await this.getBalance();
       if (balance < price) {
@@ -86,33 +102,35 @@ export default {
       }
 
       if (this.$ramper.getUser()) {
-        const action = [
-          this.$ramper.functionCall(
-            "nft_buy",
-            {
-              token_event_id: tokenId,
-              receiver_id: this.$ramper.getAccountId(),
-            },
-            "300000000000000",
-            this.$utils.format.parseNearAmount(String(price))
-          ),
-        ];
+        console.log(quantity)
+        const actions = []
+        for (let i = 0; i < quantity; i++) {
+          actions.push(
+            this.$ramper.functionCall(
+              "nft_buy",
+              {
+                token_event_id: tokenId,
+                receiver_id: this.$ramper.getAccountId(),
+              },
+              "50000000000000",
+              this.$utils.format.parseNearAmount(String(price))
+            ),
+          )
+        }
         const res = await this.$ramper.sendTransaction({
-          transactionActions: [
-            {
+          transactionActions: [{
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
-              actions: action,
-            },
-          ],
+              actions: actions,
+            }],
           network: process.env.VUE_APP_NETWORK,
         });
 
-        if (res.result[0]?.status?.SuccessValue || res.result[0]?.status?.SuccessValue === "") {
+        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
           this.modalBuy = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
-            this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
+            this.urlTx = "https://explorer.near.org/accounts/" + this.$ramper.getAccountId();
           } else {
-            this.urlTx = "https://explorer.testnet.near.org/transactions/" + res.txHashes[0];
+            this.urlTx = "https://explorer.testnet.near.org/accounts/" + this.$ramper.getAccountId();
           }
           this.modalSuccess = true;
         }
