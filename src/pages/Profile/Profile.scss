@@ -206,7 +206,9 @@
         justify-content: center;
         gap: 10px;
 
+        // TODO here
         img {
+          object-fit: cover;
           width: 222px;
           height: 333px;
           @include mq(max, small) {
