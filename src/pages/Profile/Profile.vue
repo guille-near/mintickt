@@ -20,18 +20,20 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="item in dataTabs" :key="item" :style="`--imageSize: ${105}px`">
-          <v-card
-            v-for="(item2,i) in item.content" :key="i" color="transparent"
-            v-ripple="false"
-            @click="goToDetails(item2)"
-          >
-            <img :src="item2.img" :alt="`${item2.name} image`">
+          <section class="container-grid">
+            <v-card
+              v-for="(item2,i) in item.content" :key="i" color="transparent"
+              v-ripple="false"
+              @click="goToDetails(item2)"
+            >
+              <img :src="item2.img" :alt="`${item2.name} image`">
 
-            <div class="divcol" style="gap: 1px">
-              <span>{{ item2.name }}</span>
-              <span v-show="tab !== 2">{{ item2.date }}</span>
-            </div>
-          </v-card>
+              <div class="divcol" style="gap: 1px">
+                <span>{{ item2.name }}</span>
+                <span v-show="tab !== 2">{{ item2.date }}</span>
+              </div>
+            </v-card>
+          </section>
         </v-tab-item>
       </v-tabs-items>
     </section>

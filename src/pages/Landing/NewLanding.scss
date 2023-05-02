@@ -1,182 +1,184 @@
-h2, span.h2 {
-  font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-  font-weight: 900 !important;
-  font-size: 28px !important;
-  line-height: 100% !important;
-  letter-spacing: -0.03em !important;
-  background: radial-gradient(239.3% 743.7% at 4.6% -28%, #6D6D6D 1.04%, #FF00E5 42.21%, rgba(211, 254, 184, 0.92) 93.31%), #FFFFFF !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  @media (max-width: 880px) {
-    display: flex;
-  }
-}
-
-
-.slider {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
-  display: flex;
-  overflow-x: auto;
-  &::-webkit-scrollbar {display: none;}
-
-  .v-card {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    width: 311px !important;
-    height: 501px !important;
-    margin-left: 30px;
-    &:last-child {margin-right: 30px;}
-    filter: drop-shadow(119px 192px 90px rgba(0, 0, 0, 0.01)) drop-shadow(67px 108px 76px rgba(0, 0, 0, 0.05)) drop-shadow(30px 48px 56px rgba(0, 0, 0, 0.09)) drop-shadow(7px 12px 31px rgba(0, 0, 0, 0.1)) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.1));
-    border-radius: 17px !important;
-    overflow: hidden;
-
-    img[alt="slider-card-header-image"] {
-      width: 100% !important;
-      height: 223px !important;
-      border-radius: 15px 15px 0px 0px !important;
-      object-fit: cover !important;
+#landing {
+  h2, span.h2 {
+    font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
+    font-weight: 900 !important;
+    &:not(.likeRegister) {font-size: 28px !important;}
+    line-height: 100% !important;
+    letter-spacing: -0.03em !important;
+    background: radial-gradient(239.3% 743.7% at 4.6% -28%, #6D6D6D 1.04%, #FF00E5 42.21%, rgba(211, 254, 184, 0.92) 93.31%), #FFFFFF !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    @media (max-width: 880px) {
+      display: flex;
     }
+  }
 
-    .slider__content {
+
+  .slider {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    display: flex;
+    overflow-x: auto;
+    &::-webkit-scrollbar {display: none;}
+
+    .v-card {
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      padding: 12px;
-      &-title {
-        font-family: 'Proxima Nova', "SF Pro", sans-serif;
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        line-height: 100% !important;
-        font-feature-settings: 'case' on !important;
-        color: #000000 !important;
+      flex-shrink: 0;
+      width: 311px !important;
+      height: 501px !important;
+      margin-left: 30px;
+      &:last-child {margin-right: 30px;}
+      filter: drop-shadow(119px 192px 90px rgba(0, 0, 0, 0.01)) drop-shadow(67px 108px 76px rgba(0, 0, 0, 0.05)) drop-shadow(30px 48px 56px rgba(0, 0, 0, 0.09)) drop-shadow(7px 12px 31px rgba(0, 0, 0, 0.1)) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.1));
+      border-radius: 17px !important;
+      overflow: hidden;
+
+      img[alt="slider-card-header-image"] {
+        width: 100% !important;
+        height: 223px !important;
+        border-radius: 15px 15px 0px 0px !important;
+        object-fit: cover !important;
       }
 
-      img[alt="avatar"] {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
-        object-fit: cover;
-      }
-
-      span.avatar-name {
-        font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-        font-weight: 600 !important;
-        font-size: 15px !important;
-        line-height: 100% !important;
-        text-align: center !important;
-        letter-spacing: -0.025em !important;
-        text-transform: capitalize !important;
-        color: #000000 !important;
-      }
-
-      ul {
-        list-style-image: url(../../assets/icons/check-rose.svg);
-        li {
-          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-          font-weight: 400 !important;
-          font-size: 12px !important;
+      .slider__content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 12px;
+        &-title {
+          font-family: 'Proxima Nova', "SF Pro", sans-serif;
+          font-weight: 600 !important;
+          font-size: 20px !important;
           line-height: 100% !important;
           font-feature-settings: 'case' on !important;
-          color: #080808 !important;
-        }
-      }
-
-      span.from-text {
-        font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-        font-weight: 600 !important;
-        font-size: 13px !important;
-        line-height: 100% !important;
-        letter-spacing: -0.025em !important;
-        color: #BBBBBB !important;
-      }
-
-      span.from-price {
-        font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-        font-weight: 600 !important;
-        font-size: 15px !important;
-        line-height: 100% !important;
-        letter-spacing: 0.02em !important;
-        font-feature-settings: 'case' on !important;
-        color: #000000 !important;
-      }
-
-      .v-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 15px;
-        gap: 10px;
-
-        width: 100px;
-        height: 44px;
-        background-image: url(../../assets/landing/border-gradient-landing-btn-small.png);
-        border-radius: 10px;
-        position: relative;
-        &::before {
-          content: "" !important;
-          opacity: 1 !important;
-          display: block !important;
-          position: absolute;
-          inset: 2px;
-          background: linear-gradient(124.98deg, #FFFFFF 71.99%, rgba(109, 109, 109, 0) 211.63%);
-          background-size: cover;
+          color: #000000 !important;
         }
 
-        span {
+        img[alt="avatar"] {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+          object-fit: cover;
+        }
+
+        span.avatar-name {
           font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
           font-weight: 600 !important;
-          font-size: 14px !important;
+          font-size: 15px !important;
           line-height: 100% !important;
           text-align: center !important;
           letter-spacing: -0.025em !important;
-          color: #120000 !important;
+          text-transform: capitalize !important;
+          color: #000000 !important;
+        }
+
+        ul {
+          list-style-image: url(../../assets/icons/check-rose.svg);
+          li {
+            font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
+            font-weight: 400 !important;
+            font-size: 12px !important;
+            line-height: 100% !important;
+            font-feature-settings: 'case' on !important;
+            color: #080808 !important;
+          }
+        }
+
+        span.from-text {
+          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
+          font-weight: 600 !important;
+          font-size: 13px !important;
+          line-height: 100% !important;
+          letter-spacing: -0.025em !important;
+          color: #BBBBBB !important;
+        }
+
+        span.from-price {
+          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
+          font-weight: 600 !important;
+          font-size: 15px !important;
+          line-height: 100% !important;
+          letter-spacing: 0.02em !important;
+          font-feature-settings: 'case' on !important;
+          color: #000000 !important;
+        }
+
+        .v-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 15px;
+          gap: 10px;
+
+          width: 100px;
+          height: 44px;
+          background-image: url(../../assets/landing/border-gradient-landing-btn-small.png);
+          border-radius: 10px;
+          position: relative;
+          &::before {
+            content: "" !important;
+            opacity: 1 !important;
+            display: block !important;
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(124.98deg, #FFFFFF 71.99%, rgba(109, 109, 109, 0) 211.63%);
+            background-size: cover;
+          }
+
+          span {
+            font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            line-height: 100% !important;
+            text-align: center !important;
+            letter-spacing: -0.025em !important;
+            color: #120000 !important;
+          }
         }
       }
     }
   }
-}
 
 
-.container-steps {
-  margin-top: 200px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-
-  .step-cards {
+  .container-steps {
+    margin-top: 200px;
     display: flex;
-    flex-direction: column;
-    padding: 45px 35px 30px;
-    gap: 20px;
-    
-    width: 331px;
-    height: 220px;
-    box-shadow: 83px 71px 44px rgba(0, 0, 0, 0.01), 47px 40px 37px rgba(0, 0, 0, 0.03), 21px 18px 27px rgba(0, 0, 0, 0.06), 5px 4px 15px rgba(0, 0, 0, 0.07), 0px 0px 0px rgba(0, 0, 0, 0.07) !important;
-    border-radius: 11px !important;
-    background-image: url(../../assets/landing/border-gradient-landing-card-large.png) !important;
-    border-radius: 10px !important;
-    position: relative;
-    &::before {
-      content: "" !important;
-      opacity: 1 !important;
-      display: block !important;
-      position: absolute;
-      inset: 4px;
-      background: linear-gradient(126.73deg, #FFFFFF 55.85%, rgba(255, 255, 255, 0.35) 103.21%) !important;
-      background-size: cover;
-    }
+    flex-wrap: wrap;
+    gap: 30px;
 
-    p {
-      font-family: 'Proxima Nova' "SF Pro", sans-serif !important;
-      font-weight: 400 !important;
-      font-size: 16px !important;
-      line-height: 16px !important;
-      letter-spacing: -0.03em !important;
-      color: #000000 !important;
+    .step-cards {
+      display: flex;
+      flex-direction: column;
+      padding: 45px 35px 30px;
+      gap: 20px;
+      
+      width: 331px;
+      height: 220px;
+      box-shadow: 83px 71px 44px rgba(0, 0, 0, 0.01), 47px 40px 37px rgba(0, 0, 0, 0.03), 21px 18px 27px rgba(0, 0, 0, 0.06), 5px 4px 15px rgba(0, 0, 0, 0.07), 0px 0px 0px rgba(0, 0, 0, 0.07) !important;
+      border-radius: 11px !important;
+      background-image: url(../../assets/landing/border-gradient-landing-card-large.png) !important;
+      border-radius: 10px !important;
+      position: relative;
+      &::before {
+        content: "" !important;
+        opacity: 1 !important;
+        display: block !important;
+        position: absolute;
+        inset: 4px;
+        background: linear-gradient(126.73deg, #FFFFFF 55.85%, rgba(255, 255, 255, 0.35) 103.21%) !important;
+        background-size: cover;
+      }
+
+      p {
+        font-family: 'Proxima Nova' "SF Pro", sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 16px !important;
+        letter-spacing: -0.03em !important;
+        color: #000000 !important;
+      }
     }
   }
 }

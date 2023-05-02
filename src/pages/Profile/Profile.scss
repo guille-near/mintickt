@@ -132,51 +132,57 @@
         background-color: transparent;
 
         .v-window-item--active {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--imageSize)), 1fr));
-          // row-gap: var(--spacing);
-          // column-gap: calc(var(--spacing) * 2.5);
-          gap: var(--spacing);
-          min-height: 300px;
+          .container-grid {
+            width: 100% !important;
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--imageSize)), 1fr));
+            @media (min-width: 1140px) {
+              grid-template-columns: repeat(7, 1fr);
+            }
+            // row-gap: var(--spacing);
+            // column-gap: calc(var(--spacing) * 2.5);
+            gap: var(--spacing);
+            min-height: 300px;
 
-          .v-card {
-            --lines: 1;
-            width: max-content;
-            height: max-content;
-            display: flex;
-            flex-direction: column;
-            // gap: calc(var(--spacing) * 2);
-            gap: 10px;
-            border-radius: 13px;
-
-            img {
+            .v-card {
+              --lines: 1;
               width: var(--imageSize);
-              height: var(--imageSize);
-              border-radius: 9px;
-              object-fit: cover;
-            }
-            span:first-of-type {
-              font-family: 'SF Pro', 'Proxima Nova', sans-serif;
-              font-weight: 590;
-              font-size: 15px;
-              color: #FFFFFF;
+              height: max-content;
+              display: flex;
+              flex-direction: column;
+              // gap: calc(var(--spacing) * 2);
+              gap: 10px;
+              border-radius: 13px;
 
-              display: -webkit-box;
-              -webkit-line-clamp: var(--lines);
-              -webkit-box-orient: vertical;
-              overflow: hidden;
-            }
-            span:first-of-type + span {
-              font-family: 'SF Pro', 'Proxima Nova', sans-serif;
-              font-weight: 400;
-              font-size: 12px;
-              line-height: 14px;
-              color: #D9D9D9;
+              img {
+                width: var(--imageSize);
+                height: var(--imageSize);
+                border-radius: 9px;
+                object-fit: cover;
+              }
+              span:first-of-type {
+                font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+                font-weight: 590;
+                font-size: 15px;
+                color: #FFFFFF;
 
-              display: -webkit-box;
-              -webkit-line-clamp: var(--lines);
-              -webkit-box-orient: vertical;
-              overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: var(--lines);
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+              }
+              span:first-of-type + span {
+                font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 14px;
+                color: #D9D9D9;
+
+                display: -webkit-box;
+                -webkit-line-clamp: var(--lines);
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+              }
             }
           }
         }
@@ -206,7 +212,9 @@
         justify-content: center;
         gap: 10px;
 
+        // TODO here
         img {
+          object-fit: cover;
           width: 222px;
           height: 333px;
           @include mq(max, small) {

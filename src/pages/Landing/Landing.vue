@@ -67,7 +67,7 @@
     </div> -->
 
     <section class="divcol" data-w-id="00ea4e38-8cc5-6392-e081-bdfca1d8e146">
-      <h2 class="h2">Or hire someone.</h2>
+      <h2 class="h2 likeRegister">Or hire someone.</h2>
 
       <div class="slider" ref="slider" @mousemove.prevent="onDragging" @mousedown="startDragging" @mouseup="stopDragging" @mouseleave="stopDragging">
         <v-card v-for="(item, i) in dataSlider" :key="i">
