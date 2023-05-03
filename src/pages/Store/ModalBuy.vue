@@ -152,18 +152,18 @@ export default {
     },
     fiat() {
       const tokenId = this.$session.get("tokenId");
-      // console.log(
-      //   "https://checkout.ramper.xyz/buy?contract_address=" +
-      //     process.env.VUE_APP_CONTRACT_NFT +
-      //     "&network=" +
-      //     process.env.VUE_APP_NETWORK +
-      //     "&redirect_url=" +
-      //     process.env.VUE_APP_REDIRECT_URL +
-      //     "&user_wallet_address=" +
-      //     (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +
-      //     "&token_series_id=" +
-      //     tokenId
-      // );
+      console.log(
+        "https://checkout.ramper.xyz/buy?contract_address=" +
+        process.env.VUE_APP_CONTRACT_NFT +
+          "&network=" +
+          process.env.VUE_APP_NETWORK +
+          "&user_wallet_address=" +
+          (this.$ramper.getAccountId() === null ? "" : this.$ramper.getAccountId()) +
+          "&token_series_id=" +
+          tokenId +
+          "&redirect_url=" +
+          process.env.VUE_APP_REDIRECT_URL
+      );
       window.open(
         "https://checkout.ramper.xyz/buy?contract_address=" +
           process.env.VUE_APP_CONTRACT_NFT +
