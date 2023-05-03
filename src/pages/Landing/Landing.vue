@@ -1,5 +1,5 @@
 <template>
-  <section id="landing">
+  <section id="landing" class="closed">
     <div class="hero wf-section">
       <div data-w-id="2220b184-5210-3094-780d-86fc54edc368" class="hero-div">
         <div class="div-block-6">

@@ -12,7 +12,7 @@
     </section>
 
     <section id="profile-content">
-      <h2 class="title-tabs vermobile">My tickets</h2>
+      <h2 class="title-tabs">My tickets</h2>
 
       <v-tabs v-model="tab" background-color="transparent">
         <v-tab v-for="(item, i) in dataTabs" :key="i" v-ripple="false" @click.native.prevent.stop.capture="tab = i">{{ item.title }}</v-tab>
