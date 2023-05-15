@@ -1,121 +1,188 @@
 <template>
   <section id="events" class="align divcol">
-    <h2>Your Events</h2>
-    <!-- <div class="container-search center"> -->
+    <v-tabs v-model="tab" background-color="transparent">
+      <v-tab v-for="(item, i) in dataTabs" :key="i" v-ripple="false" @click.native.prevent.stop.capture="tab = i">{{ item.title }}</v-tab>
+
+      <v-text-field
+        v-model="search"
+        label="Search"
+        single-line
+        hide-details
+        clear-icon="mdi-close"
+        clearable
+        class="search eliminarmobile"
+      >
+        <template #prepend-inner>
+          <img src="@/assets/icons/lupa.svg" alt="search" width="16px" height="16px">
+        </template>
+      </v-text-field>
+
+      <v-btn class="create-btn vermobile">
+        <img :src="require(`@/assets/icons/${createMenu ? 'minus' : 'plus'}-btn.svg`)" alt="create button">
+      </v-btn>
+    </v-tabs>
+
     <v-text-field
       v-model="search"
-      :append-icon="search ? '' : 'mdi-magnify'"
       label="Search"
       single-line
       hide-details
       clear-icon="mdi-close"
       clearable
-      class="search"
-    />
-    <!-- </div> -->
-    <v-data-table
-      id="tableEvents"
-      :headers="headers"
-      :items="data"
-      :loading="loading"
-      :search="search"
-      :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
-      calculate-widths
-      :mobile-breakpoint="880"
-      :custom-sort="customSort"
-      class="eliminarmobile"
+      class="search vermobile"
     >
-      <template v-slot:[`item.image`]="{ item }">
-        <!-- <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket"> -->
-        <img id="bgTicket-image" :src="item.media || hola" alt="event image" />
+      <template #prepend-inner>
+        <img src="@/assets/icons/lupa.svg" alt="search" width="16px" height="16px">
       </template>
+    </v-text-field>
 
-      <template v-slot:[`item.name`]="{ item }">
-        <v-btn @click="goEventData(item.id)" class="btnWithoutStyles" :href="'#/store?id=' + item.id" target="_blank">{{ item.name }}</v-btn>
-      </template>
+    <v-tabs-items v-model="tab">
+      <v-tab-item v-for="(item, i) in dataTabs" :key="i">
+        <v-data-table
+          id="tableEvents"
+          :headers="item.headers"
+          :items="item.data"
+          :loading="loading"
+          :search="search"
+          :footer-props="{ 'items-per-page-options': [5, 10, 20, 50, -1] }"
+          calculate-widths
+          :mobile-breakpoint="880"
+          :custom-sort="customSort"
+          :class="`tab-${tab} eliminarmobile`"
+        >
+          <template v-slot:[`item.image`]="{ item }">
+            <!-- <img id="bgTicket" src="@/assets/img/bg-ticket_events.png" alt="bg ticket"> -->
+            <img :id="tab === 0 ? 'bgTicket-image' : ''" :src="item.media || hola" alt="event image" />
+          </template>
 
-      <template v-slot:[`item.actions`]="{ item }">
-        <div class="cont_buttons" style="gap: 6px">
-          <v-btn @click="goLiveData(item.id)">Go to live data</v-btn>
-          <v-btn @click="goOptions(item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
-          <!--
-          <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
-            {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
-          </a>
-           <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
-            ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
-          > -->
-        </div>
-      </template>
-    </v-data-table>
+          <template v-slot:[`item.name`]="{ item }">
+            <v-btn @click="goEventData(item.id)" class="btnWithoutStyles" :href="'#/store?id=' + item.id" target="_blank">{{ item.name }}</v-btn>
+          </template>
 
-    <section class="vermobile">
-      <v-card v-for="(item, i) in filter_dataTableMobile" :key="i" class="up divcol" style="display: flex">
-        <section class="acenter">
-          <span class="eventName">
-            <v-btn @click="goEventData(item.id)" style="color: white; padding: 0" text>{{ item.name.ellipsisRange(14) }}</v-btn>
-          </span>
-          <span>{{ item.date }}</span>
+          <template v-slot:[`item.actions`]="{ item }">
+            <div class="cont_buttons" style="gap: 6px">
+              <v-btn @click="goLiveData(item.id)">Go to live data</v-btn>
+              <v-btn @click="goOptions(item.id)"><v-icon size="1.5em">mdi-cog-outline</v-icon></v-btn>
+              <!--
+              <a class="center bold" style="color: #cc00b7; font-size: 16px" :href="$store_site+item.thingid">
+                {{item.name.length > 20 ? item.name.substr(0, 20) + '...' : item.name}}
+              </a>
+              <v-btn @click="copySiteLink(item.thingid)" title="Copy site link"
+                ><v-icon size="1.5em">mdi-content-copy</v-icon>{{ message_ticket }}</v-btn
+              > -->
+            </div>
+          </template>
+        </v-data-table>
 
-          <aside class="acenter" style="gap: 0.5em">
-            <v-btn class="icon" @click="goLiveData(item.id)">
-              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
-            </v-btn>
+        <section class="vermobile">
+          <v-card v-for="(item, i) in filterDataMobile(item.dataTableMobile)" :key="i" class="up divcol" style="display: flex">
+            <section class="acenter">
+              <span class="eventName">
+                <v-btn @click="goEventData(item.id)" style="color: white; padding: 0" text>{{ item.name.ellipsisRange(14) }}</v-btn>
+              </span>
 
-            <v-btn class="icon" @click="goOptions(item.id)">
-              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
-            </v-btn>
+              <span v-show="tab == 0">{{ item.date }}</span>
 
-            <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
-              <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
-            </v-btn> -->
+              <aside class="acenter" style="gap: 0.5em">
+                <template v-if="tab == 0">
+                  <v-btn class="icon" @click="goLiveData(item.id)">
+                    <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
+                  </v-btn>
 
-            <v-icon
-              color="white"
-              :style="item.show ? 'transform:rotate(180deg)' : ''"
-              size="2em"
-              @click="
-                dataTableMobile.forEach((e) => {
-                  e !== item ? (e.show = false) : null;
-                });
-                item.show = !item.show;
-              "
-            >
-              mdi-chevron-down
-            </v-icon>
-          </aside>
+                  <v-btn class="icon" @click="goOptions(item.id)">
+                    <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
+                  </v-btn>
+                </template>
+
+                <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
+                  <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
+                </v-btn> -->
+
+                <v-icon
+                  color="white"
+                  :style="item.show ? 'transform:rotate(180deg)' : ''"
+                  size="2em"
+                  @click="
+                    dataTableMobile.forEach((e) => {
+                      e !== item ? (e.show = false) : null;
+                    });
+                    item.show = !item.show;
+                  "
+                >
+                  mdi-chevron-down
+                </v-icon>
+              </aside>
+            </section>
+
+            <!-- table 1 -->
+            <aside v-show="item.show && tab == 0" class="down space">
+              <div class="divcol">
+                <h3>TICKETS MINTED</h3>
+                <span>{{ item.minted }}</span>
+              </div>
+
+              <div class="divcol">
+                <h3>TICKETS SOLD</h3>
+                <span>{{ item.sold }}</span>
+              </div>
+
+              <!-- <div class="divcol">
+                <h3>TICKETS LISTED</h3>
+                <span>{{ item.listed }}</span>
+              </div> -->
+            </aside>
+
+            <!-- table 2 -->
+            <aside v-show="item.show && tab == 1" class="down space">
+              <div class="divcol">
+                <h3>MINTED BY</h3>
+                <span>{{ item.mintedBy }}</span>
+              </div>
+
+              <div class="divcol">
+                <h3>MINTED</h3>
+                <span>{{ item.minted }}</span>
+              </div>
+
+              <div class="divcol">
+                <h3>SOLD</h3>
+                <span>{{ item.sold }}</span>
+              </div>
+            </aside>
+          </v-card>
+
+          <!-- <section id="footer-pagination" class="end gap">
+            <span style="color:#FFFFFF">1</span>
+            <div class="center">
+              <v-btn icon>
+                <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
+              </v-btn>
+            </div>
+          </section> -->
         </section>
+      </v-tab-item>
+    </v-tabs-items>
 
-        <aside v-show="item.show" class="down space">
-          <div class="divcol">
-            <h3>TICKETS MINTED</h3>
-            <span>{{ item.minted }}</span>
-          </div>
 
-          <div class="divcol">
-            <h3>TICKETS SOLD</h3>
-            <span>{{ item.sold }}</span>
-          </div>
+    <v-menu v-model="createMenu" bottom offset-y content-class="menuCreateBtn" activator=".create-btn">
+      <v-list color="transparent">
+        <v-list-item @click="goToEvent()">
+          <v-list-item-title style="color: #fff">
+            <span>Create event</span>
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title style="color: #fff">
+            <span>Create collection</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
-          <!-- <div class="divcol">
-            <h3>TICKETS LISTED</h3>
-            <span>{{ item.listed }}</span>
-          </div> -->
-        </aside>
-      </v-card>
 
-      <!-- <section id="footer-pagination" class="end gap">
-        <span style="color:#FFFFFF">1</span>
-        <div class="center">
-          <v-btn icon>
-            <v-icon style="color:#FFFFFF !important">mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon style="color:#FFFFFF !important">mdi-chevron-right</v-icon>
-          </v-btn>
-        </div>
-      </section> -->
-    </section>
     <v-dialog v-model="modalSuccess" max-width="420px">
       <v-card id="modalSucess">
         <div class="divcol center">
@@ -132,12 +199,15 @@
         </div>
       </v-card>
     </v-dialog>
+
+    <modal-fill ref="modalfill"></modal-fill>
   </section>
 </template>
 
 <script>
 import moment from "moment";
 import gql from "graphql-tag";
+import modalFill from "../../pages/Store/ModalFill.vue";
 const your_events = gql`
   query MyQuery($user: String!) {
     series(where: { creator_id: $user, typetoken_id: "1" }) {
@@ -187,39 +257,54 @@ const main_image = gql`
 `;
 export default {
   name: "Events",
+  components: {
+    modalFill,
+  },
   data() {
     return {
+      createMenu: false,
+      search: "",
+      tab: undefined,
+      dataTabs: [
+        {
+          title: "Events",
+          headers: [
+            { align: "start", value: "image", sortable: false },
+            { text: "NAME", align: "start", value: "name" },
+            { text: "DATE", align: "start", value: "date" },
+            { text: "TICKETS MINTED", align: "start", value: "minted" },
+            { text: "TICKETS SOLD", align: "start", value: "sold" },
+            // { text: "TICKETS LISTED", align: "start", value: "listed" },
+            { sortable: false, align: "end", value: "actions" },
+          ],
+          data: [],
+          dataTableMobile: [],
+        },
+        {
+          title: "Collectibles",
+          headers: [
+            { align: "center", value: "image", sortable: false },
+            { text: "NAME", align: "start", value: "name" },
+            { text: "MINTED BY", align: "start", value: "mintedBy" },
+            { text: "MINTED", align: "start", value: "minted" },
+            { text: "SOLD", align: "start", value: "sold" },
+            // { text: "TICKETS LISTED", align: "start", value: "listed" },
+            // { sortable: false, align: "end", value: "actions" },
+          ],
+          data: [],
+          dataTableMobile: [],
+        },
+      ],
+      loading: true,
       modalSuccess: false,
       urlTx: false,
-      headers: [
-        { align: "start", value: "image", sortable: false },
-        { text: "NAME", align: "start", value: "name" },
-        { text: "DATE", align: "start", value: "date" },
-        { text: "TICKETS MINTED", align: "start", value: "minted" },
-        { text: "TICKETS SOLD", align: "start", value: "sold" },
-        // { text: "TICKETS LISTED", align: "start", value: "listed" },
-        { sortable: false, align: "end", value: "actions" },
-      ],
-      data: [],
       earnings: [],
-      search: "",
-      loading: true,
       page: 3,
-      dataTableMobile: [],
       nearid: false,
       message_ticket: "Copy link",
       src: [],
       modalQR: false,
     };
-  },
-  computed: {
-    filter_dataTableMobile() {
-      let filter = this.dataTableMobile;
-
-      if (this.search) filter = filter.filter((data) => data.name.includes(this.search));
-
-      return filter;
-    },
   },
   async mounted() {
     if (!this.$session.exists()) {
@@ -270,6 +355,13 @@ export default {
     // }
   },
   methods: {
+    filterDataMobile(dataMobile) {
+      let filter = dataMobile;
+
+      if (this.search) filter = filter.filter((data) => data.name.includes(this.search));
+
+      return filter;
+    },
     customSort: function (items, index, isDesc) {
       items.sort((a, b) => {
         if (index[0] == "date") {
@@ -456,6 +548,32 @@ export default {
     },
     onLoaded() {
       console.log(`Ready to start scanning barcodes`);
+    },
+    async goToEvent() {
+      const balance = await this.getBalance();
+      if (balance < 0.05) {
+        this.$refs.modalfill.modalFill = true;
+        return;
+      }
+
+      this.$session.clear();
+      localStorage.setItem("step", 1);
+      this.$router.push("/events/register");
+    },
+    async getBalance() {
+      try {
+        if (this.$ramper.getUser()) {
+          const account = await this.$near.account(this.$ramper.getAccountId());
+          const response = await account.state();
+          const valueStorage = Math.pow(10, 19);
+          const valueYocto = Math.pow(10, 24);
+
+          const storage = (response.storage_usage * valueStorage) / valueYocto;
+          return (response.amount / valueYocto - storage).toFixed(2);
+        }
+      } catch (error) {
+        return "0";
+      }
     },
   },
 };
