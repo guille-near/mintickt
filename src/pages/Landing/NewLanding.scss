@@ -1,183 +1,449 @@
-#landing.closed {
-  h2, span.h2 {
-    font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-    font-weight: 900 !important;
-    &:not(.likeRegister) {font-size: 28px !important;}
-    line-height: 100% !important;
-    letter-spacing: -0.03em !important;
-    background: radial-gradient(239.3% 743.7% at 4.6% -28%, #6D6D6D 1.04%, #FF00E5 42.21%, rgba(211, 254, 184, 0.92) 93.31%), #FFFFFF !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    @media (max-width: 880px) {
-      display: flex;
+@import '../../styles/mixins';
+
+#newLanding {
+  isolation: isolate;
+
+  #background-landing {
+    width: 100vw !important;
+    margin-inline: calc(50% - 50vw) !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: -1;
+    object-fit: cover !important;
+    filter: brightness(6%);
+    background-blend-mode: normal, overlay;
+  }
+
+  #lights-up {
+    width: 100vw !important;
+    margin-inline: calc(50% - 50vw) !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: -1;
+    object-fit: cover !important;
+  }
+
+  h2 {
+    color: #FFFFFF !important;
+  }
+
+  .v-btn.stylish {
+    @include borderGradientImageCard(url('../../assets/backgrounds/border-gradient-btn-xsmall.png'));
+    display: flex;
+    padding: 12.8571px 21.4286px;
+    height: 51px;
+    backdrop-filter: blur(3.21429px);
+    border-radius: 10.7143px;
+    span {
+      font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+      font-weight: 510 !important;
+      font-size: 16.0714px !important;
+      text-align: center;
+      color: #FFFFFF;
     }
   }
 
 
-  .slider {
-    width: 100vw;
-    margin-inline: calc(50% - 50vw);
+  //* hero
+  #hero {
+    height: clamp(400px, 75vw , 900px);
     display: flex;
-    overflow-x: auto;
-    &::-webkit-scrollbar {display: none;}
+    align-items: center;
+    justify-content: center;
+    padding-inline: clamp(1em, 4vw, 4em);
 
-    .v-card {
+    h1 {
+      max-width: 1111.25px;
+      font-family: 'Proxima Nova', 'SF Pro', sans-serif !important;
+      font-weight: 800;
+      font-size: 120px;
+      line-height: 120px;
+      text-align: center;
+      letter-spacing: -0.035em !important;
+      margin: 0;
+
+      background-image: linear-gradient(176.39deg, #FFFFFF 19.52%, #FFFFFF 114.85%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+
+      @media (max-width: 880px) {
+        max-width: 327px;
+        font-size: 47px;
+        line-height: 44.65px;
+        background-image: linear-gradient(167.76deg, #FFFFFF 29.85%, rgba(255, 255, 255, 0) 164.18%);
+      }
+    }
+  }
+
+  //* hero down
+  #hero-down-img {
+    padding-right: 5%;
+    @media (min-width: 1500px) {margin-top: 12vw;}
+    @media (max-width: 880px) {
+      width: 325px !important;
+      margin-inline: auto;
+      margin-block: 110px 150px;
+    }
+  }
+
+  //* bullshit
+  #bullshit {
+    max-width: 884.79px;
+    margin-inline: auto;
+    padding-inline: clamp(1em, 4vw, 4em);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @media (min-width: 880px) {margin-block: 400px;}
+
+    h2 {
+      font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+      font-weight: 510 !important;
+      font-size: 43.3603px !important;
+      line-height: 50px !important;
+      @media (max-width: 880px) {
+        font-size: 16.1232px !important;
+        line-height: 19px !important;
+      }
+    }
+
+    img {
+      width: 100%;
+      border-radius: 29.2975px;
+      @media (max-width: 880px) {border-radius: 10.894px}
+    }
+  }
+
+  //* about
+  #about {
+    padding-inline: clamp(1em, 4vw, 4em);
+    display: flex;
+    flex-direction: column;
+    gap: 200px;
+    @media (max-width: 880px) {gap: 150px;}
+    h2 {
+      max-width: 613px;
+      font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+      font-weight: 510 !important;
+      font-size: 42px !important;
+      line-height: 50px !important;
+      @media (max-width: 880px) {
+        max-width: 360px;
+        font-size: 36px !important;
+        line-height: 43px !important;
+      }
+    }
+    article {
       display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      width: 311px !important;
-      height: 501px !important;
-      margin-left: 30px;
-      &:last-child {margin-right: 30px;}
-      filter: drop-shadow(119px 192px 90px rgba(0, 0, 0, 0.01)) drop-shadow(67px 108px 76px rgba(0, 0, 0, 0.05)) drop-shadow(30px 48px 56px rgba(0, 0, 0, 0.09)) drop-shadow(7px 12px 31px rgba(0, 0, 0, 0.1)) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.1));
-      border-radius: 17px !important;
-      overflow: hidden;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    img {object-fit: cover;}
 
-      img[alt="slider-card-header-image"] {
-        width: 100% !important;
-        height: 223px !important;
-        border-radius: 15px 15px 0px 0px !important;
-        object-fit: cover !important;
+    article:first-child {
+      @media (max-width: 880px) {
+        flex-direction: column-reverse;
+        align-items: center;
       }
 
-      .slider__content {
-        display: flex;
+      img {
+        width: 416.37px;
+        height: 428.16px;
+        @media (max-width: 880px) {
+          width: 292px;
+          height: 300.27px; 
+        }
+      }
+      div.divcol {align-items: flex-start}
+    }
+
+    article:last-child {
+      @media (max-width: 880px) {
         flex-direction: column;
-        gap: 15px;
-        padding: 12px;
-        &-title {
-          font-family: 'Proxima Nova', "SF Pro", sans-serif;
-          font-weight: 600 !important;
-          font-size: 20px !important;
-          line-height: 100% !important;
-          font-feature-settings: 'case' on !important;
-          color: #000000 !important;
+        align-items: center;
+      }
+
+      img {
+        width: 446.96px;
+        height: 360px;
+        @media (max-width: 880px) {
+          width: 357.57px;
+          height: 288px;
+        }
+      }
+      div.divcol {
+        align-items: flex-end;
+        text-align: right;
+        @media (max-width: 880px) {
+          align-items: flex-start;
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  
+  //* faq
+  #FAQ {
+    display: flex;
+    flex-direction: column;
+    margin-block: 500px;
+    @media (max-width: 880px) {margin-bottom: 480px;}
+
+    h2 {
+      font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 32px !important;
+      text-align: center !important;
+      margin: 0;
+      &#faq {
+        font-family: 'Proxima Nova', 'Proxima Nova' !important;
+        font-weight: 800 !important;
+        font-size: 48px !important;
+        letter-spacing: -0.035em !important;
+      }
+    }
+
+    span.text {
+      font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      text-align: center;
+      color: #FFFFFF;
+      @media (max-width: 880px) {
+        margin-inline: auto;
+        max-width: 361px;
+      }
+    }
+
+    .v-btn {
+      width: 104.86px;
+    }
+
+    .v-expansion-panels.expansion-faqs {
+      max-width: 768px !important;
+      margin-inline: auto;
+      margin-block: 100px !important;
+      @media (max-width: 880px) {
+        max-width: 361px !important;
+        margin-block: 88px !important;
+      }
+
+      .v-expansion-panel {
+        border-radius: 11px !important;
+        background-color: transparent !important;
+        background-size: fill !important;
+        background: center no-repeat url(../../assets/newLanding/faq-header.png);
+        @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-header-mobile.png) !important;}
+        &--active {
+          background-size: 100% 100% !important;
+          background-image: url(../../assets/newLanding/faq-content.png) !important;
+          @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-content-mobile.png) !important;}
         }
 
-        img[alt="avatar"] {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
-          object-fit: cover;
-        }
+        &:not(:first-child) {margin-top: 16px;}
+        * {color: #fff !important}
 
-        span.avatar-name {
-          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-          font-weight: 600 !important;
-          font-size: 15px !important;
-          line-height: 100% !important;
-          text-align: center !important;
-          letter-spacing: -0.025em !important;
-          text-transform: capitalize !important;
-          color: #000000 !important;
-        }
-
-        ul {
-          list-style-image: url(../../assets/icons/check-rose.svg);
-          li {
-            font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-            font-weight: 400 !important;
-            font-size: 12px !important;
-            line-height: 100% !important;
-            font-feature-settings: 'case' on !important;
-            color: #080808 !important;
+        &-header {
+          padding: 20px 24px !important;
+          min-height: 73px !important;
+          font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+          font-weight: 510 !important;
+          font-size: 22px !important;
+          @media (max-width: 880px) {
+            padding-block: 0px !important;
+            font-size: 18px !important;
+            line-height: 150% !important;
           }
         }
 
-        span.from-text {
-          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-          font-weight: 600 !important;
-          font-size: 13px !important;
-          line-height: 100% !important;
-          letter-spacing: -0.025em !important;
-          color: #BBBBBB !important;
+        &-content__wrap {
+          padding-block: 5px 20px !important;
+          font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+          font-weight: 400 !important;
+          font-size: 22px !important;
+          @media (max-width: 880px) {font-size: 18px !important;}
+          line-height: 150%;
         }
+      }
+    }
+  }
 
-        span.from-price {
-          font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-          font-weight: 600 !important;
-          font-size: 15px !important;
-          line-height: 100% !important;
-          letter-spacing: 0.02em !important;
-          font-feature-settings: 'case' on !important;
-          color: #000000 !important;
+  //* memorable
+  #memorable {
+    padding-inline: clamp(1em, 4vw, 4em);
+    margin-bottom: 327px;
+    @media (max-width: 880px) {margin-bottom: 500px;}
+
+    > div {
+      max-width: 1312px;
+      width: 100%;
+      height: 359px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      @media (min-width: 880px) {
+        padding: 20px;
+        backdrop-filter: blur(36px);
+        border-radius: 25px;
+        background: center no-repeat url(../../assets/newLanding/memorable-bg.png);
+        background-size: 100% 100%;
+      }
+
+      h2 {
+        font-family: 'SF Pro', 'Proxima Nova', sans-serif;
+        font-weight: 510;
+        font-size: 47px !important;
+        line-height: 56px;
+        text-align: center;
+        @media (max-width: 880px) {
+          max-width: 361px;
+          font-size: 31px !important;
+          line-height: 37px !important;
         }
+      }
+    }
+  }
 
-        .v-btn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 15px;
+
+  
+  #lights-down {
+    width: 100vw !important;
+    margin-inline: calc(50% - 50vw) !important;
+    position: absolute !important;
+    rotate: 180deg !important;
+    bottom: 0;
+    @media (max-width: 880px) {bottom: 250px !important;}
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: -1;
+    object-fit: cover !important;
+  }
+
+
+  //* footer
+  #footer {
+    width: 100vw !important;
+    margin-inline: calc(50% - 50vw) !important;
+    padding: clamp(1em, 4vw, 4em);
+    // min-height: 541px;
+    // @media (max-width: 880px) {min-height: 907px;}
+    background: rgba(255, 255, 255, 0.01) !important;
+    backdrop-filter: blur(250px) !important;
+
+    > div {
+      max-width: 1312px;
+      @media (max-width: 880px) {max-width: 361px;}
+      width: 100%;
+      margin-inline: auto;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      @media (max-width: 880px) {
+        flex-direction: column;
+        gap: 100px;
+      }
+
+      h3 {
+        font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+        font-weight: 590 !important;
+        font-size: 16px !important;
+        line-height: 150%;
+      }
+
+      span {
+        font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+        font-weight: 400 !important;
+        line-height: 150% !important;
+        color: #FFFFFF !important;
+
+        a {
+          color: #FFFFFF !important;
+          text-decoration: underline !important;
+        }
+      }
+
+      .left {
+        max-width: 500px;
+
+        > div {
           gap: 10px;
 
-          width: 100px;
-          height: 44px;
-          background-image: url(../../assets/landing/border-gradient-landing-btn-small.png);
-          border-radius: 10px;
-          position: relative;
-          &::before {
-            content: "" !important;
-            opacity: 1 !important;
-            display: block !important;
-            position: absolute;
-            inset: 2px;
-            background: linear-gradient(124.98deg, #FFFFFF 71.99%, rgba(109, 109, 109, 0) 211.63%);
-            background-size: cover;
-          }
+          .v-input {
+            height: 42px !important;
+            &__slot {
+              padding: 12px;
+              min-height: 42px !important;
+              height: 42px !important;
+              background: rgba(217, 217, 217, 0.2);
+              border-radius: 10px;
 
-          span {
-            font-family: 'Proxima Nova', "SF Pro", sans-serif !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            line-height: 100% !important;
-            text-align: center !important;
-            letter-spacing: -0.025em !important;
-            color: #120000 !important;
+              input, ::placeholder {
+                font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
+                font-weight: 400 !important;
+                font-size: 16px !important;
+                line-height: 150% !important;
+                color: #FFFFFF !important;
+              }
+            }
+
+            &__append-outer {
+              margin-block: auto;
+              margin-left: 20px;
+              .v-btn {height: 42px !important;}
+            }
+          }
+        }
+      }
+
+      .right {
+        > div {
+          a {
+            display: flex;
+            gap: 12px;
           }
         }
       }
     }
-  }
 
 
-  .container-steps {
-    margin-top: 200px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-
-    .step-cards {
+    .bottom {
+      margin-top: 100px;
+      border-top: 1px solid #fff !important;
+      padding-top: 30px;
       display: flex;
-      flex-direction: column;
-      padding: 45px 35px 30px;
+      justify-content: space-between;
       gap: 20px;
-      
-      width: 331px;
-      height: 220px;
-      box-shadow: 83px 71px 44px rgba(0, 0, 0, 0.01), 47px 40px 37px rgba(0, 0, 0, 0.03), 21px 18px 27px rgba(0, 0, 0, 0.06), 5px 4px 15px rgba(0, 0, 0, 0.07), 0px 0px 0px rgba(0, 0, 0, 0.07) !important;
-      border-radius: 11px !important;
-      background-image: url(../../assets/landing/border-gradient-landing-card-large.png) !important;
-      border-radius: 10px !important;
-      position: relative;
-      &::before {
-        content: "" !important;
-        opacity: 1 !important;
-        display: block !important;
-        position: absolute;
-        inset: 4px;
-        background: linear-gradient(126.73deg, #FFFFFF 55.85%, rgba(255, 255, 255, 0.35) 103.21%) !important;
-        background-size: cover;
+      @media (max-width: 880px) {
+        flex-direction: column;
+        margin-top: 90px;
+        gap: 70px;
+
+        > div {
+          justify-content: space-between !important;
+        }
       }
 
-      p {
-        font-family: 'Proxima Nova' "SF Pro", sans-serif !important;
+      a, span {
+        font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
         font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 16px !important;
-        letter-spacing: -0.03em !important;
-        color: #000000 !important;
+        font-size: 14px !important;
+      }
+      a {
+        text-decoration: underline !important;
+        color: #fff !important;
       }
     }
   }

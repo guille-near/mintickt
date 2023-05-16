@@ -27,10 +27,15 @@ export default new Router({
         //   name: 'Home',
         //   component: () => import('@/pages/Home/Home'),
         // },
+        // {
+        //  path: '/',
+        //  name: 'Landing',
+        //  component: () => import('@/pages/Landing/Landing'),
+        // },
         {
          path: '/',
          name: 'Landing',
-         component: () => import('@/pages/Landing/Landing'),
+         component: () => import('@/pages/Landing/NewLanding'),
         },
         {
           path: '/profile',

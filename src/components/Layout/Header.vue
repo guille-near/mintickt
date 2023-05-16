@@ -30,10 +30,6 @@
           </a>
 
           <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
-            <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
-              <span>create an event</span>
-            </v-btn> -->
-
             <v-menu v-model="menuLogin" bottom offset-y content-class="menuButtonProfile">
               <template #activator="{ on, attrs }">
                 <!-- <v-btn
@@ -54,12 +50,13 @@
 
                 <v-btn
                   class="buttonProfile"
+                  :class="{login: !user}"
                   v-on="user ? on : undefined"
                   v-bind="user ? attrs : undefined"
                   @click="user ? menuOpened = !menuOpened : connectRamper()"
                   :title="user"
                 >
-                  <img src="@/assets/logo/near.svg" alt="near" />
+                  <img v-if="user" src="@/assets/logo/near.svg" alt="near" />
                   <span>{{ limitStr(user || "Log In", 25) }}</span>
                   <v-icon v-if="user" color="#fff" :style="menuLogin ? 'transform: rotate(180deg)' : null">mdi-chevron-down</v-icon>
                   <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
@@ -108,6 +105,11 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+
+            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
+              <span>create an event</span>
+            </v-btn>
+
             <modal-fill ref="modalfill"></modal-fill>
           </aside>
         </v-col>
