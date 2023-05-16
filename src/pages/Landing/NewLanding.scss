@@ -1,9 +1,18 @@
 @import '../../styles/mixins';
 
 #newLanding {
+  $x-small: 600px;
   isolation: isolate;
+  @media (max-width: $x-small) {padding-top: 140px;}
 
-  #background-landing {
+  .eliminarxmobile {
+    @media (max-width: $x-small) {display: none;}
+  }
+  .verxmobile {
+    @media (min-width: $x-small) {display: none;}
+  }
+
+  .background-landing {
     width: 100vw !important;
     margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;
@@ -15,9 +24,13 @@
     object-fit: cover !important;
     filter: brightness(6%);
     background-blend-mode: normal, overlay;
+    &.verxmobile {
+      top: -150px;
+      filter: brightness(4%);
+    }
   }
 
-  #lights-up {
+  .lights-up {
     width: 100vw !important;
     margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;
@@ -57,6 +70,7 @@
     align-items: center;
     justify-content: center;
     padding-inline: clamp(1em, 4vw, 4em);
+    @media (max-width: $x-small) {margin-bottom: 400px;}
 
     h1 {
       max-width: 1111.25px;
@@ -316,7 +330,7 @@
 
 
   
-  #lights-down {
+  .lights-down {
     width: 100vw !important;
     margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;

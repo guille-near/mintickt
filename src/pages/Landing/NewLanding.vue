@@ -1,7 +1,10 @@
 <template>
   <div id="newLanding" class="divcol">
-    <img id="background-landing" src="@/assets/newLanding/background-landing.png">
-    <img id="lights-up" src="@/assets/newLanding/lights-up.png">
+    <img class="background-landing eliminarxmobile" src="@/assets/newLanding/background-landing.png">
+    <img class="background-landing verxmobile" src="@/assets/newLanding/background-landing-mobile.png">
+
+    <img class="lights-up eliminarxmobile" src="@/assets/newLanding/lights-up.png">
+    <img class="lights-up verxmobile" src="@/assets/newLanding/lights-up-mobile.png">
 
     <!-- hero -->
     <section id="hero">
@@ -25,7 +28,7 @@
         <div class="divcol">
           <h2>Hire a designer to get a custom ticket for your event...</h2>
 
-          <v-btn class="stylish">
+          <v-btn class="stylish" to="/events">
             <span>More info</span>
           </v-btn>
         </div>
@@ -39,7 +42,7 @@
         <div class="divcol">
           <h2>... or use one of our templates to design your ticket.</h2>
 
-          <v-btn class="stylish">
+          <v-btn class="stylish" @click="goToEvent">
             <span>Create event</span>
           </v-btn>
         </div>
@@ -80,12 +83,15 @@
     <section id="memorable">
       <div class="divcol">
         <h2>Memorable events start with NFT tickets</h2>
-        <v-btn class="stylish">Create event</v-btn>
+        <v-btn class="stylish" @click="goToEvent">
+          <span>Create event</span>
+        </v-btn>
       </div>
     </section>
 
 
-    <img id="lights-down" src="@/assets/newLanding/lights-up.png">
+    <img class="lights-down eliminarxmobile" src="@/assets/newLanding/lights-up.png">
+    <img class="lights-down verxmobile" src="@/assets/newLanding/lights-up-mobile.png">
 
     <!-- footer -->
     <section id="footer">
@@ -101,6 +107,7 @@
                 v-model="email"
                 solo hide-details
                 placeholder="Enter your email"
+                :rules="rules.email"
               >
                 <template v-slot:append-outer>
                   <v-btn class="stylish">Subscribe</v-btn>
@@ -193,7 +200,16 @@ export default {
           name: "Discord",
           href: "",
         },
-      ]
+      ],
+      rules: {
+        required: [(v) => !!v || "Field required"],
+        email: [
+          v => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(v) || 'Invalid email.'
+          },
+        ],
+      }
     };
   },
   mounted() {
@@ -216,6 +232,32 @@ export default {
     }
   },
   methods: {
+    async goToEvent() {
+      const balance = await this.getBalance();
+      if (balance < 0.05) {
+        this.$refs.modalfill.modalFill = true;
+        return;
+      }
+
+      this.$session.clear();
+      localStorage.setItem("step", 1);
+      this.$router.push("/events/register");
+    },
+    async getBalance() {
+      try {
+        if (this.$ramper.getUser()) {
+          const account = await this.$near.account(this.$ramper.getAccountId());
+          const response = await account.state();
+          const valueStorage = Math.pow(10, 19);
+          const valueYocto = Math.pow(10, 24);
+
+          const storage = (response.storage_usage * valueStorage) / valueYocto;
+          return (response.amount / valueYocto - storage).toFixed(2);
+        }
+      } catch (error) {
+        return "0";
+      }
+    },
   }
 };
 </script>
