@@ -28,7 +28,7 @@
         <div class="divcol">
           <h2>Hire a designer to get a custom ticket for your event...</h2>
 
-          <v-btn class="stylish" to="/events">
+          <v-btn :href="storeMintabe" target="_blank" class="stylish" >
             <span>More info</span>
           </v-btn>
         </div>
@@ -209,7 +209,8 @@ export default {
             return pattern.test(v) || 'Invalid email.'
           },
         ],
-      }
+      },
+      storeMintabe: process.env.VUE_APP_MINTBASE_STORE
     };
   },
   mounted() {
