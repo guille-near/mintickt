@@ -38,7 +38,7 @@
             <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px" />
             <span>Delete</span>
           </v-btn>
-          <v-btn :disabled="btnDisabled" class="btn-filled">
+          <v-btn v-if="!nft.dc" :disabled="btnDisabled" class="btn-filled">
             <img src="@/assets/profile/discord.svg" alt="discord" width="15px" height="15px" />
             <span>Unlock your invitation</span>
           </v-btn>

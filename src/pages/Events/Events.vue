@@ -262,6 +262,7 @@ export default {
   },
   data() {
     return {
+      data: [],
       createMenu: false,
       search: "",
       tab: undefined,
@@ -396,8 +397,8 @@ export default {
         })
         .subscribe(({ data }) => {
           let dataSeries = data.series;
-          this.data = [];
-          this.dataTableMobile = [];
+          this.dataTabs[0].data = [];
+          this.dataTabs[0].dataTableMobile = [];
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
 
           for (let i = 0; i < dataSeries.length; i++) {
@@ -419,9 +420,9 @@ export default {
               date1: dataSeries[i].title,
               media: dataSeries[i].reference,
             };
-            this.data.push(rows);
-            this.data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
-            this.dataTableMobile.push(rows);
+            this.dataTabs[0].data.push(rows);
+            this.dataTabs[0].data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
+            this.dataTabs[0].dataTableMobile.push(rows);
           }
         });
       this.loading = false;

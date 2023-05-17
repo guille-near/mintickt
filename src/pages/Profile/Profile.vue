@@ -221,8 +221,10 @@ export default {
 
         const result = await this.axios.get(serviceUrl);
 
+        console.log("JKL",result.data)
+
         for (var i = 0; i < result.data.length; i++) {
-          if (result.data[i] !== process.env.VUE_APP_CONTRACT_NFT) {
+          if (result.data[i] === "testingmintickt.mintspace2.testnet") {
             await this.getNFTByContract(result.data[i], accountId);
           }
         }
@@ -243,7 +245,9 @@ export default {
           limit: 100,
         });
         const metadata = await contract.nft_metadata();
+        
         for (var i = 0; i < result.length; i++) {
+          console.log(result[i])
           let collection = {
             token_id: result[i].token_id,
             contract_id: contract_id,
