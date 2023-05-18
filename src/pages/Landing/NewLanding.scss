@@ -99,7 +99,7 @@
 
   //* hero down
   #hero-down-img {
-    padding-right: 5%;
+    padding-inline: 5%;
     @media (min-width: 1500px) {margin-top: 12vw;}
     @media (max-width: 880px) {
       width: 325px !important;
@@ -159,6 +159,7 @@
     article {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 20px;
     }
     img {object-fit: cover;}
@@ -211,6 +212,7 @@
     display: flex;
     flex-direction: column;
     margin-block: 500px;
+    // margin-inline: 480px !important;
     @media (max-width: 880px) {margin-bottom: 480px;}
 
     h2 {

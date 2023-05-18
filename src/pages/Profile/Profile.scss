@@ -10,6 +10,7 @@
   }
   --spacing: 20px;
   padding-top: 160px;
+  @media (min-width: 880px) {padding-inline: clamp(80px, 10vw, 170px);}
   border-radius: 13px 13px 0 0;
   position: relative;
   // &::before {
@@ -141,7 +142,7 @@
             }
             // row-gap: var(--spacing);
             // column-gap: calc(var(--spacing) * 2.5);
-            gap: var(--spacing);
+            gap: 22px;
             min-height: 300px;
 
             .v-card {
