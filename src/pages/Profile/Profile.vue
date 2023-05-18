@@ -81,6 +81,46 @@ const your_nfts = gql`
   }
 `;
 
+const get_nfts = gql`
+  query MyQuery($user: String!, $contract_id: String!) {
+    mb_views_nft_owned_tokens(
+      where: {owner: {_eq: $user}, nft_contract_id: {_eq: $contract_id}}
+    ) {
+      base_uri
+      burned_receipt_id
+      burned_timestamp
+      copies
+      currency
+      description
+      nft_contract_is_mintbase
+      nft_contract_name
+      nft_contract_owner_id
+      nft_contract_reference
+      owner
+      price
+      title
+      token_id
+      expires_at
+      extra
+      issued_at
+      last_transfer_receipt_id
+      last_transfer_timestamp
+      media
+      market_id
+      metadata_id
+      mint_memo
+      minted_receipt_id
+      minter
+      minted_timestamp
+      metadata_content_flag
+      media_hash
+      reference
+      reference_blob
+      reference_hash
+    }
+  }
+`;
+
 export default {
   name: "Profile",
   data() {
@@ -141,10 +181,30 @@ export default {
       this.$session.destroy("hashSuccess");
     }
     this.getData();
-    this.getNFTContractsByAccount();
+    //this.getNFTContractsByAccount();
+    this.getDataNfts()
     //console.log(this.src)
   },
   methods: {
+    async getDataNfts() {
+      const user = this.$ramper.getAccountId()
+      console.log(user, this.eventId)
+      this.$apollo
+        .watchQuery({
+          client: "mintickClient",
+          query: get_nfts,
+          variables: {
+            user: user,
+            contract_id: process.env.VUE_APP_CONTRACT_GRAPH,
+          },
+          pollInterval: 2000, // 10 seconds in milliseconds
+        })
+        .subscribe(({ data }) => {
+          console.log("DATAAA", data)
+        });
+          // this.get_tokens();
+          // this.get_tokens_redeemed();
+    },
     goToDetails(item) {
       this.$session.set("ticketDetails", item);
       this.$router.push(`/profile-ticket-details/`);
