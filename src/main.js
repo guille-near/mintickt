@@ -134,8 +134,9 @@ const apolloClient = new ApolloClient({
 });
 const mintickClient = new ApolloClient({
   uri: "https://graph.mintbase.xyz/testnet",
-  context: {
-    headers: { "mb-api-key": "anon" }
+  headers: {
+    'mb-api-key': 'anon',
+    'Content-Type': 'application/json'
   },
   defaultOptions: {
     watchQuery: {

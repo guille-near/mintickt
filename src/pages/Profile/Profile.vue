@@ -187,6 +187,7 @@ export default {
   },
   methods: {
     async getDataNfts() {
+      console.info('---------------Get data nft------------------')
       const user = this.$ramper.getAccountId()
       console.log(user, this.eventId)
       this.$apollo
