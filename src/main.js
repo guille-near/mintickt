@@ -119,7 +119,7 @@ const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
   // You should use an absolute URL here
   // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet" : "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet",
+  uri: "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet",
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',
@@ -133,9 +133,10 @@ const apolloClient = new ApolloClient({
   },
 });
 const mintickClient = new ApolloClient({
-  // You should use an absolute URL here
-  // uri: 'https://mintbase-mainnet.hasura.app/v1/graphql'
-  uri: (Vue.config.productionTip) ? "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet" : "https://api.thegraph.com/subgraphs/name/hrpalencia/minticktestnet",
+  uri: "https://graph.mintbase.xyz/testnet",
+  context: {
+    headers: { "mb-api-key": "anon" }
+  },
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',
