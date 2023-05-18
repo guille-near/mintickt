@@ -73,7 +73,7 @@
       <div class="divcol center" style="gap: 20px">
         <h2>Still have a question?</h2>
         <span class="text">We're here to assist you.</span>
-        <v-btn class="stylish">
+        <v-btn class="stylish" href="https://t.me/mintickt" target="_blank">
           <span>Contact</span>
         </v-btn>
       </div>
@@ -183,22 +183,22 @@ export default {
         {
           icon: require("@/assets/newLanding/telegram.svg"),
           name: "Telegram",
-          href: "",
+          href: "https://t.me/mintickt",
         },
         {
           icon: require("@/assets/newLanding/instagram.svg"),
           name: "Instagram",
-          href: "",
+          href: "https://instagram.com/mintickt?igshid=MmJiY2I4NDBkZg==",
         },
         {
           icon: require("@/assets/newLanding/twitter.svg"),
           name: "Twitter",
-          href: "",
+          href: "https://twitter.com/Mintickt",
         },
         {
           icon: require("@/assets/newLanding/discord.svg"),
           name: "Discord",
-          href: "",
+          href: "https://discord.gg/ebPUNdD4Bf",
         },
       ],
       rules: {
