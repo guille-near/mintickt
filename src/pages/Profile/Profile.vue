@@ -86,37 +86,14 @@ const get_nfts = gql`
     mb_views_nft_owned_tokens(
       where: {owner: {_eq: $user}, nft_contract_id: {_eq: $contract_id}}
     ) {
-      base_uri
-      burned_receipt_id
-      burned_timestamp
-      copies
-      currency
       description
-      nft_contract_is_mintbase
-      nft_contract_name
-      nft_contract_owner_id
-      nft_contract_reference
       owner
       price
       title
-      token_id
-      expires_at
-      extra
-      issued_at
-      last_transfer_receipt_id
-      last_transfer_timestamp
       media
-      market_id
-      metadata_id
-      mint_memo
-      minted_receipt_id
-      minter
-      minted_timestamp
-      metadata_content_flag
-      media_hash
-      reference
       reference_blob
-      reference_hash
+      token_id
+      media_hash
     }
   }
 `;
@@ -189,7 +166,6 @@ export default {
     async getDataNfts() {
       console.info('---------------Get data nft------------------')
       const user = this.$ramper.getAccountId()
-      console.log(user, this.eventId)
       this.$apollo
         .watchQuery({
           client: "mintickClient",
@@ -202,6 +178,21 @@ export default {
         })
         .subscribe(({ data }) => {
           console.log("DATAAA", data)
+          const nfts = data.mb_views_nft_owned_tokens
+
+          for (let nft of nfts) {
+            let collection = {
+              token_id: nft.token_id,
+              contract_id: nft.store,
+              img: nft.media,
+              name: nft.title,
+              dc: false
+            };
+
+            this.dataTabs[2].content.push(collection);
+          }
+
+          
         });
           // this.get_tokens();
           // this.get_tokens_redeemed();
