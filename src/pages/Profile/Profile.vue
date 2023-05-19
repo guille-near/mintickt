@@ -299,7 +299,7 @@ export default {
         const metadata = await contract.nft_metadata();
         
         for (var i = 0; i < result.length; i++) {
-          console.log(result[i])
+          console.log("NFT",result[i])
           let collection = {
             token_id: result[i].token_id,
             contract_id: contract_id,
