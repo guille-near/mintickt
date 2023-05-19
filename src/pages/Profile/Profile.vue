@@ -60,6 +60,8 @@
 import * as nearAPI from "near-api-js";
 import gql from "graphql-tag";
 import moment from "moment";
+import request from "request";
+
 import { CONFIG } from "@/services/api";
 
 const { connect, transactions, keyStores, WalletConnection, Contract, utils } = nearAPI;

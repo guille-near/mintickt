@@ -34,6 +34,7 @@
     "moment-timezone": "^0.5.37",
     "near-api-js": "^0.44.2",
     "prettier": "^2.7.1",
+    "undici": "^5.22.1",
     "vue": "^2.6.12",
     "vue-animate-onscroll": "^1.0.8",
     "vue-apexcharts": "^1.6.1",
