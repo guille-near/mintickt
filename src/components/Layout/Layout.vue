@@ -16,6 +16,7 @@
 <script>
 import ModalDiscord from "@/components/modals/ModalDiscord.vue";
 import Header from "@/components/Layout/Header";
+import axios from "axios"
 // import Footer from "@/components/Layout/Footer";
 import "./layout.scss";
 export default {
@@ -32,19 +33,6 @@ export default {
     };
   },
   mounted() {
-    this.$refs.modalDiscord.modalDiscord = true
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const [accessToken] = [fragment.get('access_token'), fragment.get('token_type')];
-
-    if (accessToken) {
-      const item = {
-        access_token: fragment.get('access_token'),
-        token_type: fragment.get('token_type')
-      }
-      localStorage.setItem('discord_sinc', JSON.stringify(item))
-      this.$router.push("/profile")
-    }
-
     if (JSON.parse(localStorage.getItem('discord_sinc'))) {
       if (this.$ramper.getUser()) {
         const itemDiscord = JSON.parse(localStorage.getItem('discord_sinc'))
@@ -63,9 +51,12 @@ export default {
 
           this.userDc = response
 
-          console.log(avatar)
+          console.log(response)
 
-          this.connectDiscord()
+          this.$refs.modalDiscord.userDc = response
+          this.$refs.modalDiscord.avatar = avatar || require("../../assets/profile/user.svg")
+
+          this.$refs.modalDiscord.modalDiscord = true
         })
         .catch(console.error);
       } else {
@@ -74,21 +65,6 @@ export default {
     }
   },
   methods: {
-    connectDiscord () {
-      console.log("ENTRO")
-      // this.connectBtn = true
-      const accountId = this.$ramper.getAccountId()
-
-      axios.post(process.env.VUE_APP_BOTDISCORD_URL + "/api/bot-discord/", { "wallet": accountId, "discordId": this.userDc.id })
-        .then(result => {
-          console.log("SUCCESS")
-          localStorage.removeItem('discord_sinc')
-        }).catch(err => {
-          console.log("ERROR")
-          console.error(err);
-          localStorage.removeItem('discord_sinc')
-        })
-    },
     async connectRamper() {
       const login = await this.$ramper.signIn()
       console.log(login)
