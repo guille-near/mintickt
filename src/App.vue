@@ -1,5 +1,7 @@
 <template>
+
   <router-view  />
+ 
 </template>
 
 <script>
@@ -16,6 +18,7 @@ import axios from "axios"
     };
   },
     mounted() {
+      this.$refs.modalDiscord.modalDiscord = true
       const fragment = new URLSearchParams(window.location.hash.slice(1));
       const [accessToken] = [fragment.get('access_token'), fragment.get('token_type')];
 

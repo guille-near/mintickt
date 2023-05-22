@@ -1,5 +1,6 @@
 <template>
   <v-app class="layout relative">
+    <ModalDiscord ref="modalDiscord"></ModalDiscord>
     <Header v-if="renderHeader" style="z-index: 10" ref="header" />
     <v-main
       class="content"
@@ -13,12 +14,13 @@
 </template>
 
 <script>
+import ModalDiscord from "@/components/modals/ModalDiscord.vue";
 import Header from "@/components/Layout/Header";
 // import Footer from "@/components/Layout/Footer";
 import "./layout.scss";
 export default {
   name: "Layout",
-  components: { Header },
+  components: { Header, ModalDiscord },
   data() {
     return {
       renderHeader: true,
