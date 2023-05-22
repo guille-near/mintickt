@@ -3,16 +3,16 @@
     <v-card id="modalDiscord" class="center">
       <h3 class="p tcenter">Accept Synchronization</h3>
 
-      <!-- <section class="divcol center" style="gap: 30px">
+      <section class="divcol center" style="gap: 30px">
         <div class="divcol center">
           <img id="avatar" src="../../assets/profile/user.svg" alt="profile avatar">
           <span>juan</span>
         </div>
 
         <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p>
-      </section> -->
+      </section>
 
-      <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p>
+      <!-- <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p> -->
 
       <v-btn @click="modalDiscord=false">connect</v-btn>
     </v-card>
@@ -24,7 +24,7 @@ export default {
   name: "ModalSuccess",
   data() {
     return {
-      modalDiscord: true,
+      modalDiscord: false,
     };
   },
 };
