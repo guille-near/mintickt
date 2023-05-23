@@ -38,7 +38,7 @@
             <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px" />
             <span>Delete</span>
           </v-btn>
-          <v-btn v-if="!nft.dc" :disabled="btnDisabled" :href="dc_redirect">
+          <v-btn v-if="!nft.dc" :disabled="btnDisabled" :href="dc_redirect" class="btn-filled">
             <img src="@/assets/profile/discord.svg" alt="discord" width="15px" height="15px" />
             <span>Unlock your invitation</span>
           </v-btn>
@@ -72,7 +72,7 @@ export default {
   name: "ProfileTicketDetails",
   data() {
     return {
-      dc_redirect: process.env.VUE_APP_DC_REDIRECT,
+      dc_redirect: process.env.VUE_APP_DC_REDIRECT.toString(),
       btnError: false,
       btnCancel: false,
       btnTransfer: true,
