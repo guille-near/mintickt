@@ -15,7 +15,11 @@
 
         <!-- <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p> -->
 
-        <v-btn @click="connectDiscord()">CONNECT</v-btn>
+        <v-btn :disabled="connectBtn" @click="connectDiscord()">CONNECT<v-progress-circular
+          v-if="connectBtn"
+          :size="19"
+          indeterminate
+        ></v-progress-circular></v-btn>
       </div>
       <div v-else>
         <div v-if="status == 'success'">
@@ -43,30 +47,35 @@ export default {
       modalDiscord: false,
       avatar: require("../../assets/profile/user.svg"),
       userDc: {},
-      status: null
+      status: null,
+      connectBtn: false
     };
   },
   methods: {
     connectDiscord () {
       console.log("ENTRO")
-      // this.connectBtn = true
+      this.connectBtn = true
       const accountId = this.$ramper.getAccountId()
 
       axios.post(process.env.VUE_APP_BOTDISCORD_URL + "/api/bot-discord/", { "wallet": accountId, "discordId": this.userDc.id })
         .then(result => {
           console.log("SUCCESS")
           this.status = "success"
-          // localStorage.removeItem('discord_sinc')
-          setTimeout(this.modalDiscord = false, 10000)
+          localStorage.removeItem('discord_sinc')
+          setTimeout(this.closeModal, 7000);
           
         }).catch(err => {
           console.log("ERROR")
           this.status = "error"
           console.error(err);
-          // localStorage.removeItem('discord_sinc')
-          setTimeout(this.modalDiscord = false, 10000)
+          localStorage.removeItem('discord_sinc')
+          setTimeout(this.modalDiscord = false, 7000)
         })
     },
+    closeModal() {
+      this.modalDiscord = false
+      this.status = null
+    }
   }
 };
 </script>

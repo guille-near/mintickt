@@ -179,13 +179,14 @@ export default {
           pollInterval: 2000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
-          console.log("DATAAA", data)
+          this.dataTabs[2].content = []
           const nfts = data.mb_views_nft_owned_tokens
 
           for (let nft of nfts) {
+            console.log(nft)
             let collection = {
               token_id: nft.token_id,
-              contract_id: nft.store,
+              contract_id: nft.reference_blob.store,
               img: nft.media,
               name: nft.title,
               dc: false
@@ -200,6 +201,7 @@ export default {
           // this.get_tokens_redeemed();
     },
     goToDetails(item) {
+      // console.log(item)
       this.$session.set("ticketDetails", item);
       this.$router.push(`/profile-ticket-details/`);
       this.$store.commit("changeTabProfile", this.tab)
@@ -232,6 +234,8 @@ export default {
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          this.dataTabs[0].content = []
+          this.dataTabs[1].content = []
           let dataNfts = data.nfts;
           const dataEvents = [];
           const dataPast = [];
