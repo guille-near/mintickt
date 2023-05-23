@@ -1,32 +1,82 @@
 <template>
   <v-dialog v-model="modalDiscord" max-width="420px">
     <v-card id="modalDiscord" class="center">
-      <h3 class="p tcenter">Accept Synchronization</h3>
+      <div v-if="!status">
+        <h3 class="p tcenter">Accept Synchronization</h3>
 
-      <!-- <section class="divcol center" style="gap: 30px">
-        <div class="divcol center">
-          <img id="avatar" src="../../assets/profile/user.svg" alt="profile avatar">
-          <span>juan</span>
+        <section class="divcol center" style="gap: 30px">
+          <div class="divcol center">
+            <img id="avatar" :src="avatar" alt="profile avatar">
+            <span>{{ userDc.username }}#{{ userDc.discriminator }}</span>
+          </div>
+
+          <p class="tcenter">Hey there {{ userDc.username }}<br>Ready to sync with discord?</p>
+        </section>
+
+        <!-- <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p> -->
+
+        <v-btn :disabled="connectBtn" @click="connectDiscord()">CONNECT<v-progress-circular
+          v-if="connectBtn"
+          :size="19"
+          indeterminate
+        ></v-progress-circular></v-btn>
+      </div>
+      <div v-else>
+        <div v-if="status == 'success'">
+          <h3 class="p tcenter">Success!</h3>
+          <v-icon size="10em" style="color: rgb(62, 195, 68) !important">
+          mdi-check-circle</v-icon>
         </div>
-
-        <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p>
-      </section> -->
-
-      <p class="tcenter">Hey there juan <br>Ready to sync with discord?</p>
-
-      <v-btn @click="modalDiscord=false">connect</v-btn>
+        <div v-if="status == 'error'">
+          <h3 class="p tcenter">ERROR!</h3>
+          <v-icon size="10em" style="color: rgb(181, 11, 11) !important">
+          mdi-close-circle</v-icon>
+        </div>
+      </div>
+      
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "ModalSuccess",
   data() {
     return {
-      modalDiscord: true,
+      modalDiscord: false,
+      avatar: require("../../assets/profile/user.svg"),
+      userDc: {},
+      status: null,
+      connectBtn: false
     };
   },
+  methods: {
+    connectDiscord () {
+      console.log("ENTRO")
+      this.connectBtn = true
+      const accountId = this.$ramper.getAccountId()
+
+      axios.post(process.env.VUE_APP_BOTDISCORD_URL + "/api/bot-discord/", { "wallet": accountId, "discordId": this.userDc.id })
+        .then(result => {
+          console.log("SUCCESS")
+          this.status = "success"
+          localStorage.removeItem('discord_sinc')
+          setTimeout(this.closeModal, 7000);
+          
+        }).catch(err => {
+          console.log("ERROR")
+          this.status = "error"
+          console.error(err);
+          localStorage.removeItem('discord_sinc')
+          setTimeout(this.modalDiscord = false, 7000)
+        })
+    },
+    closeModal() {
+      this.modalDiscord = false
+      this.status = null
+    }
+  }
 };
 </script>
 
