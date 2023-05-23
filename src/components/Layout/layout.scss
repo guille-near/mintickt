@@ -17,8 +17,8 @@
   // height: 100vh !important;
   .v-main__wrap:not(:has(#landing)) {
     padding-inline: 0;
-    max-width: 1440px;
-    margin-inline: auto;
+    max-width: 1440px !important;
+    margin-inline: auto !important;
     // padding-top: clamp(3rem, 22vh , 8rem);
     background-color: transparent;
     // @media (max-height: 800px) {
