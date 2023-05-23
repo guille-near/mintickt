@@ -38,7 +38,7 @@
             <img src="@/assets/profile/burn.svg" alt="burn" width="15px" height="15px" />
             <span>Delete</span>
           </v-btn>
-          <v-btn v-if="!nft.dc" :disabled="btnDisabled" href="https://discord.com/api/oauth2/authorize?client_id=1108895721928794193&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F%23%2Fprofile%2F&response_type=token&scope=identify" class="btn-filled">
+          <v-btn v-if="!nft.dc" :disabled="btnDisabled" :href="dc_redirect">
             <img src="@/assets/profile/discord.svg" alt="discord" width="15px" height="15px" />
             <span>Unlock your invitation</span>
           </v-btn>
@@ -72,6 +72,7 @@ export default {
   name: "ProfileTicketDetails",
   data() {
     return {
+      dc_redirect: process.env.VUE_APP_DC_REDIRECT,
       btnError: false,
       btnCancel: false,
       btnTransfer: true,
