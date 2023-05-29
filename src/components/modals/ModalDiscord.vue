@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="modalDiscord" max-width="420px">
+  <v-dialog v-model="modalDiscord" max-width="420px" content-class="dialogDiscord">
     <v-card id="modalDiscord" class="center">
       <div v-if="!status">
         <h3 class="p tcenter">Accept Synchronization</h3>
@@ -84,6 +84,10 @@ export default {
 <style lang="scss">
 @import '@/styles/_mixins.scss';
 
+.dialogDiscord {
+  border-radius: 16px !important;
+}
+
 #modalDiscord {
   position: relative;
   isolation: isolate;
@@ -93,7 +97,7 @@ export default {
   gap: 20px;
   padding: 48px;
   @include borderGradientImageCard(url(../../assets/backgrounds/border-gradient-card-large.png));
-  border-radius: 11px !important;
+  border-radius: 16px !important;
   backdrop-filter: blur(11px) !important;
   background-color: rgba(0, 0, 0, 0.4) !important;
 

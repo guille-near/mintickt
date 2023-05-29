@@ -124,7 +124,7 @@
     </v-dialog>
 
     <!--Modal ticket Url -->
-    <v-dialog v-model="modalTicket" width="420">
+    <v-dialog v-model="modalTicket" width="420" content-class="dialogUrl">
       <v-card id="modalUrl">
         <div class="divcol center">
           <h3 class="p">Url Code</h3>

@@ -2100,6 +2100,10 @@
   }
 }
 
+
+.dialogSuccess {
+  border-radius: 11px !important;
+}
 #modalSucess {
   position: relative;
   isolation: isolate;
@@ -2148,7 +2152,9 @@
   }
 }
 
-
+.dialogUrl {
+  border-radius: 11px !important;
+}
 #modalUrl {
   position: relative;
   isolation: isolate;

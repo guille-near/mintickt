@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="modalSuccess" max-width="420px">
+  <v-dialog v-model="modalSuccess" max-width="420px" content-class="dialogSuccess">
     <v-card id="modalSucess">
       <div class="divcol center">
         <h3 class="p">Success!</h3>

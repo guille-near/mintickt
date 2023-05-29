@@ -63,7 +63,7 @@
           class="search scan"
         >
           <template v-slot:append>
-            <v-dialog width="420px" v-model="modalQR">
+            <v-dialog width="420px" v-model="modalQR" content-class="dialogUrl">
               <template v-slot:activator="{ on, attrs }">
                 <img
                   src="@/assets/icons/scan.svg"

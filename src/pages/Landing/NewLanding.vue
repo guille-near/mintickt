@@ -164,19 +164,19 @@ export default {
         },
         {
           question: "Do I need a crypto wallet?",
-          answer: "",
+          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
         },
         {
           question: "Do I have to buy crypto to purchase a ticket?",
-          answer: "",
+          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
         },
         {
           question: "Why should I collect tickets for the events I attend?",
-          answer: "",
+          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
         },
         {
           question: "I’m an artist or event organizer. What benefits can I get?",
-          answer: "",
+          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
         },
       ],
       socials: [

@@ -106,7 +106,7 @@
               </v-list>
             </v-menu>
 
-            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store'" @click="goToEvent">
+            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store' && !user" @click="goToEvent">
               <span>create an event</span>
             </v-btn>
 
