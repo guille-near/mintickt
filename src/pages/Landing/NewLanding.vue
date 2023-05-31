@@ -11,16 +11,22 @@
       <h1>You may want to collect these tickets</h1>
     </section>
 
-    <img id="hero-down-img" src="@/assets/newLanding/hero-down.png" width="100%" class="eliminarmobile">
+    <div id="hero-down-img" class="eliminarmobile">
+      <img src="@/assets/newLanding/hero-down.png" width="100%">
+    </div>
 
     <!-- bullshit -->
     <section id="bullshit">
-      <h2>0% bullshit, 100% utility</h2>
-      <img src="@/assets/newLanding/bullshit-desktop.jpg" alt="utility image" class="eliminarmobile">
-      <img src="@/assets/newLanding/bullshit-mobile.jpg" alt="utility image" class="vermobile">
+      <div class="divcol center">
+        <h2>0% bullshit, 100% utility</h2>
+        <img src="@/assets/newLanding/bullshit-desktop.jpg" alt="utility image" class="eliminarmobile">
+        <img src="@/assets/newLanding/bullshit-mobile.jpg" alt="utility image" class="vermobile">
+      </div>
     </section>
 
-    <img id="hero-down-img" src="@/assets/newLanding/hero-down.png" width="100%" class="vermobile">
+    <div id="hero-down-img" class="vermobile">
+      <img src="@/assets/newLanding/hero-down.png" width="100%">
+    </div>
 
     <!-- about -->
     <section id="about">

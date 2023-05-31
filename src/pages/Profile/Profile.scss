@@ -74,6 +74,7 @@
     padding-top: calc((var(--avatarSize) / 2) + (var(--spacing) / 2));
     padding-bottom: 80px;
     padding-inline: calc(var(--margination) * 2);
+    @media (max-width: 880px) {padding-inline: var(--margination);}
     // background: rgba(217, 217, 217, 0.13);
 
     .container-title {
@@ -136,7 +137,7 @@
           .container-grid {
             width: 100% !important;
             display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--imageSize)), 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)) !important;
             @media (min-width: 1140px) {
               grid-template-columns: repeat(7, 1fr);
             }

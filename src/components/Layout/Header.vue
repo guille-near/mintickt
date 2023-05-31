@@ -6,8 +6,9 @@
       height="140px"
       absolute
       :class="{
-        events: routeName == 'Landing' || routePath.includes('events') || routePath.includes('profile'),
+        events: routePath.includes('events') || routePath.includes('profile'),
         register: routePath === '/events/register',
+        landing: routeName == 'Landing',
       }"
     >
       <v-row
@@ -106,7 +107,10 @@
               </v-list>
             </v-menu>
 
-            <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store' && !user" @click="goToEvent">
+            <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store' && !user" @click="goToEvent">
+              <span>create an event</span>
+            </v-btn> -->
+            <v-btn class="createEventBtn h9-em" v-show="routePath === '/events' || !user" @click="goToEvent">
               <span>create an event</span>
             </v-btn>
 

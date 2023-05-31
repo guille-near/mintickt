@@ -103,6 +103,9 @@
   &.events {
     & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
   }
+  &.landing {
+    & .v-toolbar__content {padding-inline: var(--landing-margin)}
+  }
   .logoHeader{
     width: clamp(8em, 10vw, 10.0625em);
     // height: clamp(2.5em, 3vw,3.125em);

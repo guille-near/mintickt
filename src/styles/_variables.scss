@@ -1,5 +1,14 @@
 @import '~vuetify/src/styles/styles.sass';
 
+$x-small: 600px;
+
+:root {
+  --landing-margin: 208px;
+  @media (max-width: 1200px) {--landing-margin: 100px;}
+  @media (max-width: $x-small) {--landing-margin: 15px;}
+}
+
+
 // Sidebar //
 $drawer-items-padding:                     32px !default;
 $navigation-drawer-mini-variant-width:     96px!important;
