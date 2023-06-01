@@ -31,7 +31,7 @@
           </a>
 
           <aside class="container-buttons-header center" style="gap: 20px" :style="(routePath === '/events' || !user) ? '' : 'display:contents'">
-            <v-btn class="createEventBtn h9-em eliminarmobile" v-show="routePath === '/events' || !user" @click="goToEvent">
+            <v-btn class="createEventBtn h9-em eliminarmobile" v-show="(routePath === '/events' || !user) && canShowBtn" @click="goToEvent">
               <span>create an event</span>
             </v-btn>
 
@@ -143,9 +143,9 @@ export default {
   i18n: require("./i18n"),
   data() {
     return {
-      // themeButton: true,
       menuLogin: false,
       user: undefined,
+      canShowBtn: false,
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,
       routeName: this.$router.currentRoute.name,
@@ -258,6 +258,7 @@ export default {
         } else if(this.$ramper.getUser()){
           this.user = this.$ramper.getAccountId();
         }
+        this.canShowBtn = true
       }, 200)
     },
     async logOut() {
