@@ -30,7 +30,11 @@
             <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo" />
           </a>
 
-          <aside class="container-buttons-header center" style="gap: 20px" :style="routePath !== '/events/register' ? '' : 'display:contents'">
+          <aside class="container-buttons-header center" style="gap: 20px" :style="(routePath === '/events' || !user) ? '' : 'display:contents'">
+            <v-btn class="createEventBtn h9-em eliminarmobile" v-show="routePath === '/events' || !user" @click="goToEvent">
+              <span>create an event</span>
+            </v-btn>
+
             <v-menu v-model="menuLogin" bottom offset-y content-class="menuButtonProfile">
               <template #activator="{ on, attrs }">
                 <!-- <v-btn
@@ -110,9 +114,6 @@
             <!-- <v-btn class="createEventBtn h9-em" v-show="routePath !== '/events/register' && routeName !== 'Store' && !user" @click="goToEvent">
               <span>create an event</span>
             </v-btn> -->
-            <v-btn class="createEventBtn h9-em" v-show="routePath === '/events' || !user" @click="goToEvent">
-              <span>create an event</span>
-            </v-btn>
 
             <modal-fill ref="modalfill"></modal-fill>
           </aside>
@@ -126,19 +127,6 @@
 import * as nearAPI from "near-api-js";
 import modalFill from "../../pages/Store/ModalFill.vue";
 const { Contract } = nearAPI;
-// let ubicacionPrincipal = window.pageYOffset;
-// let resizeTimeout;
-// function resizeThrottler(actualResizeHandler) {
-//   // ignore resize events as long as an actualResizeHandler execution is in the queue
-//   if (!resizeTimeout) {
-//     resizeTimeout = setTimeout(() => {
-//       resizeTimeout = null;
-//       actualResizeHandler();
-
-//       // The actualResizeHandler will execute at a rate of 15fps
-//     }, 80);
-//   }
-// }
 // window.ramper.setConfig({
 //   appName: "Near Test App",
 //   chainName: "near",
@@ -153,19 +141,6 @@ export default {
     modalFill,
   },
   i18n: require("./i18n"),
-  // created() {
-  //   this.element = document.getElementById("theme");
-  //   const theme = localStorage.getItem("theme");
-  //   if (theme) {
-  //     this.CambiarTheme(theme);
-  //   }
-  //   if (theme == "light") {
-  //     this.themeButton = true;
-  //   }
-  //   if (theme == "dark") {
-  //     this.themeButton = false;
-  //   }
-  // },
   data() {
     return {
       // themeButton: true,
@@ -176,10 +151,11 @@ export default {
       routeName: this.$router.currentRoute.name,
     };
   },
-  async mounted() {
+  async beforeMount() {
     await this.getNearPrice();
     this.revisar();
-
+  },
+  mounted() {
     // * styles
     this.responsive();
     window.onresize = () => {
@@ -187,7 +163,6 @@ export default {
     };
 
     const header = document.getElementById("headerApp");
-    // console.log(this.$route.path);
     if (this.$route.path === "/events/liveData" || this.$route.path == "/events/options") {
       header.classList.add("delpaddlivedata");
     } else {
