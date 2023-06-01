@@ -59,10 +59,10 @@
         <v-btn @click="modalListMore = true">Change price</v-btn>
       </div>
 
-      <div class="space">
+      <!-- <div class="space">
         <div class="divcol"></div>
         <v-btn color="red" @click="deleteEvent()">Stop Event</v-btn>
-      </div>
+      </div> -->
     </aside>
 
     <!-- modalQr -->
