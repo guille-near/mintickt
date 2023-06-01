@@ -4,7 +4,10 @@
     <Header v-if="renderHeader" style="z-index: 10" ref="header" />
     <v-main
       class="content"
-      :class="{events: $router.currentRoute.path.includes('events') || $router.currentRoute.path.includes('profile')}"
+      :class="{
+        events: $router.currentRoute.path.includes('events') || $router.currentRoute.path.includes('profile'),
+        landing: $router.currentRoute.name == 'Landing'
+      }"
       style="overflow: hidden"
     >
       <router-view @renderHeader="RenderHeader"></router-view>

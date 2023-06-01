@@ -29,6 +29,11 @@
     // @include mq(min, small) {padding-left: calc(clamp(8em, 10vw, 10.0625em) + (clamp(1em, 4vw, 4em) * 2)) !important}
     background: linear-gradient(180.22deg, rgba(246, 85, 235, 0.09) 0.19%, rgba(30, 30, 30, 0) 39.99%, rgba(102, 205, 118, 0.12) 99.82%) !important;
   }
+  .v-main.landing {
+    .v-main__wrap {
+      max-width: 1728px !important;
+    }
+  }
 
   .filtro1{
     position: absolute;
@@ -104,6 +109,7 @@
     & .v-toolbar__content {padding-inline: clamp(1em, 3vw, 3em)}
   }
   &.landing {
+    max-width: 1728px !important;
     & .v-toolbar__content {padding-inline: var(--landing-margin)}
   }
   .logoHeader{
