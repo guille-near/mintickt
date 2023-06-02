@@ -1151,6 +1151,7 @@ export default {
         // console.log(metadata);
 
         this.$session.set("mint_tittle", this.dataTickets.name);
+        this.$session.set("event_metadata", event_metadata);
         //LocalStorage Metadata
         // this.$session.set("metadata", JSON.stringify(metadata));
 
@@ -1230,11 +1231,42 @@ export default {
             network: process.env.VUE_APP_NETWORK,
           });
           console.log("RESULTT!!!", resTx);
-          if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
-            this.disabledBtn = false;
-            const dataResult = JSON.parse(resTx.result[0]?.receipts_outcome[0]?.outcome.logs[0]);
+          if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
+            if (JSON.parse(localStorage.getItem('ramper_loggedInUser')).signupSource === 'near_wallet') {
+              const QUERY_APOLLO = gql`
+                query MyQuery($title: String, $description: String, $extra: String, $creator_id: String) {
+                  series(where: {title: $title, description: $description, extra: $extra, creator_id: $creator_id}) {
+                    id
+                  }
+                }
+              `;
 
-            this.tokenSeriesId = dataResult.params?.token_series_id;
+              await this.$apollo
+              .query({
+                query: QUERY_APOLLO,
+                variables: {title: this.$session.get("event_metadata")?.title, description: this.$session.get("event_metadata")?.description, extra: this.$session.get("event_metadata")?.extra, creator_id: this.$ramper.getAccountId()},
+              }) 
+                .then((response) => {
+                  console.log(response)
+                  const data = response.data.series
+                  if (data.length > 0) {
+                    this.tokenSeriesId = data[0].id
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            } else {
+              this.disabledBtn = false;
+              const dataResult = JSON.parse(resTx.result[0]?.receipts_outcome[0]?.outcome.logs[0]);
+
+              this.tokenSeriesId = dataResult.params?.token_series_id;
+            }
+
+            console.log("TOKEN SERIES", this.tokenSeriesId);
 
             this.$refs.modal.modalSuccess = true;
             this.$refs.modal.url = this.$explorer + "/accounts/" + user;
@@ -1345,7 +1377,10 @@ export default {
         });
         console.log("OBJECTS", resTx);
 
-        if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
+        if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
           this.gotToEvents();
         } else {
           console.log("ERROR SEND");
