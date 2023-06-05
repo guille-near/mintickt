@@ -125,6 +125,7 @@ export default {
             ),
           )
         }
+        this.modalBuy = false;
         const res = await this.$ramper.sendTransaction({
           transactionActions: [{
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
@@ -154,6 +155,7 @@ export default {
       this.modalSuccess = false;
     },
     fiat() {
+      this.modalBuy = false;
       const tokenId = this.$session.get("tokenId");
       console.log(
         "https://checkout.ramper.xyz/buy?contract_address=" +
