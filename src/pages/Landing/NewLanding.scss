@@ -262,13 +262,14 @@
         border-radius: 11px !important;
         background-color: transparent !important;
         background-size: fill !important;
-        background: center no-repeat url(../../assets/newLanding/faq-header.png);
-        @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-header-mobile.png) !important;}
-        &--active {
-          background-size: 100% 100% !important;
-          background-image: url(../../assets/newLanding/faq-content.png) !important;
-          @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-content-mobile.png) !important;}
-        }
+        @include borderGradient2Css();
+        // background: center no-repeat url(../../assets/newLanding/faq-header.png);
+        // @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-header-mobile.png) !important;}
+        // &--active {
+        //   background-size: 100% 100% !important;
+        //   background-image: url(../../assets/newLanding/faq-content.png) !important;
+        //   @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-content-mobile.png) !important;}
+        // }
 
         &:not(:first-child) {margin-top: 16px;}
         * {color: #fff !important}
@@ -315,8 +316,7 @@
         padding: 20px;
         backdrop-filter: blur(36px);
         border-radius: 25px;
-        background: center no-repeat url(../../assets/newLanding/memorable-bg.png);
-        background-size: 100% 100%;
+        @include borderGradient2Css();
       }
 
       h2 {
