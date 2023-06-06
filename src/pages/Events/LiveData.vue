@@ -1011,7 +1011,10 @@ export default {
         console.log("TX",res);
         item.loadingBtn = false
         this.btnDisabled = false;
-        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
+        if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
           if (process.env.VUE_APP_NETWORK === "mainnet") {
             this.urlTx = "https://explorer.near.org/transactions/" + res.txHashes[0];
           } else {

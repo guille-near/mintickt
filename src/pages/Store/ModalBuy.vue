@@ -125,6 +125,7 @@ export default {
             ),
           )
         }
+        this.modalBuy = false;
         const res = await this.$ramper.sendTransaction({
           transactionActions: [{
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
@@ -133,7 +134,10 @@ export default {
           network: process.env.VUE_APP_NETWORK,
         });
 
-        if (res.result && typeof res.result[0]?.status?.SuccessValue === "string") {
+        if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
           this.modalBuy = false;
           if (process.env.VUE_APP_NETWORK === "mainnet") {
             this.urlTx = "https://explorer.near.org/accounts/" + this.$ramper.getAccountId();
@@ -151,6 +155,7 @@ export default {
       this.modalSuccess = false;
     },
     fiat() {
+      this.modalBuy = false;
       const tokenId = this.$session.get("tokenId");
       console.log(
         "https://checkout.ramper.xyz/buy?contract_address=" +

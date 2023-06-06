@@ -584,7 +584,10 @@ export default {
             network: process.env.VUE_APP_NETWORK,
           });
           console.log("RESULTT!!!", resTx);
-          if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
+          if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
             this.disabledBtn = false;
             const dataResult = JSON.parse(resTx.result[0]?.receipts_outcome[0]?.outcome.logs[0]);
 
@@ -642,7 +645,10 @@ export default {
         });
         console.log("OBJECTS", resTx);
 
-        if (resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "") {
+        if ((resTx &&
+          JSON.parse(localStorage.getItem('ramper_loggedInUser'))
+            .signupSource === 'near_wallet' &&
+            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
           this.gotToEvents();
         } else {
           console.log("ERROR SEND");
