@@ -1173,16 +1173,16 @@
   }
 
   .create-btn {
-    --size: 26px;
+    --br: 5px;
     margin-left: auto;
-    min-width: var(--size);
-    height: var(--size);
+    min-width: 26px;
+    height: 26px;
     padding: 0 !important;
-    border-radius: 7px !important;
-    background-color: transparent !important;
+    border-radius: calc(var(--br) + 2px) !important;
+    @include borderGradientCss();
     img {
-      width: var(--size);
-      height: var(--size);
+      width: 18px;
+      height: 18px;
       object-fit: cover;
     }
   }

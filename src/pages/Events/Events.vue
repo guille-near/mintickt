@@ -18,7 +18,7 @@
       </v-text-field>
 
       <v-btn class="create-btn vermobile">
-        <img :src="require(`@/assets/icons/${createMenu ? 'minus' : 'plus'}-btn.svg`)" alt="create button">
+        <img :src="require(`@/assets/icons/${createMenu ? 'minus' : 'plus'}.svg`)" alt="create button">
       </v-btn>
     </v-tabs>
 
