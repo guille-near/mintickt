@@ -382,7 +382,7 @@
   --br: 8px;
   display: flex;
   flex-direction: column;
-  border-radius: calc(var(--br) + 2px) !important;
+  border-radius: 10px !important;
   margin-top: 10px;
   @include borderGradientCss();
   .v-list-item {

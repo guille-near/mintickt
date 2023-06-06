@@ -1178,7 +1178,7 @@
     min-width: 26px;
     height: 26px;
     padding: 0 !important;
-    border-radius: calc(var(--br) + 2px) !important;
+    border-radius: 7px !important;
     @include borderGradientCss();
     img {
       width: 18px;
