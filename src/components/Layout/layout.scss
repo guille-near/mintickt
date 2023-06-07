@@ -131,8 +131,11 @@
     max-width: 184px !important;
     background-color: transparent;
     * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
-    // @include borderGradientCss(2);
-    @include borderGradientImage(small);
+    @include borderGradientCssFeatured(2);
+    /* Firefox */
+    @-moz-document url-prefix() {
+      @include borderGradientImage(small);
+    }
 
     span {
       max-width: 160px;
@@ -353,9 +356,12 @@
 
 
 .menuButtonProfile {
-  // @include borderGradientCss(2, 15);
-  @include borderGradientImageCard(small);
+  @include borderGradientCssFeatured(2, 15);
   background-color: rgba(37, 37, 37, 0.6) !important;
+  /* Firefox */
+  @-moz-document url-prefix() {
+    @include borderGradientImageCard(small);
+  }
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -389,8 +395,11 @@
   flex-direction: column;
   border-radius: 10px !important;
   margin-top: 10px;
-  // @include borderGradientCss(2, 15);
-  @include borderGradientCss();
+  @include borderGradientCssFeatured(2, 15);
+  /* Firefox */
+  @-moz-document url-prefix() {
+    @include borderGradientCss();
+  }
   .v-list-item {
     min-height: 35px;
   }

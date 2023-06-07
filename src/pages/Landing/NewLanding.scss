@@ -48,8 +48,12 @@
 
   .v-btn.stylish {
     background-color: transparent;
-    // @include borderGradientCss();
-    @include borderGradientImageCard(url('../../assets/backgrounds/border-gradient-btn-xsmall.png'));
+    @include borderGradientCssFeatured(2, 27);
+    /* Firefox */
+    @-moz-document url-prefix() {
+      @include borderGradientImageCard(url('../../assets/backgrounds/border-gradient-btn-xsmall.png'));
+    }
+
     display: flex;
     padding: 12.8571px 21.4286px;
     height: 51px;
