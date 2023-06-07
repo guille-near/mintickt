@@ -75,38 +75,38 @@
         </v-data-table>
 
         <section class="vermobile">
-          <v-card v-for="(item, i) in filterDataMobile(item.dataTableMobile)" :key="i" class="up divcol" style="display: flex">
+          <v-card v-for="(item2, i) in filterDataMobile(item.dataTableMobile)" :key="i" class="up divcol" style="display: flex">
             <section class="acenter">
               <span class="eventName">
-                <v-btn @click="goEventData(item.id)" style="color: white; padding: 0" text>{{ item.name.ellipsisRange(14) }}</v-btn>
+                <v-btn @click="goEventData(item2.id)" :href="'#/store?id=' + item2.id" target="_blank" style="color: white; padding: 0" text>{{ item2.name.ellipsisRange(14) }}</v-btn>
               </span>
 
-              <span v-show="tab == 0">{{ item.date }}</span>
+              <span v-show="tab == 0">{{ item2.date }}</span>
 
               <aside class="acenter" style="gap: 0.5em">
                 <template v-if="tab == 0">
-                  <v-btn class="icon" @click="goLiveData(item.id)">
+                  <v-btn class="icon" @click="goLiveData(item2.id)">
                     <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-chart-line</v-icon>
                   </v-btn>
 
-                  <v-btn class="icon" @click="goOptions(item.id)">
+                  <v-btn class="icon" @click="goOptions(item2.id)">
                     <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-cog-outline</v-icon>
                   </v-btn>
                 </template>
 
-                <!-- <v-btn class="icon" @click="copySiteLink(item.thingid)">
+                <!-- <v-btn class="icon" @click="copySiteLink(item2.thingid)">
                   <v-icon size="clamp(1.3em, 1.5vw, 1.5em)">mdi-content-copy</v-icon>
                 </v-btn> -->
 
                 <v-icon
                   color="white"
-                  :style="item.show ? 'transform:rotate(180deg)' : ''"
+                  :style="item2.show ? 'transform:rotate(180deg)' : ''"
                   size="2em"
                   @click="
-                    dataTableMobile.forEach((e) => {
-                      e !== item ? (e.show = false) : null;
+                    item.dataTableMobile.forEach((e) => {
+                      e !== item2 ? (e.show = false) : null;
                     });
-                    item.show = !item.show;
+                    item2.show = !item2.show;
                   "
                 >
                   mdi-chevron-down
@@ -115,38 +115,38 @@
             </section>
 
             <!-- table 1 -->
-            <aside v-show="item.show && tab == 0" class="down space">
+            <aside v-show="item2.show && tab == 0" class="down space">
               <div class="divcol">
                 <h3>TICKETS MINTED</h3>
-                <span>{{ item.minted }}</span>
+                <span>{{ item2.minted }}</span>
               </div>
 
               <div class="divcol">
                 <h3>TICKETS SOLD</h3>
-                <span>{{ item.sold }}</span>
+                <span>{{ item2.sold }}</span>
               </div>
 
               <!-- <div class="divcol">
                 <h3>TICKETS LISTED</h3>
-                <span>{{ item.listed }}</span>
+                <span>{{ item2.listed }}</span>
               </div> -->
             </aside>
 
             <!-- table 2 -->
-            <aside v-show="item.show && tab == 1" class="down space">
+            <aside v-show="item2.show && tab == 1" class="down space">
               <div class="divcol">
                 <h3>MINTED BY</h3>
-                <span>{{ item.mintedBy }}</span>
+                <span>{{ item2.mintedBy }}</span>
               </div>
 
               <div class="divcol">
                 <h3>MINTED</h3>
-                <span>{{ item.minted }}</span>
+                <span>{{ item2.minted }}</span>
               </div>
 
               <div class="divcol">
                 <h3>SOLD</h3>
-                <span>{{ item.sold }}</span>
+                <span>{{ item2.sold }}</span>
               </div>
             </aside>
           </v-card>
