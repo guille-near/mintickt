@@ -1179,7 +1179,8 @@
     height: 26px;
     padding: 0 !important;
     border-radius: 7px !important;
-    @include borderGradientCss();
+    background-color: transparent;
+    @include borderGradientCss(1, 15);
     img {
       width: 18px;
       height: 18px;

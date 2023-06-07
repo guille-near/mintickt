@@ -47,7 +47,8 @@
   }
 
   .v-btn.stylish {
-    @include borderGradientImageCard(url('../../assets/backgrounds/border-gradient-btn-xsmall.png'));
+    background-color: transparent;
+    @include borderGradientCss();
     display: flex;
     padding: 12.8571px 21.4286px;
     height: 51px;

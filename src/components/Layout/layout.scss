@@ -129,8 +129,10 @@
     border-radius: 10px;
     padding: 12px 13px 12px 20px !important;
     max-width: 184px !important;
-    @include borderGradientImage(small);
+    background-color: transparent;
     * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
+    @include borderGradientCss(2);
+
     span {
       max-width: 160px;
       font-weight: 410 !important;
@@ -350,7 +352,8 @@
 
 
 .menuButtonProfile {
-  @include borderGradientImageCard(small);
+  @include borderGradientCss(2, 15);
+  background-color: rgba(37, 37, 37, 0.6) !important;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -384,7 +387,7 @@
   flex-direction: column;
   border-radius: 10px !important;
   margin-top: 10px;
-  @include borderGradientCss();
+  @include borderGradientCss(2, 15);
   .v-list-item {
     min-height: 35px;
   }

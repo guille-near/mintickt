@@ -326,20 +326,20 @@ $breakpoints: (
 }
 
 
-@mixin borderGradientCss() {
-  isolation: isolate;
-  background: conic-gradient(from 184.38deg at 50.01% 43.31%, #FFFFFF -22.5deg, #000000 4.03deg, #FFFFFF 35.62deg, #000000 63.75deg, #FFFFFF 105deg, #000000 140.8deg, #FFFFFF 189.83deg, #000000 231.18deg, #FFFFFF 266.46deg, #000000 298.12deg, #FFFFFF 337.5deg, #000000 364.03deg),
-  radial-gradient(94.34% 98.32% at 36.22% -5.22%, #2AD0CA 0%, #FEB0FE 30.97%, #ABB3FC 46.75%, #5DF7A4 65.39%, #58C4F6 100%) !important;
-  background-blend-mode: screen !important;
-
+@mixin borderGradientCss($image: 2, $size: 25) {
   &::before {
-    content: "";
+    content: '';
     opacity: 1 !important;
-    position: absolute !important;
-    inset: 3px !important;
-    border-radius: var(--br, inherit) !important;
-    background-color: #000;
-    z-index: -1;
+    position: absolute;
+    inset: 0;
+    @if ($image == 2) {
+      mask-border: url(../../assets/backgrounds/border.svg) $size;
+    } @else {
+      mask-border: url(../assets/backgrounds/border.svg) $size;
+    }
+    background: conic-gradient(from 184.38deg at 50.01% 43.31%, #FFFFFF -22.5deg, #000000 4.03deg, #FFFFFF 35.62deg, #000000 63.75deg, #FFFFFF 105deg, #000000 140.8deg, #FFFFFF 189.83deg, #000000 231.18deg, #FFFFFF 266.46deg, #000000 298.12deg, #FFFFFF 337.5deg, #000000 364.03deg),
+    radial-gradient(94.34% 98.32% at 36.22% -5.22%, #2AD0CA 0%, #FEB0FE 30.97%, #ABB3FC 46.75%, #5DF7A4 65.39%, #58C4F6 100%) !important;
+    background-blend-mode: screen !important;
   }
 }
 
