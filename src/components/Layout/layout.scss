@@ -131,7 +131,8 @@
     max-width: 184px !important;
     background-color: transparent;
     * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
-    @include borderGradientCss(2);
+    // @include borderGradientCss(2);
+    @include borderGradientImage(small);
 
     span {
       max-width: 160px;
@@ -352,7 +353,8 @@
 
 
 .menuButtonProfile {
-  @include borderGradientCss(2, 15);
+  // @include borderGradientCss(2, 15);
+  @include borderGradientImageCard(small);
   background-color: rgba(37, 37, 37, 0.6) !important;
   display: flex;
   flex-direction: column;
@@ -387,7 +389,8 @@
   flex-direction: column;
   border-radius: 10px !important;
   margin-top: 10px;
-  @include borderGradientCss(2, 15);
+  // @include borderGradientCss(2, 15);
+  @include borderGradientCss();
   .v-list-item {
     min-height: 35px;
   }
