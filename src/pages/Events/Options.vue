@@ -74,7 +74,7 @@
     <v-dialog v-model="modalMintMore" width="300px">
       <v-card class="modalMore">
         <label for="amount">Amount</label>
-        <v-text-field id="amount" v-model="mint_amount" type="number" hide-spin-buttons v-debounce:800ms="checkMintAmount" hide-details solo>
+        <v-text-field id="amount" v-model="mint_amount" type="number" hide-spin-buttons hide-details solo>
           <template v-slot:append>
             <v-btn color=" #C4C4C4" @click="controlAmount('less')">
               <v-icon color="black"> mdi-minus </v-icon>
@@ -418,7 +418,7 @@ export default {
           ),
         ];
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
@@ -462,7 +462,7 @@ export default {
           ),
         ];
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
@@ -506,7 +506,7 @@ export default {
           ),
         ];
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
@@ -819,7 +819,7 @@ export default {
     },
     controlAmount(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more") {
         this.mint_amount++;
       }
       if (item == "less" && this.mint_amount > 1) {
@@ -837,7 +837,7 @@ export default {
     },
     controlPrice(item) {
       this.getData();
-      if (item == "more" && this.mint_amount < 20) {
+      if (item == "more") {
         this.price_list++;
       }
       if (item == "less" && this.price_list > 1) {

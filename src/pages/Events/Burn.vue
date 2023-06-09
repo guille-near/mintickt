@@ -150,7 +150,7 @@ export default {
           ),
         ];
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: process.env.VUE_APP_CONTRACT_NFT,
