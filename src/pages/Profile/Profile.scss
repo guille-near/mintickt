@@ -136,11 +136,12 @@
         .v-window-item--active {
           .container-grid {
             width: 100% !important;
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)) !important;
-            @media (min-width: 1140px) {
-              grid-template-columns: repeat(7, 1fr);
-            }
+            display: flex !important;
+            flex-wrap: wrap;
+            // grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)) !important;
+            // @media (min-width: 1140px) {
+            //   grid-template-columns: repeat(7, 1fr);
+            // }
             // row-gap: var(--spacing);
             // column-gap: calc(var(--spacing) * 2.5);
             gap: 22px;
