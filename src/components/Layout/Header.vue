@@ -30,8 +30,22 @@
             <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo" />
           </a>
 
-          <aside class="container-buttons-header center" style="gap: 20px" :style="(routePath === '/events' || !user) ? '' : 'display:contents'">
-            <v-btn class="createEventBtn h9-em eliminarmobile" v-show="(routePath === '/events' || !user) && canShowBtn" @click="goToEvent">
+          <aside
+            class="container-buttons-header center" style="gap: 20px"
+            :style="`
+              ${(routePath === '/events' || !user) ? '' : 'display:contents'};
+              ${routeName === 'Landing' ? 'flex-direction: row-reverse' : ''}
+            `"
+          >
+            <v-btn
+              v-show="(routePath === '/events' || !user) && canShowBtn"
+              class="h9-em eliminarmobile"
+              :class="{
+                createEventBtnLanding: routeName === 'Landing',
+                createEventBtn: routePath.includes('/events')
+              }"
+              @click="goToEvent"
+            >
               <span>create an event</span>
             </v-btn>
 
@@ -54,8 +68,7 @@
                 color="white" -->
 
                 <v-btn
-                  class="buttonProfile"
-                  :class="{login: !user}"
+                  :class="{buttonProfile: user, login: !user}"
                   v-on="user ? on : undefined"
                   v-bind="user ? attrs : undefined"
                   @click="user ? menuOpened = !menuOpened : connectRamper()"

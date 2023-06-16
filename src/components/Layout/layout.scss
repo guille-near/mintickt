@@ -143,12 +143,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
+    } 
+  }
 
-    &.login {
-      background: transparent !important;
-      ::before, ::after, [class*="ripple"] {display: none !important}
-    }
+  .v-btn.login {
+    background: transparent !important;
+    ::before, ::after, [class*="ripple"] {display: none !important}
   }
 
 
@@ -168,6 +168,32 @@
       /* identical to box height */
       text-align: center;
       letter-spacing: -0.03em;
+    }
+  }
+
+  .createEventBtnLanding {
+    border-radius: 10px;
+    padding: 12px 20px !important;
+    max-width: 184px !important;
+    * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
+    span {
+      max-width: 160px;
+      font-weight: 410 !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    padding: 12px clamp(1em, 1.25vw, 1.25em);
+    border-radius: 10px;
+    background-color: transparent;
+    @include borderGradientCssFeatured(2);
+    /* Firefox */
+    @-moz-document url-prefix() {
+      @include borderGradientImage(small);
+    }
+    span {
+      color:#FFFFFF !important;
+      font-size: 15px;
     }
   }
 

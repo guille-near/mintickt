@@ -1,10 +1,10 @@
 <template>
   <div id="newLanding" class="divcol">
-    <img class="background-landing eliminarxmobile" src="@/assets/newLanding/background-landing.png">
-    <img class="background-landing verxmobile" src="@/assets/newLanding/background-landing-mobile.png">
+      <img class="background-landing eliminarxmobile" src="@/assets/newLanding/background-landing.png">
+      <img class="background-landing verxmobile" src="@/assets/newLanding/background-landing-mobile.png">
 
-    <img class="lights-up eliminarxmobile" src="@/assets/newLanding/lights-up.png">
-    <img class="lights-up verxmobile" src="@/assets/newLanding/lights-up-mobile.png">
+      <img class="lights-up eliminarxmobile" src="@/assets/newLanding/lights-up.png">
+      <img class="lights-up verxmobile" src="@/assets/newLanding/lights-up-mobile.png">
 
     <!-- hero -->
     <section id="hero">
@@ -19,8 +19,28 @@
     <section id="bullshit">
       <div class="divcol center">
         <h2>0% bullshit, 100% utility</h2>
-        <img src="@/assets/newLanding/bullshit-desktop.jpg" alt="utility image" class="eliminarmobile">
-        <img src="@/assets/newLanding/bullshit-mobile.jpg" alt="utility image" class="vermobile">
+
+        <v-data-table
+          :headers="bullshitHeaders"
+          :items="bullshitItems"
+          mobile-breakpoint="-1"
+          hide-default-footer
+        >
+          <template v-slot:[`item.compare`]="{ item }">
+            <span>{{item.compare}}</span>
+          </template>
+
+          <template v-slot:[`item.old`]="{ item }">
+            <img :src="require(`@/assets/newLanding/${item.old ? 'check' :'x-close'}.svg`)">
+          </template>
+          
+          <template v-slot:[`item.our`]="{ item }">
+            <img :src="require(`@/assets/newLanding/${item.our ? 'check' :'x-close'}.svg`)">
+          </template>
+        </v-data-table>
+
+        <!-- <img src="@/assets/newLanding/bullshit-desktop.jpg" alt="utility image" class="eliminarmobile">
+        <img src="@/assets/newLanding/bullshit-mobile.jpg" alt="utility image" class="vermobile"> -->
       </div>
     </section>
 
@@ -95,8 +115,7 @@
       </div>
     </section>
 
-
-    <img class="lights-down eliminarxmobile" src="@/assets/newLanding/lights-up.png">
+    <img class="lights-down liminarxmobile" src="@/assets/newLanding/lights-up.png">
     <img class="lights-down verxmobile" src="@/assets/newLanding/lights-up-mobile.png">
 
     <!-- footer -->
@@ -161,28 +180,98 @@ export default {
   name: "Landing",
   data() {
     return {
+      bullshitHeaders: [
+        { align: "start", value: "compare", sortable: false },
+        { text: "Old tickets", align: "center", value: "old", sortable: false },
+        { text: "Our tickets", align: "center", value: "our", sortable: false },
+      ],
+      bullshitItems: [
+        {
+          compare: "Verification",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Proof of Ownership",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Transferability",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Traceability",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Collector's Value",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Interactive Features",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Personalization",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Easy Access",
+          old: false,
+          our: true,
+        },
+        {
+          compare: "Integration with Digital Media",
+          old: false,
+          our: true,
+        },
+      ],
       email: undefined,
       expansionModel: undefined,
       dataFaqs: [
         {
-          question: "Why NFT Ticketing?",
-          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
+          question: "What is an NFT ticket?",
+          answer: "An NFT ticket, also known as a non-fungible token ticket, is a digital representation of a ticket using blockchain technology. Each NFT ticket is unique, verifiable, and cannot be duplicated or counterfeited. It allows for secure ownership and transferability of tickets in a digital format.",
         },
         {
-          question: "Do I need a crypto wallet?",
-          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
+          question: "How do I purchase an NFT ticket?",
+          answer: "To purchase an NFT ticket, you can browse the available events on our website and select the ticket you want. Once you have made your selection, follow the instructions to complete the purchase using a compatible cryptocurrency or fiat currency. After successful purchase, the NFT ticket will be transferred to your digital wallet.",
         },
         {
-          question: "Do I have to buy crypto to purchase a ticket?",
-          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
+          question: "How do I access my NFT ticket?",
+          answer: "After purchasing an NFT ticket, it will be associated with your digital wallet. To access your NFT ticket, simply login to your wallet and navigate to the specific ticket.",
         },
         {
-          question: "Why should I collect tickets for the events I attend?",
-          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
+          question: "Can I resell my NFT ticket?",
+          answer: "Yes, one of the advantages of NFT tickets is their easy transferability. You can sell your NFT ticket to another interested party by initiating a transfer from your digital wallet to the recipient's wallet. However, please note that any resale or transfer may be subject to certain terms and conditions, such as ticket restrictions or event organizer policies.",
         },
         {
-          question: "I’m an artist or event organizer. What benefits can I get?",
-          answer: "NFTs, or non-fungible tokens, are unique digital assets that are stored on a blockchain. They can be used to represent ownership of a wide variety of things, such as art, music, and even event tickets. Overall, NFTs offer many benefits over traditional ticketing systems, including increased security, unique experiences, and additional revenue opportunities.",
+          question: "Are NFT tickets secure?",
+          answer: "Yes, NFT tickets are built on blockchain technology, which provides a high level of security. Each NFT ticket is uniquely identified and recorded on the blockchain, making it virtually impossible to counterfeit or manipulate. The transparent nature of the blockchain also ensures the authenticity and traceability of each ticket.",
+        },
+
+        
+        {
+          question: "What happens if I lose access to my digital wallet?",
+          answer: "It is important to keep your digital wallet secure and backed up to prevent loss of access. If you lose access to your wallet where your NFT tickets are stored, there may be limited options for recovery. We recommend following best practices for wallet security and keeping multiple backups of your wallet's private keys or recovery phrases.",
+        },
+        {
+          question: "Can I attend an event using a screenshot or printed copy of my NFT ticket?",
+          answer: "No, attending an event using a screenshot or printed copy of your NFT ticket is not recommended. NFT tickets are designed to be digitally verified, and event organizers typically require the original digital version for entry. Presenting a counterfeit or duplicated ticket may result in denial of entry.",
+        },
+        {
+          question: "Can I upgrade or downgrade my NFT ticket?",
+          answer: "The ability to upgrade or downgrade your NFT ticket depends on the policies set by the event organizer. Some organizers may allow ticket upgrades or downgrades, while others may have specific restrictions in place. We recommend checking the event details or contacting the organizer directly to inquire about ticket modification options.",
+        },
+        {
+          question: "What happens if an event is canceled or rescheduled?",
+          answer: "In the event of a cancellation or rescheduling, the policies and procedures may vary depending on the event organizer. Typically, organizers will communicate any changes or updates directly to ticket holders. Refund or exchange options may be available based on the organizer's terms and conditions.",
         },
       ],
       socials: [
