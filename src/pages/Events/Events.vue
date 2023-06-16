@@ -117,13 +117,13 @@
             <!-- table 1 -->
             <aside v-show="item2.show && tab == 0" class="down space">
               <div class="divcol">
-                <h3>TICKETS MINTED</h3>
-                <span>{{ item2.minted }}</span>
+                <h3>TICKETS SOLD</h3>
+                <span>{{ item2.sold }}</span>
               </div>
 
               <div class="divcol">
-                <h3>TICKETS SOLD</h3>
-                <span>{{ item2.sold }}</span>
+                <h3>INCOMES</h3>
+                <span>{{ item2.incomes }}</span>
               </div>
 
               <!-- <div class="divcol">
@@ -208,9 +208,14 @@
 import moment from "moment";
 import gql from "graphql-tag";
 import modalFill from "../Store/ModalFill.vue";
+import * as nearAPI from "near-api-js";
+
+const { connect, keyStores, utils, Contract } = nearAPI;
+
 const your_events = gql`
   query MyQuery($user: String!) {
     series(where: { creator_id: $user, typetoken_id: "1" }) {
+      nft_amount_sold
       title
       nftsold
       supply
@@ -262,6 +267,7 @@ export default {
   },
   data() {
     return {
+      nearPrice: 0,
       data: [],
       createMenu: false,
       search: "",
@@ -273,8 +279,8 @@ export default {
             { align: "start", value: "image", sortable: false },
             { text: "NAME", align: "start", value: "name" },
             { text: "DATE", align: "start", value: "date" },
-            { text: "TICKETS MINTED", align: "start", value: "minted" },
             { text: "TICKETS SOLD", align: "start", value: "sold" },
+            { text: "INCOMES", align: "start", value: "incomes" },
             // { text: "TICKETS LISTED", align: "start", value: "listed" },
             { sortable: false, align: "end", value: "actions" },
           ],
@@ -322,6 +328,8 @@ export default {
       this.$session.destroy("hashSuccess");
     }
 
+    await this.getNearPrice();
+
     if (!this.$ramper.getUser()) {
       const login = await this.$ramper.signIn();
       if (login) {
@@ -356,6 +364,24 @@ export default {
     // }
   },
   methods: {
+    limitStr(item, num) {
+      if (item) {
+        if (item.length > num) {
+          return item.substring(0, num) + "...";
+        }
+      }
+      return item;
+    },
+    async getNearPrice() {
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
+        viewMethods: ["get_tasa"],
+        sender: account,
+      });
+
+      const price = await contract.get_tasa();
+      this.nearPrice = price || 0;
+    },
     filterDataMobile(dataMobile) {
       let filter = dataMobile;
 
@@ -400,6 +426,7 @@ export default {
           this.dataTabs[0].data = [];
           this.dataTabs[0].dataTableMobile = [];
           var options = { year: "numeric", month: "short", day: "numeric" }; //Format data
+          
 
           for (let i = 0; i < dataSeries.length; i++) {
             const extra = JSON.parse(dataSeries[i].extra);
@@ -413,6 +440,8 @@ export default {
               location: dataSeries[i].title,
               minted: dataSeries[i].supply,
               sold: dataSeries[i].nftsold,
+              incomes: ((dataSeries[i].nft_amount_sold / Math.pow(10, 24)) * this.nearPrice) + " $",
+              incomesNear: dataSeries[i].nft_amount_sold / Math.pow(10, 24),
               thingid: dataSeries[i].reference,
               ticket_type: ticketType.value,
               show: false,

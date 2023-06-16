@@ -140,7 +140,7 @@ export default {
           ];
         }
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: this.nft.contract_id,
@@ -208,7 +208,7 @@ export default {
           ),
         ];
 
-        const res = await this.$ramper.sendTransaction({
+        const resTx = await this.$ramper.sendTransaction({
           transactionActions: [
             {
               receiverId: this.nft.contract_id,
