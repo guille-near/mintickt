@@ -79,7 +79,7 @@
     <section id="FAQ">
       <div class="divcol" style="gap: 25px">
         <h2 id="faq">FAQs</h2>
-        <span class="text">Answers to Your Frequently Asked Questions about Mintickt</span>
+        <span class="text">Answers to the most frequently asked questions</span>
       </div>
 
       <v-expansion-panels v-model="expansionModel" class="expansion-faqs">
@@ -98,9 +98,8 @@
 
       <div class="divcol center" style="gap: 20px">
         <h2>Still have a question?</h2>
-        <span class="text">We're here to assist you.</span>
         <v-btn class="stylish" href="https://t.me/mintickt" target="_blank">
-          <span>Contact</span>
+          <span>Contact Us</span>
         </v-btn>
       </div>
     </section>
@@ -126,7 +125,7 @@
             <img src="../../assets/newLanding/Logo.svg" alt="logo" width="155px">
 
             <div class="divcol">
-              <span style="font-size: 16px; margin-block: 20px 10px">Join our newsletter to stay up to date on features and releases.</span>
+              <span style="font-size: 16px; margin-block: 20px 10px">Sign up for our newsletter and be the first to receive updates on new features and releases!</span>
 
               <v-text-field
                 v-model="email"
@@ -140,13 +139,13 @@
               </v-text-field>
 
               <span style="font-size: 12px;">
-                By subscribing you agree to with our <a href="" target="_blank">Privacy Policy</a> and provide consent to receive updates from our company.
+                By registering, you agree to our  <a href="" target="_blank">Privacy Policy</a> and consent to receive updates from us.
               </span>
             </div>
           </div>
 
           <div class="right">
-            <h3>Follow Us</h3>
+            <h3>Connect With Us</h3>
 
             <div class="divcol" style="gap: 10px">
               <a
@@ -276,9 +275,9 @@ export default {
       ],
       socials: [
         {
-          icon: require("@/assets/newLanding/telegram.svg"),
-          name: "Telegram",
-          href: "https://t.me/mintickt",
+          icon: require("@/assets/newLanding/twitter.svg"),
+          name: "Twitter",
+          href: "https://twitter.com/Mintickt",
         },
         {
           icon: require("@/assets/newLanding/instagram.svg"),
@@ -286,10 +285,26 @@ export default {
           href: "https://instagram.com/mintickt?igshid=MmJiY2I4NDBkZg==",
         },
         {
-          icon: require("@/assets/newLanding/twitter.svg"),
-          name: "Twitter",
-          href: "https://twitter.com/Mintickt",
+          icon: require("@/assets/newLanding/instagram.svg"),
+          name: "Facebook",
+          href: "https://www.facebook.com/mintickt",
         },
+        {
+          icon: require("@/assets/newLanding/instagram.svg"),
+          name: "Medium",
+          href: "https://medium.com/@mintickt",
+        },
+        {
+          icon: require("@/assets/newLanding/instagram.svg"),
+          name: "LinkedIn",
+          href: "https://medium.com/@mintickt",
+        },
+        {
+          icon: require("@/assets/newLanding/telegram.svg"),
+          name: "Telegram",
+          href: "https://t.me/mintickt",
+        },
+        
         {
           icon: require("@/assets/newLanding/discord.svg"),
           name: "Discord",

@@ -280,7 +280,7 @@ export default {
             { text: "NAME", align: "start", value: "name" },
             { text: "DATE", align: "start", value: "date" },
             { text: "TICKETS SOLD", align: "start", value: "sold" },
-            { text: "INCOMES", align: "start", value: "incomes" },
+            { text: "Your Revenue", align: "start", value: "incomes" },
             // { text: "TICKETS LISTED", align: "start", value: "listed" },
             { sortable: false, align: "end", value: "actions" },
           ],

@@ -10,13 +10,13 @@
     <aside class="container-info acenter">
       <div class="divcol">
         <label style="font-size: 16px; transform: translateY(5px)"
-          >Tickets sold</label
+          >Tickets Sold</label
         >
         <span>{{ ticketsSold }}</span>
       </div>
       <div class="divcol">
         <label style="font-size: 1em; transform: translateY(5px)"
-          >Your income</label
+          >Your Revenue</label
         >
         <span>{{ incomes.toFixed(2) }} N</span>
       </div>
@@ -55,7 +55,7 @@
         <v-text-field
           v-model="search"
           :append-icon="search ? '' : 'mdi-magnify'"
-          placeholder="Search a nickname or scan it"
+          placeholder="Search Account or Scan QR-Code"
           single-line
           hide-details
           clear-icon="mdi-close"
