@@ -129,8 +129,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <alert></alert>
     </aside>
+
+    <alert></alert>
     <modalSuccess ref="modal"></modalSuccess>
     <modal-fill ref="modalfill"></modal-fill>
     <modal-buy v-on:eventBuy="buy" v-on:eventFiat="fiat" ref="modalbuy"></modal-buy>

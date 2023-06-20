@@ -2,7 +2,6 @@
 
 #newLanding {
   $x-small: 600px;
-  --max-width: 1728px; //! FIXME here
   isolation: isolate;
   @media (max-width: $x-small) {padding-top: 140px;}
 
@@ -15,8 +14,7 @@
 
   .background-landing {
     width: 100vw !important;
-    max-width: var(--max-width) !important; //! FIXME here
-    // margin-inline: calc(50% - 50vw) !important; //! FIXME here
+    margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;
     top: 0;
     left: 0;
@@ -33,9 +31,8 @@
   }
 
   .lights-up {
-    width: 100vw !important; //! FIXME here
-    max-width: var(--max-width) !important; //! FIXME here
-    // margin-inline: calc(50% - 50vw) !important; //! FIXME here
+    width: 100vw !important;
+    margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;
     top: 0;
     left: 0;
@@ -410,7 +407,6 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
-      position: relative;
       @media (min-width: 880px) {
         padding: 20px;
         backdrop-filter: blur(36px);
@@ -437,8 +433,7 @@
   
   .lights-down {
     width: 100vw !important;
-    max-width: var(--max-width) !important; //! FIXME here
-    // margin-inline: calc(50% - 50vw) !important; //! FIXME here
+    margin-inline: calc(50% - 50vw) !important;
     position: absolute !important;
     rotate: 180deg !important;
     bottom: 0;
@@ -454,8 +449,7 @@
   //* footer
   #footer {
     width: 100vw !important;
-    max-width: var(--max-width) !important; //! FIXME here
-    // margin-inline: calc(50% - 50vw) !important; //! FIXME here
+    margin-inline: calc(50% - 50vw) !important;
     padding-block: clamp(1em, 4vw, 4em);
     // min-height: 541px;
     // @media (max-width: 880px) {min-height: 907px;}
@@ -535,10 +529,6 @@
           a {
             display: flex;
             gap: 12px;
-            img {
-              width: 24px !important;
-              height: 24px !important;
-            }
           }
         }
       }
