@@ -125,18 +125,28 @@
             <img src="../../assets/newLanding/Logo.svg" alt="logo" width="155px">
 
             <div class="divcol">
+              
+              
               <span style="font-size: 16px; margin-block: 20px 10px">Sign up for our newsletter and be the first to receive updates on new features and releases!</span>
 
+              <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+              >
               <v-text-field
                 v-model="email"
+                :error="errorBtn"
                 solo hide-details
                 placeholder="Enter your email"
                 :rules="rules.email"
               >
                 <template v-slot:append-outer>
-                  <v-btn class="stylish">Subscribe</v-btn>
+                  <v-btn class="stylish" :color="colorBtn" @click="subscribe()">Subscribe</v-btn>
                 </template>
               </v-text-field>
+
+            </v-form>
 
               <span style="font-size: 12px;">
                 By registering, you agree to our  <a href="" target="_blank">Privacy Policy</a> and consent to receive updates from us.
@@ -175,6 +185,8 @@
 </template>
 
 <script>
+import axios from "axios"
+
 export default {
   name: "Landing",
   data() {
@@ -320,6 +332,8 @@ export default {
           },
         ],
       },
+      colorBtn: "",
+      errorBtn: false,
       storeMintabe: process.env.VUE_APP_MINTBASE_STORE
     };
   },
@@ -343,6 +357,27 @@ export default {
     }
   },
   methods: {
+    subscribe() {
+      if (this.$refs.form.validate()) {
+        axios.post(process.env.VUE_APP_BOTDISCORD_URL + "/api/set-email-subscribe/", { "email": this.email })
+        .then(result => {
+          this.colorBtn = "green"
+
+          setTimeout(() => {
+            this.colorBtn = ""
+          }, 3000);
+          
+        }).catch(err => {
+          this.colorBtn = "red"
+          this.errorBtn = true
+
+          setTimeout(() => {
+            this.colorBtn = ""
+            this.errorBtn = false
+          }, 3000);
+        })
+      }
+    },
     async goToEvent() {
       const balance = await this.getBalance();
       if (balance < 0.05) {
@@ -355,7 +390,6 @@ export default {
       this.$router.push("/events/register");
     },
     async getBalance() {
-      const asd = 7  3
       try {
         if (this.$ramper.getUser()) {
           const account = await this.$near.account(this.$ramper.getAccountId());
