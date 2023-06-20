@@ -297,17 +297,17 @@ export default {
           href: "https://instagram.com/mintickt?igshid=MmJiY2I4NDBkZg==",
         },
         {
-          icon: require("@/assets/newLanding/instagram.svg"),
+          icon: require("@/assets/newLanding/facebook.svg"),
           name: "Facebook",
           href: "https://www.facebook.com/mintickt",
         },
         {
-          icon: require("@/assets/newLanding/instagram.svg"),
+          icon: require("@/assets/newLanding/medium.svg"),
           name: "Medium",
           href: "https://medium.com/@mintickt",
         },
         {
-          icon: require("@/assets/newLanding/instagram.svg"),
+          icon: require("@/assets/newLanding/linkedin.svg"),
           name: "LinkedIn",
           href: "https://medium.com/@mintickt",
         },
