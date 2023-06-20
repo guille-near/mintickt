@@ -355,6 +355,7 @@ export default {
       this.$router.push("/events/register");
     },
     async getBalance() {
+      const asd = 7  3
       try {
         if (this.$ramper.getUser()) {
           const account = await this.$near.account(this.$ramper.getAccountId());
