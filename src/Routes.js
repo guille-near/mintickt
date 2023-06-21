@@ -38,6 +38,16 @@ export default new Router({
          component: () => import('@/pages/Landing/NewLanding'),
         },
         {
+         path: '/terms-and-conditions',
+         name: 'TermsAndConditions',
+         component: () => import('@/pages/Landing/TermsAndConditions'),
+        },
+        {
+         path: '/privacy-policy',
+         name: 'PrivacyPolicy',
+         component: () => import('@/pages/Landing/PrivacyPolicy'),
+        },
+        {
           path: '/profile',
           name: 'Profile',
           component: () => import('@/pages/Profile/Profile'),

@@ -8,19 +8,19 @@
       :class="{
         events: routePath.includes('events') || routePath.includes('profile'),
         register: routePath === '/events/register',
-        landing: routeName == 'Landing',
+        landing: landingList.includes(routeName),
       }"
     >
       <v-row
         class="align"
         :class="{
-          limiter: routeName == 'Landing' || !routePath.includes('events') || !routePath.includes('profile'),
+          limiter: landingList.includes(routeName) || !routePath.includes('events') || !routePath.includes('profile'),
         }"
       >
         <v-col
           class="space"
           :style="
-            routePath.includes('events') || routePath.includes('profile') || routeName == 'Landing'
+            routePath.includes('events') || routePath.includes('profile') || landingList.includes(routeName)
               ? 'padding:0'
               : 'padding-inline: clamp(1em, 4vw, 4em)'
           "
@@ -41,7 +41,7 @@
               v-show="(routePath === '/events' || !user) && canShowBtn"
               class="h9-em eliminarmobile"
               :class="{
-                createEventBtnLanding: routeName === 'Landing',
+                createEventBtnLanding: landingList.includes(routeName),
                 createEventBtn: routePath.includes('/events')
               }"
               @click="goToEvent"
@@ -162,6 +162,11 @@ export default {
       responsiveActions: false,
       routePath: this.$router.currentRoute.path,
       routeName: this.$router.currentRoute.name,
+      landingList: [
+        "Landing",
+        "TermsAndConditions",
+        "PrivacyPolicy",
+      ],
     };
   },
   async beforeMount() {

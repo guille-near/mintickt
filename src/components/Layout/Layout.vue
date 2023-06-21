@@ -6,7 +6,7 @@
       class="content"
       :class="{
         events: $router.currentRoute.path.includes('events') || $router.currentRoute.path.includes('profile'),
-        landing: $router.currentRoute.name == 'Landing'
+        landing: landingList.includes($router.currentRoute.name)
       }"
       style="overflow: hidden"
     >
@@ -32,7 +32,12 @@ export default {
       varDialog: false,
       userDc: {},
       resultOperation: undefined,
-      account: null
+      account: null,
+      landingList: [
+        "Landing",
+        "TermsAndConditions",
+        "PrivacyPolicy",
+      ],
     };
   },
   mounted() {
