@@ -30,7 +30,7 @@
           </v-form>
 
             <span style="font-size: 12px;">
-              By registering, you agree to our  <a href="" target="_blank">Privacy Policy</a> and consent to receive updates from us.
+              By registering, you agree to our  <a @click="$router.push('/privacy-policy')">Privacy Policy</a> and consent to receive updates from us.
             </span>
           </div>
         </div>
@@ -57,7 +57,7 @@
         <div class="center" style="gap: 10px">
           <a @click="$router.push('/privacy-policy')">Privacy Policy</a>
           <a @click="$router.push('/terms-and-conditions')">Terms of Service</a>
-          <a>Cookies Settings</a>
+          <!-- <a>Cookies Settings</a> -->
         </div>
       </aside>
     </div>
