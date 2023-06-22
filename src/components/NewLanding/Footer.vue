@@ -11,23 +11,25 @@
             <span style="font-size: 16px; margin-block: 20px 10px">Sign up for our newsletter and be the first to receive updates on new features and releases!</span>
 
             <v-form
-              ref="form"
-              v-model="valid"
-              lazy-validation
-            >
-            <v-text-field
-              v-model="email"
-              :error="errorBtn"
-              solo hide-details
-              placeholder="Enter your email"
-              :rules="rules.email"
-            >
-              <template v-slot:append-outer>
-                <v-btn class="stylish" :color="colorBtn" @click="subscribe()">Subscribe</v-btn>
-              </template>
-            </v-text-field>
+                ref="form"
+                v-model="valid"
+                lazy-validation
+              >
+              <v-text-field
+                v-model="email"
+                :error="errorBtn"
+                solo hide-details
+                placeholder="Enter your email"
+                :rules="rules.email"
+              >
+                <template v-slot:append-outer>
+                  <v-btn class="stylish" :color="colorBtn" @click="subscribe()">Subscribe</v-btn>
+                </template>
+              </v-text-field>
+              <span v-show="colorBtn=='green'" style="font-size: 16px; margin-block: 20px 10px; color: green !important;">Thanks for subscribing.</span>
+              <span v-show="colorBtn=='red'" style="font-size: 16px; margin-block: 20px 10px; color: red !important;">Error saving, try again.</span>
 
-          </v-form>
+            </v-form>
 
             <span style="font-size: 12px;">
               By registering, you agree to our  <a @click="$router.push('/privacy-policy')">Privacy Policy</a> and consent to receive updates from us.
