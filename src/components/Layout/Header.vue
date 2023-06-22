@@ -9,6 +9,7 @@
         events: routePath.includes('events') || routePath.includes('profile'),
         register: routePath === '/events/register',
         landing: landingList.includes(routeName),
+        store: routeName == 'Store',
       }"
     >
       <v-row

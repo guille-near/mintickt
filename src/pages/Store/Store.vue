@@ -14,6 +14,7 @@
         <!-- <span>{{ tittle }}</span> -->
       </div>
     </aside>
+
     <aside class="gapmobile limiter">
       <div v-if="!isIntersecting" class="floatButton vermobile">
         <div class="fill-w">
@@ -849,6 +850,7 @@ export default {
       letter-spacing: -0.03em;
       font-weight: 800;
       font-size: clamp(3.5em, calc(6vw + 1em), 6.25em);
+      @media (max-width: 880px) {font-size: 56px !important;}
       line-height: 1 !important;
       width: max-content;
       max-width: max(calc(75% - 4vw), 4.7em);
@@ -885,7 +887,7 @@ export default {
 
   & > aside + aside {
     width: 100%;
-    padding: clamp(1em, 4vw, 4em);
+    padding: clamp(1em, 4vw, 4em) !important;
     position: relative;
     display: flex !important;
     justify-content: space-between !important;

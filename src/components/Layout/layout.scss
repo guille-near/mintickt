@@ -112,6 +112,19 @@
     max-width: 1728px !important;
     & .v-toolbar__content {padding-inline: var(--landing-margin)}
   }
+  &.store {
+    & .v-toolbar__content {
+      padding-inline: clamp(1em, 4vw, 4em) !important;
+      margin-inline: auto !important;
+      @media (max-width: 880px) {
+        width: 80% !important;
+        margin-inline: auto !important;
+      }
+      @media (max-width: 400px) {
+        width: 90% !important;
+      }
+    }
+  }
   .logoHeader{
     width: clamp(8em, 10vw, 10.0625em);
     // height: clamp(2.5em, 3vw,3.125em);
