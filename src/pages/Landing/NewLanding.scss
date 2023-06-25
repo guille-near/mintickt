@@ -5,6 +5,7 @@
   $x-small: 600px;
   isolation: isolate;
   @media (max-width: $x-small) {padding-top: 140px;}
+  @media (max-width: 400px) {font-size: clamp(12px, 3.5vw, 16px) !important}
 
   .eliminarxmobile {
     @media (max-width: $x-small) {display: none;}
@@ -48,10 +49,11 @@
     align-items: center;
     justify-content: center;
     padding-inline: var(--landing-margin);
-    @media (max-width: $x-small) {margin-bottom: 400px;}
+    @media (max-width: $x-small) {margin-bottom: 25em;}
 
     h1 {
       max-width: 1111.25px;
+      @media (max-width: 880px) {max-width: 280px !important;}
       font-family: 'Proxima Nova', 'SF Pro', sans-serif !important;
       font-weight: 700;
       font-size: 120px;
@@ -83,8 +85,8 @@
     @media (max-width: 880px) {
       margin-inline: auto;
       margin-block: 110px 150px;
-      img {width: 325px !important;}
-      padding-inline: 32px;
+      img {width: 20.3125em !important;}
+      padding-inline: 2em;
     }
   }
 
@@ -98,7 +100,7 @@
     > div {
       width: 100%;
       max-width: 884.79px;
-      @media (max-width: 880px) {max-width: 329px;}
+      @media (max-width: 880px) {max-width: 20.5625em;}
       margin-inline: auto;
       @media (min-width: 880px) {margin-block: 400px;}
 
@@ -125,7 +127,7 @@
 
       table {
         --margin: 48.05px;
-        @media (max-width: 880px) {--margin: 17.87px;}
+        @media (max-width: 880px) {--margin: 1.116875em;}
 
         padding: 0 !important;
         border-collapse: collapse;
@@ -197,7 +199,7 @@
         }
       };
     }
-    
+
     &-card {
       position: relative;
       width: 100%;
@@ -214,7 +216,7 @@
     display: flex;
     flex-direction: column;
     gap: 200px;
-    @media (max-width: 880px) {gap: 150px;}
+    @media (max-width: 880px) {gap: 9.375em;}
     h2 {
       max-width: 613px;
       font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
@@ -222,7 +224,7 @@
       font-size: 42px !important;
       line-height: 50px !important;
       @media (max-width: 880px) {
-        max-width: 360px;
+        max-width: 22.5em;
         font-size: 36px !important;
         line-height: 43px !important;
       }
@@ -245,8 +247,8 @@
         width: 416.37px;
         height: 428.16px;
         @media (max-width: 880px) {
-          width: 292px;
-          height: 300.27px; 
+          width: 18.25em;
+          height: 18.766875em; 
         }
       }
       div.divcol {align-items: flex-start}
@@ -262,8 +264,8 @@
         width: 446.96px;
         height: 360px;
         @media (max-width: 880px) {
-          width: 357.57px;
-          height: 288px;
+          width: 22.348125em;
+          height: 18em;
         }
       }
       div.divcol {
@@ -282,9 +284,9 @@
   #FAQ {
     display: flex;
     flex-direction: column;
-    margin-block: 500px;
+    margin-block: 31.25em;
     padding-inline: var(--landing-margin) !important;
-    @media (max-width: 880px) {margin-bottom: 480px;}
+    @media (max-width: 880px) {margin-bottom: 30em;}
 
     h2 {
       font-family: 'SF Pro', 'Proxima Nova', sans-serif !important;
@@ -321,7 +323,7 @@
       margin-inline: auto;
       margin-block: 100px !important;
       @media (max-width: 880px) {
-        max-width: 361px !important;
+        max-width: 22.5625em !important;
         margin-block: 88px !important;
       }
 
@@ -370,7 +372,7 @@
   #memorable {
     padding-inline: var(--landing-margin);
     margin-bottom: 327px;
-    @media (max-width: 880px) {margin-bottom: 500px;}
+    @media (max-width: 880px) {margin-bottom: 31.25em;}
 
     > div {
       max-width: 1312px;
@@ -380,7 +382,7 @@
       align-items: center;
       gap: 10px;
       @media (min-width: 880px) {
-        padding: 20px;
+        padding: 1.25em;
         backdrop-filter: blur(36px);
         border-radius: 25px;
         @include borderGradient2Css();
@@ -416,7 +418,7 @@
     > div {
       max-width: 1728px;
       width: 100% !important;
-      @media (max-width: $x-small) {max-width: 361px;}
+      @media (max-width: $x-small) {max-width: 22.5625em;}
       margin-inline: auto;
       padding-inline: var(--landing-margin);
     }
@@ -449,7 +451,7 @@
       }
 
       .left {
-        max-width: 500px;
+        max-width: 31.25em;
 
         > div {
           gap: 10px;
