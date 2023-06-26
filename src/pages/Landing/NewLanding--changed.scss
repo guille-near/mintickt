@@ -51,6 +51,10 @@
     @media (max-width: $x-small) {margin-bottom: 400px;}
 
     h1 {
+      @media (min-width: 1728px) {transform: translateY(2vw);}
+      @media (min-width: 1900px) {transform: translateY(3vw);}
+      @media (min-width: 2100px) {transform: translateY(4vw);}
+      @media (min-width: 2400px) {transform: translateY(5vw);}
       max-width: 1111.25px;
       font-family: 'Proxima Nova', 'SF Pro', sans-serif !important;
       font-weight: 700;
@@ -329,6 +333,7 @@
         border-radius: 11px !important;
         background-color: transparent !important;
         background-size: fill !important;
+        position: relative;
         @include borderGradient2Css();
         // background: center no-repeat url(../../assets/newLanding/faq-header.png);
         // @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-header-mobile.png) !important;}
@@ -384,6 +389,7 @@
         padding: 20px;
         backdrop-filter: blur(36px);
         border-radius: 25px;
+        position: relative;
         @include borderGradient2Css();
       }
 
