@@ -331,6 +331,7 @@
         border-radius: 11px !important;
         background-color: transparent !important;
         background-size: fill !important;
+        position: relative;
         @include borderGradient2Css();
         // background: center no-repeat url(../../assets/newLanding/faq-header.png);
         // @media (max-width: 880px) {background-image: url(../../assets/newLanding/faq-header-mobile.png) !important;}
@@ -385,6 +386,7 @@
         padding: 1.25em;
         backdrop-filter: blur(36px);
         border-radius: 25px;
+        position: relative;
         @include borderGradient2Css();
       }
 
