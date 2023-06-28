@@ -62,7 +62,8 @@ export default {
     img.lights {
       object-fit: cover !important;
       width: 100%;
-      max-width: 86.1505em;
+      max-width: 1728px;
+      transform: translateY(-3.5%);
       
       @media (max-width: 1200px) {
         width: 100vw !important;
