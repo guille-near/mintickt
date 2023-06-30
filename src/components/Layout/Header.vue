@@ -39,7 +39,7 @@
             `"
           >
             <v-btn
-              v-show="(routePath === '/events' || !user) && canShowBtn"
+              v-show="(routePath.includes('/events') || !user) && canShowBtn"
               class="h9-em eliminarmobile"
               :class="{
                 createEventBtnLanding: landingList.includes(routeName),
