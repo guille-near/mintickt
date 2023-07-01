@@ -1,9 +1,9 @@
 //Cross-domain proxy prefix
 // const API_PROXY_PREFIX='/api'
 //const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API_BASE_URL : API_PROXY_PREFIX
-// const BASE_URL = process.env.VUE_APP_API_BASE_URL
+const network = process.env.VUE_APP_NETWORK
 const enviroment = false
-const NETWORK = (enviroment) ? 'testnet' : 'testnet';
+const NETWORK = (enviroment) ? network : network;
 
 function CONFIG(keyStores) {
   switch (NETWORK) {

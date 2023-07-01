@@ -1269,7 +1269,7 @@ export default {
             console.log("TOKEN SERIES", this.tokenSeriesId);
 
             this.$refs.modal.modalSuccess = true;
-            console.log(this.$explorer + "/accounts/" + user;)
+            console.log(this.$explorer + "/accounts/" + user)
             this.$refs.modal.urlTx = this.$explorer + "/accounts/" + user;
             this.loading = false;
             this.disable = false;
