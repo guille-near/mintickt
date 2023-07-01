@@ -43,7 +43,7 @@
               class="h9-em eliminarmobile"
               :class="{
                 createEventBtnLanding: landingList.includes(routeName),
-                createEventBtn: routePath.includes('/events')
+                createEventBtn: routePath.includes('/events') || routePath.includes('/store')
               }"
               @click="goToEvent"
             >
