@@ -2230,7 +2230,7 @@ export default {
 
       formData.append("uploaded_file", file);
       formData.append("name", user + "-" + this.$session.get("dataFormName"));
-      console.log("formData", formData);
+      //console.log("formData", formData);
       //console.log(this.$ipfs)
       await this.axios.post(this.$ipfs, formData).then((res) => {
         //console.log('res', res.data)
