@@ -1231,10 +1231,10 @@ export default {
             network: process.env.VUE_APP_NETWORK,
           });
           console.log("RESULTT!!!", resTx);
-          if ((resTx &&
+          if ((resTx && resTx.type !== "failure" &&
           JSON.parse(localStorage.getItem('ramper_loggedInUser'))
             .signupSource === 'near_wallet' &&
-            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
+            resTx.txHashes.length > 0) || (resTx.result && resTx.type !== "failure" && resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
             if (JSON.parse(localStorage.getItem('ramper_loggedInUser')).signupSource === 'near_wallet') {
               const QUERY_APOLLO = gql`
                 query MyQuery($title: String, $description: String, $extra: String, $creator_id: String) {
@@ -1269,7 +1269,8 @@ export default {
             console.log("TOKEN SERIES", this.tokenSeriesId);
 
             this.$refs.modal.modalSuccess = true;
-            this.$refs.modal.url = this.$explorer + "/accounts/" + user;
+            console.log(this.$explorer + "/accounts/" + user;)
+            this.$refs.modal.urlTx = this.$explorer + "/accounts/" + user;
             this.loading = false;
             this.disable = false;
             this.step = 5;
@@ -1377,10 +1378,10 @@ export default {
         });
         console.log("OBJECTS", resTx);
 
-        if ((resTx &&
+        if ((resTx && resTx.type !== "failure" &&
           JSON.parse(localStorage.getItem('ramper_loggedInUser'))
             .signupSource === 'near_wallet' &&
-            resTx.txHashes.length > 0) || (resTx.result || resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
+            resTx.txHashes.length > 0) || (resTx.result && resTx.type !== "failure" && resTx.result[0]?.status?.SuccessValue || resTx.result[0]?.status?.SuccessValue === "")) {
           this.gotToEvents();
         } else {
           console.log("ERROR SEND");

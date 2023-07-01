@@ -343,6 +343,7 @@ export default {
         this.$router.push("/");
       }
     }
+    
     this.scanListener();
     // this.revisar();
     this.getData();
@@ -413,6 +414,7 @@ export default {
       this.progress = true;
       const user = this.$ramper.getAccountId();
       var rows = [];
+      console.log("BRR")
       this.$apollo
         .watchQuery({
           query: your_events,
@@ -422,6 +424,7 @@ export default {
           pollInterval: 10000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          console.log("DATAA", data)
           let dataSeries = data.series;
           this.dataTabs[0].data = [];
           this.dataTabs[0].dataTableMobile = [];
