@@ -257,36 +257,36 @@ export default {
       if(this.$ramper.getUser()){
         this.user = this.$ramper.getAccountId();
       }    
-      // const account = await this.$near.account(this.$ramper.getAccountId());
-      // if (!this.$session.get("nearSocialName")) {
-      //   const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
-      //     viewMethods: ["get"],
-      //     sender: account,
-      //   });
+      const account = await this.$near.account(this.$ramper.getAccountId());
+      if (!this.$session.get("nearSocialName")) {
+        const contract = new Contract(account, process.env.VUE_APP_CONTRACT_SOCIAL, {
+          viewMethods: ["get"],
+          sender: account,
+        });
 
-      //   const myArray = [account.accountId + "/profile/**"];
-      //   //console.log(myArray)
-      //   const social = await contract.get({
-      //       keys: myArray
-      //     });
+        const myArray = [account.accountId + "/profile/**"];
+        //console.log(myArray)
+        const social = await contract.get({
+            keys: myArray
+          });
         
-      //   Object.entries(social).forEach(([key, value]) => {
-      //     this.$session.set("nearSocialName", value.profile.name);
-      //     this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
-      //     if (value.profile.backgroundImage?.ipfs_cid) {
-      //       this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
-      //     }
-      //   });
-      // }
+        Object.entries(social).forEach(([key, value]) => {
+          this.$session.set("nearSocialName", value.profile.name);
+          this.$session.set("nearSocialProfileImage", value.profile.image.ipfs_cid);
+          if (value.profile.backgroundImage?.ipfs_cid) {
+            this.$session.set("nearSocialProfileBackgroundImage", value.profile.backgroundImage.ipfs_cid);
+          }
+        });
+      }
 
-      // setTimeout(() => {
-      //   if (this.$session.get("nearSocialName")) {
-      //     this.user = this.$session.get("nearSocialName")
-      //   } else if(this.$ramper.getUser()){
-      //     this.user = this.$ramper.getAccountId();
-      //   }
-      //   this.canShowBtn = true
-      // }, 200)
+      setTimeout(() => {
+        if (this.$session.get("nearSocialName")) {
+          this.user = this.$session.get("nearSocialName")
+        } else if(this.$ramper.getUser()){
+          this.user = this.$ramper.getAccountId();
+        }
+        this.canShowBtn = true
+      }, 200)
     },
     async logOut() {
       this.$ramper.signOut();

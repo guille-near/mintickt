@@ -942,7 +942,7 @@ export default {
 
     // let datos = JSON.parse(localStorage.getItem("Mintbase.js_wallet_auth_key"));
     const user = this.$ramper.getAccountId();
-    this.getData();
+    //this.getData();
     this.pollData();
     if (this.$session.get("dataFormName")) {
       this.getCanvas();
@@ -954,7 +954,7 @@ export default {
       this.$refs.modal.modalSuccess = true;
       this.$refs.modal.url = this.$explorer + "/accounts/" + user;
       this.step = 4;
-      this.getData();
+      //this.getData();
       this.$session.set("step", 4);
       history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
     }
@@ -1273,7 +1273,7 @@ export default {
             this.loading = false;
             this.disable = false;
             this.step = 5;
-            this.getData();
+            //this.getData();
             this.$session.set("step", 5);
             history.replaceState(null, location.href.split("?")[0], "/#/events/register:" + this.$session.get("ticketval"));
           } else {
