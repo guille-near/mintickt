@@ -141,6 +141,7 @@
   .buttonProfile {
     border-radius: 10px;
     padding: 12px 13px 12px 20px !important;
+    min-width: 138.5px !important;
     max-width: 184px !important;
     background-color: transparent;
     * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
@@ -148,6 +149,11 @@
     /* Firefox */
     @-moz-document url-prefix() {
       @include borderGradientImage(small);
+    }
+
+    .v-btn__content {
+      display: flex !important;
+      justify-content: space-between !important;
     }
 
     span {

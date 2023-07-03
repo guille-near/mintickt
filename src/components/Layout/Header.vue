@@ -75,8 +75,10 @@
                   @click="user ? menuOpened = !menuOpened : connectRamper()"
                   :title="user"
                 >
-                  <img v-if="user" src="@/assets/logo/near.svg" alt="near" />
-                  <span>{{ limitStr(user || "Log In", 25) }}</span>
+                  <div class="center">
+                    <img v-if="user" src="@/assets/logo/near.svg" alt="near" />
+                    <span>{{ limitStr(user || "Log In", 25) }}</span>
+                  </div>
                   <v-icon v-if="user" color="#fff" :style="menuLogin ? 'transform: rotate(180deg)' : null">mdi-chevron-down</v-icon>
                   <!-- <span><v-icon class="mr-1 ml-1" style="font-size:20px;color:orange">mdi-square-rounded</v-icon>Testnet</span> -->
                 </v-btn>
