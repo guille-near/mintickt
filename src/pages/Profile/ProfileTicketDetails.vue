@@ -16,7 +16,7 @@
         <v-btn icon @click="$router.go(-1)">
           <v-icon color="#fff">mdi-arrow-left</v-icon>
         </v-btn>
-        <h2 class="title-tabs p">My Tickets / {{ "Nearcon" }}</h2>
+        <h2 class="title-tabs p">My Tickets / {{ nft.name }}</h2>
       </div>
 
       <article>
@@ -88,6 +88,7 @@ export default {
   mounted() {
     this.getData();
     this.nft = this.$session.get("ticketDetails");
+    console.log(this.nft)
     if (!this.nft) {
       this.$router.push(`/profile`);
     }
