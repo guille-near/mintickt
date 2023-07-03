@@ -284,7 +284,7 @@ export default {
   },
   computed: {
     ticketType() {
-      return this.ticket_Type?.toLowerCase().split("/")[0];
+      return this.$session.get("ticketval");
       // return this.$route.query.thingid.toLowerCase().split("/")[1];
     },
     ticketSize() {
