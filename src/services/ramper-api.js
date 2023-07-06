@@ -9,7 +9,7 @@ export default function RamperApi() {
     walletProviders: [],
     theme: THEME.DARK,
     network: process.env.VUE_APP_NETWORK,
-    logoURI: "https://www.mintickt.com/images/logom.6dc78695.svg",
+    logoURI: "https://mintickt.mypinata.cloud/ipfs/QmaAUkyfTTBLYeWpj62FXgrB3Z17FDrqWdmPzEvP6uMrLs",
     authProviders: [
       AUTH_PROVIDER.GOOGLE,
       AUTH_PROVIDER.FACEBOOK,

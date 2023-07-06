@@ -72,6 +72,7 @@
       </div>
 
       <article
+        v-if="ticketType"
         class="divcol acenter"
         :class="ticketType"
         v-intersect="onIntersect"
@@ -259,6 +260,7 @@ export default {
       nearPrice: 0,
       price_usd: 0,
       amountDeposit: 0.01,
+      ticketType: null
     };
   },
 
@@ -275,18 +277,16 @@ export default {
     //Generate the base 64 image to nft let me in
     await this.getBase64FromUrl(this.burn_ticket_image);
 
-    console.log("AQUI VA");
-
     this.$emit("renderHeader");
     this.getData();
     //this.fetch();
     // this.mainImg();
   },
   computed: {
-    ticketType() {
-      return this.$session.get("ticketval");
-      // return this.$route.query.thingid.toLowerCase().split("/")[1];
-    },
+    // ticketType() {
+    //   return this.$session.get("ticketval");
+    //   // return this.$route.query.thingid.toLowerCase().split("/")[1];
+    // },
     ticketSize() {
       return this.ticket_Type?.toLowerCase().split("/")[1];
       // return this.$route.query.thingid.toLowerCase().split("/")[2];
@@ -341,6 +341,9 @@ export default {
           const endDate = extra.find((element) => element.trait_type === "End Date");
           const ticketType = extra.find((element) => element.trait_type === "ticket_type");
           this.ticket_Type = ticketType.value;
+          this.ticketType = ticketType.value;
+          this.$session.set("ticketval", ticketType.value),
+          console.log("TICKET TYPEEEE",this.ticket_Type)
 
           this.token_id = dataEvent.id;
 
