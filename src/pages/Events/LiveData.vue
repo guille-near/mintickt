@@ -34,6 +34,7 @@
       <div class="container-filter acenter">
         <v-card
           v-for="(item, i) in dataFilters"
+          :title="item.name.length > 22? item.name : null"
           :key="i"
           class="divcol"
           :class="{ active: item.active }"
@@ -44,7 +45,7 @@
             item.active = true;
           "
         >
-          <label>{{ item.name }}</label>
+          <label>{{ limitStr(item.name, 22) }}</label>
           <span>{{ item.value }}</span>
         </v-card>
       </div>
@@ -484,6 +485,16 @@ const get_data_serie = gql`
   }
 `;
 
+const get_data_goodie = gql`
+  query MyQuery($refe: String!) {
+    series(where: { reference: $refe, typetoken_id: "3" }) {
+      title
+      typetoken_id
+      reference
+    }
+  }
+`;
+
 const eventsObjects = gql`
   query MyQuery($eventId: String!) {
     series(where: { reference: $eventId }) {
@@ -775,6 +786,7 @@ export default {
     // this.fetch();
     this.getData();
     this.getDataGeneral()
+    this.getDataGoodie()
     //this.pollData();
   },
   beforeDestroy() {
@@ -807,6 +819,14 @@ export default {
     },
   },
   methods: {
+    limitStr(item, num) {
+      if (item) {
+        if (item.length > num) {
+          return item.substring(0, num) + "...";
+        }
+      }
+      return item;
+    },
     async getNearPrice() {
       const account = await this.$near.account(this.$ramper.getAccountId());
       const contract = new Contract(account, process.env.VUE_APP_CONTRACT_NFT, {
@@ -941,6 +961,26 @@ export default {
           // this.get_tokens();
           // this.get_tokens_redeemed();
     },
+    async getDataGoodie() {
+      this.$apollo
+        .watchQuery({
+          query: get_data_goodie,
+          variables: {
+            refe: this.eventId,
+          },
+          pollInterval: 20000, // 10 seconds in milliseconds
+        })
+        .subscribe(({ data }) => { 
+          const datos = data.series
+          if (datos.length > 0) {
+            this.dataFilters[2].name = datos[0].title + " Orders"
+            this.dataFilters[3].name = datos[0].title + " Redeemed"
+          } else {
+            this.dataFilters[2].name = "Goody Orders"
+            this.dataFilters[3].name = "Goody Redeemed"
+          }
+        });
+    },
     async getDataGoodies() {
       this.$apollo
         .watchQuery({
@@ -951,6 +991,7 @@ export default {
           pollInterval: 2000, // 10 seconds in milliseconds
         })
         .subscribe(({ data }) => {
+          console.log("GODIEE", data)
           this.dataTableOrders = []
           this.dataTableOrdersMobile = []
           this.dataTableRedeemer = []

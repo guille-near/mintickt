@@ -6,7 +6,7 @@
       <img :src="media" alt="burn ticket" style="background: rgba(0, 0, 0, 0.87)" />
       <div class="divcol" style="gap: 0.5em">
         <h3 class="p">{{ title }} ({{ extra }})</h3>
-        <p>Burn this NFT so event staff let you in at the venue.</p>
+        <p>{{ textNft }}</p>
       </div>
       <v-btn class="fill-w mt-n3" :disabled="btnDisabled" @click="burn">Burn it</v-btn>
     </v-sheet>
@@ -70,6 +70,7 @@ export default {
       meta: "",
       media: "",
       txs: [],
+      textNft: null,
       burn_goodie_image: this.$pinata_gateway + "QmQxY2cqZ5LZ6cfArVsdskrKfmPLZ3NdsZxbJWxbmeXURw",
     };
   },
@@ -115,6 +116,15 @@ export default {
           this.token = dataNfts.id;
           this.title = dataNfts.title;
           this.extra = dataNfts.title;
+          if (dataNfts.typetoken_id === "1") {
+            this.textNft = "This is your NFT collectible that will make your experience memorable!"
+          } else if (dataNfts.typetoken_id === "2") {
+            this.textNft = "Burn this NFT so event staff let you in at the venue."
+          } else if (dataNfts.typetoken_id === "3") {
+            this.textNft = "Burn this NFT at the event to receive your goody."
+          }  else {
+            this.textNft = "This is your NFT collectible that will make your experience memorable!"
+          }
         })
         .catch((err) => {
           console.log("Error", err);
