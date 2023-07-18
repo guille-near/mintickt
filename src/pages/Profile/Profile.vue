@@ -183,7 +183,7 @@ export default {
           const nfts = data.mb_views_nft_owned_tokens
 
           for (let nft of nfts) {
-            console.log(nft)
+            console.log("AQUI",nft)
             let collection = {
               token_id: nft.token_id,
               contract_id: nft.reference_blob.store,
@@ -241,6 +241,8 @@ export default {
           const dataPast = [];
           const dateNow = Date.now();
 
+          console.log("DATANFT",dataNfts)
+
           for (let i = 0; i < dataNfts.length; i++) {
             const extra = JSON.parse(dataNfts[i].metadata.extra);
             let startDate = { value: 0 }
@@ -254,6 +256,7 @@ export default {
               contract_id: process.env.VUE_APP_CONTRACT_NFT,
               img: dataNfts[i].metadata.media,
               name: dataNfts[i].title,
+              typetoken: dataNfts[i].typetoken_id,
               date: moment(dateNft).format("ll"),
               dc: true
             };

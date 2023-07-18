@@ -673,13 +673,13 @@ export default {
         },
         {
           key: "orders",
-          name: "Beers Orders",
+          name: "Goody Orders",
           value: "0 / 0",
           active: false,
         },
         {
           key: "redeemed",
-          name: "Beers Redeemed",
+          name: "Goody Redeemed",
           value: "0",
           active: false,
         },

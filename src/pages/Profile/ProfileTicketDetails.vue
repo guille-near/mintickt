@@ -25,7 +25,7 @@
 
           <div class="divcol center">
             <span>{{ nft.name }}</span>
-            <span>Burn this NFT so event staff let you in at the venue.</span>
+            <span>{{ textNft }}</span>
           </div>
         </div>
 
@@ -82,15 +82,23 @@ export default {
       nft: {},
       avatar: undefined,
       banner: undefined,
+      textNft: null
     };
   },
   created() {},
   mounted() {
     this.getData();
     this.nft = this.$session.get("ticketDetails");
-    console.log(this.nft)
+    console.log("NFT",this.nft)
     if (!this.nft) {
       this.$router.push(`/profile`);
+    }
+    if (this.nft.typetoken === "1") {
+      this.textNft = "This is your NFT collectible that will make your experience memorable!"
+    } else if (this.nft.typetoken === "2") {
+      this.textNft = "Burn this NFT so event staff let you in at the venue."
+    } else {
+      this.textNft = "This is your NFT collectible that will make your experience memorable!"
     }
   },
   methods: {

@@ -26,7 +26,7 @@
                   <v-btn class="stylish" :color="colorBtn" @click="subscribe()">Subscribe</v-btn>
                 </template>
               </v-text-field>
-              <span v-show="colorBtn=='green'" style="font-size: 16px; margin-block: 20px 10px; color: green !important;">Thanks for subscribing.</span>
+              <span v-show="colorBtn=='#cafc01'" style="font-size: 16px; margin-block: 20px 10px; color: #cafc01 !important;">Thanks for subscribing.</span>
               <span v-show="colorBtn=='red'" style="font-size: 16px; margin-block: 20px 10px; color: red !important;">Error saving, try again.</span>
 
             </v-form>
@@ -128,7 +128,7 @@ export default {
       if (this.$refs.form.validate()) {
         axios.post(process.env.VUE_APP_BOTDISCORD_URL + "/api/set-email-subscribe/", { "email": this.email })
         .then(result => {
-          this.colorBtn = "green"
+          this.colorBtn = "#cafc01"
 
           setTimeout(() => {
             this.colorBtn = ""
