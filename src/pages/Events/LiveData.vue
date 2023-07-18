@@ -973,8 +973,8 @@ export default {
         .subscribe(({ data }) => { 
           const datos = data.series
           if (datos.length > 0) {
-            this.dataFilters[2].name = datos[0].title + " Orders"
-            this.dataFilters[3].name = datos[0].title + " Redeemed"
+            this.dataFilters[2].name = "Orders " + datos[0].title
+            this.dataFilters[3].name = "Redeemed " + datos[0].title
           } else {
             this.dataFilters[2].name = "Goody Orders"
             this.dataFilters[3].name = "Goody Redeemed"

@@ -436,6 +436,7 @@ export default {
             const startDate = extra.find((element) => element.trait_type === "Start Date");
             const ticketType = extra.find((element) => element.trait_type === "ticket_type");
             console.log(extra);
+            let incomess = ((dataSeries[i].nft_amount_sold / Math.pow(10, 24)) * this.nearPrice)
             rows = {
               id: dataSeries[i].id,
               name: dataSeries[i].title,
@@ -443,7 +444,7 @@ export default {
               location: dataSeries[i].title,
               minted: dataSeries[i].supply,
               sold: dataSeries[i].nftsold,
-              incomes: ((dataSeries[i].nft_amount_sold / Math.pow(10, 24)) * this.nearPrice) + " $",
+              incomes:  (incomess? incomess.toFixed(2) : incomess) + " $",
               incomesNear: dataSeries[i].nft_amount_sold / Math.pow(10, 24),
               thingid: dataSeries[i].reference,
               ticket_type: ticketType.value,
