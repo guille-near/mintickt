@@ -217,13 +217,13 @@
 
         // TODO here
         img {
-          object-fit: cover;
-          // width: 222px;
-          // height: 333px;
-          // @include mq(max, small) {
-          //   width: 227px;
-          //   height: 340px;
-          // }
+          object-fit: contain;
+          width: 222px;
+          height: 333px;
+          @include mq(max, small) {
+            width: 227px;
+            height: 340px;
+          }
         }
         span {
           max-width: 265px;
