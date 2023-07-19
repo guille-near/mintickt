@@ -96,7 +96,7 @@ export default {
     if (this.nft.typetoken === "1") {
       this.textNft = "This is your NFT collectible that will make your experience memorable!"
     } else if (this.nft.typetoken === "2") {
-      this.textNft = "Burn this NFT so event staff let you in at the venue."
+      this.textNft = "Burn this NFT at the event to be allowed in."
     } else if (this.nft.typetoken === "3") {
       this.textNft = "Burn this NFT at the event to receive your goody."
     }  else {

@@ -211,10 +211,15 @@ import modalFill from "../Store/ModalFill.vue";
 import * as nearAPI from "near-api-js";
 
 const { connect, keyStores, utils, Contract } = nearAPI;
+// (
+//     orderBy: fecha
+//     orderDirection: desc
+//     where: {creator_id: "049df53399cc4c22e077cf9460e13b18ba5cfa501e56fec37f481e50abe32734", typetoken_id: "1"}
+//   )
 
 const your_events = gql`
   query MyQuery($user: String!) {
-    series(where: { creator_id: $user, typetoken_id: "1" }) {
+    series(orderBy: fecha orderDirection: desc where: { creator_id: $user, typetoken_id: "1" }) {
       nft_amount_sold
       title
       nftsold
@@ -425,6 +430,7 @@ export default {
         })
         .subscribe(({ data }) => {
           console.log("DATAA", data)
+          // data.series.sort((x, y) => x.year - y.year);
           let dataSeries = data.series;
           this.dataTabs[0].data = [];
           this.dataTabs[0].dataTableMobile = [];
@@ -454,7 +460,7 @@ export default {
               media: dataSeries[i].reference,
             };
             this.dataTabs[0].data.push(rows);
-            this.dataTabs[0].data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
+            // this.dataTabs[0].data.sort((a, b) => (a.date1 > b.date1 ? -1 : 1));
             this.dataTabs[0].dataTableMobile.push(rows);
           }
         });
