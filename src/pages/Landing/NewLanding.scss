@@ -355,7 +355,6 @@
 
       .v-expansion-panel {
         border-radius: 11px !important;
-        background-color: transparent !important;
         background-size: fill !important;
         position: relative;
         @include borderGradient2Css();
@@ -368,6 +367,7 @@
         // }
 
         &:not(:first-child) {margin-top: 16px;}
+        &::after {display: none !important}
         * {color: #fff !important}
 
         &-header {

@@ -19,7 +19,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in dataTabs" :key="item" :style="`--imageSize: ${105}px`">
+        <v-tab-item v-for="item in dataTabs" :key="item">
           <section class="container-grid">
             <v-card
               v-for="(item2,i) in item.content" :key="i" color="transparent"

@@ -130,6 +130,8 @@
 
 
       &-items {
+        --imageSize: 105px;
+        @media (max-width: 400px) {--imageSize: clamp(4.5em, 25vw, 6.5625em)}
         margin-top: var(--spacing);
         background-color: transparent;
 
