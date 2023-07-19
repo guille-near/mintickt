@@ -144,7 +144,13 @@
     min-width: 138.5px !important;
     max-width: 184px !important;
     background-color: transparent;
-    * {font-family: 'SF Pro', "Proxima Nova", sans-serif !important;}
+    * {
+      font-family: 'SF Pro', "Proxima Nova", sans-serif !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+
     @include borderGradientCssFeatured(2);
     /* Firefox */
     @-moz-document url-prefix() {
@@ -159,9 +165,6 @@
     span {
       max-width: 160px;
       font-weight: 410 !important;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     } 
   }
 
