@@ -126,7 +126,8 @@
     }
   }
   .logoHeader{
-    width: clamp(8em, 10vw, 10.0625em);
+    width: clamp(8em, 15vw, 11em); //? <-- beta
+    // width: clamp(8em, 10vw, 10.0625em); //? <-- original
     // height: clamp(2.5em, 3vw,3.125em);
   }
   .logoHeaderEvents {
@@ -134,7 +135,8 @@
     // height: clamp(2.5em, 3vw,3.125em);
     @include mq(max, small) {
       min-width: 30px !important;
-      width: 2.5em !important
+      // width: 2.5em !important //? <-- original
+      width: 6em !important; //? <-- beta
     }
   }
   // ? this class is used for profile view

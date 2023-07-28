@@ -27,8 +27,8 @@
           "
         >
           <a class="center" href="/#/">
-            <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/logo-mobile.svg" alt="logo" />
-            <img v-else class="logoHeader" src="@/assets/logo/logom.svg" alt="logo" />
+            <img v-if="responsiveActions" class="logoHeaderEvents" src="@/assets/logo/mintickt_beta_mobile.svg" alt="logo" />
+            <img v-else class="logoHeader" src="@/assets/logo/mintickt_beta.svg" alt="logo" />
           </a>
 
           <aside
