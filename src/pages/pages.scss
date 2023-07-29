@@ -933,7 +933,7 @@
   }
 
   // ! changed
-  .ticket:not(.custom) {
+  .ticket.cinema, .ticket.con, .ticket.event {
     width: min(var(--margin), 22rem);
     // height: 35em;
     aspect-ratio: 1 / 2;

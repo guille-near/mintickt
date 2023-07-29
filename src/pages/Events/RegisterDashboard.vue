@@ -10,7 +10,7 @@
           <h2 class="vermobile align" style="text-align: center" @click="$refs.modal.modalSuccess = true">Let's create your NFT for your event!</h2>
           <!-- // * canvas ticket -->
           <div class="ticket-wrapper" @click="loadAgain" v-if="imagecanvas">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
 
           <!-- // * custome ticket -->
@@ -329,7 +329,7 @@
       <v-window-item :value="2">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <v-form ref="form1" v-model="valid" enctype="multipart/form-data" @submit.prevent="next1()" class="divcol" style="min-height: 100%">
@@ -403,7 +403,7 @@
       <v-window-item :value="3">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <aside class="divcol gap" style="min-height: 100%">
@@ -522,7 +522,7 @@
       <v-window-item :value="4">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <v-form ref="form3" v-model="valid" @submit.prevent="list()" class="divcol" style="min-height: 100%">
@@ -588,7 +588,7 @@
       <v-window-item :value="5">
         <section class="jcenter divwrap">
           <div class="ticket-wrapper" :class="ticketType">
-            <img class="ticket" :src="canvas" alt="Ticket image" />
+            <img class="ticket" :class="ticketType" :src="canvas" alt="Ticket image" />
           </div>
           <div class="container-content divcol" style="gap: 20px">
             <v-form ref="form4" v-model="valid" @submit.prevent="mintGoodie()" class="divcol" style="min-height: 100%">
