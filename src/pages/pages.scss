@@ -933,8 +933,8 @@
   }
 
   // ! changed
-  .ticket.cinema, .ticket.con, .ticket.event {
-    width: min(var(--margin), 22rem);
+  .ticket:not(.custom) {
+    width: min(var(--margin), 252.39px) !important;
     // height: 35em;
     aspect-ratio: 1 / 2;
   }
@@ -2360,7 +2360,10 @@ body:has(#createTickets) {
     }
 
     .ticket-wrapper.cinema {
+      min-width: 252.39px !important;
+      max-width: 252.39px !important;
       width: 252.39px !important;
+
       height: 471px !important;
       .v-input {
         top: 10.5% !important;
