@@ -9,7 +9,7 @@
 
     <aside class="container-info acenter">
       <div class="divcol">
-        <label style="font-size: 16px; transform: translateY(5px)"
+        <label style="font-size: 1em; transform: translateY(5px)"
           >Tickets Sold</label
         >
         <span>{{ ticketsSold }}</span>
