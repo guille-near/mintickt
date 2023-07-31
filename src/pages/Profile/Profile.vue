@@ -20,20 +20,19 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="item in dataTabs" :key="item">
-          <section class="container-grid">
-            <v-card
-              v-for="(item2,i) in item.content" :key="i" color="transparent"
-              v-ripple="false"
-              @click="goToDetails(item2)"
-            >
-              <img :src="item2.img" :alt="`${item2.name} image`">
+          <v-card
+            v-show="!isTapping"
+            v-for="(item2,i) in item.content" :key="i" color="transparent"
+            v-ripple="false"
+            @click="goToDetails(item2)"
+          >
+            <img :src="item2.img" :alt="`${item2.name} image`">
 
-              <div class="divcol" style="gap: 1px">
-                <span>{{ item2.name }}</span>
-                <span v-show="tab !== 2">{{ item2.date }}</span>
-              </div>
-            </v-card>
-          </section>
+            <div class="divcol" style="gap: 1px">
+              <span>{{ item2.name }}</span>
+              <span v-show="tab !== 2">{{ item2.date }}</span>
+            </div>
+          </v-card>
         </v-tab-item>
       </v-tabs-items>
     </section>
@@ -104,6 +103,7 @@ export default {
   name: "Profile",
   data() {
     return {
+      isTapping: false,
       urlTx: "",
       modalSuccess: false,
       tab: undefined,
@@ -149,6 +149,11 @@ export default {
   beforeMount() {
     this.tab = this.$store.state.indexTabProfile
   },
+  watch: {
+    tab() {
+      this.updateTapState()
+    }
+  },
   mounted() {
     if (this.$session.get("hashSuccess")) {
       if (process.env.VUE_APP_NETWORK === "mainnet") {
@@ -165,6 +170,13 @@ export default {
     //console.log(this.src)
   },
   methods: {
+    updateTapState() {
+      this.isTapping = true
+
+      setTimeout(() => {
+        this.isTapping = false
+      }, 350);
+    },
     async getDataNfts() {
       console.info('---------------Get data nft------------------')
       const user = this.$ramper.getAccountId()

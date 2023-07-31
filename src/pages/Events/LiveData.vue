@@ -26,7 +26,7 @@
     </aside>
 
     <div class="divcol">
-      <h2 style="margin-bottom: 0.3em">Last updates</h2>
+      <h2 style="margin-bottom: 1px">Last updates</h2>
       <label style="font-size: 13px; font-weight: 510">Filter by</label>
     </div>
 
@@ -50,7 +50,7 @@
         </v-card>
       </div>
       <v-row no-gutters>
-        <h3 class="p vermobile mt-10" style="font-size: 23px">Orders</h3>
+        <h2 class="p vermobile mt-10" style="font-size: 23px">Orders</h2>
         <!-- <div class="container-search center"> -->
         <!--Modal ticket Url -->
         <v-text-field
